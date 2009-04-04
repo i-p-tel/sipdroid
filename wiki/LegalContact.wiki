@@ -1,4 +1,5 @@
 #summary The webpages under sipdroid.org, sipdroid.com, sipdroid.de, and sipdroid.net are brought to you by:
+#labels Featured
 
 [http://i-p-tel.com i-p-tel GmbH]
 Marc-Chagall-Str. 49
