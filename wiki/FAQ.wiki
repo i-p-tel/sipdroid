@@ -19,4 +19,4 @@ After completion of the closed alpha stage this project will publish the softwar
 
 == What build environment is needed for Sipdroid? ==
 
-The program will be downloadable for installation from this website. If you are interested in contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] for building the source code.
+The program will be downloadable for installation from this website. If you are interested in contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] and [http://subclipse.tigris.org/install.html Subclipse] for building the source code.
