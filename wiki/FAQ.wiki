@@ -13,6 +13,10 @@ The following plans are suitable for unlimited hotspot/3G usage:
 
 [http://code.google.com/p/sipdroid/w/edit/FAQ Add] more!
 
+== What type of warranty comes with Sipdroid? ==
+
+Sipdroid is published by this project for free under the terms of GNU General Public License v3. Initially this will be a beta version for software testing.
+
 == What build environment is needed for Sipdroid? ==
 
-The software will be downloadable for installation from this website. Sipdroid will be open source. If you are interested in contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] for building.
+The software will be downloadable for installation from this website. If you are interested in contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] for building the source code.
