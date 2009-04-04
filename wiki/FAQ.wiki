@@ -1,0 +1,12 @@
+#summary Frequently Asked Questions
+
+== Is mobile VoIP legal? ==
+
+If you are going to use VoIP services outside private wireless networks, it's your responsibility to check the contractual terms with the mobile operator:
+
+Often mobile phone operators forbid using VoIP in the contract's fine print. The European Union is already looking at whether blocks on VoIP service by Europe's mobile phone operators might breach competition laws.
+
+The following plans are suitable for unlimited hotspot/3G usage:
+
+* Germany: [https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php debitel Talk and Surf S]
+[{{SERVER}}{{localurl:{{NAMESPACE}}:{{PAGENAME}}|action=edit}} Add] more!
