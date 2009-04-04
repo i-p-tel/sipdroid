@@ -1,4 +1,5 @@
 #summary Frequently Asked Questions
+#labels Featured
 
 == How can I prepare for mobile VoIP? ==
 
