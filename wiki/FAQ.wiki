@@ -15,7 +15,7 @@ The following plans are suitable for unlimited hotspot/3G usage:
 
 == What type of warranty comes with Sipdroid? ==
 
-After completion of the closed alpha stage this project will publish a beta version for free under the terms of [http://www.gnu.org/licenses/gpl.html GNU General Public License v3]. The beta phase will be for software testing i.e. expect some issues and incompatibilities at the beginning.
+After completion of the closed alpha stage this project will publish the software for free under the terms of [http://www.gnu.org/licenses/gpl.html GNU General Public License v3]. The first beta version will be for software testing. So please allow for some issues and incompatibilities at the beginning.
 
 == What build environment is needed for Sipdroid? ==
 
