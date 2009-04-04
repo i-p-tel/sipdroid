@@ -9,4 +9,6 @@ Often mobile phone operators forbid using VoIP in the contract's fine print. The
 The following plans are suitable for unlimited hotspot/3G usage:
 
 * Germany: [https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php debitel Talk and Surf S]
-[{{SERVER}}{{localurl:{{NAMESPACE}}:{{PAGENAME}}|action=edit}} Add] more!
+
+
+[http://code.google.com/p/sipdroid/w/edit/FAQ Add] more!
