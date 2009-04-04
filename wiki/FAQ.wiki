@@ -14,4 +14,4 @@ The following plans are suitable for unlimited hotspot/3G usage:
 
 == What build environment is needed for Sipdroid? ==
 
-Sipdroid will be open source. Use [http://developer.android.com/sdk/1.1_r1/installing.html eclipse] for building.
+The software will be downloadable for installation from this website. Sipdroid will be open source. If you are interested in contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] for building.
