@@ -9,7 +9,7 @@ Often mobile phone operators forbid using VoIP in the contract's fine print. The
 
 The following plans are suitable for unlimited hotspot/3G usage:
 
-* Germany: [https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php debitel Talk and Surf S]
+  * Germany: [https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php debitel Talk and Surf S]
 
 [http://code.google.com/p/sipdroid/w/edit/FAQ Add] more!
 
@@ -43,11 +43,11 @@ No, you can enter any SIP account. But presently this will limit you to just out
 
 == What advantages do I get by signing up for PBXes? ==
 
-* It suppliers a full features PBX to you for multiple extensions. It's not a telephony service provider. You can register several trunks to use multiple telephony service providers of your choice.
-* PBXes allows for handoff of calls between networks.
-* Support NAT (network address translation).
-* It's free.
-* PBXes can screen anonymous callers for you.
+  * It suppliers a full features PBX to you for multiple extensions. It's not a telephony service provider. You can register several trunks to use multiple telephony service providers of your choice.
+  * PBXes allows for handoff of calls between networks.
+  * Support NAT (network address translation).
+  * It's free.
+  * PBXes can screen anonymous callers for you.
 
 http://sipdroid.googlecode.com/svn/images/priv.png
 
