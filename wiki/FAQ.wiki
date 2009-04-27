@@ -31,6 +31,8 @@ When entering a phone number in the dialer add a "#" sign to toggle call type. I
 
 NOTE: Don't add anything to emergency numbers. They are always dialed over PSTN.
 
+http://sipdroid.googlecode.com/svn/images/choose2.png
+
 == What SIP providers is Sipdroid compatible with? ==
 
 Sipdroid runs standard SIP. At the moment registering to a virtual PBX as offered by [pbxes.org] is required to get good speech quality and full interoperability. [pbxes.org] is a free service. From there register your SIP accounts.
