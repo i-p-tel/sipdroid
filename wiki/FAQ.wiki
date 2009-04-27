@@ -35,25 +35,25 @@ http://sipdroid.googlecode.com/svn/images/choose2.png
 
 == What SIP providers is Sipdroid compatible with? ==
 
-Sipdroid runs standard SIP. At the moment registering to a virtual PBX as offered by [pbxes.org] is required to get good speech quality and full interoperability. [pbxes.org] is a free service. From there register your SIP accounts.
+Sipdroid runs standard SIP. At the moment registering to a virtual PBX as offered by [http://pbxes.org pbxes.org] is required to get good speech quality and full interoperability. [http://pbxes.org pbxes.org] is a free service. From there register your SIP accounts.
 
 == Is a PBXes account required? ==
 
-No, you can enter any SIP account. But presently this will limit you to just outgoing calls, poor voice in send direction, or battery draining issues. So we strongly recommend using the proxy service of [pbxes.org]. In the future other providers will probably improve their services to directly support Sipdroid, or Sipdroid might also support more by new ideas or operating system features when they become available.
+No, you can enter any SIP account. But presently this will limit you to just outgoing calls, poor voice in send direction, or battery draining issues. So we strongly recommend using the proxy service of [http://pbxes.org pbxes.org]. In the future other providers will probably improve their services to directly support Sipdroid, or Sipdroid might also support more by new ideas or operating system features when they become available.
 
-== What advantages do I get by signing up for PBXes? ==
+== What advantages do I get by signing up for [http://pbxes.org pbxes.org]? ==
 
   * It suppliers a full features PBX to you for multiple extensions. It's not a telephony service provider. You can register several trunks to use multiple telephony service providers of your choice.
-  * PBXes allows for handoff of calls between networks.
+  * [http://pbxes.org pbxes.org] allows for handoff of calls between networks.
   * Support NAT (network address translation).
   * It's free.
-  * PBXes can screen anonymous callers for you.
+  * [http://pbxes.org pbxes.org] can screen anonymous callers for you.
 
 http://sipdroid.googlecode.com/svn/images/priv.png
 
 == Is it complicated to set up a virtual PBX? ==
 
-Please have a look at the DOCS section on the PBXes website. Under "Getting started" you find an introduction to the necessary steps. First you create extension(s) and trunk(s). Then you must add at least one inbound and one outbound route.
+Please have a look at the DOCS section on the [http://pbxes.org pbxes.org] website. Under "Getting started" you find an introduction to the necessary steps. First you create extension(s) and trunk(s). Then you must add at least one inbound and one outbound route.
 
 == What build environment is needed for Sipdroid? ==
 
