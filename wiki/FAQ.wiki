@@ -61,4 +61,6 @@ To install Sipdroid you need version 1.5 "Cupcake" of Android. It is already ava
 
 == What build environment is needed for Sipdroid? ==
 
-The program will be downloadable for installation from this website. If you are interested in contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] and [http://subclipse.tigris.org/install.html Subclipse] for building the source code.
+For running the application just download the APK file.
+
+If you are interested in developing and contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] and [http://subclipse.tigris.org/install.html Subclipse] for building the source code.
