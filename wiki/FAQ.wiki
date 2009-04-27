@@ -41,7 +41,7 @@ Sipdroid runs standard SIP. At the moment registering to a virtual PBX as offere
 
 No, you can enter any SIP account. But presently this will limit you to just outgoing calls, poor voice in send direction, or battery draining issues. So we strongly recommend using the proxy service of [http://pbxes.org pbxes.org]. In the future other providers will probably improve their services to directly support Sipdroid, or Sipdroid might also support more by new ideas or operating system features when they become available.
 
-== What advantages do I get by signing up for [http://pbxes.org pbxes.org]? ==
+== What advantages do I get by signing up for PBXes? ==
 
   * It suppliers a full features PBX to you for multiple extensions. It's not a telephony service provider. You can register several trunks to use multiple telephony service providers of your choice.
   * [http://pbxes.org pbxes.org] allows for handoff of calls between networks.
