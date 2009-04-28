@@ -15,7 +15,7 @@ The following plans are suitable for unlimited hotspot/3G usage:
 
 == What type of warranty comes with Sipdroid? ==
 
-This project publishes Sipdroid for free under the terms of [http://www.gnu.org/licenses/gpl.html GNU General Public License v3]. The first version is a beta for software testing. So please allow for some issues and incompatibilities at the beginning.
+This project publishes Sipdroid for free under the terms of [http://www.gnu.org/licenses/gpl.html GNU General Public License v3]. The first public version is a beta for software testing. So please allow for some issues and incompatibilities at the beginning.
 
 == How can I dial my contacts over IP / over PSTN? ==
 
