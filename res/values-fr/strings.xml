@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="card_title_call_ended">Appel terminé</string>
+  <string name="card_title_dialing">Numérotation</string>
+  <string name="card_title_in_progress">Appel en cours</string>
+  <string name="card_title_incoming_call">Appel entrant</string>
+  <string name="card_title_on_hold">En attente</string>
+ <string name="menu_call">Numéroter</string>
+  <string name="menu_endCall">Terminer l\'appel</string>
+  <string name="menu_hold">En attente</string>
+  <string name="menu_mute">Muet</string>
+  <string name="unknown">Inconnu</string>
+</resources>
