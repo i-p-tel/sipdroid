@@ -55,6 +55,10 @@ http://sipdroid.googlecode.com/svn/images/priv.png
 
 Please have a look at the DOCS section on the [http://pbxes.org pbxes.org] website. Under "Getting started" you find an introduction to the necessary steps. First you create extension(s) and trunk(s). Then you must add at least one inbound and one outbound route. The Android specific details can be found in the DOCS section under "Fixed Mobile Convergence (FMC)".
 
+== How can I switch Sipdroid On and Off? ==
+
+You need to open Sipdroid's settings and uncheck "Use WLAN" to disable it.
+
 == What are the system requirements? ==
 
 To install Sipdroid you need version 1.5 "Cupcake" of Android. It is already available from HTC for Android Developer Phones. Please visit http://android-developers.blogspot.com/2009/04/android-15-is-here.html for details on updating the OS. An OTA (over the air) update for the other phones has been announced for coming in the beginning of May.
