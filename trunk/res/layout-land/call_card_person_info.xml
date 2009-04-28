@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2008 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!-- XML resource file for the "person info" area of the main
+     CallCard of the in-call UI, which includes the photo and
+     name/number TextViews.
+     This is the LANDSCAPE mode version of this layout. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:gravity="center_vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              >
+
+    <!-- Photo, or else a generic placeholder image. -->
+    <!-- In landscape mode this ImageView is smaller than in portrait mode.
+         (Contact photos are 96x96 by default, but they're displayed
+         smaller than that here.  Note that the layout size of this
+         ImageView is *not* the actual size of the photo, but also
+         includes the extra space taken up by the incall_photo_border
+         background.)
+         And since the contact photo will need to be scaled down, we set
+         scaleType="centerInside" here (rather than the scaleType="center"
+         we use in portrait mode, where photos are drawn at their true size.) -->
+    <ImageView android:id="@+id/photo"
+               android:layout_width="96px"
+               android:layout_height="96px"
+               android:scaleType="centerInside"
+               android:background="@drawable/incall_photo_border"
+               />
+
+    <!-- Name and number, to the right of the photo. -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dip">
+        >
+
+        <!-- Name (or the phone number, if we don't have a name to display). -->
+        <TextView android:id="@+id/name"
+                  android:gravity="center_horizontal"
+                  android:textAppearance="?android:attr/textAppearanceLarge"
+                  android:textSize="22sp"
+                  android:singleLine="true"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  />
+
+        <!-- Label (like "Mobile" or "Work", if present) and phone number, side by side -->
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center_horizontal"
+                      android:layout_marginTop="-4dip">
+            <TextView android:id="@+id/label"
+                      android:textAppearance="?android:attr/textAppearanceSmall"
+                      android:textSize="18sp"
+                      android:textColor="?android:attr/textColorSecondary"
+                      android:singleLine="true"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:paddingRight="6dip"
+                      />
+            <TextView android:id="@+id/phoneNumber"
+                      android:textAppearance="?android:attr/textAppearanceSmall"
+                      android:textSize="18sp"
+                      android:textColor="?android:attr/textColorSecondary"
+                      android:singleLine="true"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
