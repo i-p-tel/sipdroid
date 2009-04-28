@@ -1,0 +1,48 @@
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_account">
+                <EditTextPreference
+                        android:key="username"
+                        android:title="@string/settings_username"
+                        />
+                <EditTextPreference
+                        android:key="password"
+                        android:title="@string/settings_password"
+                        android:password="true"
+                        />
+
+                <EditTextPreference
+                        android:key="server"
+                        android:title="Server"
+                        />
+
+                <EditTextPreference
+                        android:key="port"
+                        android:title="Port"
+                        />
+                        </PreferenceCategory>
+   <PreferenceCategory android:title="@string/settings_options">
+	<CheckBoxPreference
+		android:key="wlan"
+		android:title="@string/settings_wlan"
+		android:summary="@string/settings_check" />
+	<CheckBoxPreference
+		android:key="3g"
+		android:title="@string/settings_3g"
+		android:summary="@string/settings_check" />
+	<CheckBoxPreference
+		android:key="edge"
+		android:title="@string/settings_edge"
+		android:summary="@string/settings_check" />
+		</PreferenceCategory>
+	<ListPreference
+		android:key="pref"
+		android:title="@string/settings_pref"
+            android:entries="@array/pref_display_values"
+            android:entryValues="@array/pref_values"
+            android:dialogTitle="@string/settings_pref" />
+	<CheckBoxPreference
+		android:key="par"
+		android:title="@string/settings_par"
+				android:summary="@string/settings_par2"  />
+</PreferenceScreen>

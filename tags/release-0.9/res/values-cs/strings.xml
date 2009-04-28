@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="card_title_call_ended">Konec hovoru</string>
+  <string name="card_title_dialing">Vytáčení</string>
+  <string name="card_title_in_progress">Probíhá hovor</string>
+  <string name="card_title_incoming_call">Příchozí hovor</string>
+  <string name="card_title_on_hold">Přidržený</string>
+  <string name="menu_call">Volat</string>
+  <string name="unknown">Neznámý</string>
+</resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pstn_name">Über Sprachdienst anrufen</string>
+    <string name="sip_name">Über IP anrufen, wenn verfügbar</string>
+<string name="menuButtonHint">Drücken Sie auf Menü für Anrufoptionen, die Rufaufbautaste zum Halten und Zurück, um den Anruf zu beenden</string>
+<string name="about">Sipdroid ist ein freier SIP-Client für Android
+\n
+\nSiehe http://sipdroid.org für weitere Infos
+\n
+\nVersion 0.9
+\nDas Programm befindet sich noch in der Beta-Testphase.
+\n
+\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
+\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\n
+\nDieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder (nach Ihrer Option) jeder späteren Version.
+\n
+\nDie Veröffentlichung dieses Programms erfolgt in der Hoffnung, daß es Ihnen von Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE, sogar ohne die implizite Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License (siehe http://www.gnu.org/licenses).</string>
+<string name="regfailed">Anmeldung fehlgeschlagen</string>
+<string name="regok">Angemeldet</string>
+<string name="reg">Angefordert</string>
+<string name="hint">Zieladresse</string>
+<string name="empty">Bitte Zieladresse als name@domain.com eingeben</string>
+<string name="notfast">Keine geeignete Datenverbindung verfügbar</string>
+<string name="settings_account">Zugangsdaten</string>
+<string name="settings_username">Benutzername</string>
+<string name="settings_password">Paßwort</string>
+<string name="settings_options">Optionen</string>
+<string name="settings_wlan">WLAN verwenden</string>
+<string name="settings_3g">3G verwenden</string>
+<string name="settings_edge">EDGE verwenden</string>
+<string name="settings_check">Prüfen Sie, ob Ihr Mobilfunkanbieter VoIP-Nutzung erlaubt</string>
+<string name="settings_par">Gleichzeitige Anwahl</string>
+<string name="settings_par2">Wählt alle Nummern eines Gesprächspartners gleichzeitig an</string>
+<string name="settings_pref">Bevorzugte Anrufart</string>
+    <string-array name="pref_display_values">
+        <item>SIP, wenn verfügbar</item>
+        <item>Sprachdienst</item>
+    </string-array>
+<string name="menu_settings">Einstellungen</string>
+<string name="menu_exit">Beenden</string>
+<string name="menu_about">Info</string>
+<string name="menu_dtmf">DTMF senden</string>
+  <string name="card_title_call_ended">Anruf beendet</string>
+  <string name="card_title_dialing">Rufaufbau</string>
+  <string name="card_title_in_progress">Aktiver Anruf</string>
+  <string name="card_title_incoming_call">Eingehender Anruf</string>
+  <string name="card_title_on_hold">Gehalten</string>
+  <string name="menu_call">Wählen</string>
+  <string name="menu_endCall">Anruf beenden</string>
+  <string name="menu_hold">Halten</string>
+  <string name="menu_mute">Stumm</string>
+  <string name="unknown">Unbekannt</string>
+</resources>

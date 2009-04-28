@@ -1,0 +1,107 @@
+	
+	Further changes will be logged on http://sipdroid.org (Google Code)
+	
+	--- This change log ends here (first public beta) ---
+	
+	Author: i-p-tel GmbH
+	Date: March, 2009
+	
+		The following source files have been added:
+
+		./sipdroid/media/G711.java
+		./sipdroid/sipua/phone/ButtonGridLayout.java
+		./sipdroid/sipua/phone/Call.java
+		./sipdroid/sipua/phone/CallCard.java
+		./sipdroid/sipua/phone/CallerInfo.java
+		./sipdroid/sipua/phone/CallerInfoAsyncQuery.java
+		./sipdroid/sipua/phone/CallStateException.java
+		./sipdroid/sipua/phone/Connection.java
+		./sipdroid/sipua/phone/ContactsAsyncHelper.java
+		./sipdroid/sipua/phone/Phone.java
+		./sipdroid/sipua/phone/PhoneUtils.java
+		./sipdroid/sipua/ui/Activity2.java
+		./sipdroid/sipua/ui/Caller.java
+		./sipdroid/sipua/ui/DTMF.java
+		./sipdroid/sipua/ui/OneShotAlarm.java
+		./sipdroid/sipua/ui/PSTN.java
+		./sipdroid/sipua/ui/Receiver.java
+		./sipdroid/sipua/ui/RegisterService.java
+		./sipdroid/sipua/ui/Settings.java
+		./sipdroid/sipua/ui/SIP.java
+		./sipdroid/sipua/ui/SipdroidListener.java
+
+		The following source files have been modified:
+	
+		./sipdroid/media/JAudioLauncher.java
+		./sipdroid/media/MediaLauncher.java
+		./sipdroid/media/RtpStreamReceiver.java
+		./sipdroid/media/RtpStreamSender.java
+		./sipdroid/net/RtpSocket.java
+		./sipdroid/net/KeepAliveSip.java
+		./sipdroid/net/KeepAliveUdp.java
+		./sipdroid/sipua/RegisterAgent.java
+		./sipdroid/sipua/SipdroidEngine.java
+		./sipdroid/sipua/UserAgent.java
+		./sipdroid/sipua/UserAgentProfile.java
+		./sipdroid/sipua/ui/Sipdroid.java
+		./zoolu/call/ExtendedCall.java
+		./zoolu/net/UdpProvider.java
+		./zoolu/sip/dialog/InviteDialog.java
+		./zoolu/sip/dialog/ExtendedInviteDialog.java
+		./zoolu/sip/message/BaseMessageFactory.java
+		./zoolu/sip/provider/SipProvider.java
+		
+		
+	Author: Hughes Systique Corporation
+	Date: Nov 17-2008
+	
+		re-ported for Version 1.0r1
+		
+	Author: Hughes Systique Corporation
+	Date: 30 April, 2008
+	
+		Initial release.
+		
+	Author: Hughes Systique Corporation
+	Date: 2 April, 2008
+	
+		The following files were modified as part of the Porting Process:
+	
+		./zoolu/sdp/AttributeField.java
+		./zoolu/sdp/MediaDescriptor.java
+		./zoolu/sdp/MediaField.java
+		./zoolu/sdp/SdpParser.java
+		./zoolu/sdp/SessionDescriptor.java
+		./zoolu/sdp/SessionNameField.java
+		./zoolu/sip/address/SipURL.java
+		./zoolu/sip/call/Call.java
+		./zoolu/sip/call/CallListenerAdapter.java
+		./zoolu/sip/call/ExtendedCall.java
+		./zoolu/sip/call/ExtendedCallListener.java
+		./zoolu/sip/call/SdpTools.java
+		./zoolu/sip/dialog/Dialog.java
+		./zoolu/sip/dialog/DialogInfo.java
+		./zoolu/sip/dialog/ExtendedInviteDialog.java
+		./zoolu/sip/dialog/NotifierDialog.java
+		./zoolu/sip/dialog/NotifierDialogListener.java
+		./zoolu/sip/dialog/SubscriberDialog.java
+		./zoolu/sip/header/AllowEventsHeader.java
+		./zoolu/sip/header/AllowHeader.java
+		./zoolu/sip/header/AuthenticationHeader.java
+		./zoolu/sip/header/AuthenticationInfoHeader.java
+		./zoolu/sip/header/AuthorizationHeader.java
+		./zoolu/sip/header/ListHeader.java
+		./zoolu/sip/header/MultipleHeader.java
+		./zoolu/sip/header/ParametricHeader.java
+		./zoolu/sip/message/BaseMessage.java
+		./zoolu/sip/message/BaseMessageFactory.java
+		./zoolu/sip/message/BaseMessageOtp.java
+		./zoolu/sip/provider/SipProvider.java
+		./zoolu/tools/Timer.java
+	
+		The changes can be summarized as
+		1) Remove JMF / RAT specific code from User Agent code
+		2) All warnings in the MJSip 1.6 release were fixed
+		3) Strongly type checked code
+		4) Some bug fixes
+	
