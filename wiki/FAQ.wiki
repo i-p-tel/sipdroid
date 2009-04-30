@@ -80,7 +80,9 @@ You need to open Sipdroid's settings and uncheck "Use WLAN" to disable it.
 
 === How much will Sipdroid drain the battery? (Constantly running Internet connection?) ===
 
-When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time). Network access then happens just once per hour and you will never experience battery drain (like within a few hours). To improve also try uninstalling background applications (e.g. Netcounter, which only runs fine with WLAN turned off). A good application to save battery is Ambient Light Sensor.
+When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time).
+
+To improve also try uninstalling background applications (e.g. Netcounter, which only runs fine with WLAN turned off). A good application to save battery is Ambient Light Sensor.
 
 === What are the system requirements? ===
 
