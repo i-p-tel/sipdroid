@@ -51,7 +51,6 @@ Possible issues when registering directly to other SIP servers are:
 
 Sipdroid presently supports basic call. All the typical PBX features are configured from the PC. This concept is much like the concept of Google's services that allow you e.g. to manage your calendar on the PC and access it remotely on your phone. The following features are provided by the Free Account on [http://pbxes.org pbxes.org]:
 
-  * Routing to multiple SIP accounts
   * Change number format (e.g. convert the + codes)
   * Music on hold
   * Support of several modes for DTMF tones
