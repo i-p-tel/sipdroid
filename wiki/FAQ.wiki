@@ -43,7 +43,7 @@ No, you can enter any SIP account. But presently this will limit you to just out
 
 == What advantages do I get by signing up for PBXes? ==
 
-  * It supplies a full features PBX for multiple extensions. It's not a telephony service provider. You can register several trunks to use multiple telephony service providers of your choice.
+  * It supplies a full featured PBX for multiple extensions. It's not a telephony service provider. You can register several trunks to use multiple telephony service providers of your choice.
   * [http://pbxes.org pbxes.org] routes incoming calls over SIP and PSTN to you. If you are online you can take it as VoIP, if offline there is a fallback to GSM. A paid account additionally allows for handoff of calls between networks.
   * Support NAT (network address translation).
   * It's free.
