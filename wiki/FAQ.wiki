@@ -71,7 +71,7 @@ What is currently missing is Bluetooth and there are already some [http://code.g
 
 === Is it complicated to set up a virtual PBX? ===
 
-Please have a look at the [http://pbxes.org/community_e.php?display=wiki DOCS section]. Under "Getting started" you find an introduction to the necessary steps. *It's all web based. No installation required.* First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. The Android specific details can be found in the DOCS section under "Fixed Mobile Convergence (FMC)".
+Please have a look at the [http://pbxes.org/community_e.php?display=wiki DOCS section]. Under "Getting started" you find an introduction to the necessary steps. *It's all web based. No installation required.* First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. The Android specific details can be found under "Fixed Mobile Convergence (FMC)".
 
 === How can I switch Sipdroid on and off? ===
 
