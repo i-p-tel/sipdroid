@@ -86,7 +86,11 @@ To improve also try uninstalling background applications (e.g. Netcounter, which
 
 === What are the system requirements? ===
 
-To install Sipdroid you need version 1.5 "Cupcake" of Android. It is already available from HTC for Android Developer Phones. Please visit http://android-developers.blogspot.com/2009/04/android-15-is-here.html for details on updating the OS. An OTA (over the air) update for the other phones has been announced for coming in the beginning of May.
+To install Sipdroid you need version 1.5 "Cupcake" of Android.
+
+See http://android-developers.blogspot.com/2009/04/android-15-is-here.html for details on updating the OS on developer phones.
+
+The update for the other phones is currently being deployed over the air.
 
 === What build environment is needed for Sipdroid? ===
 
