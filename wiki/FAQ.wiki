@@ -35,33 +35,49 @@ http://sipdroid.googlecode.com/svn/images/choose2.png
 
 == What SIP providers is Sipdroid compatible with? ==
 
-Sipdroid runs standard SIP. At the moment registering to a virtual PBX as offered by [http://pbxes.org pbxes.org] is required to get good speech quality and full interoperability. [http://pbxes.org pbxes.org] is a free service. From there register your SIP accounts.
+Sipdroid runs standard SIP. At the moment registering to a virtual PBX is required to get good speech quality and full interoperability. [http://pbxes.org pbxes.org] is such a free service. From there register your SIP accounts.
 
 == Is a PBXes account required? ==
 
 No, you can enter any SIP account. But presently this will limit you to just outgoing calls, poor voice in send direction, or battery draining issues. So we strongly recommend using the proxy service of [http://pbxes.org pbxes.org]. In the future other providers will probably improve their services to directly support Sipdroid, or Sipdroid might also support more by new ideas or operating system features when they become available.
 
-== What advantages do I get by signing up for PBXes? ==
+== What advantages do I get by signing up for the Free Account at PBXes? ==
 
   * It supplies a full featured PBX for multiple extensions. It's not a telephony service provider. You can register several trunks to use multiple telephony service providers of your choice.
-  * [http://pbxes.org pbxes.org] routes incoming calls over SIP and PSTN to you. If you are online you can take it as VoIP, if offline there is a fallback to GSM. A paid account additionally allows for handoff of calls between networks.
-  * Support NAT (network address translation).
-  * It's free.
-  * [http://pbxes.org pbxes.org] can screen anonymous callers for you.
+  * [http://pbxes.org pbxes.org] routes incoming calls over SIP and PSTN to you. If you are online you can take it as VoIP, if offline there is a fallback to GSM.
+
+== Which features are supported in Sipdroid? ==
+
+The Sipdroid client is kept simple to allow all the typical PBX features be configured from the PC. This concept is much like the concept of Google's services that allow you e.g. to manage your calendar on the PC and access it remotely on your phone. The following features are provided by the Free Account on [http://pbxes.org pbxes.org]:
+
+  * Routing to multiple SIP accounts
+  * Change number format (e.g. convert the + codes)
+  * Music on hold
+  * Support of several modes for DTMF tones
+  * Support for NAT (network address translation)
+  * Simultaneous Outbound Calling
+  * Screening anonymous callers
 
 http://sipdroid.googlecode.com/svn/images/priv.png
 
+  * Time-based routing for incoming calls
+  * Call Transfer
+  * Conferences
+  * Webcall
+
+You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Call Recording, Handoff of calls between networks, ENUM, Faxmail).
+
 == Is it complicated to set up a virtual PBX? ==
 
-Please have a look at the DOCS section on the [http://pbxes.org pbxes.org] website. Under "Getting started" you find an introduction to the necessary steps. First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you must add at least one inbound and one outbound route. The Android specific details can be found in the DOCS section under "Fixed Mobile Convergence (FMC)".
+Please have a look at the [http://pbxes.org/community_e.php?display=wiki DOCS section]. Under "Getting started" you find an introduction to the necessary steps. It's all web based. No installation required. First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. The Android specific details can be found in the DOCS section under "Fixed Mobile Convergence (FMC)".
 
-== How can I switch Sipdroid On and Off? ==
+== How can I switch Sipdroid on and off? ==
 
 You need to open Sipdroid's settings and uncheck "Use WLAN" to disable it.
 
-== How much will sipdroid drain the battery? (constantly running internet connection?) ==
+== How much will Sipdroid drain the battery? (Constantly running Internet connection?) ==
 
-When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time). Network access then happens once per hour. If you experience battery drain (like within a few hours) you should try with [http://pbxes.org pbxes.org] first. Also try uninstalling other background applications (e.g. Netcounter, which only runs fine with WLAN turned off).
+When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time). Network access then happens just once per hour and you will never experience battery drain (like within a few hours). To improve also try uninstalling background applications (e.g. Netcounter, which only runs fine with WLAN turned off). A good battery saver application is Ambient Light Sensor.
 
 == What are the system requirements? ==
 
@@ -69,6 +85,6 @@ To install Sipdroid you need version 1.5 "Cupcake" of Android. It is already ava
 
 == What build environment is needed for Sipdroid? ==
 
-For running the application just download the APK file.
+For running the application just download the APK file from here. There is a download at Android Market which is limited to usage within Wireless LANs only.
 
 If you are interested in developing and contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] and [http://subclipse.tigris.org/install.html Subclipse] for building the source code.
