@@ -35,15 +35,16 @@ http://sipdroid.googlecode.com/svn/images/choose2.png
 
 === What SIP providers is Sipdroid compatible with? ===
 
-Sipdroid runs standard SIP. At the moment registering to a virtual PBX is required to get good speech quality and full interoperability. [http://pbxes.org pbxes.org] is such a free service. From there register your SIP accounts.
+Sipdroid runs standard SIP. For full interoperability register Sipdroid to [http://pbxes.org pbxes.org]. From there register your SIP accounts. 
 
-=== Is a PBXes account required? ===
+Possible issues when registering directly to other SIP servers are:
 
-No, you can enter any SIP account. But presently this will limit you to just outgoing calls, possibly poor voice in send direction, or battery draining issues. So we strongly recommend using the proxy service of [http://pbxes.org pbxes.org] at this time.
+ * Poor voice in send direction
+ * Battery drain
 
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
-  * It supplies a full featured PBX for multiple extensions. It's not a telephony service provider. You can register several trunks to use multiple telephony service providers of your choice.
+  * You can register several trunks to use multiple telephony service providers of your choice.
   * [http://pbxes.org pbxes.org] routes incoming calls over SIP and PSTN to you. If you are online you can take it as VoIP, if offline there is a fallback to GSM.
 
 === Which features are supported in Sipdroid? ===
