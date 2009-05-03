@@ -40,7 +40,7 @@ Sipdroid runs standard SIP. For full interoperability register Sipdroid to [http
 Possible issues when registering directly to other SIP servers are:
 
  * Poor voice in send direction
- * Battery drain
+ * Battery drain on 3G/EDGE
 
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
