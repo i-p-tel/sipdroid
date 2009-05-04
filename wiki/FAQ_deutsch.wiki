@@ -1,23 +1,19 @@
 #summary Häufig gestellte Fragen
 #labels Featured
 
-=== How can I prepare for mobile VoIP? ===
+=== Was ist bei der Nutzung zu beachten? ===
 
-Sipdroid allows you to choose where you will use VoIP, on WLANs only, on 3G, or EDGE networks. If you are going to use VoIP services outside private wireless networks, it's your responsibility to check the contractual terms with the mobile operator:
+Sipdroid erlaubt Ihnen die Auswahl, wo VoIP-Dienste genutzt werden sollen: Nur innerhalb von WLANs, in 3G- oder EDGE-Netzen. Wenn VoIP-Dienste auch außerhalb des eigenen WLANs mobil genutzt werden sollen, empfiehlt sich ein Blick in das Kleingedruckte des Mobilfunkvertrages:
 
-Often mobile phone operators forbid using VoIP in the contract's fine print. The European Union is already looking at whether blocks on VoIP service by Europe's mobile phone operators might breach competition laws.
+In Deutschland untersagen die Anbieter häufig die mobile Nutzung von VoIP. Die Europäische Kommission prüft bereits, ob Mobilfunkanbieter gegen Wettbewerbsregeln verstoßen, wenn sie Telefonate per mobilem Internet (VoIP) verbieten.
 
-The following plans are suitable for unlimited hotspot/3G usage:
+Geeignet für die VoIP-Nutzung von unterwegs ist z.B. der Tarif [https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php debitel Talk and Surf S], bei dem eine echte Hotspot/3G-Flatrate geboten wird.
 
-  * Germany: [https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php debitel Talk and Surf S]
+=== Welche Bedingungen gelten für Gewährleistung und Haftung? ===
 
-[http://code.google.com/p/sipdroid/w/edit/FAQ Add] more!
+Sipdroid wird kostenlos unter den Bedingungen der [http://www.gnu.de/documents/gpl.de.html allgemeinen öffentlichen GNU-Lizenz v3] veröffentlicht. Darüberhinaus befindet sich die Software noch in der Beta-Testphase, so daß derzeit durchaus noch Fehler und Inkompatibilitäten auftreten können.
 
-=== What type of warranty comes with Sipdroid? ===
-
-This project publishes Sipdroid for free under the terms of [http://www.gnu.org/licenses/gpl.html GNU General Public License v3]. The first public version is beta for software testing. So please allow for some issues and incompatibilities at the beginning.
-
-=== How can I dial my contacts over IP / over PSTN? ===
+=== Wie wähle ich zwischen Handynetz und IP-Anrufen aus? ===
 
 In settings you can specify your preferred call type. This is used when clicking a "Call" tab of a contact. When clicking on the "Text" tab of a contact you get a menu like this:
 
