@@ -57,7 +57,7 @@ public class RtpStreamReceiver extends Thread {
 
 	/** Whether it is running */
 	boolean running = false;
-	boolean muted = false;
+	boolean muted = false,was_muted;
 
 	/**
 	 * Constructs a RtpStreamReceiver.
@@ -89,6 +89,7 @@ public class RtpStreamReceiver extends Thread {
 	
 	public boolean mute() {
 		muted = !muted;
+		was_muted = true;
 		return muted;
 	}
 
@@ -153,9 +154,10 @@ public class RtpStreamReceiver extends Thread {
 				track.play();
 			}
 			try {
+				was_muted = false;
 				rtp_socket.receive(rtp_packet);
 			} catch (IOException e) {
-				if (running && !muted) {
+				if (running && !muted && !was_muted) {
 					Receiver.engine(Receiver.mContext).rejectcall();
 					break;
 				}

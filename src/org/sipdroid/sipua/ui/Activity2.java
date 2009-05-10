@@ -28,7 +28,7 @@ public class Activity2 extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     	Intent startActivity = new Intent();
-    	startActivity.setClass(this,Sipdroid.class);
+    	startActivity.setClass(this,InCallScreen.class);
 	    startActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     	startActivity(startActivity); 
     	finish();

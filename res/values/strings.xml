@@ -7,7 +7,7 @@
 \n
 \nSee http://sipdroid.org for more info
 \n
-\nVersion 0.9
+\nVersion 0.9.1
 \nThe software has been released for beta testing.
 \n
 \nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
@@ -32,7 +32,7 @@
 <string name="settings_3g">Use 3G</string>
 <string name="settings_edge">Use EDGE</string>
 <string name="settings_check">Check with your mobile operator if he allows VoIP</string>
-<string name="settings_par2">Dials all of one person's phone numbers in parallel</string>
+<string name="settings_par2">Dials all of one person\'s phone numbers in parallel</string>
 <string name="settings_par">Simultaneous Outbound</string>
 <string name="settings_pref">Preferred call type</string>
     <string-array name="pref_display_values">

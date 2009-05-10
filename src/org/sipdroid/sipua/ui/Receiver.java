@@ -58,6 +58,7 @@ import org.sipdroid.sipua.phone.Connection;
 		public static Call ccCall;
 		public static Connection ccConn;
 		public static int call_state;
+		public static String laststate,lastnumber;
 		
 		public static SipdroidEngine engine(Context context) {
 			mContext = context;
@@ -89,6 +90,7 @@ import org.sipdroid.sipua.phone.Connection;
 					if (text2.indexOf("\"") >= 0)
 						text2 = text2.substring(text2.indexOf("\"")+1,text2.lastIndexOf("\""));
 					broadcastCallStateChanged("RINGING", caller);
+			        mContext.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 					keepTop = true;
 					moveTop();
 					ccCall.setState(Call.State.INCOMING);
@@ -155,7 +157,7 @@ import org.sipdroid.sipua.phone.Connection;
 						}
 					}).start();   
 				}
-		        mContext.startActivity(createIntent(Sipdroid.class));
+		        mContext.startActivity(createIntent(InCallScreen.class));
 			}
 		}
 		
@@ -182,12 +184,18 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		public static void broadcastCallStateChanged(String state,String number) {
+			if (state == null) {
+				state = laststate;
+				number = lastnumber;
+			}
 			Intent intent = new Intent(ACTION_PHONE_STATE_CHANGED);
 			intent.putExtra("state",state);
 			if (number != null)
 				intent.putExtra("incoming_number", number);
 			intent.putExtra(mContext.getString(R.string.app_name), true);
 			mContext.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
+			laststate = state;
+			lastnumber = number;
 		}
 		
 		public static void reRegister(int renew_time) {
@@ -274,11 +282,15 @@ import org.sipdroid.sipua.phone.Connection;
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        	!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
 	    		String state = intent.getStringExtra("state");
-	    		if ((state.equals("OFFHOOK") && call_state == UserAgent.UA_STATE_INCALL) ||
-	    			(state.equals("IDLE") && call_state == UserAgent.UA_STATE_HOLD))
-	    			engine(context).togglehold();
 	    		if (state.equals("RINGING"))
 	    			engine(context).register();
+	    		else
+	    		if (state.equals("IDLE") && call_state != UserAgent.UA_STATE_IDLE)
+	    			broadcastCallStateChanged(null,null);
+	    		else
+	    		if ((state.equals("OFFHOOK") && call_state == UserAgent.UA_STATE_INCALL) ||
+		    			(state.equals("IDLE") && call_state == UserAgent.UA_STATE_HOLD))
+		    			engine(context).togglehold();
 	        }
 		}
 }
