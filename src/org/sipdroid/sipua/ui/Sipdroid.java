@@ -55,7 +55,8 @@ public class Sipdroid extends Activity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
-        Receiver.engine(this).register();
+		if (!Receiver.engine(this).isRegistered())
+			Receiver.engine(this).register();
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.sipdroid);
@@ -105,7 +106,7 @@ public class Sipdroid extends Activity {
 			break;
 
         case KeyEvent.KEYCODE_BACK:
-            finish();
+            moveTaskToBack(true);
             return true;
 
         }
