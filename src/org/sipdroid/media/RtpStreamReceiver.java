@@ -57,7 +57,7 @@ public class RtpStreamReceiver extends Thread {
 
 	/** Whether it is running */
 	boolean running = false;
-	boolean muted = false,was_muted;
+	boolean muted = false;
 
 	/**
 	 * Constructs a RtpStreamReceiver.
@@ -89,7 +89,6 @@ public class RtpStreamReceiver extends Thread {
 	
 	public boolean mute() {
 		muted = !muted;
-		was_muted = true;
 		return muted;
 	}
 
@@ -120,7 +119,7 @@ public class RtpStreamReceiver extends Thread {
 		track.play();
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
-		int user, server, lserver, luser, cnt, todo, headroom, len;
+		int user, server, lserver, luser, cnt, todo, headroom, len, timeout = 0;
 		user = 0;
 		lserver = 0;
 		luser = -8000;
@@ -136,7 +135,7 @@ public class RtpStreamReceiver extends Thread {
 		} catch (IOException e) {
 		}
 		try {
-			rtp_socket.getDatagramSocket().setSoTimeout(10000);
+			rtp_socket.getDatagramSocket().setSoTimeout(1000);
 		} catch (SocketException e2) {
 			if (!Sipdroid.release) e2.printStackTrace();
 		}
@@ -154,15 +153,16 @@ public class RtpStreamReceiver extends Thread {
 				track.play();
 			}
 			try {
-				was_muted = false;
 				rtp_socket.receive(rtp_packet);
+				timeout = 0;
 			} catch (IOException e) {
-				if (running && !muted && !was_muted) {
+				rtp_socket.getDatagramSocket().disconnect();
+				if (++timeout >= 10) {
 					Receiver.engine(Receiver.mContext).rejectcall();
 					break;
 				}
 			}
-			if (running) {		
+			if (running && timeout == 0) {		
 				 len = rtp_packet.getPayloadLength();
 				 G711.alaw2linear(buffer, lin, len);
 				 server = track.getPlaybackHeadPosition();
@@ -201,7 +201,7 @@ public class RtpStreamReceiver extends Thread {
 		track.stop();
 		am.setMode(AudioManager.MODE_NORMAL);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
-		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME);
+		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {
 			sleep(500);
