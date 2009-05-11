@@ -41,12 +41,12 @@ Possible issues when registering directly to other SIP servers are:
 
  * Poor voice in send direction
  * Battery drain on 3G/EDGE
- * No incoming calls
+ * No ringing
 
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
   * You can register several trunks to use multiple telephony service providers of your choice.
-  * [http://pbxes.org pbxes.org] routes incoming calls over SIP and PSTN to you. If you are online you can take it as VoIP, if offline there is a fallback to GSM.
+  * [http://pbxes.org pbxes.org] routes incoming calls over SIP and PSTN to you. If you are online you can take it as VoIP, if off line you can take it as GSM.
 
 === How are the buttons assigned? ===
 
@@ -54,7 +54,7 @@ Android reserves the green and red keys for the built-in dialer of the phone. So
 
 ==== When ringing ====
 
-Incoming SIP calls can be identified by the turquoise icon in the status bar. Pressing the MENU button answers the SIP call. Pressing the green call button would answer the regular call.
+Incoming SIP calls can be identified by the turquoise icon in the status bar. Pressing the MENU button answers the SIP call. Pressing the green call button answers the regular call.
 
 ==== While in call ====
 
