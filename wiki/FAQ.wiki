@@ -104,10 +104,16 @@ To install Sipdroid you need version 1.5 "Cupcake" of Android.
 
 See http://android-developers.blogspot.com/2009/04/android-15-is-here.html for details on updating the OS on developer phones.
 
-The update for the other phones is currently being deployed over the air.
+The update for the other phones comes over the air, starting May 1st, 2009.
+
+=== What does "full" version mean? ===
+
+There is a download at Android Market which is limited to usage within Wireless LANs only. 
+
+The download available [http://code.google.com/p/sipdroid/downloads/list here] can be used on 3G and EDGE networks as well. Please check the contractual terms with your mobile operator before using that one (see above).
+
+Upgrading through Android Market always reverts to the limited version.
 
 === What build environment is needed for Sipdroid? ===
-
-For running the application just download the APK file from here. There is a download at Android Market which is limited to usage within Wireless LANs only.
 
 If you are interested in developing and contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] and [http://subclipse.tigris.org/install.html Subclipse] for building the source code.
