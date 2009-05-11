@@ -77,7 +77,8 @@ public class InCallScreen extends Activity {
 	}
 	
 	void moveBack() {
-		if (!Receiver.ccConn.isIncoming() || Receiver.ccCall.base != 0) {
+		if ((Receiver.ccConn != null && !Receiver.ccConn.isIncoming()) || 
+				(Receiver.ccCall != null && Receiver.ccCall.base != 0)) {
 	        Intent intent = new Intent(Intent.ACTION_VIEW, null);
 	        intent.setType("vnd.android.cursor.dir/calls");
 	        startActivity(intent);
@@ -166,10 +167,13 @@ public class InCallScreen extends Activity {
 		
 		initInCallScreen();
 
-		IntentFilter intentfilter = new IntentFilter();
-		intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
-		intentfilter.addAction(Intent.ACTION_SCREEN_ON);
-        registerReceiver(m_receiver = new Receiver(), intentfilter);           
+		if (m_receiver == null) {
+			IntentFilter intentfilter = new IntentFilter();
+			intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
+			intentfilter.addAction(Intent.ACTION_SCREEN_ON);
+        	m_receiver = new Receiver();
+        	registerReceiver(m_receiver, intentfilter);     
+		}
 
         mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         mKeyguardLock = mKeyguardManager.newKeyguardLock("Sipdroid");
