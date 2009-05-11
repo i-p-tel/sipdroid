@@ -27,7 +27,9 @@ import org.sipdroid.sipua.phone.CallCard;
 import org.sipdroid.sipua.phone.Phone;
 
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -53,7 +55,11 @@ public class InCallScreen extends Activity {
 	CallCard mCallCard;
 	Phone ccPhone;
 	
-	public void onDestroy() {
+    KeyguardManager mKeyguardManager;
+    KeyguardManager.KeyguardLock mKeyguardLock;
+    boolean enabled;
+    
+    public void onDestroy() {
 		super.onDestroy();
 		if (m_receiver != null) {
 			unregisterReceiver(m_receiver);
@@ -67,6 +73,7 @@ public class InCallScreen extends Activity {
 		Receiver.isTop = false;
     	if (!Sipdroid.release) Log.i("SipUA:","on pause");
 		if (Receiver.keepTop) Receiver.moveTop();
+		reenableKeyguard();
 	}
 	
 	void moveBack() {
@@ -78,14 +85,33 @@ public class InCallScreen extends Activity {
 		moveTaskToBack(true);
 	}
 	
+	void disableKeyguard() {
+		if (enabled) {
+			mKeyguardLock.disableKeyguard();
+			enabled = false;
+		}
+	}
+	
+	void reenableKeyguard() {
+		if (!enabled) {
+			mKeyguardLock.reenableKeyguard();
+			enabled = true;
+		}
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();
 		Receiver.isTop = true;
     	if (!Sipdroid.release) Log.i("SipUA:","on resume");
 		switch (Receiver.call_state) {
+		case UserAgent.UA_STATE_INCOMING_CALL:
+			callCardMenuButtonHint.setText(R.string.menuButtonHint2);
+			callCardMenuButtonHint.setVisibility(View.VISIBLE);
+			break;
 		case UserAgent.UA_STATE_INCALL:
 		case UserAgent.UA_STATE_HOLD:
+            callCardMenuButtonHint.setText(R.string.menuButtonHint);
 			callCardMenuButtonHint.setVisibility(View.VISIBLE);
 			break;
 		case UserAgent.UA_STATE_IDLE:
@@ -103,11 +129,12 @@ public class InCallScreen extends Activity {
 			} else
 				moveBack();
 			break;
-		default:
+		case UserAgent.UA_STATE_OUTGOING_CALL:
 			callCardMenuButtonHint.setVisibility(View.INVISIBLE);
 			break;
 		}
 		if (Receiver.ccCall != null) mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
+		disableKeyguard();
 	}
 	
 	ViewGroup mInCallPanel;
@@ -143,6 +170,10 @@ public class InCallScreen extends Activity {
 		intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
 		intentfilter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(m_receiver = new Receiver(), intentfilter);           
+
+        mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        mKeyguardLock = mKeyguardManager.newKeyguardLock("Sipdroid");
+        enabled = true;
 	}
 	
 	@Override
@@ -160,6 +191,7 @@ public class InCallScreen extends Activity {
 				
 		return result;
 	}
+	
 	@Override
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
@@ -183,7 +215,6 @@ public class InCallScreen extends Activity {
 		
 		return result;
 	}
-
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

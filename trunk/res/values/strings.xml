@@ -2,7 +2,8 @@
 <resources>
     <string name="pstn_name">Call over PSTN</string>
     <string name="sip_name">Call over IP, when available</string>
-<string name="menuButtonHint">Press Menu for call options, Call button to put on hold, and Back to hang up</string>
+<string name="menuButtonHint">Press Menu for call options, Call button to put on hold, or Back to hang up.</string>
+<string name="menuButtonHint2">Press Menu to answer or Back to reject call.</string>
 <string name="about">Sipdroid is an open-source SIP client for Android
 \n
 \nSee http://sipdroid.org for more info
