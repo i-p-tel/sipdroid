@@ -20,8 +20,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-          android:versionName="0.9.1"
-          android:versionCode="3">
+          android:versionName="0.9.2"
+          android:versionCode="4">
 <uses-sdk android:minSdkVersion="3" />
     <application android:icon="@drawable/icon64" android:label="@string/app_name">
         <activity android:name=".ui.Sipdroid" android:label="@string/app_name" android:launchMode="singleInstance"
