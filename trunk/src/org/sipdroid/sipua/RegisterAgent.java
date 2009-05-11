@@ -31,6 +31,8 @@ import org.zoolu.sip.header.AuthorizationHeader;
 import org.zoolu.sip.header.ContactHeader;
 import org.zoolu.sip.header.ExpiresHeader;
 import org.zoolu.sip.header.Header;
+import org.zoolu.sip.header.ProxyAuthenticateHeader;
+import org.zoolu.sip.header.ProxyAuthorizationHeader;
 import org.zoolu.sip.header.StatusLine;
 import org.zoolu.sip.header.WwwAuthenticateHeader;
 import org.zoolu.sip.message.Message;
@@ -291,38 +293,9 @@ public class RegisterAgent implements TransactionClientListener {
 		if (transaction.getTransactionMethod().equals(SipMethods.REGISTER)) {
 			StatusLine status = resp.getStatusLine();
 			int code = status.getCode();
-			if (code == 401
-					&& attempts < MAX_ATTEMPTS
-					&& resp.hasWwwAuthenticateHeader()
-					&& resp.getWwwAuthenticateHeader().getRealmParam()
-							.equalsIgnoreCase(realm)) {
-				attempts++;
-				Message req = transaction.getRequestMessage();
-				req.setCSeqHeader(req.getCSeqHeader().incSequenceNumber());
-				
-				WwwAuthenticateHeader wah = resp.getWwwAuthenticateHeader();
-				String qop_options = wah.getQopOptionsParam();
-				
-				printLog("DEBUG: qop-options: " + qop_options, LogLevel.MEDIUM);
-				
-				qop = (qop_options != null) ? "auth" : null;
-				
-				AuthorizationHeader ah = (new DigestAuthentication(
-						SipMethods.REGISTER, req.getRequestLine().getAddress()
-								.toString(), wah, qop, null, username, passwd))
-						.getAuthorizationHeader();
-				req.setAuthorizationHeader(ah);
-				
-				TransactionClient t = new TransactionClient(sip_provider, req,
-						this);
-				
-				t.request();
-				
-				//He we need not change the current state since, in case it was
-				//a case of registration, we are registering and if it was a 
-				//case of de-registration then we are de-registering
-				
-			} else {
+			if (code == 401 || code == 407)
+				processAuthenticationResponse(transaction, resp, code);
+			else {
 				String result = code + " " + status.getReason();
 				
 				//Since the transactions are atomic, we rollback to the 
@@ -346,7 +319,70 @@ public class RegisterAgent implements TransactionClientListener {
 			}
 		}
 	}
+	
+	private void generateRequestWithProxyAuthorizationheader(TransactionClient transaction,
+			Message resp, Message req){
+		if(resp.hasProxyAuthenticateHeader()
+				&& resp.getProxyAuthenticateHeader().getRealmParam()
+				.equalsIgnoreCase(realm)){
+			ProxyAuthenticateHeader pah = resp.getProxyAuthenticateHeader();
+			String qop_options = pah.getQopOptionsParam();
+			
+			printLog("DEBUG: qop-options: " + qop_options, LogLevel.MEDIUM);
+			
+			qop = (qop_options != null) ? "auth" : null;
+			
+			ProxyAuthorizationHeader ah = (new DigestAuthentication(
+					SipMethods.REGISTER, req.getRequestLine().getAddress()
+							.toString(), pah, qop, null, username, passwd))
+					.getProxyAuthorizationHeader();
+			req.setProxyAuthorizationHeader(ah);
+			
+			TransactionClient t = new TransactionClient(sip_provider, req, this);
+			
+			t.request();
+		}
+	}
+	
+	private void generateRequestWithWwwAuthorizationheader(TransactionClient transaction,
+			Message resp, Message req){
+		if(resp.hasWwwAuthenticateHeader()
+				&& resp.getWwwAuthenticateHeader().getRealmParam()
+				.equalsIgnoreCase(realm)){		
+			WwwAuthenticateHeader wah = resp.getWwwAuthenticateHeader();
+			String qop_options = wah.getQopOptionsParam();
+			
+			printLog("DEBUG: qop-options: " + qop_options, LogLevel.MEDIUM);
+			
+			qop = (qop_options != null) ? "auth" : null;
+			
+			AuthorizationHeader ah = (new DigestAuthentication(
+					SipMethods.REGISTER, req.getRequestLine().getAddress()
+							.toString(), wah, qop, null, username, passwd))
+					.getAuthorizationHeader();
+			req.setAuthorizationHeader(ah);
+			
+			TransactionClient t = new TransactionClient(sip_provider, req, this);
+			
+			t.request();
+		}
+	}
+	
+	private void processAuthenticationResponse(TransactionClient transaction,
+			Message resp, int respCode){
+		if (attempts < MAX_ATTEMPTS){
+			attempts++;
+			Message req = transaction.getRequestMessage();
+			req.setCSeqHeader(req.getCSeqHeader().incSequenceNumber());
 
+			if (respCode == 407)
+				generateRequestWithProxyAuthorizationheader(transaction, resp, req);
+			else
+				generateRequestWithWwwAuthorizationheader(transaction, resp, req);
+			
+		}
+	}
+	
 	/** Callback function called when client expires timeout. */
 	public void onTransTimeout(TransactionClient transaction) {
 		if (transaction.getTransactionMethod().equals(SipMethods.REGISTER)) {
