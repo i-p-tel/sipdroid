@@ -80,11 +80,19 @@ public class SipURL {
 	/** Inits the SipURL */
 	private void init(String username, String hostname, int portnumber) {
 		StringBuffer sb = new StringBuffer("sip:");
-		if (username != null)
-			sb.append(username).append('@');
-		sb.append(hostname);
+		if (username != null){
+			sb.append(username);
+			if(username.indexOf('@') < 0){
+				sb.append('@');
+				sb.append(hostname);
+			}
+		} else
+			sb.append(hostname);
+		
 		if (portnumber > 0)
-			sb.append(":" + portnumber);
+			if(username.indexOf(':') < 0)
+				sb.append(":" + portnumber);
+		
 		url = sb.toString();
 	}
 
