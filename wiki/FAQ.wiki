@@ -44,7 +44,7 @@ Possible issues when registering directly to other SIP servers are:
  * No ringing, or
  * No connection at all
 
-*Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged in to a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid.*
+*Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged in to a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
 
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
@@ -83,7 +83,7 @@ http://sipdroid.googlecode.com/svn/images/priv.png
   * Conferences
   * Webcall
 
-You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Call Recording, Handoff of calls between networks, ENUM, Faxmail).
+You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Call Recording, Handoff of calls between networks).
 
 What is currently missing is Bluetooth and there are already some [http://code.google.com/p/sipdroid/issues/list ideas] for more enhancements.
 
