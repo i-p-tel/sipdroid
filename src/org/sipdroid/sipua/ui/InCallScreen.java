@@ -95,6 +95,10 @@ public class InCallScreen extends Activity {
 	
 	void reenableKeyguard() {
 		if (!enabled) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+			}
 			mKeyguardLock.reenableKeyguard();
 			enabled = true;
 		}
