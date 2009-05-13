@@ -293,9 +293,7 @@ public class RegisterAgent implements TransactionClientListener {
 		if (transaction.getTransactionMethod().equals(SipMethods.REGISTER)) {
 			StatusLine status = resp.getStatusLine();
 			int code = status.getCode();
-			if (code == 401 || code == 407)
-				processAuthenticationResponse(transaction, resp, code);
-			else {
+			if (!processAuthenticationResponse(transaction, resp, code)) {
 				String result = code + " " + status.getReason();
 				
 				//Since the transactions are atomic, we rollback to the 
@@ -320,7 +318,7 @@ public class RegisterAgent implements TransactionClientListener {
 		}
 	}
 	
-	private void generateRequestWithProxyAuthorizationheader(TransactionClient transaction,
+	private boolean generateRequestWithProxyAuthorizationheader(TransactionClient transaction,
 			Message resp, Message req){
 		if(resp.hasProxyAuthenticateHeader()
 				&& resp.getProxyAuthenticateHeader().getRealmParam()
@@ -341,10 +339,12 @@ public class RegisterAgent implements TransactionClientListener {
 			TransactionClient t = new TransactionClient(sip_provider, req, this);
 			
 			t.request();
+			return true;
 		}
+		return false;
 	}
 	
-	private void generateRequestWithWwwAuthorizationheader(TransactionClient transaction,
+	private boolean generateRequestWithWwwAuthorizationheader(TransactionClient transaction,
 			Message resp, Message req){
 		if(resp.hasWwwAuthenticateHeader()
 				&& resp.getWwwAuthenticateHeader().getRealmParam()
@@ -365,22 +365,26 @@ public class RegisterAgent implements TransactionClientListener {
 			TransactionClient t = new TransactionClient(sip_provider, req, this);
 			
 			t.request();
+			return true;
 		}
+		return false;
 	}
 	
-	private void processAuthenticationResponse(TransactionClient transaction,
+	private boolean processAuthenticationResponse(TransactionClient transaction,
 			Message resp, int respCode){
 		if (attempts < MAX_ATTEMPTS){
 			attempts++;
 			Message req = transaction.getRequestMessage();
 			req.setCSeqHeader(req.getCSeqHeader().incSequenceNumber());
 
-			if (respCode == 407)
-				generateRequestWithProxyAuthorizationheader(transaction, resp, req);
-			else
-				generateRequestWithWwwAuthorizationheader(transaction, resp, req);
-			
+			switch(respCode) {
+			case 407:
+				return generateRequestWithProxyAuthorizationheader(transaction, resp, req);
+			case 401:
+				return generateRequestWithWwwAuthorizationheader(transaction, resp, req);
+			}
 		}
+		return false;
 	}
 	
 	/** Callback function called when client expires timeout. */
