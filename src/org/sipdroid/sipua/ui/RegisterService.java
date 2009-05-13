@@ -38,7 +38,7 @@ public class RegisterService extends Service {
     			while (hold) {
     				hold = false;
     				try {
-    					sleep(10000);
+    					sleep(45000);
     				} catch (InterruptedException e) {
     				}
     			}
@@ -51,6 +51,7 @@ public class RegisterService extends Service {
     public void onStart(Intent intent, int id) {
          super.onStart(intent,id);
          hold = true;
+         t.interrupt();
     }
 
 	@Override
