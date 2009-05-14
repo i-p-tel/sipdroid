@@ -46,6 +46,13 @@
                 <data android:scheme="sms" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.SIPUri" android:label="@string/sip_name">
+            <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="sip" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.Activity2" android:label="@string/app_name"
         android:excludeFromRecents="true" android:taskAffinity=""/>
         <activity android:name=".ui.Settings" android:label="@string/app_name"
@@ -61,7 +68,7 @@
         android:launchMode="singleInstance" android:configChanges="orientation|keyboardHidden">
         </activity>
    <receiver android:name=".ui.OneShotAlarm"/>
-   <receiver android:name=".ui.Caller" android:enabled="true" android:priority="-1">
+   <receiver android:name=".ui.Caller" android:enabled="true" android:priority="100">
       <intent-filter>
         <action android:name=
           "android.intent.action.NEW_OUTGOING_CALL" />
