@@ -5,6 +5,7 @@ import org.zoolu.sip.header.AuthorizationHeader;
 import org.zoolu.sip.header.ProxyAuthorizationHeader;
 import org.zoolu.sip.header.WwwAuthenticateHeader;
 import org.zoolu.tools.MD5;
+import org.zoolu.tools.Random;
 
 /**
  * The HTTP Digest Authentication as defined in RFC2617. It can be used to i)
@@ -53,6 +54,14 @@ public class DigestAuthentication {
 		init(method, ah, body, passwd);
 		this.uri = uri;
 		this.qop = qop;
+		if (qop != null && cnonce == null) {
+			this.cnonce = Random.nextHexString(16);
+			/*
+			 * A new cnonce is generated for every new instance so 
+			 * no need to keep track of the nc value.
+			 */
+			this.nc = "00000001";
+		}
 		this.username = username;
 	}
 
@@ -119,6 +128,8 @@ public class DigestAuthentication {
 			ah.addQopParam(qop);
 		if (nc != null)
 			ah.addNcParam(nc);
+		if (cnonce != null)
+			ah.addCnonceParam(cnonce);
 		String response = getResponse();
 		ah.addResponseParam(response);
 		return ah;
