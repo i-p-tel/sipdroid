@@ -27,7 +27,9 @@ import org.sipdroid.sipua.UserAgent;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -150,7 +152,7 @@ public class Sipdroid extends Activity {
 				m_AlertDlg.cancel();
 			}
 			m_AlertDlg = new AlertDialog.Builder(this)
-			.setMessage(getString(R.string.about).replace("\\n","\n"))
+			.setMessage(getString(R.string.about).replace("\\n","\n").replace("${VERSION}", getVersion(this)))
 			.setTitle(getString(R.string.menu_about))
 			.setIcon(R.drawable.icon22)
 			.setCancelable(true)
@@ -174,4 +176,23 @@ public class Sipdroid extends Activity {
 		return result;
 	}
 	
+	public static String getVersion() {
+		return getVersion(Receiver.mContext);
+	}
+	
+	public static String getVersion(Context context) {
+		final String unknown = "Unknown";
+		
+		if (context == null) {
+			return unknown;
+		}
+		
+		try {
+			return context.getPackageManager()
+				   .getPackageInfo(context.getPackageName(), 0)
+				   .versionName;
+		} catch(NameNotFoundException ex) {}
+		
+		return unknown;		
+	}
 }

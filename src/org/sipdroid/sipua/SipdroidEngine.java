@@ -22,6 +22,7 @@
 package org.sipdroid.sipua;
 
 import org.sipdroid.sipua.ui.Receiver;
+import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.net.IpAddress;
 import org.zoolu.net.SocketAddress;
 import org.zoolu.sip.address.NameAddress;
@@ -63,6 +64,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 			SipStack.default_transport_protocols = new String[1];
 			SipStack.default_transport_protocols[0] = SipProvider.PROTO_UDP;
 			
+			String version = "Sipdroid/" + Sipdroid.getVersion();
+			SipStack.ua_info = version;
+			SipStack.server_info = version;
+				
 			String opt_via_addr = "127.0.0.1";
 			
 			user_profile = new UserAgentProfile(null);
