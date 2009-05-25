@@ -1,6 +1,8 @@
 #summary Frequently Asked Questions
 #labels Featured
 
+<wiki:toc max_depth="1" />
+
 === How can I prepare for mobile VoIP? ===
 
 Sipdroid allows you to choose where you will use VoIP, on WLANs only, on 3G, or EDGE networks. If you are going to use VoIP services outside private wireless networks, it's your responsibility to check the contractual terms with the mobile operator:
