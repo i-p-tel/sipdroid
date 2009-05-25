@@ -25,4 +25,7 @@
     
     <!-- DTMF Dialer -->
     <color name="dtmf_dialer_background">#333333</color> <!-- green -->
-</resources>
+
+    <color name="recording_time_elapsed_text">#FFFFFFFF</color>
+    <color name="recording_time_remaining_text">#FFFF0033</color>
+  </resources>

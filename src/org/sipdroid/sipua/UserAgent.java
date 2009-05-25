@@ -83,6 +83,8 @@ public class UserAgent extends CallListenerAdapter {
 	public static final int UA_STATE_HOLD = 4;
 
 	int call_state = UA_STATE_IDLE;
+	String remote_media_address;
+	int remote_video_port,local_video_port;
 
 	// *************************** Basic methods ***************************
 
@@ -132,12 +134,6 @@ public class UserAgent extends CallListenerAdapter {
 	public void setAudio(boolean enable) {
 		user_profile.audio = enable;
 	}
-
-	/** Enables video */
-	/*public void setVideo(boolean enable) {
-		user_profile.video = enable;
-	}
-	*/
 
 	/** Sets the receive only mode */
 	public void setReceiveOnlyMode(boolean r_only) {
@@ -216,7 +212,7 @@ public class UserAgent extends CallListenerAdapter {
 		this.sip_provider = sip_provider;
 		log = sip_provider.getLog();
 		this.user_profile = user_profile;
-		this.user_profile.video = false;
+//		this.user_profile.video = false;
 		
 		// if no contact_url and/or from_url has been set, create it now
 		user_profile.initContactAddress(sip_provider);
@@ -238,7 +234,7 @@ public class UserAgent extends CallListenerAdapter {
 			//This has no significance as of now as we do not have a 
 			//release ready for video.
 			addMediaDescriptor("video", user_profile.video_port,
-					user_profile.video_avp, null, 0);
+					user_profile.video_avp, "h263-1998", 90000);
 		}
 	}
 
@@ -365,12 +361,12 @@ public class UserAgent extends CallListenerAdapter {
 					LogLevel.HIGH);
 			return;
 		}
+
+		// parse local sdp
 		SessionDescriptor local_sdp = new SessionDescriptor(call
 				.getLocalSessionDescriptor());
 		int local_audio_port = 0;
-		int local_video_port = 0;
-		
-		// parse local sdp
+		local_video_port = 0;
 		for (Enumeration<MediaDescriptor> e = local_sdp.getMediaDescriptors()
 				.elements(); e.hasMoreElements();) {
 			MediaField media = e.nextElement().getMedia();
@@ -379,13 +375,14 @@ public class UserAgent extends CallListenerAdapter {
 			if (media.getMedia().equals("video"))
 				local_video_port = media.getPort();
 		}
+
 		// parse remote sdp
 		SessionDescriptor remote_sdp = new SessionDescriptor(call
 				.getRemoteSessionDescriptor());
-		String remote_media_address = (new Parser(remote_sdp.getConnection()
+		remote_media_address = (new Parser(remote_sdp.getConnection()
 				.toString())).skipString().skipString().getString();
 		int remote_audio_port = 0;
-		int remote_video_port = 0;
+		remote_video_port = 0;
 		for (Enumeration<MediaDescriptor> e = remote_sdp.getMediaDescriptors()
 				.elements(); e.hasMoreElements();) {
 			MediaField media = e.nextElement().getMedia();
@@ -442,6 +439,12 @@ public class UserAgent extends CallListenerAdapter {
 				changeStatus(UA_STATE_HOLD);
 			else
 				changeStatus(UA_STATE_INCALL);
+	}
+
+	public int speakerMediaApplication(int mode) {
+		if (audio_app != null)
+			return audio_app.speakerMedia(mode);
+		return 0;
 	}
 
 	// ********************** Call callback functions **********************

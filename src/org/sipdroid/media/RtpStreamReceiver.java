@@ -56,8 +56,13 @@ public class RtpStreamReceiver extends Thread {
 	RtpSocket rtp_socket = null;
 
 	/** Whether it is running */
-	boolean running = false;
-	boolean muted = false;
+	boolean running;
+	boolean muted;
+	int speakermode;
+	
+	public static final int TOGGLE = 1;
+	public static final int SET = 2;
+	public static final int RESET = 3;
 
 	/**
 	 * Constructs a RtpStreamReceiver.
@@ -92,6 +97,13 @@ public class RtpStreamReceiver extends Thread {
 		return muted;
 	}
 
+	public int speaker(int mode) {
+		int old = speakermode;
+		
+		speakermode = mode;
+		return old;
+	}
+	
 	/** Runs it in a new Thread. */
 	public void run() {
 		if (rtp_socket == null) {
@@ -107,6 +119,8 @@ public class RtpStreamReceiver extends Thread {
 			println("Reading blocks of max " + buffer.length + " bytes");
 
 		running = true;
+		muted = false;
+		speakermode = AudioManager.MODE_IN_CALL;
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 		KeepAliveSip ka = new KeepAliveSip(Receiver.engine(Receiver.mContext).sip_provider,15000);
@@ -191,8 +205,8 @@ public class RtpStreamReceiver extends Thread {
 					 user += track.write(lin,0,len);
 				 
 				 if (user >= luser + 8000) {
-					 if (am.getMode() != AudioManager.MODE_IN_CALL)
-						 am.setMode(AudioManager.MODE_IN_CALL);
+					 if (am.getMode() != speakermode)
+						 am.setMode(speakermode);
 					 luser = user;
 				 }
 				 lserver = server;

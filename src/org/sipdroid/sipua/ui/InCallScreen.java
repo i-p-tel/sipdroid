@@ -26,9 +26,7 @@ import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.phone.CallCard;
 import org.sipdroid.sipua.phone.Phone;
 
-import android.app.Activity;
 import android.app.KeyguardManager;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -37,19 +35,13 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class InCallScreen extends Activity {
-	public static final int FIRST_MENU_ID = Menu.FIRST;
-	public static final int HANG_UP_MENU_ITEM = FIRST_MENU_ID + 1;
-	public static final int HOLD_MENU_ITEM = FIRST_MENU_ID + 2;
-	public static final int MUTE_MENU_ITEM = FIRST_MENU_ID + 3;
-	public static final int DTMF_MENU_ITEM = FIRST_MENU_ID + 4;
+public class InCallScreen extends CallScreen {
 
 	private static Receiver m_receiver;
 	CallCard mCallCard;
@@ -183,23 +175,7 @@ public class InCallScreen extends Activity {
         mKeyguardLock = mKeyguardManager.newKeyguardLock("Sipdroid");
         enabled = true;
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		boolean result = super.onCreateOptionsMenu(menu);
-
-		MenuItem m = menu.add(0, HOLD_MENU_ITEM, 0, R.string.menu_hold);
-		m.setIcon(R.drawable.sym_call_hold_on);
-		m = menu.add(0, HANG_UP_MENU_ITEM, 0, R.string.menu_endCall);
-		m.setIcon(R.drawable.sym_call_end);
-		m = menu.add(0, MUTE_MENU_ITEM, 0, R.string.menu_mute);
-		m.setIcon(R.drawable.mute);
-		m = menu.add(0, DTMF_MENU_ITEM, 0, R.string.menu_dtmf);
-		m.setIcon(R.drawable.sym_incoming_call_answer_options);
-				
-		return result;
-	}
-	
+		
 	@Override
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
@@ -215,10 +191,14 @@ public class InCallScreen extends Activity {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(true);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(true);
 			menu.findItem(DTMF_MENU_ITEM).setVisible(true);
+			menu.findItem(SPEAKER_MENU_ITEM).setVisible(true);
+			menu.findItem(VIDEO_MENU_ITEM).setVisible(Receiver.engine(this).getRemoteVideo() != 0);
 		} else {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(false);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(false);
 			menu.findItem(DTMF_MENU_ITEM).setVisible(false);
+			menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
+			menu.findItem(SPEAKER_MENU_ITEM).setVisible(true);
 		}
 		
 		return result;
@@ -268,35 +248,5 @@ public class InCallScreen extends Activity {
         return super.onKeyDown(keyCode, event);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean result = super.onOptionsItemSelected(item);
-		Intent intent = null;
-
-		switch (item.getItemId()) {
-		case HANG_UP_MENU_ITEM:
-			Receiver.engine(this).rejectcall();
-			break;
-			
-		case HOLD_MENU_ITEM:
-			Receiver.engine(this).togglehold();
-			break;
-			
-		case MUTE_MENU_ITEM:
-			Receiver.engine(this).togglemute();
-			break;
-					
-		case DTMF_MENU_ITEM: {
-			try {
-				intent = new Intent(this, org.sipdroid.sipua.ui.DTMF.class);
-				startActivity(intent);
-			} catch (ActivityNotFoundException e) {
-			}
-		}
-			break;
-		}
-
-		return result;
-	}
 
 }

@@ -45,6 +45,7 @@
 <string name="menu_exit">Beenden</string>
 <string name="menu_about">Info</string>
 <string name="menu_dtmf">DTMF senden</string>
+<string name="menu_video">Video senden</string>
   <string name="card_title_call_ended">Anruf beendet</string>
   <string name="card_title_dialing">Rufaufbau</string>
   <string name="card_title_in_progress">Aktiver Anruf</string>
@@ -53,6 +54,7 @@
   <string name="menu_call">Wählen</string>
   <string name="menu_endCall">Anruf beenden</string>
   <string name="menu_hold">Halten</string>
+  <string name="menu_speaker">Lautsprecher</string>
   <string name="menu_mute">Stumm</string>
   <string name="unknown">Unbekannt</string>
 </resources>

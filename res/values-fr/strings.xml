@@ -11,4 +11,5 @@
   <string name="menu_hold">En attente</string>
   <string name="menu_mute">Muet</string>
   <string name="unknown">Inconnu</string>
+  <string name="menu_speaker">Haut-parleur</string>
 </resources>

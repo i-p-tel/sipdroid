@@ -10,5 +10,6 @@
   <string name="menu_endCall">Termina chiamata</string>
   <string name="menu_hold">Pausa</string>
   <string name="menu_mute">Dis. micr.</string>
+  <string name="menu_speaker">Altoparlante</string>
   <string name="unknown">Sconosciuto</string>
 </resources>

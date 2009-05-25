@@ -63,6 +63,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			SipStack.transaction_timeout = 30000;
 			SipStack.default_transport_protocols = new String[1];
 			SipStack.default_transport_protocols[0] = SipProvider.PROTO_UDP;
+			SipStack.default_port = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("port",""+SipStack.default_port));
 			
 			String version = "Sipdroid/" + Sipdroid.getVersion();
 			SipStack.ua_info = version;
@@ -102,13 +103,25 @@ public class SipdroidEngine implements RegisterAgentListener {
 			if (!sip_provider.hasOutboundProxy())
 				sip_provider.setOutboundProxy(new SocketAddress(
 						IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("dns","")),
-						Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("port",""+SipStack.default_port))));
+						SipStack.default_port));
 		} catch (Exception E) {
 		}
 	}
 
 	public Context getUIContext() {
 		return Receiver.mContext;
+	}
+	
+	public int getRemoteVideo() {
+		return ua.remote_video_port;
+	}
+	
+	public int getLocalVideo() {
+		return ua.local_video_port;
+	}
+	
+	public String getRemoteAddr() {
+		return ua.remote_media_address;
 	}
 	
 	public void register() {	
@@ -208,6 +221,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 			ua.reInvite(null, 0);
 		else
 			ua.muteMediaApplication();
+	}
+	
+	public int speaker(int mode) {
+		return ua.speakerMediaApplication(mode);
 	}
 	
 	/** When a new call is incoming */
