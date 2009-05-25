@@ -54,9 +54,6 @@ public class RtpStreamSender extends Thread {
 	/** Number of bytes per frame */
 	int frame_size;
 
-	/** Whether the socket has been created here */
-	boolean socket_is_local = false;
-
 	/**
 	 * Whether it works synchronously with a local clock, or it it acts as slave
 	 * of the InputStream
@@ -96,7 +93,7 @@ public class RtpStreamSender extends Thread {
 	 * @param dest_addr
 	 *            the destination address
 	 * @param dest_port
-	 *            the thestination port
+	 *            the destination port
 	 */
 	public RtpStreamSender(boolean do_sync,
 			int payload_type, long frame_rate, int frame_size,
@@ -108,18 +105,13 @@ public class RtpStreamSender extends Thread {
 	/** Inits the RtpStreamSender */
 	private void init(boolean do_sync,
 			int payload_type, long frame_rate, int frame_size,
-			DatagramSocket src_socket, /* int src_port, */String dest_addr,
+			DatagramSocket src_socket, String dest_addr,
 			int dest_port) {
 		this.p_type = payload_type;
 		this.frame_rate = frame_rate;
 		this.frame_size = 1024; //15
 		this.do_sync = do_sync;
 		try {
-			if (src_socket == null) { // if (src_port>0) src_socket=new
-										// DatagramSocket(src_port); else
-				src_socket = new DatagramSocket();
-				socket_is_local = true;
-			}
 			rtp_socket = new RtpSocket(src_socket, InetAddress
 					.getByName(dest_addr), dest_port);
 		} catch (Exception e) {
@@ -195,13 +187,7 @@ public class RtpStreamSender extends Thread {
 		}
 		record.stop();
 		
-		// close RtpSocket and local DatagramSocket
-		DatagramSocket socket = rtp_socket.getDatagramSocket();
 		rtp_socket.close();
-		if (socket_is_local && socket != null)
-			socket.close();
-
-		// free all
 		rtp_socket = null;
 
 		if (DEBUG)

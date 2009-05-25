@@ -24,14 +24,16 @@ package org.sipdroid.sipua.ui;
 import java.util.HashMap;
 
 import org.sipdroid.sipua.R;
-import android.app.Activity;
+
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
-public class DTMF extends Activity implements SipdroidListener,View.OnClickListener {
+public class DTMF extends CallScreen implements SipdroidListener,View.OnClickListener {
 	Thread t;
 	
 	public void onHangup() {
@@ -95,27 +97,57 @@ public class DTMF extends Activity implements SipdroidListener,View.OnClickListe
 		super.onDestroy();
 		Receiver.listener = null;
 		t.interrupt();
+    	Receiver.screenOff(true);
 	}
 	
-	/**
+	/*
      * catch the back and call buttons to return to the in call activity.
      */
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         switch (keyCode) {
-            // finish for these events
-            case KeyEvent.KEYCODE_BACK:
+        	// finish for these events
             case KeyEvent.KEYCODE_CALL:
-            	Receiver.screenOff(true);
-                finish();
+       			Receiver.engine(this).togglehold();            	
+            case KeyEvent.KEYCODE_BACK:
+            	finish();
+            	break;
+                
             case KeyEvent.KEYCODE_CAMERA:
                 // Disable the CAMERA button while in-call since it's too
                 // easy to press accidentally.
             	return true;
         }
-    	return super.onKeyDown(keyCode, event);
+
+        return super.onKeyDown(keyCode, event);
     }
     
-    public void onClick(View v) {
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean result = super.onPrepareOptionsMenu(menu);
+
+		menu.findItem(DTMF_MENU_ITEM).setVisible(false);
+		menu.findItem(VIDEO_MENU_ITEM).setVisible(Receiver.engine(this).getRemoteVideo() != 0);
+		
+		return result;
+	}
+
+	int speakermode;
+	
+    @Override
+    protected void onResume() {
+        super.onResume();
+        speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Receiver.engine(this).speaker(speakermode);
+    }
+
+	public void onClick(View v) {
         int viewId = v.getId();
 
         // if the button is recognized

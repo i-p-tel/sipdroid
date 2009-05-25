@@ -133,6 +133,13 @@ public class JAudioLauncher implements MediaLauncher
 		   return receiver.mute();
 	   return false;
    }
+   
+   public int speakerMedia(int mode)
+   {
+	   if (receiver != null)
+		   return receiver.speaker(mode);
+	   return 0;
+   }
 
    // ****************************** Logs *****************************
 

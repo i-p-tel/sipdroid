@@ -54,7 +54,7 @@ import org.sipdroid.sipua.phone.Connection;
 		public static SipdroidEngine mSipdroidEngine;
 		public static Context mContext;
 		
-		public static SipdroidListener listener;
+		public static SipdroidListener listener,listener_video;
 		public static Call ccCall;
 		public static Connection ccConn;
 		public static int call_state;
@@ -117,7 +117,10 @@ import org.sipdroid.sipua.phone.Connection;
 					keepTop = false;
 					onText(CALL_NOTIFICATION, null, 0,0);
 					ccCall.setState(Call.State.DISCONNECTED);
-					if (listener != null) listener.onHangup();
+					if (listener != null)
+						listener.onHangup();
+					if (listener_video != null)
+						listener_video.onHangup();
 					break;
 				case UserAgent.UA_STATE_INCALL:
 					broadcastCallStateChanged("OFFHOOK", null);
@@ -259,7 +262,7 @@ import org.sipdroid.sipua.phone.Connection;
         	return (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("edge",false) &&
 	        			tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE) ||
 	        			(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("3g",false) &&
-	        			tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS);
+	        			tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS);
 		}
 		
 	    @Override

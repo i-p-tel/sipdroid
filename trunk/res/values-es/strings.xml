@@ -10,5 +10,6 @@
   <string name="menu_endCall">Finalizar llamada</string>
   <string name="menu_hold">Retener</string>
   <string name="menu_mute">Silenciar</string>
+  <string name="menu_speaker">Altavoz</string>
   <string name="unknown">Desconocido</string>
 </resources>

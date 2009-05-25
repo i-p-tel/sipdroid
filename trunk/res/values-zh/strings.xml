@@ -10,5 +10,6 @@
  <string name="menu_endCall">結束通話</string>
   <string name="menu_hold">保留</string>
   <string name="menu_mute">靜音</string>
+  <string name="menu_speaker">喇叭</string>
   <string name="unknown">無法辨識</string>
  </resources>

@@ -130,7 +130,7 @@ public class UserAgentProfile extends Configure {
 	/** Whether using audio */
 	public boolean audio = true; // modified
 	/** Whether using video */
-	public boolean video = false;
+	public boolean video = true; // modified
 
 	/** Whether playing in receive only mode */
 	public boolean recv_only = false;
