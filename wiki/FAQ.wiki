@@ -1,7 +1,7 @@
 #summary Frequently Asked Questions
 #labels Featured
 
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="5" />
 
 === How can I prepare for mobile VoIP? ===
 
