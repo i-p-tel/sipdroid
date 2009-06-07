@@ -35,22 +35,30 @@ public class Caller extends BroadcastReceiver {
 	    @Override
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
-	        if (intentAction.equals(Intent.ACTION_NEW_OUTGOING_CALL)){
+	        if (intentAction.equals(Intent.ACTION_NEW_OUTGOING_CALL))
+	        {
 	            String number = getResultData();
         		if (!Sipdroid.release) Log.i("SipUA:","outgoing call");
         		if (number != null && Receiver.engine(context).isRegistered() && Receiver.isFast()
-        				&& !intent.getBooleanExtra("android.phone.extra.ALREADY_CALLED",false)) {
+        				&& !intent.getBooleanExtra("android.phone.extra.ALREADY_CALLED",false)) 
+        		{
         			boolean sip_type = PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("SIP");
-        			if (number.endsWith("#")) {
+        			if (number.endsWith("#")) 
+        			{
         				sip_type = !sip_type;
         				number = number.substring(0,number.length()-1);
         			}
-        			if (!sip_type){
+        			if (!sip_type)
+        			{
         				setResultData(number);
-        			} else {
-        				if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("par",false)) {
+        			} 
+        			else 
+        			{
+        				if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("par",false)) 
+        				{
         					String orig = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");
-        					if (orig.lastIndexOf("/phones") >= 0) {
+         					if (orig.lastIndexOf("/phones") >= 0) 
+        					{
         						orig = orig.substring(0,orig.lastIndexOf("/phones")+7);
 	        					Uri contactRef = Uri.parse(orig);
 	        				    final String[] PHONES_PROJECTION = new String[] {
@@ -59,21 +67,31 @@ public class Caller extends BroadcastReceiver {
 	        				    };
 	        			        Cursor phonesCursor = context.getContentResolver().query(contactRef, PHONES_PROJECTION, null, null,
 	        			                Phones.ISPRIMARY + " DESC");
-	        			        if (phonesCursor != null) {
+	        			        if (phonesCursor != null) 
+	        			        {	        			        	
+	                				String sPrefix = PreferenceManager.getDefaultSharedPreferences(context).getString("prefix", "");
 	        			        	number = "";
-	        			            while (phonesCursor.moveToNext()) {
+	        			            while (phonesCursor.moveToNext()) 
+	        			            {
 	        			                final int type = phonesCursor.getInt(1);
 	        			                final String n = phonesCursor.getString(0);
 	         			                if (TextUtils.isEmpty(n)) continue;
-	         			                if (type == Phones.TYPE_MOBILE || type == Phones.TYPE_HOME || type == Phones.TYPE_WORK) {
-	         			                	if (!number.equals("")) number = number + "&";
-	         			                	number = number + n;
+	         			                if (type == Phones.TYPE_MOBILE || type == Phones.TYPE_HOME || type == Phones.TYPE_WORK) 
+	         			                {
+	         			                	if (!number.equals("")) number = number + "&" + sPrefix;
+	         			                	else number = sPrefix;
+	         			                	number = number + n;	         			                	
 	        			                }
 	        			            }
 	        			            phonesCursor.close();
 	        			        }
-	        				}
+	        				}        					
         				}
+        				else 
+        				{
+    						String sPrefix = PreferenceManager.getDefaultSharedPreferences(context).getString("prefix", "");
+    						number = sPrefix + number;    		        	
+        			    }   					
         				Receiver.engine(context).call(number);
 		            	setResultData(null);
         			}
