@@ -45,7 +45,7 @@ import android.preference.PreferenceActivity;
 				edit.putBoolean("wlan", true);
 				edit.putString("port", ""+SipStack.default_port);
 				edit.putString("server", "pbxes.org");
-				edit.putString("pref", "SIP");
+				edit.putString("pref", "SIP");				
 				edit.commit();
 			}
 			if (Sipdroid.market) {
@@ -90,7 +90,8 @@ import android.preference.PreferenceActivity;
         public void updateSummaries() {
         	getPreferenceScreen().findPreference("username").setSummary(getPreferenceScreen().getSharedPreferences().getString("username", "")); 
         	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
-        	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", "")); 
+        	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", ""));
+        	getPreferenceScreen().findPreference("prefix").setSummary(getPreferenceScreen().getSharedPreferences().getString("prefix", "")); 
         	if (getPreferenceScreen().getSharedPreferences().getString("pref", "").equals("SIP")) {
         		getPreferenceScreen().findPreference("pref").setSummary(getResources().getStringArray(R.array.pref_display_values)[0]);
         		getPreferenceScreen().findPreference("par").setEnabled(true);

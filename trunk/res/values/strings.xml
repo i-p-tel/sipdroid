@@ -44,6 +44,8 @@
         <item>SIP</item>
         <item>PSTN</item>
     </string-array>
+<string name="settings_advanced_options">Advanced Options</string>   
+<string name="settings_prefix">Prefix</string> 
 <string name="menu_settings">Settings</string>
 <string name="menu_exit">Exit</string>
 <string name="menu_about">About</string>
