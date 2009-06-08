@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
+import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -42,6 +43,8 @@ public class Caller extends BroadcastReceiver {
         		if (number != null && Receiver.engine(context).isRegistered() && Receiver.isFast()
         				&& !intent.getBooleanExtra("android.phone.extra.ALREADY_CALLED",false)) 
         		{
+        			if (PhoneNumberUtils.isEmergencyNumber(number))	    			
+    	    			return;
         			boolean sip_type = PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("SIP");
         			if (number.endsWith("#")) 
         			{
