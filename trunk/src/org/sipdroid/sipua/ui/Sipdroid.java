@@ -54,11 +54,16 @@ public class Sipdroid extends Activity {
 	AutoCompleteTextView sip_uri_box;
 	
 	@Override
-	public void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
+	public void onStart() {
+		super.onStart();
 		
 		if (!Receiver.engine(this).isRegistered())
 			Receiver.engine(this).register();
+	}
+	
+	@Override
+	public void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.sipdroid);
@@ -129,7 +134,7 @@ public class Sipdroid extends Activity {
 				.setIcon(R.drawable.icon22)
 				.setCancelable(true)
 				.show();
-		else if (!Receiver.isFast())
+		else if (!Receiver.isFast(true))
 			m_AlertDlg = new AlertDialog.Builder(this)
 				.setMessage(R.string.notfast)
 				.setTitle(R.string.app_name)

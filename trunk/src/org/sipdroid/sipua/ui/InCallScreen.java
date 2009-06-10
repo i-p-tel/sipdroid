@@ -32,8 +32,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.os.Vibrator;
-import android.os.DeadObjectException;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -107,10 +105,6 @@ public class InCallScreen extends CallScreen {
 		case UserAgent.UA_STATE_INCOMING_CALL:
 			callCardMenuButtonHint.setText(R.string.menuButtonHint2);
 			callCardMenuButtonHint.setVisibility(View.VISIBLE);
-
-			android.os.Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			v.vibrate(5000);
-
 			break;
 		case UserAgent.UA_STATE_INCALL:
 		case UserAgent.UA_STATE_HOLD:

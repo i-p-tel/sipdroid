@@ -31,8 +31,7 @@
 <string name="settings_password">Paßwort</string>
 <string name="settings_options">Optionen</string>
 <string name="settings_wlan">WLAN verwenden</string>
-<string name="settings_3g">3G verwenden</string>
-<string name="settings_edge">EDGE verwenden</string>
+<string name="settings_3g">3G/EDGE verwenden</string>
 <string name="settings_check">Prüfen Sie, ob Ihr Mobilfunkanbieter VoIP-Nutzung erlaubt</string>
 <string name="settings_par">Gleichzeitige Anwahl</string>
 <string name="settings_par2">Wählt alle Nummern eines Gesprächspartners gleichzeitig an</string>
@@ -42,6 +41,8 @@
         <item>Sprachdienst</item>
     </string-array>
 <string name="menu_settings">Einstellungen</string>
+<string name="settings_advanced_options">Erweiterte Einstellungen</string>   
+<string name="settings_minedge">Signalstärke für EDGE</string>
 <string name="menu_exit">Beenden</string>
 <string name="menu_about">Info</string>
 <string name="menu_dtmf">DTMF senden</string>

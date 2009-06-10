@@ -28,11 +28,6 @@
 			android:key="3g"
 			android:title="@string/settings_3g"
 			android:summary="@string/settings_check" />
-		<CheckBoxPreference
-			android:key="edge"
-			android:title="@string/settings_edge"
-			android:summary="@string/settings_check" />
-			</PreferenceCategory>
 		<ListPreference
 			android:key="pref"
 			android:title="@string/settings_pref"
@@ -43,10 +38,17 @@
 			android:key="par"
 			android:title="@string/settings_par"
 			android:summary="@string/settings_par2"  />
-	<PreferenceCategory android:title="@string/settings_advanced_options">
-        <EditTextPreference
-            android:key="prefix"
-            android:title="@string/settings_prefix"
-        />
-    </PreferenceCategory>      
+    </PreferenceCategory>
+	<PreferenceScreen android:title="@string/settings_advanced_options">
+		<PreferenceCategory android:title="@string/settings_advanced_options">
+	        <EditTextPreference
+	            android:key="prefix"
+	            android:title="@string/settings_prefix"
+	        />
+	        <EditTextPreference
+	            android:key="minedge"
+	            android:title="@string/settings_minedge"
+	        />
+	    </PreferenceCategory>    
+    </PreferenceScreen>  
 </PreferenceScreen>

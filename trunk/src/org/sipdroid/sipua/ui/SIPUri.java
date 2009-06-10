@@ -16,8 +16,6 @@ public class SIPUri extends Activity {
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		if (!Receiver.engine(this).isRegistered())
-			Receiver.engine(this).register();
 
 		Uri uri = getIntent().getData();
 		String target = uri.getSchemeSpecificPart();
