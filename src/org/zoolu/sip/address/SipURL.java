@@ -90,7 +90,7 @@ public class SipURL {
 			sb.append(hostname);
 		
 		if (portnumber > 0)
-			if(username.indexOf(':') < 0)
+			if(username == null || username.indexOf(':') < 0)
 				sb.append(":" + portnumber);
 		
 		url = sb.toString();

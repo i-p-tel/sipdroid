@@ -28,10 +28,12 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -44,6 +46,7 @@ import org.sipdroid.sipua.phone.Connection;
 	public class Receiver extends BroadcastReceiver {
 
 		public final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
+		public final static String ACTION_SIGNAL_STRENGTH_CHANGED = "android.intent.action.SIG_STR";
 		
 		public final static int REGISTER_NOTIFICATION = 1;
 		public final static int CALL_NOTIFICATION = 2;
@@ -58,6 +61,8 @@ import org.sipdroid.sipua.phone.Connection;
 		public static Call ccCall;
 		public static Connection ccConn;
 		public static int call_state;
+		public static String pstn_state;
+		static int cellAsu;
 		public static String laststate,lastnumber;
 		
 		public static SipdroidEngine engine(Context context) {
@@ -80,6 +85,7 @@ import org.sipdroid.sipua.phone.Connection;
 			}
 			if (call_state != state) {
 				call_state = state;
+				android.os.Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 				switch(call_state)
 				{
 				case UserAgent.UA_STATE_INCOMING_CALL:
@@ -99,6 +105,10 @@ import org.sipdroid.sipua.phone.Connection;
 					ccConn.setIncoming(true);
 					ccConn.date = System.currentTimeMillis();
 					ccCall.base = 0;
+					AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+					if ((pstn_state == null || !pstn_state.equals("RINGING")) &&
+							am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER) != AudioManager.VIBRATE_SETTING_OFF)
+						v.vibrate(5000);
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
 					engine(mContext).register();
@@ -121,6 +131,7 @@ import org.sipdroid.sipua.phone.Connection;
 						listener.onHangup();
 					if (listener_video != null)
 						listener_video.onHangup();
+					v.cancel();
 					break;
 				case UserAgent.UA_STATE_INCALL:
 					broadcastCallStateChanged("OFFHOOK", null);
@@ -131,6 +142,7 @@ import org.sipdroid.sipua.phone.Connection;
 					}
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call,ccCall.base);
 					ccCall.setState(Call.State.ACTIVE);
+					v.cancel();
 					break;
 				case UserAgent.UA_STATE_HOLD:
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_on_hold), android.R.drawable.stat_sys_phone_call_on_hold,ccCall.base);
@@ -240,29 +252,32 @@ import org.sipdroid.sipua.phone.Connection;
 		
 		public static void moveTop() {
 	    	if (!Sipdroid.release) Log.i("SipUA:","moveTop "+isTop);
-			if (isFast()) {
-				onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call, 0);
-				if (!isTop)
-					mContext.startActivity(createIntent(Activity2.class)); 
-			}
+			onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call, 0);
+			if (!isTop)
+				mContext.startActivity(createIntent(Activity2.class)); 
 		}
 
-		public static boolean isFast() {
+		public static boolean isFast(boolean for_a_call) {
 			Context context = mContext;
 			
         	TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         	WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         	WifiInfo wi = wm.getConnectionInfo();
-        	
+
         	if (wi != null)
-        		if (!Sipdroid.release) Log.i("SipUA:","wifi state "+WifiInfo.getDetailedStateOf(wi.getSupplicantState()));
+        		if (!Sipdroid.release) Log.i("SipUA:","isFast() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())+" "+cellAsu);
         	if (wi != null && WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR)
         		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("wlan",false);
-        	if (Sipdroid.market) return false;
-        	return (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("edge",false) &&
-	        			tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE) ||
-	        			(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("3g",false) &&
-	        			tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS);
+        	if (Sipdroid.market || !PreferenceManager.getDefaultSharedPreferences(context).getBoolean("3g",false))
+        		return false;
+        	if (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS)
+        		return true;
+        	if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
+        		if (!for_a_call)
+        			return true;
+        		else
+        			return cellAsu >= Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString("minedge", "4"));
+        	return false;
 		}
 		
 	    @Override
@@ -283,17 +298,25 @@ import org.sipdroid.sipua.phone.Connection;
 	        	screenOff(false);
 	        } else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
-	        	!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
-	    		String state = intent.getStringExtra("state");
-	    		if (state.equals("RINGING"))
+	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
+	    		pstn_state = intent.getStringExtra("state");
+	    		if (pstn_state.equals("RINGING"))
 	    			engine(context).register();
 	    		else
-	    		if (state.equals("IDLE") && call_state != UserAgent.UA_STATE_IDLE)
+	    		if (pstn_state.equals("IDLE") && call_state != UserAgent.UA_STATE_IDLE)
 	    			broadcastCallStateChanged(null,null);
 	    		else
-	    		if ((state.equals("OFFHOOK") && call_state == UserAgent.UA_STATE_INCALL) ||
-		    			(state.equals("IDLE") && call_state == UserAgent.UA_STATE_HOLD))
+	    		if ((pstn_state.equals("OFFHOOK") && call_state == UserAgent.UA_STATE_INCALL) ||
+		    			(pstn_state.equals("IDLE") && call_state == UserAgent.UA_STATE_HOLD))
 		    			engine(context).togglehold();
+	        } else
+	        if (intentAction.equals(ACTION_SIGNAL_STRENGTH_CHANGED)) {
+	        	cellAsu = intent.getIntExtra("asu", 0);
+	        	if (cellAsu <= 0 || cellAsu == 99) cellAsu = 0;
+	        	else if (cellAsu >= 16) cellAsu = 4;
+	        	else if (cellAsu >= 8) cellAsu = 3;
+	        	else if (cellAsu >= 4) cellAsu = 2;
+	        	else cellAsu = 1;
 	        }
 		}
 }

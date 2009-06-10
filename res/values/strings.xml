@@ -30,8 +30,7 @@
 <string name="settings_password">Password</string>
 <string name="settings_options">Options</string>
 <string name="settings_wlan">Use WLAN</string>
-<string name="settings_3g">Use 3G</string>
-<string name="settings_edge">Use EDGE</string>
+<string name="settings_3g">Use 3G/EDGE</string>
 <string name="settings_check">Check with your mobile operator if he allows VoIP</string>
 <string name="settings_par2">Dials all of one person\'s phone numbers in parallel</string>
 <string name="settings_par">Simultaneous Outbound</string>
@@ -46,6 +45,7 @@
     </string-array>
 <string name="settings_advanced_options">Advanced Options</string>   
 <string name="settings_prefix">Prefix</string> 
+<string name="settings_minedge">Signal Bars for EDGE</string>
 <string name="menu_settings">Settings</string>
 <string name="menu_exit">Exit</string>
 <string name="menu_about">About</string>

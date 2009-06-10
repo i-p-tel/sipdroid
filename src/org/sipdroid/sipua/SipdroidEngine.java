@@ -125,7 +125,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	public void register() {	
-		if (!Receiver.isFast() || user_profile.username.equals("") || user_profile.realm.equals("")) {
+		if (!Receiver.isFast(false) || user_profile.username.equals("") || user_profile.realm.equals("")) {
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION,null,0,0);
 			if (wl.isHeld())
 				wl.release();

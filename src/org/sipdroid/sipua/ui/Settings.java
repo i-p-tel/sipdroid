@@ -52,10 +52,8 @@ import android.preference.PreferenceActivity;
 				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
 
 				edit.putBoolean("3g", false);
-				edit.putBoolean("edge", false);
 				edit.commit();
 				getPreferenceScreen().findPreference("3g").setEnabled(false);
-				getPreferenceScreen().findPreference("edge").setEnabled(false);
 			}
 			getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 			updateSummaries();
@@ -92,6 +90,7 @@ import android.preference.PreferenceActivity;
         	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
         	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", ""));
         	getPreferenceScreen().findPreference("prefix").setSummary(getPreferenceScreen().getSharedPreferences().getString("prefix", "")); 
+        	getPreferenceScreen().findPreference("minedge").setSummary(getPreferenceScreen().getSharedPreferences().getString("minedge", "4")); 
         	if (getPreferenceScreen().getSharedPreferences().getString("pref", "").equals("SIP")) {
         		getPreferenceScreen().findPreference("pref").setSummary(getResources().getStringArray(R.array.pref_display_values)[0]);
         		getPreferenceScreen().findPreference("par").setEnabled(true);
