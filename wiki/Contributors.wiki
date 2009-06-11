@@ -2,7 +2,7 @@
 #labels Featured
 
  * [http://mjsip.org Mjsip]
- * [http://hsc.com Hughes Systique Corporation
+ * [http://hsc.com Hughes Systique Corporation]
  * [http://i-p-tel.com i-p-tel GmbH]
  * [http://voicetechnology.com.br Voice Technology]
  * [http://nominet.org.uk Nominet]
