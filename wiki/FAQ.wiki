@@ -29,7 +29,7 @@ http://sipdroid.googlecode.com/svn/images/choose.png
 
 === How can I dial a phone number over IP / over PSTN? ===
 
-When entering a phone number in the dialer add a "#" sign to toggle call type. If your preferred call type is SIP adding a # behind the number calls over PSTN.
+When entering a phone number in the dialer add a "+" sign to toggle call type. If your preferred call type is SIP adding a + behind the number calls over PSTN.
 
 NOTE: Don't add anything to emergency numbers. They are always dialed over PSTN.
 
