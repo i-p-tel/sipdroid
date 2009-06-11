@@ -46,7 +46,7 @@ Possible issues when registering directly to other SIP servers are:
  * No ringing, or
  * No connection at all
 
-*Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged in to a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
+*Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged into a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
 
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
@@ -101,7 +101,7 @@ You need to open Sipdroid's settings and uncheck "Use WLAN" to disable it.
 
 When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time).
 
-To improve also try uninstalling background applications (e.g. Netcounter, which only runs fine with WLAN turned off). A good application to save battery is Ambient Light Sensor.
+To improve also try uninstalling background applications (e.g. Netcounter, which only runs fine with WLAN turned off). A good application to save battery is [http://www.cyrket.com/package/org.pbxes.light2 Ambient Light Sensor].
 
 === What are the system requirements? ===
 
