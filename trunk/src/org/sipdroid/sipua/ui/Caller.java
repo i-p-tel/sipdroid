@@ -54,10 +54,10 @@ public class Caller extends BroadcastReceiver {
 	        		if (number != null && Receiver.engine(context).isRegistered() && Receiver.isFast(true)
 	        				&& !intent.getBooleanExtra("android.phone.extra.ALREADY_CALLED",false)) 
 	        		{
-	    				String sPrefix = PreferenceManager.getDefaultSharedPreferences(context).getString("prefix", "");
+	    				String sPrefix = PreferenceManager.getDefaultSharedPreferences(context).getString("prefix", "");			
 	    				if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("par",false)) 
 	    				{
-	    					String orig = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");
+	    					String orig = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");	
 	     					if (orig.lastIndexOf("/phones") >= 0) 
 	    					{
 	    						orig = orig.substring(0,orig.lastIndexOf("/phones")+7);
@@ -87,9 +87,11 @@ public class Caller extends BroadcastReceiver {
 	        				}        					
 	    				}
 	    				else 
-	    				{
+	    				{	 
+	    					if(number.startsWith(sPrefix))
+		    					sPrefix = "";
 							number = sPrefix + number;    		        	
-	    			    }   					
+	    			    }   			
 	    				Receiver.engine(context).call(number);
 		            	setResultData(null);
 	        		}
