@@ -324,9 +324,9 @@ public class G711 {
 			lin[i] = a2s[alaw[i+12] & 0xff];
 	}
 	
-	public static void linear2alaw(short lin[],byte alaw[],int frames) {
+	public static void linear2alaw(short lin[],int offset,byte alaw[],int frames) {
 		int i;
 		for (i = 0; i < frames; i++)
-			alaw[i+12] = s2a[lin[i] & 0xffff];
+			alaw[i+12] = s2a[lin[i+offset] & 0xffff];
 	}
 }

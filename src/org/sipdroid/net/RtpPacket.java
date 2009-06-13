@@ -102,7 +102,7 @@ public class RtpPacket {
 	/** Set padding (P) */
 	public void setPadding(boolean p) {
 		if (packet_len >= 12)
-			setBit(p, packet[0], 5);
+			packet[0] = setBit(p, packet[0], 5);
 	}
 
 	/** Whether has extension (X) */
@@ -116,7 +116,7 @@ public class RtpPacket {
 	/** Set extension (X) */
 	public void setExtension(boolean x) {
 		if (packet_len >= 12)
-			setBit(x, packet[0], 4);
+			packet[0] = setBit(x, packet[0], 4);
 	}
 
 	/** Gets the CSCR count (CC) */
@@ -138,7 +138,7 @@ public class RtpPacket {
 	/** Set marker (M) */
 	public void setMarker(boolean m) {
 		if (packet_len >= 12)
-			setBit(m, packet[1], 7);
+			packet[1] = setBit(m, packet[1], 7);
 	}
 
 	/** Gets the payload type (PT) */
@@ -309,10 +309,10 @@ public class RtpPacket {
 	}
 
 	/** Sets bit value */
-	private static void setBit(boolean value, byte b, int bit) {
+	private static byte setBit(boolean value, byte b, int bit) {
 		if (value)
-			b = (byte) (b | (1 << bit));
+			return (byte) (b | (1 << bit));
 		else
-			b = (byte) ((b | (1 << bit)) ^ (1 << bit));
+			return (byte) ((b | (1 << bit)) ^ (1 << bit));
 	}
 }

@@ -21,26 +21,6 @@ package org.sipdroid.sipua.ui;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/* This module is a start for sending video.
- * 
- * It uses MediaRecorder to record video to a file
- * and reads the file while it is written.
- * 
- * Because the file has not been closed when it is
- * read it misses information about the size of
- * the contained H.263-1998 payloads. The payloads
- * are found concatenated after the initial mdat tag.
- * 
- * The idea is to look into the H.263 headers and
- * payloads to determine their sizes. With the size
- * info it would be very easy to fit them into RTP
- * packets.
- * 
- * Possible sources:
- * RFC 2429 - info about H.263 header format
- * FFMPEG package - maybe info about H.263 payload format
- */
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -48,6 +28,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import org.sipdroid.media.RtpStreamSender;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.sipua.R;
@@ -252,72 +233,6 @@ public class VideoCamera extends CallScreen implements
         mStorageStatus = getStorageStatus(true);
 
         initializeVideo();
-        
-        if (Receiver.listener_video == null) {
-			Receiver.listener_video = this;
-	        (t = new Thread() {
-				public void run() {
-					int frame_size = 1024;
-					byte[] buffer = new byte[frame_size + 12];
-					RtpPacket rtp_packet = new RtpPacket(buffer, 0);
-					RtpSocket rtp_socket = null;
-					int seqn = 0;
-					int num;
-					File f;
-					FileInputStream fis = null;
-
-					try {
-						rtp_socket = new RtpSocket(new DatagramSocket(Receiver.engine(mContext).getLocalVideo()),
-								InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
-								Receiver.engine(mContext).getRemoteVideo());
-					} catch (Exception e) {
-						if (!Sipdroid.release) e.printStackTrace();
-						return;
-					}		
-					while (fis == null) {
-						try {
-							f = new File(mCameraVideoFilename);
-							fis = new FileInputStream(f);
-						} catch (Exception e) {
-							try {
-								sleep(1000);
-							} catch (InterruptedException e2) {
-								rtp_socket.getDatagramSocket().close();
-								return;
-							}
-						}
-					}
-					rtp_packet.setPayloadType(103);
-					while (Receiver.listener_video != null) {
-						num = -1;
-						try {
-							num = fis.read(buffer,12,frame_size);
-						} catch (IOException e) {
-							if (!Sipdroid.release) e.printStackTrace();
-						}
-						if (num < 0) {
-							try {
-								sleep(100);
-							} catch (InterruptedException e) {
-								break;
-							}
-							continue;							
-						}
-			 			rtp_packet.setSequenceNumber(seqn++);
-			 			rtp_packet.setTimestamp(SystemClock.elapsedRealtime()*90);
-			 			rtp_packet.setPayloadLength(num);
-			 			try {
-			 				rtp_socket.send(rtp_packet);
-			 			} catch (IOException e) {
-			 				if (!Sipdroid.release) e.printStackTrace();
-			 			}
-					}
-					rtp_socket.getDatagramSocket().close();
-				}
-			}).start();   
-        }
-    	
-        speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
     }
 
     @Override
@@ -333,10 +248,6 @@ public class VideoCamera extends CallScreen implements
         mPausing = true;
 
         unregisterReceiver(mReceiver);
-
-		Receiver.listener_video = null;
-		t.interrupt();
-        Receiver.engine(this).speaker(speakermode);
     }
 
 	/*
@@ -575,12 +486,117 @@ public class VideoCamera extends CallScreen implements
             mRecordingTimeView.setVisibility(View.VISIBLE);
             mHandler.sendEmptyMessage(UPDATE_RECORD_TIME);
             setScreenOnFlag();
+        
+            if (Receiver.listener_video == null) {
+    			Receiver.listener_video = this;
+    	        (t = new Thread() {
+    				public void run() {
+    					int frame_size = 1400;
+    					byte[] buffer = new byte[frame_size + 14];
+    					buffer[12] = 4;
+    					RtpPacket rtp_packet = new RtpPacket(buffer, 0);
+    					RtpSocket rtp_socket = null;
+    					int seqn = 0;
+    					int num,number = 0,src,dest;
+    					File f;
+    					FileInputStream fis = null;
+
+    					try {
+    						rtp_socket = new RtpSocket(new DatagramSocket(Receiver.engine(mContext).getLocalVideo()),
+    								InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
+    								Receiver.engine(mContext).getRemoteVideo());
+    					} catch (Exception e) {
+    						if (!Sipdroid.release) e.printStackTrace();
+    						return;
+    					}		
+    					while (fis == null) {
+    						try {
+    							f = new File(mCameraVideoFilename);
+    							fis = new FileInputStream(f);
+    							fis.skip(0x22);
+    						} catch (Exception e) {
+    							try {
+    								sleep(1000);
+    							} catch (InterruptedException e2) {
+    								rtp_socket.getDatagramSocket().close();
+    								return;
+    							}
+    						}
+    					}
+    					rtp_packet.setPayloadType(103);
+    					while (Receiver.listener_video != null) {
+    						num = -1;
+    						try {
+    							num = fis.read(buffer,14+number,frame_size-number);
+    						} catch (IOException e) {
+    							if (!Sipdroid.release) e.printStackTrace();
+    						}
+    						if (num < 0) {
+    							try {
+    								sleep(20);
+    							} catch (InterruptedException e) {
+    								break;
+    							}
+    							continue;							
+    						}
+    						number += num;
+    						
+    						for (num = 14+number-2; num > 14; num--)
+    							if (buffer[num] == 0 && buffer[num+1] == 0) break;
+    						if (num == 14) {
+    							num = 0;
+    							rtp_packet.setMarker(false);
+    						} else {	
+    							num = 14+number - num;
+    							rtp_packet.setMarker(true);
+    						}
+    						
+    			 			rtp_packet.setSequenceNumber(seqn++);
+    			 			rtp_packet.setTimestamp(SystemClock.elapsedRealtime()*90);
+    			 			rtp_packet.setPayloadLength(number-num+2);
+    			 			try {
+    			 				rtp_socket.send(rtp_packet);
+    			 			} catch (IOException e) {
+    			 				if (!Sipdroid.release) e.printStackTrace();	
+    			 			}
+    			 			try {
+    			 				if (fis.available() < 24000)
+    			 					Thread.sleep((number-num)/24);
+							} catch (Exception e) {
+								break;
+							}
+							
+    			 			if (num > 0) {
+    				 			num -= 2;
+    				 			dest = 14;
+    				 			src = 14+number - num;
+    				 			number = num;
+    				 			while (num-- > 0)
+    				 				buffer[dest++] = buffer[src++];
+    							buffer[12] = 4;
+    			 			} else {
+    			 				number = 0;
+    							buffer[12] = 0;
+    			 			}
+    					}
+    					rtp_socket.getDatagramSocket().close();
+    				}
+    			}).start();   
+            }
+        	
+            speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
+            RtpStreamSender.delay = 9*1024;
         }
     }
 
     private void stopVideoRecording() {
         Log.v(TAG, "stopVideoRecording");
         if (mMediaRecorderRecording || mMediaRecorder != null) {
+    		Receiver.listener_video = null;
+    		t.interrupt();
+            Receiver.engine(this).speaker(speakermode);
+            RtpStreamSender.delay = 0;
+
             if (mMediaRecorderRecording && mMediaRecorder != null) {
                 try {
                     mMediaRecorder.setOnErrorListener(null);

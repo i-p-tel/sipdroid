@@ -167,11 +167,6 @@ public class UserAgent extends CallListenerAdapter {
 		return local_session;
 	}
 
-	/** Sets the local SDP */
-	public void setSessionDescriptor(String sdp) {
-		local_session = sdp;
-	}
-
 	/** Inits the local SDP (no media spec) */
 	public void initSessionDescriptor() {
 		SessionDescriptor sdp = new SessionDescriptor(
@@ -179,17 +174,26 @@ public class UserAgent extends CallListenerAdapter {
 				sip_provider.getViaAddress());
 		
 		local_session = sdp.toString();
+		
+		//We will have at least one media line, and it will be 
+		//audio
+		if (user_profile.audio || !user_profile.video)
+		{
+			addMediaDescriptor("audio", user_profile.audio_port,
+					user_profile.audio_avp, user_profile.audio_codec,
+					user_profile.audio_sample_rate);
+		}
+		
+		if (user_profile.video)
+		{
+			addMediaDescriptor("video", user_profile.video_port,
+					user_profile.video_avp, "h263-1998", 90000);
+		}
 	}
 
 	/** Adds a media to the SDP */
 	public void addMediaDescriptor(String media, int port, int avp,
 			String codec, int rate) {
-		
-		if (local_session == null)
-		{
-			initSessionDescriptor();
-		}
-		
 		SessionDescriptor sdp = new SessionDescriptor(local_session);
 		
 		String attr_param = String.valueOf(avp);
@@ -212,30 +216,9 @@ public class UserAgent extends CallListenerAdapter {
 		this.sip_provider = sip_provider;
 		log = sip_provider.getLog();
 		this.user_profile = user_profile;
-//		this.user_profile.video = false;
 		
 		// if no contact_url and/or from_url has been set, create it now
 		user_profile.initContactAddress(sip_provider);
-
-		// set local sdp
-		initSessionDescriptor();
-		
-		//We will have atleast one media line, and it will be 
-		//audio
-		if (user_profile.audio || !user_profile.video)
-		{
-			addMediaDescriptor("audio", user_profile.audio_port,
-					user_profile.audio_avp, user_profile.audio_codec,
-					user_profile.audio_sample_rate);
-		}
-		
-		if (user_profile.video)
-		{
-			//This has no significance as of now as we do not have a 
-			//release ready for video.
-			addMediaDescriptor("video", user_profile.video_port,
-					user_profile.video_avp, "h263-1998", 90000);
-		}
 	}
 
 	/** Makes a new call (acting as UAC). */
@@ -262,6 +245,7 @@ public class UserAgent extends CallListenerAdapter {
 			from_url = "sip:anonymous@anonymous.com";
 		}
 		
+		initSessionDescriptor();
 		call = new ExtendedCall(sip_provider, from_url,
 				user_profile.contact_url, user_profile.username,
 				user_profile.realm, user_profile.passwd, this);
@@ -307,6 +291,7 @@ public class UserAgent extends CallListenerAdapter {
 		
 		hangup();
 		
+		initSessionDescriptor();
 		call = new ExtendedCall(sip_provider, user_profile.from_url,
 				user_profile.contact_url, user_profile.username,
 				user_profile.realm, user_profile.passwd, this);
