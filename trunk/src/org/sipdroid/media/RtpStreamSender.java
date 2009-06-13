@@ -133,6 +133,8 @@ public class RtpStreamSender extends Thread {
 		muted = !muted;
 	}
 
+	public static int delay = 0;
+	
 	/** Stops running */
 	public void halt() {
 		running = false;
@@ -159,8 +161,8 @@ public class RtpStreamSender extends Thread {
 		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
 				6144);
 		record.startRecording();
-		short[] lin = new short[frame_size];
-		int num;
+		short[] lin = new short[frame_size*10];
+		int num,ring = 0;
 		while (running) {
 			 RegisterService.hold = true;
 			 if (muted) {
@@ -174,8 +176,9 @@ public class RtpStreamSender extends Thread {
 				}
 				record.startRecording();
 			 }
-			 num = record.read(lin,0,frame_size);
- 			 G711.linear2alaw(lin, buffer, num);
+			 num = record.read(lin,(ring+delay)%(frame_size*10),frame_size);
+ 			 G711.linear2alaw(lin, ring%(frame_size*10),buffer, num);
+ 			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
  			 rtp_packet.setTimestamp(time);
  			 rtp_packet.setPayloadLength(num);
