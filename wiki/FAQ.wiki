@@ -48,6 +48,8 @@ Possible issues when registering directly to other SIP servers are:
 
 *Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged into a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
 
+PBXes is interoperable with most SIP providers. One exception is Gizmo which does not allow to fork calls. Either use it directly (with a possible battery drain on standby) or add another provider on PBXes to do the fork to your mobile number (for incoming calls).
+
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
   * You can register several trunks to use multiple telephony service providers of your choice.
@@ -92,6 +94,8 @@ What is currently missing is Bluetooth and there are already some [http://code.g
 === Is it complicated to set up a virtual PBX? ===
 
 Please have a look at the [http://pbxes.org/community_e.php?display=wiki DOCS section]. Under "Getting started" you find an introduction to the necessary steps. *It's all web based. No installation required.* First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. The Android specific details can be found under "Fixed Mobile Convergence (FMC)".
+
+The username to be entered in Sipdroid consists of account name, a dash ('-') and the extension number, e.g. "myuser-200". The password is that of the extension, not the password of your PBXes account.
 
 === How can I switch Sipdroid on and off? ===
 
