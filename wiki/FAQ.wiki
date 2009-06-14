@@ -107,6 +107,12 @@ When using [http://pbxes.org pbxes.org] the expected stand-by times are the same
 
 To improve also try uninstalling background applications (e.g. Netcounter, which only runs fine with WLAN turned off). A good application to save battery is [http://www.cyrket.com/package/org.pbxes.light2 Ambient Light Sensor].
 
+=== How much bandwidth is required? ===
+
+Sipdroid uses G.711 A-law to transmit voice which needs about 80 kBit/s in each direction. This corresponds to a total of 1.2 MB per second.
+
+A video call needs approximately twice as much.
+
 === What are the system requirements? ===
 
 To install Sipdroid you need version 1.5 "Cupcake" of Android.
