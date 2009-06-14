@@ -109,7 +109,7 @@ To improve also try uninstalling background applications (e.g. Netcounter, which
 
 === How much bandwidth is required? ===
 
-Sipdroid uses G.711 A-law to transmit voice which needs about 80 kBit/s in each direction. This corresponds to a total of 1.2 MB per second.
+Sipdroid uses G.711 A-law to transmit voice which needs about 80 kBit/s in each direction. This corresponds to a total of 1.2 MB per minute.
 
 A video call needs approximately twice as much.
 
