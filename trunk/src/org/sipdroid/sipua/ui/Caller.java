@@ -37,7 +37,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 public class Caller extends BroadcastReceiver {
-	    @Override
+
+		@Override
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
 	        String number = getResultData();
@@ -58,25 +59,25 @@ public class Caller extends BroadcastReceiver {
 					boolean bExTypes = false;
 					if (sExPat.length() > 0) 
 					{					
-						Vector vExPats = getTokens(sExPat, ",");
-						Vector vPatNums = new Vector();
-						Vector vTypesCode = new Vector();					
+						Vector<String> vExPats = getTokens(sExPat, ",");
+						Vector<String> vPatNums = new Vector<String>();
+						Vector<Integer> vTypesCode = new Vector<Integer>();					
 				    	for(int i = 0; i < vExPats.size(); i++)
 			            {
-				    		if (vExPats.get(i).toString().startsWith("h") || vExPats.get(i).toString().startsWith("H"))
-			        			vTypesCode.add("1");
-				    		else if (vExPats.get(i).toString().startsWith("m") || vExPats.get(i).toString().startsWith("M"))
-			        			vTypesCode.add("2");
-				    		else if (vExPats.get(i).toString().startsWith("w") || vExPats.get(i).toString().startsWith("W"))
-			        			vTypesCode.add("3");
+				    		if (vExPats.get(i).startsWith("h") || vExPats.get(i).startsWith("H"))
+			        			vTypesCode.add(Integer.valueOf(People.Phones.TYPE_HOME));
+				    		else if (vExPats.get(i).startsWith("m") || vExPats.get(i).startsWith("M"))
+			        			vTypesCode.add(Integer.valueOf(People.Phones.TYPE_MOBILE));
+				    		else if (vExPats.get(i).startsWith("w") || vExPats.get(i).startsWith("W"))
+			        			vTypesCode.add(Integer.valueOf(People.Phones.TYPE_WORK));
 				    		else 
-				    			vPatNums.add(vExPats.get(i).toString());     
+				    			vPatNums.add(vExPats.get(i));     
 			            }
 						if(vTypesCode.size() > 0)
 							bExTypes = isExcludedType(vTypesCode, number, context);
 						if(vPatNums.size() > 0)
 							bExNums = isExcludedNum(vPatNums, number);   					
-					}					
+					}	
 					if (bExTypes || bExNums)
 						sip_type = false;
 				}
@@ -131,11 +132,11 @@ public class Caller extends BroadcastReceiver {
 	        }
 	    }
 	    
-	    Vector getTokens(String sInput, String sDelimiter)
+	    Vector<String> getTokens(String sInput, String sDelimiter)
 	    {
-	    	Vector vTokens = new Vector();				
+	    	Vector<String> vTokens = new Vector<String>();				
 			int iStartIndex = 0;				
-			int iEndIndex = sInput.lastIndexOf(sDelimiter);
+			final int iEndIndex = sInput.lastIndexOf(sDelimiter);
 			for (; iStartIndex < iEndIndex; iStartIndex++) 
 			{
 				int iNextIndex = sInput.indexOf(sDelimiter, iStartIndex);
@@ -149,11 +150,11 @@ public class Caller extends BroadcastReceiver {
 			return vTokens;
 	    }
 	    
-	    boolean isExcludedNum(Vector vExNums, String sNumber)
+	    boolean isExcludedNum(Vector<String> vExNums, String sNumber)
 	    {
 			for (int i = 0; i < vExNums.size(); i++) 
 			{
-				Pattern p = Pattern.compile(vExNums.get(i).toString());
+				Pattern p = Pattern.compile(vExNums.get(i));
 				Matcher m = p.matcher(sNumber);					
 				if(m.find())
 					return true;			
@@ -161,7 +162,7 @@ public class Caller extends BroadcastReceiver {
 			return false;
 	    }
 	    
-	    boolean isExcludedType(Vector vExTypesCode, String sNumber, Context oContext)
+	    boolean isExcludedType(Vector<Integer> vExTypesCode, String sNumber, Context oContext)
 	    {
 			String sForNum = PhoneNumberUtils.formatNumber(sNumber);			
 	    	final String[] PHONES_PROJECTION = new String[] 
@@ -169,15 +170,15 @@ public class Caller extends BroadcastReceiver {
 		        People.Phones.NUMBER, // 0
 		        People.Phones.TYPE, // 1
 		    };
-	    	String sWhereClause = "number = '" + sForNum + "'"; 
+	    	final String sWhereClause = People.Phones.NUMBER + " = '" + sForNum + "'"; 
 	        Cursor phonesCursor = oContext.getContentResolver().query(People.CONTENT_URI, PHONES_PROJECTION, sWhereClause, null,
 	        		Phones.TYPE + " ASC"); 
 			if (phonesCursor != null) 
 	        {	        			
  	            while (phonesCursor.moveToNext()) 
 	            { 			            	
-	                final int type = phonesCursor.getInt(1);
-	                if(vExTypesCode.contains(Integer.toString(type)))
+	                final int type = phonesCursor.getInt(1);	              
+	                if(vExTypesCode.contains(Integer.valueOf(type)))
 	                	return true;	    
 	            }
 	            phonesCursor.close();
