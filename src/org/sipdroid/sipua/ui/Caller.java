@@ -35,9 +35,10 @@ public class Caller extends BroadcastReceiver {
 	    @Override
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
-	        if (intentAction.equals(Intent.ACTION_NEW_OUTGOING_CALL))
+	        String number = getResultData();
+	        
+	        if (intentAction.equals(Intent.ACTION_NEW_OUTGOING_CALL) && number != null)
 	        {
-	            String number = getResultData();
         		if (!Sipdroid.release) Log.i("SipUA:","outgoing call");
     			boolean sip_type = PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("SIP");
     			if (number.endsWith("+")) 
