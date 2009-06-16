@@ -108,7 +108,8 @@ public class VideoCamera extends CallScreen implements
     LocationManager mLocationManager = null;
 
     private Handler mHandler = new MainHandler();
-
+    long started;
+    
     /** This Handler is used to post message back onto the main thread of the application */
     private class MainHandler extends Handler {
         @Override
@@ -120,10 +121,10 @@ public class VideoCamera extends CallScreen implements
                         // Starting a minute before reaching the max duration
                         // limit, we'll countdown the remaining time instead.
                         boolean countdown_remaining_time =
-                            (delta >= MAX_RECORDING_DURATION_MS - 60000);
+                            (now - started >= MAX_RECORDING_DURATION_MS - 60000);
 
                         if (countdown_remaining_time) {
-                            delta = Math.max(0, MAX_RECORDING_DURATION_MS - delta);
+                            delta = Math.max(0, MAX_RECORDING_DURATION_MS - (now-started));
                         }
 
                         long seconds = (delta + 500) / 1000;  // round to nearest
@@ -482,6 +483,7 @@ public class VideoCamera extends CallScreen implements
                 return;
             }
             mMediaRecorderRecording = true;
+            started = SystemClock.elapsedRealtime();
             mRecordingTimeView.setText("");
             mRecordingTimeView.setVisibility(View.VISIBLE);
             mHandler.sendEmptyMessage(UPDATE_RECORD_TIME);
