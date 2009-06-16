@@ -49,6 +49,10 @@
 	            android:key="minedge"
 	            android:title="@string/settings_minedge"
 	        />
+	       	<EditTextPreference
+	            android:key="excludepat"
+	            android:title="@string/settings_excludepat"
+	        />
 	    </PreferenceCategory>    
     </PreferenceScreen>  
 </PreferenceScreen>

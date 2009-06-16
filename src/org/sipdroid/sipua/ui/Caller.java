@@ -20,6 +20,10 @@ package org.sipdroid.sipua.ui;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +32,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
+import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -41,11 +46,39 @@ public class Caller extends BroadcastReceiver {
 	        {
         		if (!Sipdroid.release) Log.i("SipUA:","outgoing call");
     			boolean sip_type = PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("SIP");
-    			if (number.endsWith("+")) 
+
+    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString("excludepat", ""); 
+   				boolean bExNums = false;
+				boolean bExTypes = false;
+				if (sExPat.length() > 0) 
+				{					
+					Vector vExPats = getTokens(sExPat, ",");
+					Vector vPatNums = new Vector();
+					Vector vTypesCode = new Vector();					
+			    	for(int i = 0; i < vExPats.size(); i++)
+		            {
+			    		if (vExPats.get(i).toString().startsWith("h") || vExPats.get(i).toString().startsWith("H"))
+		        			vTypesCode.add("1");
+			    		else if (vExPats.get(i).toString().startsWith("m") || vExPats.get(i).toString().startsWith("M"))
+		        			vTypesCode.add("2");
+			    		else if (vExPats.get(i).toString().startsWith("w") || vExPats.get(i).toString().startsWith("W"))
+		        			vTypesCode.add("3");
+			    		else 
+			    			vPatNums.add(vExPats.get(i).toString());     
+		            }
+					if(vTypesCode.size() > 0)
+						bExTypes = isExcludedType(vTypesCode, number, context);
+					if(vPatNums.size() > 0)
+						bExNums = isExcludedNum(vPatNums, number);   					
+				}
+				if (number.endsWith("+")) 
     			{
     				sip_type = !sip_type;
     				number = number.substring(0,number.length()-1);
     			}
+    			else if (bExTypes || bExNums)
+    				sip_type = false;
+    			
     			if (!sip_type)
     			{
     				setResultData(number);
@@ -99,4 +132,59 @@ public class Caller extends BroadcastReceiver {
 	            }
 	        }
 	    }
+	    
+	    Vector getTokens(String sInput, String sDelimiter)
+	    {
+	    	Vector vTokens = new Vector();				
+			int iStartIndex = 0;				
+			int iEndIndex = sInput.lastIndexOf(sDelimiter);
+			for (; iStartIndex < iEndIndex; iStartIndex++) 
+			{
+				int iNextIndex = sInput.indexOf(sDelimiter, iStartIndex);
+				String sPattern = sInput.substring(iStartIndex, iNextIndex).trim();
+				vTokens.add(sPattern);
+				iStartIndex = iNextIndex; 
+			}
+			if(iStartIndex < sInput.length())
+				vTokens.add(sInput.substring(iStartIndex, sInput.length()).trim());
+		
+			return vTokens;
+	    }
+	    
+	    boolean isExcludedNum(Vector vExNums, String sNumber)
+	    {
+			for (int i = 0; i < vExNums.size(); i++) 
+			{
+				Pattern p = Pattern.compile(vExNums.get(i).toString());
+				Matcher m = p.matcher(sNumber);					
+				if(m.find())
+					return true;			
+			}    		
+			return false;
+	    }
+	    
+	    boolean isExcludedType(Vector vExTypesCode, String sNumber, Context oContext)
+	    {
+			String sForNum = PhoneNumberUtils.formatNumber(sNumber);			
+	    	final String[] PHONES_PROJECTION = new String[] 
+		    {
+		        People.Phones.NUMBER, // 0
+		        People.Phones.TYPE, // 1
+		    };
+	    	String sWhereClause = "number = '" + sForNum + "'"; 
+	        Cursor phonesCursor = oContext.getContentResolver().query(People.CONTENT_URI, PHONES_PROJECTION, sWhereClause, null,
+	        		Phones.TYPE + " ASC"); 
+			if (phonesCursor != null) 
+	        {	        			
+ 	            while (phonesCursor.moveToNext()) 
+	            { 			            	
+	                final int type = phonesCursor.getInt(1);
+	                if(vExTypesCode.contains(Integer.toString(type)))
+	                	return true;	    
+	            }
+	            phonesCursor.close();
+	        }
+			return false;
+	    }   
+	    
 }
