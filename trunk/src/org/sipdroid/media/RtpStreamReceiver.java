@@ -171,7 +171,7 @@ public class RtpStreamReceiver extends Thread {
 				timeout = 0;
 			} catch (IOException e) {
 				rtp_socket.getDatagramSocket().disconnect();
-				if (++timeout >= 10) {
+				if (++timeout >= 22) {
 					Receiver.engine(Receiver.mContext).rejectcall();
 					break;
 				}
