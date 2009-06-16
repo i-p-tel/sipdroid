@@ -47,37 +47,39 @@ public class Caller extends BroadcastReceiver {
         		if (!Sipdroid.release) Log.i("SipUA:","outgoing call");
     			boolean sip_type = PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("SIP");
 
-    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString("excludepat", ""); 
-   				boolean bExNums = false;
-				boolean bExTypes = false;
-				if (sExPat.length() > 0) 
-				{					
-					Vector vExPats = getTokens(sExPat, ",");
-					Vector vPatNums = new Vector();
-					Vector vTypesCode = new Vector();					
-			    	for(int i = 0; i < vExPats.size(); i++)
-		            {
-			    		if (vExPats.get(i).toString().startsWith("h") || vExPats.get(i).toString().startsWith("H"))
-		        			vTypesCode.add("1");
-			    		else if (vExPats.get(i).toString().startsWith("m") || vExPats.get(i).toString().startsWith("M"))
-		        			vTypesCode.add("2");
-			    		else if (vExPats.get(i).toString().startsWith("w") || vExPats.get(i).toString().startsWith("W"))
-		        			vTypesCode.add("3");
-			    		else 
-			    			vPatNums.add(vExPats.get(i).toString());     
-		            }
-					if(vTypesCode.size() > 0)
-						bExTypes = isExcludedType(vTypesCode, number, context);
-					if(vPatNums.size() > 0)
-						bExNums = isExcludedNum(vPatNums, number);   					
-				}
 				if (number.endsWith("+")) 
     			{
     				sip_type = !sip_type;
     				number = number.substring(0,number.length()-1);
     			}
-    			else if (bExTypes || bExNums)
-    				sip_type = false;
+				if (sip_type) {
+	    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString("excludepat", ""); 
+	   				boolean bExNums = false;
+					boolean bExTypes = false;
+					if (sExPat.length() > 0) 
+					{					
+						Vector vExPats = getTokens(sExPat, ",");
+						Vector vPatNums = new Vector();
+						Vector vTypesCode = new Vector();					
+				    	for(int i = 0; i < vExPats.size(); i++)
+			            {
+				    		if (vExPats.get(i).toString().startsWith("h") || vExPats.get(i).toString().startsWith("H"))
+			        			vTypesCode.add("1");
+				    		else if (vExPats.get(i).toString().startsWith("m") || vExPats.get(i).toString().startsWith("M"))
+			        			vTypesCode.add("2");
+				    		else if (vExPats.get(i).toString().startsWith("w") || vExPats.get(i).toString().startsWith("W"))
+			        			vTypesCode.add("3");
+				    		else 
+				    			vPatNums.add(vExPats.get(i).toString());     
+			            }
+						if(vTypesCode.size() > 0)
+							bExTypes = isExcludedType(vTypesCode, number, context);
+						if(vPatNums.size() > 0)
+							bExNums = isExcludedNum(vPatNums, number);   					
+					}					
+					if (bExTypes || bExNums)
+						sip_type = false;
+				}
     			
     			if (!sip_type)
     			{
