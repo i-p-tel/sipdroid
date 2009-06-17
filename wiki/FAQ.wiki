@@ -3,6 +3,8 @@
 
 <wiki:toc max_depth="5" />
 
+== Prerequisites ==
+
 === How can I prepare for mobile VoIP? ===
 
 Sipdroid allows you to choose where you will use VoIP, on WLANs only, on 3G, or EDGE networks. If you are going to use VoIP services outside private wireless networks, it's your responsibility to check the contractual terms with the mobile operator:
@@ -18,6 +20,38 @@ The following plans are suitable for unlimited hotspot/3G usage:
 === What type of warranty comes with Sipdroid? ===
 
 This project publishes Sipdroid for free under the terms of [http://www.gnu.org/licenses/gpl.html GNU General Public License v3]. The first public version is beta for software testing. So please allow for some issues and incompatibilities at the beginning.
+
+=== How much will Sipdroid drain the battery? (Constantly running Internet connection?) ===
+
+When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time).
+
+=== How much bandwidth is required? ===
+
+Sipdroid uses G.711 A-law to transmit voice which needs about 80 kBit/s in each direction. This corresponds to a total of 1.2 MB per minute.
+
+A video call needs approximately twice as much.
+
+=== What are the system requirements? ===
+
+To install Sipdroid you need version 1.5 "Cupcake" of Android.
+
+See http://android-developers.blogspot.com/2009/04/android-15-is-here.html for details on updating the OS on developer phones.
+
+The update for the other phones comes over the air, starting May 1st, 2009.
+
+=== What does "full" version mean? ===
+
+There is a download at Android Market which is limited to usage within Wireless LANs only. 
+
+The download available [http://code.google.com/p/sipdroid/downloads/list here] can be used on 3G and EDGE networks as well. Please check the contractual terms with your mobile operator before using that one (see above).
+
+Upgrading through Android Market always reverts to the limited version.
+
+=== What build environment is needed for Sipdroid? ===
+
+If you are interested in developing and contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] and [http://subclipse.tigris.org/install.html Subclipse] for building the source code.
+
+== User Interface ==
 
 === How can I dial my contacts over IP / over PSTN? ===
 
@@ -35,26 +69,6 @@ NOTE: Don't add anything to emergency numbers. They are always dialed over PSTN.
 
 http://sipdroid.googlecode.com/svn/images/choose2.png
 
-=== What SIP providers is Sipdroid compatible with? ===
-
-Sipdroid runs standard SIP. For full interoperability register Sipdroid to [http://pbxes.org pbxes.org]. From there register your SIP accounts. 
-
-Possible issues when registering directly to other SIP servers are:
-
- * Poor voice in send direction,
- * Battery drain on 3G/EDGE,
- * No ringing, or
- * No connection at all
-
-*Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged into a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
-
-PBXes is interoperable with most SIP providers. One exception is Gizmo which does not allow to fork calls. Either use it directly (with a possible battery drain on standby) or add another provider on PBXes to do the fork to your mobile number (for incoming calls).
-
-=== What advantages do I get by signing up for the Free Account at PBXes? ===
-
-  * You can register several trunks to use multiple telephony service providers of your choice.
-  * [http://pbxes.org pbxes.org] routes incoming calls over SIP and PSTN to you. If you are online you can take it as VoIP, if off line you can take it as GSM.
-
 === How are the buttons assigned? ===
 
 Android reserves the green and red keys for the built-in dialer of the phone. So Sipdroid is controlled by the MENU and BACK buttons instead.
@@ -68,6 +82,34 @@ Incoming SIP calls can be identified by the turquoise icon in the status bar. Pr
 Green call button: Toggle on-hold
 
 BACK button: End call
+
+=== How can I switch Sipdroid on and off? ===
+
+You need to open Sipdroid's settings and uncheck "Use WLAN" to disable it.
+
+== SIP Providers ==
+
+=== What SIP providers is Sipdroid compatible with? ===
+
+Sipdroid runs standard SIP. For full interoperability register Sipdroid to [http://pbxes.org pbxes.org]. From there register your SIP accounts. 
+
+Possible issues when registering directly to other SIP servers are:
+
+ * Poor voice in send direction,
+ * Battery drain on 3G/EDGE,
+ * No ringing, or
+ * No connection at all
+
+*Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged into a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
+
+=== Gizmo ===
+
+PBXes is interoperable with most SIP providers. One exception is Gizmo which does not allow to fork calls. Either use it directly (with a possible battery drain on standby) or add another provider on PBXes to do the fork to your mobile number (for incoming calls).
+
+=== What advantages do I get by signing up for the Free Account at PBXes? ===
+
+  * You can register several trunks to use multiple telephony service providers of your choice.
+  * [http://pbxes.org pbxes.org] routes incoming calls over SIP and PSTN to you. If you are online you can take it as VoIP, if off line you can take it as GSM.
 
 === Which features are supported in Sipdroid? ===
 
@@ -97,38 +139,18 @@ Please have a look at the [http://pbxes.org/community_e.php?display=wiki DOCS se
 
 The username to be entered in Sipdroid consists of account name, a dash ('-') and the extension number, e.g. "myuser-200". The password is that of the extension, not the password of your PBXes account.
 
-=== How can I switch Sipdroid on and off? ===
+== Android Applications ==
 
-You need to open Sipdroid's settings and uncheck "Use WLAN" to disable it.
+=== Latitude ===
 
-=== How much will Sipdroid drain the battery? (Constantly running Internet connection?) ===
+We noticed that choppy voice on WLANs can be resolved by disabling "Detect your location automatically" within Google Maps/Latitude.
 
-When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time).
+=== Netcounter ===
 
-To improve also try uninstalling background applications (e.g. Netcounter, which only runs fine with WLAN turned off). A good application to save battery is [http://www.cyrket.com/package/org.pbxes.light2 Ambient Light Sensor].
+This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs as well you should not install the present version.
 
-=== How much bandwidth is required? ===
+On WLANs it wakes the device quite often, also on standby thus draining the battery.
 
-Sipdroid uses G.711 A-law to transmit voice which needs about 80 kBit/s in each direction. This corresponds to a total of 1.2 MB per minute.
+=== Ambient Light Sensor ===
 
-A video call needs approximately twice as much.
-
-=== What are the system requirements? ===
-
-To install Sipdroid you need version 1.5 "Cupcake" of Android.
-
-See http://android-developers.blogspot.com/2009/04/android-15-is-here.html for details on updating the OS on developer phones.
-
-The update for the other phones comes over the air, starting May 1st, 2009.
-
-=== What does "full" version mean? ===
-
-There is a download at Android Market which is limited to usage within Wireless LANs only. 
-
-The download available [http://code.google.com/p/sipdroid/downloads/list here] can be used on 3G and EDGE networks as well. Please check the contractual terms with your mobile operator before using that one (see above).
-
-Upgrading through Android Market always reverts to the limited version.
-
-=== What build environment is needed for Sipdroid? ===
-
-If you are interested in developing and contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] and [http://subclipse.tigris.org/install.html Subclipse] for building the source code.
+This [http://www.cyrket.com/package/org.pbxes.light2 tool] is recommend to save battery.
