@@ -133,7 +133,7 @@ You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid
 
 What is currently missing is Bluetooth and there are already some [http://code.google.com/p/sipdroid/issues/list ideas] for more enhancements.
 
-=== Is it complicated to set up a virtual PBX? ===
+=== How can I set up PBXes? ===
 
 Please have a look at the [http://pbxes.org/community_e.php?display=wiki DOCS section]. Under "Getting started" you find an introduction to the necessary steps. *It's all web based. No installation required.* First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. The Android specific details can be found under "Fixed Mobile Convergence (FMC)".
 
