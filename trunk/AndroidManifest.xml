@@ -75,8 +75,8 @@
 	        android:launchMode="singleInstance" android:configChanges="orientation|keyboardHidden">
         </activity>
 	    <receiver android:name=".ui.OneShotAlarm"/>
-	    <receiver android:name=".ui.Caller" android:enabled="true" android:priority="-1">
-	        <intent-filter>
+	    <receiver android:name=".ui.Caller" android:enabled="true">
+	        <intent-filter android:priority="-1">
 	        	<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
 	      	</intent-filter>
 	    </receiver>
