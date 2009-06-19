@@ -127,7 +127,6 @@ http://sipdroid.googlecode.com/svn/images/priv.png
   * Time-based routing for incoming calls
   * Call Transfer
   * Conferences
-  * Webcall
   * Video Reception (Video Transmission is supported by Sipdroid natively)
 
 You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Call Recording, Handoff of calls between networks).
