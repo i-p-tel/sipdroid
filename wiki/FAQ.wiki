@@ -129,7 +129,7 @@ http://sipdroid.googlecode.com/svn/images/priv.png
   * Conferences
   * Video Reception (Video Transmission is supported by Sipdroid natively)
 
-You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Call Recording, Handoff of calls between networks).
+You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Video Streaming, Call Recording, Handoff of calls between networks).
 
 What is currently missing is Bluetooth and there are already some [http://code.google.com/p/sipdroid/issues/list ideas] for more enhancements.
 
