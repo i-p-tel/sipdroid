@@ -20,7 +20,13 @@ package org.sipdroid.sipua.ui;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
 import org.sipdroid.media.G711;
+import org.sipdroid.net.RtpPacket;
+import org.sipdroid.net.RtpSocket;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.phone.CallCard;
@@ -30,8 +36,11 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -66,6 +75,10 @@ public class InCallScreen extends CallScreen {
     	if (!Sipdroid.release) Log.i("SipUA:","on pause");
 		if (Receiver.keepTop) Receiver.moveTop();
 		reenableKeyguard();
+		if (socket != null) {
+			socket.close();
+			socket = null;
+		}
 	}
 	
 	void moveBack() {
@@ -96,6 +109,12 @@ public class InCallScreen extends CallScreen {
 		}
 	}
 	
+	DatagramSocket socket;
+	Context mContext = this;
+	int running;
+	int speakermode;
+	long speakervalid;
+	
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -107,6 +126,53 @@ public class InCallScreen extends CallScreen {
 			callCardMenuButtonHint.setVisibility(View.VISIBLE);
 			break;
 		case UserAgent.UA_STATE_INCALL:
+			if (socket == null && Receiver.engine(mContext).getLocalVideo() != 0 && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString("server","").equals("pbxes.org"))
+		        (new Thread() {
+					public void run() {
+						RtpSocket rtp_socket;
+						RtpPacket keepalive = new RtpPacket(new byte[12],0);
+						RtpPacket videopacket = new RtpPacket(new byte[1000],0);
+						
+						if (speakervalid == Receiver.ccConn.date) {
+							Receiver.engine(mContext).speaker(speakermode);
+							speakervalid = 0;
+						}
+						try {
+							rtp_socket = new RtpSocket(socket = new DatagramSocket(Receiver.engine(mContext).getLocalVideo()),
+									InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
+									Receiver.engine(mContext).getRemoteVideo());
+							rtp_socket.getDatagramSocket().setSoTimeout(15000);
+						} catch (Exception e) {
+							if (!Sipdroid.release) e.printStackTrace();
+							return;
+						}
+						keepalive.setPayloadType(126);
+						try {
+							rtp_socket.send(keepalive);
+						} catch (IOException e1) {
+							return;
+						}
+						for (;;) {
+							try {
+								rtp_socket.receive(videopacket);
+							} catch (IOException e) {
+								rtp_socket.getDatagramSocket().disconnect();
+								try {
+									rtp_socket.send(keepalive);
+								} catch (IOException e1) {
+									return;
+								}
+							}
+							if (videopacket.getPayloadLength() > 200) {
+					            speakermode = Receiver.engine(mContext).speaker(AudioManager.MODE_NORMAL);
+					            speakervalid = Receiver.ccConn.date;
+								Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("rtsp://"+Receiver.engine(mContext).getRemoteAddr()+"/"+Receiver.engine(mContext).getRemoteVideo()+"/sipdroid"));
+								startActivity(i);
+								return;
+							}
+						}
+					}
+		        }).start();  
 		case UserAgent.UA_STATE_HOLD:
             callCardMenuButtonHint.setText(R.string.menuButtonHint);
 			callCardMenuButtonHint.setVisibility(View.VISIBLE);
@@ -198,7 +264,7 @@ public class InCallScreen extends CallScreen {
 			menu.findItem(MUTE_MENU_ITEM).setVisible(false);
 			menu.findItem(DTMF_MENU_ITEM).setVisible(false);
 			menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
-			menu.findItem(SPEAKER_MENU_ITEM).setVisible(true);
+			menu.findItem(SPEAKER_MENU_ITEM).setVisible(false);
 		}
 		
 		return result;

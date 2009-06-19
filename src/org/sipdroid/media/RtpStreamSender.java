@@ -159,9 +159,11 @@ public class RtpStreamSender extends Thread {
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
 		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
-				6144);
+				AudioRecord.getMinBufferSize(8000, 
+						AudioFormat.CHANNEL_CONFIGURATION_MONO, 
+						AudioFormat.ENCODING_PCM_16BIT)*3/2);
 		record.startRecording();
-		short[] lin = new short[frame_size*10];
+		short[] lin = new short[frame_size*11];
 		int num,ring = 0;
 		while (running) {
 			 RegisterService.hold = true;
@@ -176,8 +178,8 @@ public class RtpStreamSender extends Thread {
 				}
 				record.startRecording();
 			 }
-			 num = record.read(lin,(ring+delay)%(frame_size*10),frame_size);
- 			 G711.linear2alaw(lin, ring%(frame_size*10),buffer, num);
+			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
+ 			 G711.linear2alaw(lin, ring%(frame_size*11),buffer, num);
  			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
  			 rtp_packet.setTimestamp(time);
