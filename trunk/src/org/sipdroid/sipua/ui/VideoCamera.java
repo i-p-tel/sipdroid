@@ -537,7 +537,6 @@ public class VideoCamera extends CallScreen implements
     						if (num < 0) {
     							try {
     								sleep(20);
-    								System.out.println("sleep 20");
     							} catch (InterruptedException e) {
     								break;
     							}
