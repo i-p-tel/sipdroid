@@ -526,6 +526,7 @@ public class VideoCamera extends CallScreen implements
     						}
     					}
     					rtp_packet.setPayloadType(103);
+    					android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
     					while (Receiver.listener_video != null) {
     						num = -1;
     						try {
@@ -536,6 +537,7 @@ public class VideoCamera extends CallScreen implements
     						if (num < 0) {
     							try {
     								sleep(20);
+    								System.out.println("sleep 20");
     							} catch (InterruptedException e) {
     								break;
     							}
@@ -554,7 +556,6 @@ public class VideoCamera extends CallScreen implements
     						}
     						
     			 			rtp_packet.setSequenceNumber(seqn++);
-    			 			rtp_packet.setTimestamp(SystemClock.elapsedRealtime()*90);
     			 			rtp_packet.setPayloadLength(number-num+2);
     			 			try {
     			 				rtp_socket.send(rtp_packet);
@@ -576,6 +577,7 @@ public class VideoCamera extends CallScreen implements
     				 			while (num-- > 0)
     				 				buffer[dest++] = buffer[src++];
     							buffer[12] = 4;
+        			 			rtp_packet.setTimestamp(SystemClock.elapsedRealtime()*90);
     			 			} else {
     			 				number = 0;
     							buffer[12] = 0;
@@ -587,7 +589,7 @@ public class VideoCamera extends CallScreen implements
             }
         	
             speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
-            RtpStreamSender.delay = 9*1024;
+            RtpStreamSender.delay = 10*1024;
         }
     }
 
