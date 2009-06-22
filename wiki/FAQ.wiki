@@ -104,7 +104,9 @@ Possible issues when registering directly to other SIP servers are:
 
 === Gizmo ===
 
-PBXes is interoperable with most SIP providers. One exception is Gizmo which does not allow to fork calls. Either use it directly (with a possible battery drain on standby) or add another provider on PBXes to do the fork to your mobile number (for incoming calls).
+PBXes is interoperable with most SIP providers. One exception is Gizmo which does not allow PBXes to fork for incoming calls. Using Gizmo directly, without PBXes, would result in a *battery drain on 3G/EDGE standby* as mentioned above.
+
+So if you want to use Gizmo and have a good battery performance, use it with PBXes and add a second provider to do the forking to your mobile number.
 
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
@@ -135,7 +137,7 @@ What is currently missing is Bluetooth and there are already some [http://code.g
 
 === How can I set up PBXes? ===
 
-Please have a look at the [http://pbxes.org/community_e.php?display=wiki DOCS section]. Under "Getting started" you find an introduction to the necessary steps. *It's all web based. No installation required.* First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. The Android specific details can be found under "Fixed Mobile Convergence (FMC)".
+Please have a look at the [http://pbxes.org/community_e.php?display=wiki HELP section]. Under "Getting started" you find an introduction to the necessary steps. *It's all web based. No installation required.* First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. The Android specific details can be found under "Fixed Mobile Convergence (FMC)".
 
 The username to be entered in Sipdroid consists of account name, a dash ('-') and the extension number, e.g. "myuser-200". The password is that of the extension, not the password of your PBXes account.
 
