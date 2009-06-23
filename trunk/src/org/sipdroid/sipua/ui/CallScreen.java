@@ -7,6 +7,7 @@ import org.sipdroid.sipua.UserAgent;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -78,7 +79,8 @@ public class CallScreen extends Activity {
 			break;
 					
 		case SPEAKER_MENU_ITEM:
-			Receiver.engine(this).speaker(RtpStreamReceiver.TOGGLE);
+			Receiver.engine(this).speaker(RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL?
+					AudioManager.MODE_IN_CALL:AudioManager.MODE_NORMAL);
 			break;
 					
 		case DTMF_MENU_ITEM:
