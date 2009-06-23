@@ -218,7 +218,7 @@ public class RtpStreamSender extends Thread {
 			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
 
 			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL)
-	 			 if (RtpStreamReceiver.powersil < 4000)
+	 			 if (RtpStreamReceiver.powersil < 2000)
 	 				 noise(lin,(ring+delay)%(frame_size*11),num,power);
 	 			 else
 		 			 if (powersil >= 4000) {
