@@ -23,6 +23,7 @@ package org.sipdroid.sipua.ui;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -154,8 +155,17 @@ public class Caller extends BroadcastReceiver {
 	    {
 			for (int i = 0; i < vExNums.size(); i++) 
 			{
-				Pattern p = Pattern.compile(vExNums.get(i));
-				Matcher m = p.matcher(sNumber);					
+				Pattern p = null;
+				Matcher m = null;
+				try
+				{					
+					p = Pattern.compile(vExNums.get(i));
+					m = p.matcher(sNumber);	
+				}
+				catch(PatternSyntaxException pse)
+				{
+		           return false;    
+				}  
 				if(m.find())
 					return true;			
 			}    		
