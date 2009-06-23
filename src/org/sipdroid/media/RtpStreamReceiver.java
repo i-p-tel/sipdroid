@@ -58,12 +58,8 @@ public class RtpStreamReceiver extends Thread {
 	/** Whether it is running */
 	boolean running;
 	boolean muted;
-	int speakermode;
+	public static int speakermode;
 	
-	public static final int TOGGLE = 1;
-	public static final int SET = 2;
-	public static final int RESET = 3;
-
 	/**
 	 * Constructs a RtpStreamReceiver.
 	 * 
@@ -102,6 +98,18 @@ public class RtpStreamReceiver extends Thread {
 		
 		speakermode = mode;
 		return old;
+	}
+
+	public static int powersil;
+	
+	void silence(short[] lin,int off,int len) {
+		int i;
+		
+		for (i = 0; i < len; i++)
+			if (lin[i+off] < 300 && lin[i+off] > -300)
+				powersil++;
+			else
+				powersil = 0;
 	}
 	
 	/** Runs it in a new Thread. */
@@ -177,8 +185,12 @@ public class RtpStreamReceiver extends Thread {
 				}
 			}
 			if (running && timeout == 0) {		
-				 len = rtp_packet.getPayloadLength();
+				 len = rtp_packet.getPayloadLength();		 
 				 G711.alaw2linear(buffer, lin, len);
+				 
+	 			 if (speakermode == AudioManager.MODE_NORMAL)
+	 				 silence(lin,0,len);
+
 				 server = track.getPlaybackHeadPosition();
 				 headroom = user-server;
 				 

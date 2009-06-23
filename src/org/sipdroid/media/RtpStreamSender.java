@@ -24,6 +24,7 @@ package org.sipdroid.media;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Random;
 
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
@@ -31,6 +32,7 @@ import org.sipdroid.sipua.ui.RegisterService;
 import org.sipdroid.sipua.ui.Sipdroid;
 
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 
@@ -140,6 +142,40 @@ public class RtpStreamSender extends Thread {
 		running = false;
 	}
 
+	int poweri,powern,powersum,powersil,power;
+	Random random;
+	
+	void silence(short[] lin,int off,int len) {
+		int i;
+		
+		for (i = 0; i < len; i++)
+			if (lin[i+off] < 300 && lin[i+off] > -300)
+				powersil++;
+			else
+				powersil = 0;
+	}
+	
+	void powersilence(short[] lin,int off,int len) {
+		int i;
+		
+		poweri = 0;
+		for (i = 0; i < len; i++) {
+			if (lin[i+off] < 300 && lin[i+off] > -300)
+				powersil++;
+			else
+				powersil = 0;
+			poweri += Math.abs(lin[i+off]);
+		}
+	}
+	
+	void noise(short[] lin,int off,int len,int power) {
+		int i;
+
+		if (power == 0) power = 10;
+		for (i = 0; i < len; i++)
+			lin[i+off] = (short)(random.nextInt(power*4)-power);
+	}
+	
 	/** Runs it in a new Thread. */
 	public void run() {
 		if (rtp_socket == null)
@@ -165,6 +201,7 @@ public class RtpStreamSender extends Thread {
 		record.startRecording();
 		short[] lin = new short[frame_size*11];
 		int num,ring = 0;
+		random = new Random();
 		while (running) {
 			 RegisterService.hold = true;
 			 if (muted) {
@@ -179,7 +216,23 @@ public class RtpStreamSender extends Thread {
 				record.startRecording();
 			 }
 			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
- 			 G711.linear2alaw(lin, ring%(frame_size*11),buffer, num);
+
+			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL)
+	 			 if (RtpStreamReceiver.powersil < 4000)
+	 				 noise(lin,(ring+delay)%(frame_size*11),num,power);
+	 			 else
+		 			 if (powersil >= 4000) {
+		 				 powersilence(lin,(ring+delay)%(frame_size*11),num);
+		 				 if (powern >= 8000) {
+		 					 power = powersum/powern;
+		 					 powersum *= 1-(float)num/powern;
+		 				 } else
+		 					 powern += num;
+		 				 powersum += poweri;
+		 			 } else
+		 				 silence(lin,(ring+delay)%(frame_size*11),num);
+			 
+			 G711.linear2alaw(lin, ring%(frame_size*11), buffer, num);
  			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
  			 rtp_packet.setTimestamp(time);
