@@ -217,8 +217,17 @@ public class RtpStreamReceiver extends Thread {
 					 user += track.write(lin,0,len);
 				 
 				 if (user >= luser + 8000) {
-					 if (am.getMode() != speakermode)
+					 if (am.getMode() != speakermode) {
 						 am.setMode(speakermode);
+						 switch (speakermode) {
+						 case AudioManager.MODE_IN_CALL:
+								track.setStereoVolume(0.3f,0.3f);
+								break;
+						 case AudioManager.MODE_NORMAL:
+								track.setStereoVolume(1f,1f);
+								break;
+						 }
+					 }
 					 luser = user;
 				 }
 				 lserver = server;
