@@ -166,7 +166,7 @@ public class Caller extends BroadcastReceiver {
 				{
 		           return false;    
 				}  
-				if(m.find())
+				if(m != null && m.find())
 					return true;			
 			}    		
 			return false;
