@@ -94,13 +94,13 @@ Numbers can be exluded by type and/or number.
 <br> Format is pattern,pattern,pattern...
 
 To exclude by *phone type* you can enter single or combination of the three supported types:
-<br>e.g. h,m,w or h{{{*}}},m{{{*}}},w{{{*}}} or home,mobile,work (excludes all home, mobile and work numbers)
+<br>e.g. h,m,w or ho,mo,wo or home,mobile,work (excludes all home, mobile and work numbers)
 
 To exclude by *numbers* enter any pattern:
-<br>e.g. \+03{{{*}}} (excludes all numbers starting with +03).
+<br>e.g. \+03\d{{{*}}} (excludes all numbers starting with +03).
 
 To exclude by *both* phone type and number:
-<br>e.g. m,1{{{*}}}  (exludes all mobile and numbers starting with 1).
+<br>e.g. m,1\d{{{*}}}  (exludes all mobile and numbers starting with 1).
 
 == SIP Providers ==
 
