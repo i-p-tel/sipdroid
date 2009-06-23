@@ -87,6 +87,21 @@ BACK button: End call
 
 You need to open Sipdroid's settings and uncheck "Use WLAN" to disable it.
 
+=== How do I exclude certain numbers from Sipdroid? ===
+
+Choose *Advanced Options* and enter your pattern in the *exclude pattern* field.
+Numbers can be exluded by type and/or number.  
+<br> Format is pattern,pattern,pattern...
+
+To exclude by *phone type* you can enter single or combination of the three supported types:
+<br>e.g. h,m,w or h{{{*}}},m{{{*}}},w{{{*}}} or home,mobile,work (excludes all home, mobile and work numbers)
+
+To exclude by *numbers* enter any pattern:
+<br>e.g. \+03{{{*}}} (excludes all numbers starting with +03).
+
+To exclude by *both* phone type and number:
+<br>e.g. m,1{{{*}}}  (exludes all mobile and numbers starting with 1).
+
 == SIP Providers ==
 
 === What SIP providers is Sipdroid compatible with? ===
