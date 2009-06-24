@@ -96,7 +96,7 @@ Numbers can be exluded by type and/or number.
 To exclude by *phone type* you can enter single or combination of the three supported types:
 <br>e.g. h,m,w or ho,mo,wo or home,mobile,work (excludes all home, mobile and work numbers)
 
-To exclude by *numbers* enter any regular expression:
+To exclude by *numbers* enter any java regular expression:
 <br>e.g. \A\+03\d{{{*}}} (excludes all numbers starting with +03).
 
 To exclude by *both* phone type and number:
