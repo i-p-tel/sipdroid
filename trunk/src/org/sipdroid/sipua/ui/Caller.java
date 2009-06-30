@@ -28,6 +28,7 @@ import java.util.regex.PatternSyntaxException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -48,41 +49,50 @@ public class Caller extends BroadcastReceiver {
 	        {
         		if (!Sipdroid.release) Log.i("SipUA:","outgoing call");
     			boolean sip_type = PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("SIP");
+    			boolean bSipCall = PreferenceManager.getDefaultSharedPreferences(context).getString("call_over","").equals("SIP");
+    			Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();				
+ 				edit.putString("call_over", "");		
+ 				edit.commit();
+    	        
+    			if (!bSipCall)
+	        	{
+					if (number.endsWith("+")) 
+	    			{
+	    				sip_type = !sip_type;
+	    				number = number.substring(0,number.length()-1);
+	    			}
+					if (sip_type) {
+		    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString("excludepat", ""); 
+		   				boolean bExNums = false;
+						boolean bExTypes = false;
+						if (sExPat.length() > 0) 
+						{					
+							Vector<String> vExPats = getTokens(sExPat, ",");
+							Vector<String> vPatNums = new Vector<String>();
+							Vector<Integer> vTypesCode = new Vector<Integer>();					
+					    	for(int i = 0; i < vExPats.size(); i++)
+				            {
+					    		if (vExPats.get(i).startsWith("h") || vExPats.get(i).startsWith("H"))
+				        			vTypesCode.add(Integer.valueOf(People.Phones.TYPE_HOME));
+					    		else if (vExPats.get(i).startsWith("m") || vExPats.get(i).startsWith("M"))
+				        			vTypesCode.add(Integer.valueOf(People.Phones.TYPE_MOBILE));
+					    		else if (vExPats.get(i).startsWith("w") || vExPats.get(i).startsWith("W"))
+				        			vTypesCode.add(Integer.valueOf(People.Phones.TYPE_WORK));
+					    		else 
+					    			vPatNums.add(vExPats.get(i));     
+				            }
+							if(vTypesCode.size() > 0)
+								bExTypes = isExcludedType(vTypesCode, number, context);
+							if(vPatNums.size() > 0)
+								bExNums = isExcludedNum(vPatNums, number);   					
+						}	
+						if (bExTypes || bExNums)
+							sip_type = false;
+					}
+	        	}
+    			if (bSipCall)		
+    				sip_type = true;
 
-				if (number.endsWith("+")) 
-    			{
-    				sip_type = !sip_type;
-    				number = number.substring(0,number.length()-1);
-    			}
-				if (sip_type) {
-	    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString("excludepat", ""); 
-	   				boolean bExNums = false;
-					boolean bExTypes = false;
-					if (sExPat.length() > 0) 
-					{					
-						Vector<String> vExPats = getTokens(sExPat, ",");
-						Vector<String> vPatNums = new Vector<String>();
-						Vector<Integer> vTypesCode = new Vector<Integer>();					
-				    	for(int i = 0; i < vExPats.size(); i++)
-			            {
-				    		if (vExPats.get(i).startsWith("h") || vExPats.get(i).startsWith("H"))
-			        			vTypesCode.add(Integer.valueOf(People.Phones.TYPE_HOME));
-				    		else if (vExPats.get(i).startsWith("m") || vExPats.get(i).startsWith("M"))
-			        			vTypesCode.add(Integer.valueOf(People.Phones.TYPE_MOBILE));
-				    		else if (vExPats.get(i).startsWith("w") || vExPats.get(i).startsWith("W"))
-			        			vTypesCode.add(Integer.valueOf(People.Phones.TYPE_WORK));
-				    		else 
-				    			vPatNums.add(vExPats.get(i));     
-			            }
-						if(vTypesCode.size() > 0)
-							bExTypes = isExcludedType(vTypesCode, number, context);
-						if(vPatNums.size() > 0)
-							bExNums = isExcludedNum(vPatNums, number);   					
-					}	
-					if (bExTypes || bExNums)
-						sip_type = false;
-				}
-    			
     			if (!sip_type)
     			{
     				setResultData(number);
