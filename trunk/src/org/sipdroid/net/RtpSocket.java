@@ -23,8 +23,9 @@ package org.sipdroid.net;
 
 import java.net.InetAddress;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.io.IOException;
+
+
 
 /**
  * RtpSocket implements a RTP socket for receiving and sending RTP packets.
@@ -34,7 +35,7 @@ import java.io.IOException;
  */
 public class RtpSocket {
 	/** UDP socket */
-	DatagramSocket socket;
+	SipdroidSocket socket;
 	DatagramPacket datagram;
 	
 	/** Remote address */
@@ -44,7 +45,7 @@ public class RtpSocket {
 	int r_port;
 
 	/** Creates a new RTP socket (only receiver) */
-	public RtpSocket(DatagramSocket datagram_socket) {
+	public RtpSocket(SipdroidSocket datagram_socket) {
 		socket = datagram_socket;
 		r_addr = null;
 		r_port = 0;
@@ -52,7 +53,7 @@ public class RtpSocket {
 	}
 
 	/** Creates a new RTP socket (sender and receiver) */
-	public RtpSocket(DatagramSocket datagram_socket,
+	public RtpSocket(SipdroidSocket datagram_socket,
 			InetAddress remote_address, int remote_port) {
 		socket = datagram_socket;
 		r_addr = remote_address;
@@ -60,8 +61,8 @@ public class RtpSocket {
 		datagram = new DatagramPacket(new byte[1],1);
 	}
 
-	/** Returns the RTP DatagramSocket */
-	public DatagramSocket getDatagramSocket() {
+	/** Returns the RTP SipdroidSocket */
+	public SipdroidSocket getDatagramSocket() {
 		return socket;
 	}
 

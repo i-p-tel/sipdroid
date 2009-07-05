@@ -21,12 +21,12 @@ package org.sipdroid.sipua.ui;
  */
 
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import org.sipdroid.media.G711;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
+import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.phone.CallCard;
@@ -109,7 +109,7 @@ public class InCallScreen extends CallScreen {
 		}
 	}
 	
-	DatagramSocket socket;
+	SipdroidSocket socket;
 	Context mContext = this;
 	int running;
 	int speakermode;
@@ -138,7 +138,7 @@ public class InCallScreen extends CallScreen {
 							speakervalid = 0;
 						}
 						try {
-							rtp_socket = new RtpSocket(socket = new DatagramSocket(Receiver.engine(mContext).getLocalVideo()),
+							rtp_socket = new RtpSocket(socket = new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
 									InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
 									Receiver.engine(mContext).getRemoteVideo());
 							rtp_socket.getDatagramSocket().setSoTimeout(15000);

@@ -22,12 +22,12 @@
 package org.sipdroid.media;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Random;
 
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
+import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.ui.RegisterService;
 import org.sipdroid.sipua.ui.Sipdroid;
 
@@ -99,7 +99,7 @@ public class RtpStreamSender extends Thread {
 	 */
 	public RtpStreamSender(boolean do_sync,
 			int payload_type, long frame_rate, int frame_size,
-			DatagramSocket src_socket, String dest_addr, int dest_port) {
+			SipdroidSocket src_socket, String dest_addr, int dest_port) {
 		init(do_sync, payload_type, frame_rate, frame_size,
 				src_socket, dest_addr, dest_port);
 	}
@@ -107,7 +107,7 @@ public class RtpStreamSender extends Thread {
 	/** Inits the RtpStreamSender */
 	private void init(boolean do_sync,
 			int payload_type, long frame_rate, int frame_size,
-			DatagramSocket src_socket, String dest_addr,
+			SipdroidSocket src_socket, String dest_addr,
 			int dest_port) {
 		this.p_type = payload_type;
 		this.frame_rate = frame_rate;
@@ -142,38 +142,37 @@ public class RtpStreamSender extends Thread {
 		running = false;
 	}
 
-	int poweri,powern,powersum,powersil,power;
 	Random random;
+	double smin = 200,s;
+	int nearend;
 	
-	void silence(short[] lin,int off,int len) {
-		int i;
+	void calc(short[] lin,int off,int len) {
+		int i,j;
+		double sm = 30000,r;
 		
-		for (i = 0; i < len; i++)
-			if (lin[i+off] < 300 && lin[i+off] > -300)
-				powersil++;
-			else
-				powersil = 0;
-	}
-	
-	void powersilence(short[] lin,int off,int len) {
-		int i;
-		
-		poweri = 0;
-		for (i = 0; i < len; i++) {
-			if (lin[i+off] < 300 && lin[i+off] > -300)
-				powersil++;
-			else
-				powersil = 0;
-			poweri += Math.abs(lin[i+off]);
+		for (i = 0; i < len; i += 5) {
+			j = lin[i+off];
+			s = 0.03*Math.abs(j) + 0.97*s;
+			if (s < sm) sm = s;
+			if (s > smin) nearend = 3000/5;
+			else if (nearend > 0) nearend--;
 		}
+		r = (double)len/100000;
+		smin = sm*r + smin*(1-r);
 	}
-	
-	void noise(short[] lin,int off,int len,int power) {
-		int i;
 
-		if (power == 0) power = 10;
-		for (i = 0; i < len; i++)
-			lin[i+off] = (short)(random.nextInt(power*4)-power);
+	void noise(short[] lin,int off,int len,double power) {
+		int i,r = (int)(power*2);
+		short ran;
+
+		if (r == 0) r = 1;
+		for (i = 0; i < len; i += 4) {
+			ran = (short)(random.nextInt(r*2)-r);
+			lin[i+off] = ran;
+			lin[i+off+1] = ran;
+			lin[i+off+2] = ran;
+			lin[i+off+3] = ran;
+		}
 	}
 	
 	/** Runs it in a new Thread. */
@@ -187,6 +186,7 @@ public class RtpStreamSender extends Thread {
 		long time = 0;
 		long byte_rate = frame_rate * frame_size;
 		long frame_time = (frame_size * 1000) / byte_rate;
+		double p = 0;
 
 		running = true;
 
@@ -217,20 +217,13 @@ public class RtpStreamSender extends Thread {
 			 }
 			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
 
-			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL)
-	 			 if (RtpStreamReceiver.powersil < 2000)
-	 				 noise(lin,(ring+delay)%(frame_size*11),num,power);
-	 			 else
-		 			 if (powersil >= 4000) {
-		 				 powersilence(lin,(ring+delay)%(frame_size*11),num);
-		 				 if (powern >= 8000) {
-		 					 power = powersum/powern;
-		 					 powersum *= 1-(float)num/powern;
-		 				 } else
-		 					 powern += num;
-		 				 powersum += poweri;
-		 			 } else
-		 				 silence(lin,(ring+delay)%(frame_size*11),num);
+			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
+ 				 calc(lin,(ring+delay)%(frame_size*11),num);
+ 	 			 if (RtpStreamReceiver.nearend != 0)
+	 				 noise(lin,(ring+delay)%(frame_size*11),num,p);
+	 			 else if (nearend == 0)
+	 				 p = 0.9*p + 0.1*s;
+			 }
 			 
 			 G711.linear2alaw(lin, ring%(frame_size*11), buffer, num);
  			 ring += frame_size;
