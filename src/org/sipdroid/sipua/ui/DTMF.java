@@ -133,18 +133,14 @@ public class DTMF extends CallScreen implements SipdroidListener,View.OnClickLis
 		return result;
 	}
 
-	int speakermode;
-	
     @Override
     protected void onResume() {
         super.onResume();
-        speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
     }
     
     @Override
     protected void onPause() {
         super.onPause();
-        Receiver.engine(this).speaker(speakermode);
     }
 
 	public void onClick(View v) {

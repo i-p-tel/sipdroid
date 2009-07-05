@@ -24,13 +24,13 @@ package org.sipdroid.sipua.ui;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
 import org.sipdroid.media.RtpStreamSender;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
+import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
 
 import android.content.BroadcastReceiver;
@@ -504,7 +504,7 @@ public class VideoCamera extends CallScreen implements
     					FileInputStream fis = null;
 
     					try {
-    						rtp_socket = new RtpSocket(new DatagramSocket(Receiver.engine(mContext).getLocalVideo()),
+    						rtp_socket = new RtpSocket(new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
     								InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
     								Receiver.engine(mContext).getRemoteVideo());
     					} catch (Exception e) {

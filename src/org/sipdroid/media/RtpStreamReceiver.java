@@ -22,12 +22,12 @@
 package org.sipdroid.media;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.SocketException;
 
 import org.sipdroid.net.KeepAliveSip;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
+import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 
@@ -66,14 +66,14 @@ public class RtpStreamReceiver extends Thread {
 	 * @param output_stream
 	 *            the stream sink
 	 * @param socket
-	 *            the local receiver DatagramSocket
+	 *            the local receiver SipdroidSocket
 	 */
-	public RtpStreamReceiver(DatagramSocket socket) {
+	public RtpStreamReceiver(SipdroidSocket socket) {
 		init(socket);
 	}
 
 	/** Inits the RtpStreamReceiver */
-	private void init(DatagramSocket socket) {
+	private void init(SipdroidSocket socket) {
 		if (socket != null)
 			rtp_socket = new RtpSocket(socket);
 	}
@@ -100,16 +100,31 @@ public class RtpStreamReceiver extends Thread {
 		return old;
 	}
 
-	public static int powersil;
+	double smin = 200,s;
+	public static int nearend;
 	
-	void silence(short[] lin,int off,int len) {
-		int i;
+	void calc(short[] lin,int off,int len) {
+		int i,j;
+		double sm = 30000,r;
 		
-		for (i = 0; i < len; i++)
-			if (lin[i+off] < 300 && lin[i+off] > -300)
-				powersil++;
+		for (i = 0; i < len; i += 5) {
+			j = lin[i+off];
+			s = 0.03*Math.abs(j) + 0.97*s;
+			if (s < sm) sm = s;
+			if (s > smin) nearend = 3000/5;
+			else if (nearend > 0) nearend--;
+		}
+		for (i = 0; i < len; i++) {
+			j = lin[i+off];
+			if (j > 6550)
+				lin[i+off] = 6550*5;
+			else if (j < -6550)
+				lin[i+off] = -6550*5;
 			else
-				powersil = 0;
+				lin[i+off] = (short)(j*5);
+		}
+		r = (double)len/100000;
+		smin = sm*r + smin*(1-r);
 	}
 	
 	/** Runs it in a new Thread. */
@@ -137,7 +152,7 @@ public class RtpStreamReceiver extends Thread {
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
 		AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
 				4096, AudioTrack.MODE_STREAM);
-		track.setStereoVolume(0.3f,0.3f);
+		track.setStereoVolume(AudioTrack.getMaxVolume()/3,AudioTrack.getMaxVolume()/3);
 		track.play();
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
@@ -189,7 +204,7 @@ public class RtpStreamReceiver extends Thread {
 				 G711.alaw2linear(buffer, lin, len);
 				 
 	 			 if (speakermode == AudioManager.MODE_NORMAL)
-	 				 silence(lin,0,len);
+	 				 calc(lin,0,len);
 
 				 server = track.getPlaybackHeadPosition();
 				 headroom = user-server;
@@ -221,10 +236,10 @@ public class RtpStreamReceiver extends Thread {
 						 am.setMode(speakermode);
 						 switch (speakermode) {
 						 case AudioManager.MODE_IN_CALL:
-								track.setStereoVolume(0.3f,0.3f);
+								track.setStereoVolume(AudioTrack.getMaxVolume()/3,AudioTrack.getMaxVolume()/3);
 								break;
 						 case AudioManager.MODE_NORMAL:
-								track.setStereoVolume(1f,1f);
+								track.setStereoVolume(AudioTrack.getMaxVolume(),AudioTrack.getMaxVolume());
 								break;
 						 }
 					 }
