@@ -25,8 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.sipdroid.sipua.R;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -56,7 +54,7 @@ public class Caller extends BroadcastReceiver {
     				sip_type = !sip_type;
     				number = number.substring(0,number.length()-1);
     			}
-				if (sip_type && !intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
+				if (sip_type) {
 	    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString("excludepat", ""); 
 	   				boolean bExNums = false;
 					boolean bExTypes = false;
@@ -176,7 +174,7 @@ public class Caller extends BroadcastReceiver {
 	    
 	    boolean isExcludedType(Vector<Integer> vExTypesCode, String sNumber, Context oContext)
 	    {
-			String sForNum = PhoneNumberUtils.formatNumber(sNumber);			
+			String sForNum = PhoneNumberUtils.formatNumber(sNumber);
 	    	final String[] PHONES_PROJECTION = new String[] 
 		    {
 		        People.Phones.NUMBER, // 0

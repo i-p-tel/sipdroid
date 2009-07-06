@@ -20,8 +20,6 @@ package org.sipdroid.sipua.ui;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import org.sipdroid.sipua.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -40,7 +38,6 @@ public class SIP extends Activity {
 		                Uri.fromParts("tel", Uri.decode(number)+
 		                		(PreferenceManager.getDefaultSharedPreferences(this).getString("pref","").equals("PSTN")?"+":""), null));
 		        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(getString(R.string.app_name), true);
 		        startActivity(intent);
 			}
 		}
