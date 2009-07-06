@@ -165,10 +165,12 @@ We noticed that choppy voice on WLANs can be resolved by turning off Latitude wi
 
 === Netcounter ===
 
-This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs as well you should not install the present version.
-
-On WLANs it wakes the device quite often, also on standby thus draining the battery.
+This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs you should not install the present version. It wakes the device too often thus draining the battery.
 
 === Ambient Light Sensor ===
 
-This [http://www.cyrket.com/package/org.pbxes.light2 tool] is recommend to save battery.
+This [http://www.cyrket.com/package/org.pbxes.light2 tool] is recommended to save battery. It uses the camera to adjust screen brightness.
+
+=== ChompSMS ===
+
+This is the equivalent to Sipdroid for SMS.
