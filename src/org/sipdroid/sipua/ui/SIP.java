@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 public class SIP extends Activity {
@@ -38,6 +39,7 @@ public class SIP extends Activity {
 		                Uri.fromParts("tel", Uri.decode(number)+
 		                		(PreferenceManager.getDefaultSharedPreferences(this).getString("pref","").equals("PSTN")?"+":""), null));
 		        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		        Caller.noexclude = SystemClock.elapsedRealtime();
 		        startActivity(intent);
 			}
 		}

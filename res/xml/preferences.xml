@@ -42,12 +42,16 @@
 	<PreferenceScreen android:title="@string/settings_advanced_options">
 		<PreferenceCategory android:title="@string/settings_advanced_options">
 	        <EditTextPreference
-	            android:key="prefix"
-	            android:title="@string/settings_prefix"
-	        />
-	        <EditTextPreference
 	            android:key="minedge"
 	            android:title="@string/settings_minedge"
+	        />
+	        <EditTextPreference
+	            android:key="maxpoll"
+	            android:title="@string/settings_maxpoll"
+	        />
+	        <EditTextPreference
+	            android:key="prefix"
+	            android:title="@string/settings_prefix"
 	        />
 	       	<EditTextPreference
 	            android:key="excludepat"
