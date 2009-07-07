@@ -15,3 +15,15 @@ Geeignet für die VoIP-Nutzung von unterwegs ist z.B. der Tarif [https://www.deb
 Sipdroid wird kostenlos unter den Bedingungen der [http://www.gnu.de/documents/gpl.de.html allgemeinen öffentlichen GNU-Lizenz v3] veröffentlicht. Darüberhinaus befindet sich die Software noch in der Beta-Testphase, so daß derzeit durchaus noch Fehler und Inkompatibilitäten auftreten können.
 
 === Wie wähle ich zwischen Handynetz und IP-Anrufen aus? ===
+
+=== What SIP providers is Sipdroid compatible with? ===
+
+Sipdroid runs standard SIP. For full interoperability register Sipdroid to [http://pbxes.org pbxes.org]. From there register your SIP accounts. 
+
+Possible issues when registering directly to other SIP servers are:
+
+ * Battery drain on 3G/EDGE,
+ * No ringing,
+ * Poor voice in send direction,
+ * One way voice, or
+ * No connection at all
