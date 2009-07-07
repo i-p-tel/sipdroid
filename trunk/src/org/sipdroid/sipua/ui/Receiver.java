@@ -40,6 +40,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import org.sipdroid.net.KeepAliveSip;
 import org.sipdroid.sipua.*;
 import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.Connection;
@@ -63,7 +64,7 @@ import org.sipdroid.sipua.phone.Connection;
 		public static Connection ccConn;
 		public static int call_state;
 		public static String pstn_state;
-		static int cellAsu;
+		static int cellAsu = -1;
 		public static String laststate,lastnumber;
 				
 		public static SipdroidEngine engine(Context context) {
@@ -214,15 +215,19 @@ import org.sipdroid.sipua.phone.Connection;
 			lastnumber = number;
 		}
 		
-		public static void reRegister(int renew_time) {
+		public static void alarm(int renew_time,Class <?>cls) {
        		if (!Sipdroid.release) Log.i("SipUA:","alarm "+renew_time);
-	        Intent intent = new Intent(mContext, OneShotAlarm.class);
+	        Intent intent = new Intent(mContext, cls);
 	        PendingIntent sender = PendingIntent.getBroadcast(mContext,
 	                0, intent, 0);
 			AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
 			am.cancel(sender);
-			if (renew_time > 15)
-				am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+(renew_time-15)*1000, sender);
+			if (renew_time > 0)
+				am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+renew_time*1000, sender);
+		}
+		
+		public static void reRegister(int renew_time) {
+       		alarm(renew_time-15, OneShotAlarm.class);
 		}
 
 		public static void screenOff(boolean off) {
@@ -258,6 +263,8 @@ import org.sipdroid.sipua.phone.Connection;
 				mContext.startActivity(createIntent(Activity2.class)); 
 		}
 
+		static boolean on_wlan;
+		
 		public static boolean isFast(boolean for_a_call) {
 			Context context = mContext;
 			
@@ -268,7 +275,8 @@ import org.sipdroid.sipua.phone.Connection;
         	if (wi != null)
         		if (!Sipdroid.release) Log.i("SipUA:","isFast() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())+" "+cellAsu);
         	if (wi != null && WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR)
-        		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("wlan",false);
+        		return on_wlan = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("wlan",false);
+        	on_wlan = false;
         	if (Sipdroid.market || !PreferenceManager.getDefaultSharedPreferences(context).getBoolean("3g",false))
         		return false;
         	if (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS)
@@ -280,6 +288,8 @@ import org.sipdroid.sipua.phone.Connection;
         			return cellAsu >= Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString("minedge", "4"));
         	return false;
 		}
+		
+		public static KeepAliveSip ka;
 		
 	    @Override
 		public void onReceive(Context context, Intent intent) {
@@ -318,6 +328,18 @@ import org.sipdroid.sipua.phone.Connection;
 	        	else if (cellAsu >= 8) cellAsu = 3;
 	        	else if (cellAsu >= 4) cellAsu = 2;
 	        	else cellAsu = 1;
+	        	if (!Sipdroid.release) Log.i("SipUA:","cellAsu "+cellAsu);
+	        	if (cellAsu <= Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString("maxpoll", "1")) && on_wlan) {
+	        		if (ka == null) {
+	        			ka = new KeepAliveSip(Receiver.engine(context).sip_provider,15000);
+	        			alarm(15, LoopAlarm.class);
+	        		}
+	        	} else
+	        		if (ka != null) {
+	        			ka.halt();
+	        			ka = null;
+	        			alarm(0, LoopAlarm.class);
+	        		}	        	
 	        }
 		}
 }

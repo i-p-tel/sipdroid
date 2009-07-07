@@ -90,7 +90,8 @@ import android.preference.PreferenceActivity;
         	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
         	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", ""));
         	getPreferenceScreen().findPreference("prefix").setSummary(getPreferenceScreen().getSharedPreferences().getString("prefix", "")); 
-        	getPreferenceScreen().findPreference("minedge").setSummary(getPreferenceScreen().getSharedPreferences().getString("minedge", "4")); 
+        	getPreferenceScreen().findPreference("minedge").setSummary("Signal >= "+getPreferenceScreen().getSharedPreferences().getString("minedge", "4")); 
+        	getPreferenceScreen().findPreference("maxpoll").setSummary("Signal <= "+getPreferenceScreen().getSharedPreferences().getString("maxpoll", "1")); 
         	getPreferenceScreen().findPreference("excludepat").setSummary(getPreferenceScreen().getSharedPreferences().getString("excludepat", "")); 
         	if (getPreferenceScreen().getSharedPreferences().getString("pref", "").equals("SIP")) {
         		getPreferenceScreen().findPreference("pref").setSummary(getResources().getStringArray(R.array.pref_display_values)[0]);
@@ -99,5 +100,9 @@ import android.preference.PreferenceActivity;
           		getPreferenceScreen().findPreference("pref").setSummary(getResources().getStringArray(R.array.pref_display_values)[1]);
         		getPreferenceScreen().findPreference("par").setEnabled(false);
           	}
+        	if (getPreferenceScreen().getSharedPreferences().getBoolean("3g", false))
+        		getPreferenceScreen().findPreference("minedge").setEnabled(true);
+        	else
+        		getPreferenceScreen().findPreference("minedge").setEnabled(false);
        }
 	}

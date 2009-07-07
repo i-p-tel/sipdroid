@@ -30,15 +30,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.provider.Contacts;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
-import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
 
 public class Caller extends BroadcastReceiver {
 
+		static long noexclude;
+		
 		@Override
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
@@ -54,7 +57,7 @@ public class Caller extends BroadcastReceiver {
     				sip_type = !sip_type;
     				number = number.substring(0,number.length()-1);
     			}
-				if (sip_type) {
+				if (sip_type && SystemClock.elapsedRealtime() > noexclude + 10000) {
 	    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString("excludepat", ""); 
 	   				boolean bExNums = false;
 					boolean bExTypes = false;
@@ -82,6 +85,7 @@ public class Caller extends BroadcastReceiver {
 					if (bExTypes || bExNums)
 						sip_type = false;
 				}
+				noexclude = 0;
 
     			if (!sip_type)
     			{
@@ -174,15 +178,14 @@ public class Caller extends BroadcastReceiver {
 	    
 	    boolean isExcludedType(Vector<Integer> vExTypesCode, String sNumber, Context oContext)
 	    {
-			String sForNum = PhoneNumberUtils.formatNumber(sNumber);
+	    	Uri contactRef = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, sNumber);
 	    	final String[] PHONES_PROJECTION = new String[] 
 		    {
 		        People.Phones.NUMBER, // 0
 		        People.Phones.TYPE, // 1
 		    };
-	    	final String sWhereClause = People.Phones.NUMBER + " = '" + sForNum + "'"; 
-	        Cursor phonesCursor = oContext.getContentResolver().query(People.CONTENT_URI, PHONES_PROJECTION, sWhereClause, null,
-	        		Phones.TYPE + " ASC"); 
+	        Cursor phonesCursor = oContext.getContentResolver().query(contactRef, PHONES_PROJECTION, null, null,
+	                null);
 			if (phonesCursor != null) 
 	        {	        			
  	            while (phonesCursor.moveToNext()) 
