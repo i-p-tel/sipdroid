@@ -25,7 +25,6 @@ import java.util.HashMap;
 
 import org.sipdroid.sipua.R;
 
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;

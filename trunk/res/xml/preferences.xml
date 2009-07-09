@@ -44,10 +44,12 @@
 	        <EditTextPreference
 	            android:key="minedge"
 	            android:title="@string/settings_minedge"
+	            android:hint="4"
 	        />
 	        <EditTextPreference
 	            android:key="maxpoll"
 	            android:title="@string/settings_maxpoll"
+	            android:hint="1"
 	        />
 	        <EditTextPreference
 	            android:key="prefix"
@@ -56,6 +58,15 @@
 	       	<EditTextPreference
 	            android:key="excludepat"
 	            android:title="@string/settings_excludepat"
+	        />
+			<CheckBoxPreference
+				android:key="pos"
+				android:title="@string/settings_pos"
+				android:summary="@string/settings_pos2" />
+	       	<EditTextPreference
+	            android:key="posurl"
+	            android:title="@string/settings_posurl"
+	            android:hint="http://pbxes.org/name"
 	        />
 	    </PreferenceCategory>    
     </PreferenceScreen>  

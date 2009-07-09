@@ -162,6 +162,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public void onUaRegistrationSuccess(RegisterAgent ra, NameAddress target,
 			NameAddress contact, String result) {
 		Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.regok),R.drawable.sym_presence_available,0);
+		Receiver.registered();
 		if (wl.isHeld())
 			wl.release();
 	}
