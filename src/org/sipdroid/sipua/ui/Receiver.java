@@ -192,7 +192,7 @@ import org.sipdroid.sipua.phone.Connection;
 		        contentView.setImageViewResource(R.id.icon, notification.icon);
 				if (base != 0) {
 					contentView.setChronometer(R.id.text1, base, text+" (%s)", true);
-				} else if (type == CALL_NOTIFICATION && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false))
+				} else if (type == REGISTER_NOTIFICATION && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false))
 					contentView.setTextViewText(R.id.text1, text+", "+mContext.getString(R.string.settings_pos3));
 				else
 					contentView.setTextViewText(R.id.text1, text);

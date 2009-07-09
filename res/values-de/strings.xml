@@ -37,7 +37,7 @@
 <string name="settings_par2">Wählt alle Nummern eines Gesprächspartners gleichzeitig an</string>
 <string name="settings_pos">Position uploaden</string>
 <string name="settings_pos2">Zeigt Ihre Position im Web</string>
-<string name="settings_pos3">Position wird hochgeladen</string>
+<string name="settings_pos3">Position hochgeladen</string>
 <string name="settings_posurl">URL für Position</string>
 <string name="settings_pref">Bevorzugte Anrufart</string>
     <string-array name="pref_display_values">
