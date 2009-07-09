@@ -36,7 +36,7 @@
 <string name="settings_par">Simultaneous Outbound</string>
 <string name="settings_pos">Upload location</string>
 <string name="settings_pos2">Displays your position on web page</string>
-<string name="settings_pos3">Uploading location</string>
+<string name="settings_pos3">uploading location</string>
 <string name="settings_posurl">URL for position updates</string>
 <string name="settings_pref">Preferred call type</string>
     <string-array name="pref_display_values">
