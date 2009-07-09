@@ -154,7 +154,11 @@ What is currently missing is Bluetooth and there are already some [http://code.g
 
 === How can I set up PBXes? ===
 
-Please have a look at the [http://pbxes.org/community_e.php?display=wiki HELP section]. Under "Getting started" you find an introduction to the necessary steps. *It's all web based. No installation required.* First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. The Android specific details can be found under "Fixed Mobile Convergence (FMC)".
+Please have a look at the [http://pbxes.org/community_e.php?display=wiki HELP section]. Under "Getting started" you find an introduction to the necessary steps.
+
+*It's all web based. No installation required.*
+
+First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. The Android specific details can be found under "Fixed Mobile Convergence (FMC)".
 
 The username to be entered in Sipdroid consists of account name, a dash ('-') and the extension number, e.g. "myuser-200". The password is that of the extension, not the password of your PBXes account.
 
