@@ -30,6 +30,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -66,8 +68,8 @@ import org.sipdroid.sipua.phone.Connection;
 		public static int call_state;
 		public static String pstn_state;
 		static int cellAsu = -1;
-		public static String laststate,lastnumber;
-				
+		public static String laststate,lastnumber;		
+		
 		public static SipdroidEngine engine(Context context) {
 			mContext = context;
 			if (mSipdroidEngine == null) {
@@ -112,6 +114,11 @@ import org.sipdroid.sipua.phone.Connection;
 					if ((pstn_state == null || !pstn_state.equals("RINGING")) &&
 							am.getRingerMode() != AudioManager.RINGER_MODE_SILENT)
 						v.vibrate(5000);
+					if ((pstn_state == null || !pstn_state.equals("RINGING")) && am.getStreamVolume(AudioManager.STREAM_RING) > 0) 
+					{				            
+						Ringtone oRingtone = RingtoneManager.getRingtone(mContext, Settings.System.DEFAULT_RINGTONE_URI);
+						oRingtone.play();						
+					}
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
 					engine(mContext).register();
@@ -362,5 +369,5 @@ import org.sipdroid.sipua.phone.Connection;
 	        			alarm(0, LoopAlarm.class);
 	        		}	        	
 	        }
-		}
+		}   
 }
