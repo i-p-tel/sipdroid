@@ -28,6 +28,7 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.media.AudioManager;
 import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
@@ -109,7 +110,7 @@ import org.sipdroid.sipua.phone.Connection;
 					ccCall.base = 0;
 					AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 					if ((pstn_state == null || !pstn_state.equals("RINGING")) &&
-							am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER) != AudioManager.VIBRATE_SETTING_OFF)
+							am.getRingerMode() != AudioManager.RINGER_MODE_SILENT)
 						v.vibrate(5000);
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
@@ -191,7 +192,9 @@ import org.sipdroid.sipua.phone.Connection;
 		        contentView.setImageViewResource(R.id.icon, notification.icon);
 				if (base != 0) {
 					contentView.setChronometer(R.id.text1, base, text+" (%s)", true);
-				} else
+				} else if (type == CALL_NOTIFICATION && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false))
+					contentView.setTextViewText(R.id.text1, text+", "+mContext.getString(R.string.settings_pos3));
+				else
 					contentView.setTextViewText(R.id.text1, text);
 				notification.contentView = contentView;
 		        mNotificationMgr.notify(type,notification);
@@ -200,6 +203,24 @@ import org.sipdroid.sipua.phone.Connection;
 	        }
 		}
 		
+		public static void registered() {
+			if (call_state != UserAgent.UA_STATE_INCALL && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) &&
+					PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","").length() > 0)
+				pos(true);
+		}
+		
+		public static void pos(boolean enabled) {
+	        Intent intent = new Intent(mContext, OneShotLocation.class);
+	        PendingIntent sender = PendingIntent.getBroadcast(mContext,
+	                0, intent, 0);
+	        LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+			lm.removeUpdates(sender);
+			if (enabled) {
+				lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, sender);
+				lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, sender);
+			}
+		}
+
 		public static void broadcastCallStateChanged(String state,String number) {
 			if (state == null) {
 				state = laststate;

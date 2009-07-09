@@ -93,6 +93,7 @@ import android.preference.PreferenceActivity;
         	getPreferenceScreen().findPreference("minedge").setSummary("Signal >= "+getPreferenceScreen().getSharedPreferences().getString("minedge", "4")); 
         	getPreferenceScreen().findPreference("maxpoll").setSummary("Signal <= "+getPreferenceScreen().getSharedPreferences().getString("maxpoll", "1")); 
         	getPreferenceScreen().findPreference("excludepat").setSummary(getPreferenceScreen().getSharedPreferences().getString("excludepat", "")); 
+        	getPreferenceScreen().findPreference("posurl").setSummary(getPreferenceScreen().getSharedPreferences().getString("posurl", "")); 
         	if (getPreferenceScreen().getSharedPreferences().getString("pref", "").equals("SIP")) {
         		getPreferenceScreen().findPreference("pref").setSummary(getResources().getStringArray(R.array.pref_display_values)[0]);
         		getPreferenceScreen().findPreference("par").setEnabled(true);
@@ -104,5 +105,9 @@ import android.preference.PreferenceActivity;
         		getPreferenceScreen().findPreference("minedge").setEnabled(true);
         	else
         		getPreferenceScreen().findPreference("minedge").setEnabled(false);
+           	if (getPreferenceScreen().getSharedPreferences().getBoolean("pos", false))
+        		getPreferenceScreen().findPreference("posurl").setEnabled(true);
+        	else
+        		getPreferenceScreen().findPreference("posurl").setEnabled(false);
        }
 	}
