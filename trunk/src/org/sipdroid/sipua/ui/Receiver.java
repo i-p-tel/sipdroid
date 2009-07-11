@@ -113,10 +113,12 @@ import org.sipdroid.sipua.phone.Connection;
 					ccConn.date = System.currentTimeMillis();
 					ccCall.base = 0;
 					AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+					int rm = am.getRingerMode();
+					int vs = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
 					if ((pstn_state == null || !pstn_state.equals("RINGING")) &&
-							am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
+							(rm == AudioManager.RINGER_MODE_VIBRATE ||
+							(rm == AudioManager.RINGER_MODE_NORMAL && vs == AudioManager.VIBRATE_SETTING_ON)))
 						v.vibrate(5000);
-					
 					if ((pstn_state == null || !pstn_state.equals("RINGING")) && am.getStreamVolume(AudioManager.STREAM_RING) > 0) 
 					{				 
 						String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone", "");
