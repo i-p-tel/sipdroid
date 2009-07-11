@@ -52,6 +52,9 @@
 <string name="settings_minedge">Signal Bars for EDGE Calls</string>
 <string name="settings_maxpoll">Signal Bars for WLAN Polling</string>
 <string name="settings_excludepat">Exclude Pattern</string>
+<string name="settings_sipringtone">SIP Ringtone</string>
+<string name="sipringtone_summary">Set Ringtone for incoming SIP call</string>
+<string name="sipringtone_title">Ringtones</string>
 <string name="menu_settings">Settings</string>
 <string name="menu_exit">Exit</string>
 <string name="menu_about">About</string>
