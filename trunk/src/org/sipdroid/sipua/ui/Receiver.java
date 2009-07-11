@@ -32,6 +32,7 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -40,6 +41,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -68,7 +70,7 @@ import org.sipdroid.sipua.phone.Connection;
 		public static int call_state;
 		public static String pstn_state;
 		static int cellAsu = -1;
-		public static String laststate,lastnumber;		
+		public static String laststate,lastnumber;	
 		
 		public static SipdroidEngine engine(Context context) {
 			mContext = context;
@@ -112,11 +114,18 @@ import org.sipdroid.sipua.phone.Connection;
 					ccCall.base = 0;
 					AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 					if ((pstn_state == null || !pstn_state.equals("RINGING")) &&
-							am.getRingerMode() != AudioManager.RINGER_MODE_SILENT)
+							am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
 						v.vibrate(5000);
+					
 					if ((pstn_state == null || !pstn_state.equals("RINGING")) && am.getStreamVolume(AudioManager.STREAM_RING) > 0) 
-					{				            
-						Ringtone oRingtone = RingtoneManager.getRingtone(mContext, Settings.System.DEFAULT_RINGTONE_URI);
+					{				 
+						String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone", "");
+						Uri oUriSipRingtone = null;
+						if(!TextUtils.isEmpty(sUriSipRingtone))
+							oUriSipRingtone = Uri.parse(sUriSipRingtone);
+						else
+							oUriSipRingtone = Settings.System.DEFAULT_RINGTONE_URI;						
+						Ringtone oRingtone = RingtoneManager.getRingtone(mContext, oUriSipRingtone);
 						oRingtone.play();						
 					}
 					break;

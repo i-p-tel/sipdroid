@@ -68,6 +68,14 @@
 	            android:title="@string/settings_posurl"
 	            android:hint="http://pbxes.org/name"
 	        />
+	        <org.sipdroid.sipua.ui.SipRingtonePreference
+	        	android:key="sipringtone"
+	        	android:title="@string/settings_sipringtone"
+	        	android:summary="@string/sipringtone_summary"
+	        	android:dialogTitle="@string/sipringtone_title"
+	        	android:persistent="false"
+	        	android:ringtoneType="ringtone"
+	        /> 
 	    </PreferenceCategory>    
     </PreferenceScreen>  
 </PreferenceScreen>
