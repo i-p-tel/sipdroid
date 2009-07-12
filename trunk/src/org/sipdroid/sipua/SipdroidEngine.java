@@ -21,6 +21,8 @@
 
 package org.sipdroid.sipua;
 
+import java.net.UnknownHostException;
+
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.net.IpAddress;
@@ -30,6 +32,8 @@ import org.zoolu.sip.provider.SipProvider;
 import org.zoolu.sip.provider.SipStack;
 
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 
@@ -88,7 +92,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			ua = new UserAgent(sip_provider, user_profile);
 			ra = new RegisterAgent(sip_provider, user_profile.from_url,
 					user_profile.contact_url, user_profile.username,
-					user_profile.realm, user_profile.passwd, this);
+					user_profile.realm, user_profile.passwd, this, user_profile);
 
 			register();
 			listen();
@@ -98,14 +102,18 @@ public class SipdroidEngine implements RegisterAgentListener {
 		return true;
 	}
 	
-	public void CheckEngine() {
+	void setOutboundProxy() {
 		try {
-			if (!sip_provider.hasOutboundProxy())
-				sip_provider.setOutboundProxy(new SocketAddress(
-						IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("dns","")),
-						SipStack.default_port));
-		} catch (Exception E) {
+			sip_provider.setOutboundProxy(new SocketAddress(
+					IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("dns","")),
+					SipStack.default_port));
+		} catch (UnknownHostException e) {
 		}
+	}
+	
+	public void CheckEngine() {
+		if (!sip_provider.hasOutboundProxy())
+			setOutboundProxy();
 	}
 
 	public Context getUIContext() {
@@ -173,8 +181,20 @@ public class SipdroidEngine implements RegisterAgentListener {
 		Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.regfailed)+" ("+result+")",R.drawable.sym_presence_away,0);
 		if (wl.isHeld())
 			wl.release();
+		updateDNS();
 	}
 	
+	public void updateDNS() {
+		Editor edit = PreferenceManager.getDefaultSharedPreferences(getUIContext()).edit();
+		try {
+			edit.putString("dns", IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("server","")).toString());
+		} catch (UnknownHostException e1) {
+			return;
+		}
+		edit.commit();
+		setOutboundProxy();
+	}
+
 	/** Receives incoming calls (auto accept) */
 	public void listen() 
 	{
@@ -193,14 +213,23 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	/** Makes a new call */
-	public void call(String target_url) {
+	public boolean call(String target_url) {
 		ua.printLog("UAC: CALLING " + target_url);
 		
+		if (!isRegistered() || !Receiver.isFast(true)) {
+			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean("callback",false) &&
+					PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("posurl","").length() > 0) {
+				Receiver.url("n="+Uri.decode(target_url));
+				return true;
+			}
+			return false;
+		}
+
 		if (!ua.user_profile.audio && !ua.user_profile.video)
 		{
 			 ua.printLog("ONLY SIGNALING, NO MEDIA");
 		}
-		ua.call(target_url, false);
+		return ua.call(target_url, false);
 	}
 
 	public void answercall() 

@@ -24,7 +24,7 @@
 <string name="reg">Registering...</string>
 <string name="hint">Called Party Address</string>
 <string name="empty">Please enter called party address as name@domain.com</string>
-<string name="notfast">No suitable data network ready</string>
+<string name="notfast">No suitable data network available</string>
 <string name="settings_account">SIP Account Settings</string>
 <string name="settings_username">Username</string>
 <string name="settings_password">Password</string>
@@ -34,11 +34,13 @@
 <string name="settings_check">Check with your mobile operator if he allows VoIP</string>
 <string name="settings_par2">Dials all of one person\'s phone numbers in parallel</string>
 <string name="settings_par">Simultaneous Outbound</string>
-<string name="settings_pos">Upload location</string>
+<string name="settings_pos">Upload Location</string>
 <string name="settings_pos2">Displays your position on web page</string>
 <string name="settings_pos3">uploading location</string>
-<string name="settings_posurl">URL for position updates</string>
-<string name="settings_pref">Preferred call type</string>
+<string name="settings_posurl">URL for Location/Callback</string>
+<string name="settings_callback">Trigger Callback</string>
+<string name="settings_callback2">If no data network available</string>
+<string name="settings_pref">Preferred Call Type</string>
     <string-array name="pref_display_values">
         <item>SIP, when available</item>
         <item>PSTN</item>
@@ -48,12 +50,13 @@
         <item>PSTN</item>
     </string-array>
 <string name="settings_advanced_options">Advanced Options</string>   
+<string name="settings_pbxes_options">PBXes Features</string>   
 <string name="settings_prefix">Prefix</string> 
 <string name="settings_minedge">Signal Bars for EDGE Calls</string>
 <string name="settings_maxpoll">Signal Bars for WLAN Polling</string>
 <string name="settings_excludepat">Exclude Pattern</string>
 <string name="settings_sipringtone">SIP Ringtone</string>
-<string name="sipringtone_summary">Set Ringtone for incoming SIP call</string>
+<string name="sipringtone_summary">Set ringtone for incoming SIP call</string>
 <string name="sipringtone_title">Ringtones</string>
 <string name="menu_settings">Settings</string>
 <string name="menu_exit">Exit</string>

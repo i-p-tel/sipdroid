@@ -38,7 +38,9 @@
 <string name="settings_pos">Position uploaden</string>
 <string name="settings_pos2">Zeigt Ihre Position im Web</string>
 <string name="settings_pos3">Position hochgeladen</string>
-<string name="settings_posurl">URL für Position</string>
+<string name="settings_posurl">URL für Position/Callback</string>
+<string name="settings_callback">Callback auslösen</string>
+<string name="settings_callback2">Wenn ohne Datenverbindung</string>
 <string name="settings_pref">Bevorzugte Anrufart</string>
     <string-array name="pref_display_values">
         <item>SIP, wenn verfügbar</item>

@@ -216,11 +216,14 @@ public class UserAgent extends CallListenerAdapter {
 		this.sip_provider = sip_provider;
 		log = sip_provider.getLog();
 		this.user_profile = user_profile;
+		realm = user_profile.realm;
 		
 		// if no contact_url and/or from_url has been set, create it now
 		user_profile.initContactAddress(sip_provider);
 	}
 
+	String realm;
+	
 	/** Makes a new call (acting as UAC). */
 	public boolean call(String target_url, boolean send_anonymous) {
 		
@@ -255,7 +258,7 @@ public class UserAgent extends CallListenerAdapter {
 		if (target_url.indexOf("@") < 0) {
 			if (user_profile.realm.equals("pbxes.org"))
 				target_url = "&" + target_url;
-			target_url = target_url + "@" + user_profile.realm; // modified
+			target_url = target_url + "@" + realm; // modified
 		}
 		
 		target_url = sip_provider.completeNameAddress(target_url).toString();

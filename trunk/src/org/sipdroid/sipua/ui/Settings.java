@@ -20,10 +20,7 @@
 
 package org.sipdroid.sipua.ui;
 
-import java.net.UnknownHostException;
-
 import org.sipdroid.sipua.R;
-import org.zoolu.net.IpAddress;
 import org.zoolu.sip.provider.SipStack;
 
 import android.content.SharedPreferences;
@@ -68,14 +65,11 @@ import android.preference.PreferenceActivity;
 		
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {	        	
  	        	if (!key.equals("dns")) {
+ 	        		Editor edit = sharedPreferences.edit();
+ 	        		edit.putString("dns", "");
+ 	        		edit.commit();
+ 		        	Receiver.engine(this).updateDNS();
  		        	Receiver.engine(this).halt();
-					Editor edit = sharedPreferences.edit();
-					try {
-						edit.putString("dns", IpAddress.getByName(sharedPreferences.getString("server","")).toString());
-					} catch (UnknownHostException e1) {
-						edit.putString("dns", "");
-					}
-					edit.commit();
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
@@ -105,9 +99,12 @@ import android.preference.PreferenceActivity;
         		getPreferenceScreen().findPreference("minedge").setEnabled(true);
         	else
         		getPreferenceScreen().findPreference("minedge").setEnabled(false);
-           	if (getPreferenceScreen().getSharedPreferences().getBoolean("pos", false))
-        		getPreferenceScreen().findPreference("posurl").setEnabled(true);
-        	else
-        		getPreferenceScreen().findPreference("posurl").setEnabled(false);
+           	if (getPreferenceScreen().getSharedPreferences().getString("posurl", "").length() > 0) {
+        		getPreferenceScreen().findPreference("pos").setEnabled(true);
+        		getPreferenceScreen().findPreference("callback").setEnabled(true);
+           	} else {
+        		getPreferenceScreen().findPreference("pos").setEnabled(false);
+        		getPreferenceScreen().findPreference("callback").setEnabled(false);
+           	}
        }
 	}
