@@ -101,11 +101,7 @@ public class RegisterAgent implements TransactionClientListener {
 	/** Current State of the registrar component */
 	int CurrentState = UNREGISTERED;
 
-	/** Creates a new RegisterAgent. */
-	public RegisterAgent(SipProvider sip_provider, String target_url,
-			String contact_url, RegisterAgentListener listener) {
-		init(sip_provider, target_url, contact_url, listener);
-	}
+	UserAgentProfile user_profile;
 
 	/**
 	 * Creates a new RegisterAgent with authentication credentials (i.e.
@@ -113,7 +109,7 @@ public class RegisterAgent implements TransactionClientListener {
 	 */
 	public RegisterAgent(SipProvider sip_provider, String target_url,
 			String contact_url, String username, String realm, String passwd,
-			RegisterAgentListener listener) {
+			RegisterAgentListener listener,UserAgentProfile user_profile) {
 		
 		init(sip_provider, target_url, contact_url, listener);
 		
@@ -121,6 +117,7 @@ public class RegisterAgent implements TransactionClientListener {
 		this.username = username;
 		this.realm = realm;
 		this.passwd = passwd;
+		this.user_profile = user_profile;
 	}
 
 	public void halt() {
@@ -322,7 +319,8 @@ public class RegisterAgent implements TransactionClientListener {
 			Message resp, Message req){
 		if(resp.hasProxyAuthenticateHeader()
 				&& resp.getProxyAuthenticateHeader().getRealmParam()
-				.equalsIgnoreCase(realm)){
+				.length() > 0){
+			user_profile.realm = realm = resp.getProxyAuthenticateHeader().getRealmParam();
 			ProxyAuthenticateHeader pah = resp.getProxyAuthenticateHeader();
 			String qop_options = pah.getQopOptionsParam();
 			
@@ -348,7 +346,8 @@ public class RegisterAgent implements TransactionClientListener {
 			Message resp, Message req){
 		if(resp.hasWwwAuthenticateHeader()
 				&& resp.getWwwAuthenticateHeader().getRealmParam()
-				.equalsIgnoreCase(realm)){		
+				.length() > 0){		
+			user_profile.realm = realm = resp.getWwwAuthenticateHeader().getRealmParam();
 			WwwAuthenticateHeader wah = resp.getWwwAuthenticateHeader();
 			String qop_options = wah.getQopOptionsParam();
 			

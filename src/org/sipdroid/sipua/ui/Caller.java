@@ -93,9 +93,7 @@ public class Caller extends BroadcastReceiver {
     			} 
     			else 
     			{
-	        		if (number != null && Receiver.engine(context).isRegistered() && Receiver.isFast(true)
-	        				&& !intent.getBooleanExtra("android.phone.extra.ALREADY_CALLED",false)) 
-	        		{
+	        		if (number != null && !intent.getBooleanExtra("android.phone.extra.ALREADY_CALLED",false)) {
 	    				String sPrefix = PreferenceManager.getDefaultSharedPreferences(context).getString("prefix", "");			
     					if(!number.startsWith(sPrefix))
 	    					number = sPrefix + number;    		 
@@ -130,8 +128,8 @@ public class Caller extends BroadcastReceiver {
 	        			        }
 	        				}        					
 	    				}
-	    				Receiver.engine(context).call(number);
-		            	setResultData(null);
+	    				if (Receiver.engine(context).call(number))
+	    					setResultData(null);
 	        		}
 	            }
 	        }

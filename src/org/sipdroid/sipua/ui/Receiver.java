@@ -20,6 +20,11 @@
 
 package org.sipdroid.sipua.ui;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -119,6 +124,7 @@ import org.sipdroid.sipua.phone.Connection;
 							(rm == AudioManager.RINGER_MODE_VIBRATE ||
 							(rm == AudioManager.RINGER_MODE_NORMAL && vs == AudioManager.VIBRATE_SETTING_ON)))
 						v.vibrate(5000);
+					/* FIXME (incomplete)
 					if ((pstn_state == null || !pstn_state.equals("RINGING")) && am.getStreamVolume(AudioManager.STREAM_RING) > 0) 
 					{				 
 						String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone", "");
@@ -130,6 +136,7 @@ import org.sipdroid.sipua.phone.Connection;
 						Ringtone oRingtone = RingtoneManager.getRingtone(mContext, oUriSipRingtone);
 						oRingtone.play();						
 					}
+					*/
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
 					engine(mContext).register();
@@ -239,6 +246,23 @@ import org.sipdroid.sipua.phone.Connection;
 			}
 		}
 
+		public static void url(final String opt) {
+	        (new Thread() {
+				public void run() {
+					try {
+				        URL url = new URL(PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","")+
+				        		"?"+opt);
+				        BufferedReader in;
+							in = new BufferedReader(new InputStreamReader(url.openStream()));
+				        in.close();
+					} catch (IOException e) {
+						if (!Sipdroid.release) e.printStackTrace();
+					}
+
+				}
+			}).start();   
+		}
+		
 		public static void broadcastCallStateChanged(String state,String number) {
 			if (state == null) {
 				state = laststate;

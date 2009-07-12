@@ -107,7 +107,7 @@ public class Sipdroid extends Activity {
         case KeyEvent.KEYCODE_CALL:
 			String target = this.sip_uri_box.getText().toString();
 			if (target.length() != 0) {
-				Receiver.engine(this).call(target);
+				call_menu();
 				return true;
 			}	 
 			break;
@@ -134,17 +134,15 @@ public class Sipdroid extends Activity {
 				.setIcon(R.drawable.icon22)
 				.setCancelable(true)
 				.show();
-		else if (!Receiver.isFast(true))
+		else if (!Receiver.engine(this).call(target))
 			m_AlertDlg = new AlertDialog.Builder(this)
 				.setMessage(R.string.notfast)
 				.setTitle(R.string.app_name)
 				.setIcon(R.drawable.icon22)
 				.setCancelable(true)
 				.show();
-		else
-			Receiver.engine(this).call(target);
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		boolean result = super.onOptionsItemSelected(item);

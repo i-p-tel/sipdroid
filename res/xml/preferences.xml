@@ -34,10 +34,6 @@
 		    android:entries="@array/pref_display_values"
 		    android:entryValues="@array/pref_values"
 		    android:dialogTitle="@string/settings_pref" />
-		<CheckBoxPreference
-			android:key="par"
-			android:title="@string/settings_par"
-			android:summary="@string/settings_par2"  />
     </PreferenceCategory>
 	<PreferenceScreen android:title="@string/settings_advanced_options">
 		<PreferenceCategory android:title="@string/settings_advanced_options">
@@ -59,15 +55,7 @@
 	            android:key="excludepat"
 	            android:title="@string/settings_excludepat"
 	        />
-			<CheckBoxPreference
-				android:key="pos"
-				android:title="@string/settings_pos"
-				android:summary="@string/settings_pos2" />
-	       	<EditTextPreference
-	            android:key="posurl"
-	            android:title="@string/settings_posurl"
-	            android:hint="http://pbxes.org/name"
-	        />
+<!--
 	        <org.sipdroid.sipua.ui.SipRingtonePreference
 	        	android:key="sipringtone"
 	        	android:title="@string/settings_sipringtone"
@@ -76,6 +64,26 @@
 	        	android:persistent="false"
 	        	android:ringtoneType="ringtone"
 	        /> 
+ -->
 	    </PreferenceCategory>    
+    </PreferenceScreen>  
+	<PreferenceScreen android:title="@string/settings_pbxes_options">
+		<CheckBoxPreference
+			android:key="par"
+			android:title="@string/settings_par"
+			android:summary="@string/settings_par2"  />
+	       	<EditTextPreference
+	            android:key="posurl"
+	            android:title="@string/settings_posurl"
+	            android:hint="http://pbxes.org/name"
+	        />
+			<CheckBoxPreference
+				android:key="pos"
+				android:title="@string/settings_pos"
+				android:summary="@string/settings_pos2" />
+			<CheckBoxPreference
+				android:key="callback"
+				android:title="@string/settings_callback"
+				android:summary="@string/settings_callback2" />
     </PreferenceScreen>  
 </PreferenceScreen>
