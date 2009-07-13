@@ -102,6 +102,40 @@ To exclude by *numbers* enter any java regular expression:
 To exclude by *both* phone type and number:
 <br>e.g. m,1234 (exludes all mobile and numbers that contain 1234).
 
+=== What is "Trigger Callback"? ===
+
+Suppose you got an Internet connection, but not good enough for a SIP
+call.
+
+Normally the phone would fall back to PSTN in this case.
+
+Enabling "trigger callback" will instead ask the PBX to initiate a
+callback to your mobile number, and connect the call to the dialed contact.
+
+This makes sense if you like the PBX features (like calling a SIP URI,
+simultaneous outbound, ability to transfer calls), or if it's cheaper
+than a call from your mobile. I was using the function for calling
+international numbers. Some plans allow you to get unlimited calls
+from a certain number. That number could be assigned to your PBX.
+
+=== What types of video calls are supported? ===
+
+There are three levels of operation for video calls.
+
+==== Sending ====
+By pressing the MENU button and choosing "Send Video" you can start
+video transmission to a SIP phone with video.
+
+==== Receiving ====
+This is not supported natively. If you are registered to PBXes and the
+other party starts sending video it will show up on the Android phone.
+
+==== Streaming ====
+When you start sending video as described in 1) while you are in a
+call to a regular phone, and you have a PBXes Premium Account, the
+other party can open your webcall URL, click on your photo and see
+your video.
+
 == SIP Providers ==
 
 === What SIP providers is Sipdroid compatible with? ===
