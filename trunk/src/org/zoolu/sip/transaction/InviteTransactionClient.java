@@ -115,10 +115,10 @@ public class InviteTransactionClient extends TransactionClient {
 					ack = MessageFactory.createNon2xxAckRequest(sip_provider,
 							request, msg);
 					changeStatus(STATE_COMPLETED);
+					connection_id = sip_provider.sendMessage(ack);
 					if (transaction_listener != null)
 						transaction_listener.onTransFailureResponse(this, msg);
 					transaction_listener = null;
-					connection_id = sip_provider.sendMessage(ack);
 					if (connection_id == null)
 						end_to.start();
 					else {
