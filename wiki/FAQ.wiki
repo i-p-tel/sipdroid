@@ -181,7 +181,7 @@ http://sipdroid.googlecode.com/svn/images/priv.png
   * Conferences
   * Video Reception (Video Transmission is supported by Sipdroid natively)
   * Publish location on webcall page
-  * Trigger callbacks (if no data network available)
+  * Trigger callbacks (if no suitable data network available)
 
 You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Video Streaming, Call Recording, Handoff of calls between networks).
 
