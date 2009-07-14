@@ -88,6 +88,8 @@ import org.sipdroid.sipua.phone.Connection;
 			return mSipdroidEngine;
 		}
 		
+		static Ringtone oRingtone;
+		
 		public static void onState(int state,String caller) {
 			if (ccCall == null) {
 		        ccCall = new Call();
@@ -124,8 +126,7 @@ import org.sipdroid.sipua.phone.Connection;
 							(rm == AudioManager.RINGER_MODE_VIBRATE ||
 							(rm == AudioManager.RINGER_MODE_NORMAL && vs == AudioManager.VIBRATE_SETTING_ON)))
 						v.vibrate(5000);
-					/* FIXME (incomplete)
-					if ((pstn_state == null || !pstn_state.equals("RINGING")) && am.getStreamVolume(AudioManager.STREAM_RING) > 0) 
+					if (am.getStreamVolume(AudioManager.STREAM_RING) > 0) 
 					{				 
 						String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone", "");
 						Uri oUriSipRingtone = null;
@@ -133,10 +134,9 @@ import org.sipdroid.sipua.phone.Connection;
 							oUriSipRingtone = Uri.parse(sUriSipRingtone);
 						else
 							oUriSipRingtone = Settings.System.DEFAULT_RINGTONE_URI;						
-						Ringtone oRingtone = RingtoneManager.getRingtone(mContext, oUriSipRingtone);
+						oRingtone = RingtoneManager.getRingtone(mContext, oUriSipRingtone);
 						oRingtone.play();						
 					}
-					*/
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
 					engine(mContext).register();
@@ -160,6 +160,10 @@ import org.sipdroid.sipua.phone.Connection;
 					if (listener_video != null)
 						listener_video.onHangup();
 					v.cancel();
+					if (oRingtone != null) {
+						oRingtone.stop();
+						oRingtone = null;
+					}
 					break;
 				case UserAgent.UA_STATE_INCALL:
 					broadcastCallStateChanged("OFFHOOK", null);
@@ -171,6 +175,10 @@ import org.sipdroid.sipua.phone.Connection;
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call,ccCall.base);
 					ccCall.setState(Call.State.ACTIVE);
 					v.cancel();
+					if (oRingtone != null) {
+						oRingtone.stop();
+						oRingtone = null;
+					}
 					break;
 				case UserAgent.UA_STATE_HOLD:
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_on_hold), android.R.drawable.stat_sys_phone_call_on_hold,ccCall.base);
@@ -239,10 +247,13 @@ import org.sipdroid.sipua.phone.Connection;
 	        PendingIntent sender = PendingIntent.getBroadcast(mContext,
 	                0, intent, 0);
 	        LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+			AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
 			lm.removeUpdates(sender);
+			am.cancel(sender);
 			if (enabled) {
 				lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, sender);
 				lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, sender);
+				am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+10*1000, sender);
 			}
 		}
 
@@ -374,12 +385,11 @@ import org.sipdroid.sipua.phone.Connection;
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
 	    		pstn_state = intent.getStringExtra("state");
-	    		if (pstn_state.equals("RINGING"))
+	    		if (pstn_state.equals("RINGING") && call_state == UserAgent.UA_STATE_IDLE)
 	    			engine(context).register();
 	    		else
 	    		if (pstn_state.equals("IDLE") && call_state != UserAgent.UA_STATE_IDLE)
 	    			broadcastCallStateChanged(null,null);
-	    		else
 	    		if ((pstn_state.equals("OFFHOOK") && call_state == UserAgent.UA_STATE_INCALL) ||
 		    			(pstn_state.equals("IDLE") && call_state == UserAgent.UA_STATE_HOLD))
 		    			engine(context).togglehold();

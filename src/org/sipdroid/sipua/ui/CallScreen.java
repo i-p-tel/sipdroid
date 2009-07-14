@@ -55,7 +55,7 @@ public class CallScreen extends Activity {
 		m = menu.add(0, DTMF_MENU_ITEM, 0, R.string.menu_dtmf);
 		m.setIcon(R.drawable.sym_incoming_call_answer_options);
 		m = menu.add(0, VIDEO_MENU_ITEM, 0, R.string.menu_video);
-		m.setIcon(R.drawable.incall_photo_border);
+		m.setIcon(android.R.drawable.ic_menu_camera);
 				
 		return result;
 	}

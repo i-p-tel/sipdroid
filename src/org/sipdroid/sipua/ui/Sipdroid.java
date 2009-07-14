@@ -92,11 +92,11 @@ public class Sipdroid extends Activity {
 		boolean result = super.onCreateOptionsMenu(menu);
 
 		MenuItem m = menu.add(0, ABOUT_MENU_ITEM, 0, R.string.menu_about);
-		m.setIcon(R.drawable.icon32);
+		m.setIcon(android.R.drawable.ic_menu_info_details);
 		m = menu.add(0, CALL_MENU_ITEM, 0, R.string.menu_call);
-		m.setIcon(R.drawable.sym_call);
+		m.setIcon(android.R.drawable.ic_menu_call);
 		m = menu.add(0, CONFIGURE_MENU_ITEM, 0, R.string.menu_settings);
-		m.setIcon(R.drawable.configure);
+		m.setIcon(android.R.drawable.ic_menu_preferences);
 						
 		return result;
 	}
