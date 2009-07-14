@@ -55,7 +55,6 @@
 	            android:key="excludepat"
 	            android:title="@string/settings_excludepat"
 	        />
-<!--
 	        <org.sipdroid.sipua.ui.SipRingtonePreference
 	        	android:key="sipringtone"
 	        	android:title="@string/settings_sipringtone"
@@ -64,14 +63,14 @@
 	        	android:persistent="false"
 	        	android:ringtoneType="ringtone"
 	        /> 
- -->
 	    </PreferenceCategory>    
     </PreferenceScreen>  
 	<PreferenceScreen android:title="@string/settings_pbxes_options">
-		<CheckBoxPreference
-			android:key="par"
-			android:title="@string/settings_par"
-			android:summary="@string/settings_par2"  />
+		<PreferenceCategory android:title="@string/settings_pbxes_options">
+			<CheckBoxPreference
+				android:key="par"
+				android:title="@string/settings_par"
+				android:summary="@string/settings_par2"  />
 	       	<EditTextPreference
 	            android:key="posurl"
 	            android:title="@string/settings_posurl"
@@ -85,5 +84,6 @@
 				android:key="callback"
 				android:title="@string/settings_callback"
 				android:summary="@string/settings_callback2" />
+		</PreferenceCategory>
     </PreferenceScreen>  
 </PreferenceScreen>

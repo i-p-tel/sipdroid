@@ -42,7 +42,6 @@ public class RegisterService extends Service {
     				} catch (InterruptedException e) {
     				}
     			}
-    			Receiver.pos(false);
     			stopSelf();
     		}
     	}).start();   
