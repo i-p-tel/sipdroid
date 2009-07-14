@@ -214,3 +214,17 @@ This [http://www.cyrket.com/package/org.pbxes.light2 tool] is recommended to sav
 === ChompSMS ===
 
 This is the equivalent to Sipdroid for SMS.
+
+== Troubleshooting ==
+
+=== Incoming calls only work for a few minutes after startup. ===
+
+As described above Sipdroid relies on a parallel call from the mobile network to wake up. This is to ensure reachability and saves battery power.
+
+If you cannot set up call forking as described you have the option of enabling "WLAN Polling" mode. Normally this only gets chosen if you loose mobile network while WLAN is available. By raising the signal level threshold to 4 bars you can have this mode run permananently. So you won't need call forking while in wireless LANS.
+
+Running polling mode in mobile networks would drain your battery within a few hours and would not make any technical sense either.
+
+=== My battery is empty after a few hours. ===
+
+Please see above Providers/What SIP providers is Sipdroid compatible with?
