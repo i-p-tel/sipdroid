@@ -71,11 +71,11 @@ http://sipdroid.googlecode.com/svn/images/choose2.png
 
 === How are the buttons assigned? ===
 
-Android reserves the green and red keys for the built-in dialer of the phone. So Sipdroid is controlled by the MENU and BACK buttons instead.
+Android reserves the red key for the built-in dialer of the phone. So Sipdroid is controlled by the BACK button instead.
 
 ==== When ringing ====
 
-Incoming SIP calls can be identified by the turquoise icon in the status bar. Pressing the MENU button answers the SIP call. Pressing the green call button answers the regular call.
+Incoming SIP calls can be identified by the turquoise icon in the status bar. As usual pressing the green call button answers the call.
 
 ==== While in call ====
 
