@@ -21,8 +21,11 @@
 
 package org.sipdroid.sipua;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 
+import org.sipdroid.net.KeepAliveSip;
+import org.sipdroid.sipua.ui.LoopAlarm;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.net.IpAddress;
@@ -51,7 +54,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	/** UserAgentProfile */
 	private UserAgentProfile user_profile;
 
-	public SipProvider sip_provider;
+	private SipProvider sip_provider;
 	
 	PowerManager.WakeLock wl;
 	
@@ -60,19 +63,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 			PowerManager pm = (PowerManager) getUIContext().getSystemService(Context.POWER_SERVICE);
 			wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid");
 
-			SipStack.init(null);
-			SipStack.debug_level = 0;
-//			SipStack.log_path = "/data/data/org.sipdroid.sipua";
-			SipStack.max_retransmission_timeout = 4000;
-			SipStack.transaction_timeout = 30000;
-			SipStack.default_transport_protocols = new String[1];
-			SipStack.default_transport_protocols[0] = SipProvider.PROTO_UDP;
-			SipStack.default_port = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("port",""+SipStack.default_port));
-			
-			String version = "Sipdroid/" + Sipdroid.getVersion();
-			SipStack.ua_info = version;
-			SipStack.server_info = version;
-				
 			String opt_via_addr = "127.0.0.1";
 			
 			user_profile = new UserAgentProfile(null);
@@ -86,6 +76,20 @@ public class SipdroidEngine implements RegisterAgentListener {
 					+ "@"
 					+ opt_via_addr;
 
+			SipStack.init(null);
+			SipStack.debug_level = 0;
+//			SipStack.log_path = "/data/data/org.sipdroid.sipua";
+			SipStack.max_retransmission_timeout = 4000;
+			SipStack.transaction_timeout = 30000;
+			SipStack.default_transport_protocols = new String[1];
+			SipStack.default_transport_protocols[0] = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("protocol",
+					user_profile.realm.equals("pbxes.org")?"tcp":"udp");
+			SipStack.default_port = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("port",""+SipStack.default_port));
+			
+			String version = "Sipdroid/" + Sipdroid.getVersion();
+			SipStack.ua_info = version;
+			SipStack.server_info = version;
+				
 			sip_provider = new SipProvider(opt_via_addr, SipStack.default_port);
 			CheckEngine();
 			
@@ -133,25 +137,28 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	public void register() {	
-		if (!Receiver.isFast(false) || user_profile.username.equals("") || user_profile.realm.equals("")) {
-			Receiver.onText(Receiver.REGISTER_NOTIFICATION,null,0,0);
-			if (wl.isHeld())
-				wl.release();
-		} else
-		if (ra != null && ra.register()) {
-			Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
-			wl.acquire();
+		if (!Receiver.isFast(false)) {
+			if (user_profile != null && !user_profile.username.equals("") &&
+					!user_profile.realm.equals("") &&
+					ra != null && ra.unregister()) {
+				Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
+				wl.acquire();
+			}
+		} else {
+			if (ra != null && ra.register()) {
+				Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
+				wl.acquire();
+			}
 		}
 	}
 
 	public void halt() { // modified
 		if (wl.isHeld())
 			wl.release();
+		keepAlive(false);
 		Receiver.onText(Receiver.REGISTER_NOTIFICATION, null, 0, 0);
-		if (ra != null) {
-			ra.unregister();
+		if (ra != null)
 			ra.halt();
-		}
 		if (ua != null)
 			ua.hangup();
 		if (sip_provider != null)
@@ -169,7 +176,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 	
 	public void onUaRegistrationSuccess(RegisterAgent ra, NameAddress target,
 			NameAddress contact, String result) {
-		Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.regok),R.drawable.sym_presence_available,0);
+		if (isRegistered())
+			Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.regok),R.drawable.sym_presence_available,0);
+		else
+			Receiver.onText(Receiver.REGISTER_NOTIFICATION, null, 0,0);
 		Receiver.registered();
 		if (wl.isHeld())
 			wl.release();
@@ -262,4 +272,30 @@ public class SipdroidEngine implements RegisterAgentListener {
 			Receiver.onState(state,text);
 	}
 
+	KeepAliveSip ka;
+	
+	public boolean keepAlive() {
+		if (ka != null && isRegistered())
+			try {
+				ka.sendToken();
+				return true;
+			} catch (IOException e) {
+				if (!Sipdroid.release) e.printStackTrace();
+			}
+		return false;
+	}
+	
+	public void keepAlive(boolean on_wlan) {
+       	if (on_wlan) {
+    		if (ka == null)
+    			ka = new KeepAliveSip(sip_provider,15000);
+    		Receiver.alarm(15, LoopAlarm.class);
+    	} else
+    		if (ka != null) {
+    			ka.halt();
+    			ka = null;
+    			Receiver.alarm(0, LoopAlarm.class);
+    		}	        	
+
+	}
 }

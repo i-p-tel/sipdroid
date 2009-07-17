@@ -20,49 +20,34 @@
 
 package org.sipdroid.sipua.ui;
 
+import org.zoolu.sip.provider.SipProvider;
+import org.zoolu.sip.provider.SipStack;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
 public class RegisterService extends Service {
 	public static boolean hold;
-	Thread t;
 	
     @Override
     public void onCreate() {
     	super.onCreate();
-        if (Receiver.mSipdroidEngine == null) Receiver.engine(this).register();
-        (t = new Thread() {
-    		public void run() {
-    	    	hold = true;
-    			while (hold) {
-    				hold = false;
-    				try {
-    					sleep(45000);
-    				} catch (InterruptedException e) {
-    				}
-    			}
-    			stopSelf();
-    		}
-    	}).start();   
+        Receiver.engine(this).isRegistered();
     }
     
     @Override
     public void onStart(Intent intent, int id) {
          super.onStart(intent,id);
-         hold = true;
-         t.interrupt();
+         if (SipStack.default_transport_protocols[0].equals(SipProvider.PROTO_TCP))
+        	 Receiver.alarm(10*60, OneShotAlarm2.class);
+         else
+        	 Receiver.alarm(45, OneShotAlarm2.class);
     }
 
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;
-	}
-
-	public void onDestroy() {
-		super.onDestroy();
-		hold = false;
-		t.interrupt();
 	}
 	
 }

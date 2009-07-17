@@ -488,7 +488,8 @@ public class InviteDialog extends Dialog implements TransactionClientListener,
 		printLog("inside refuse()", LogLevel.MEDIUM);
 		// refuse(480,"Temporarily Unavailable");
 		// refuse(603,"Decline");
-		refuse(403, SipResponses.reasonOf(403));
+		// refuse(403, SipResponses.reasonOf(403));
+		refuse(486, SipResponses.reasonOf(486)); // modified
 	}
 
 	/**

@@ -28,9 +28,26 @@ import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 
 	public class Settings extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
+		public static int getMinEdge() {
+			try {
+				return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("minedge", "4"));
+			} catch (NumberFormatException i) {
+				return 1;
+			}			
+		}
+		
+		public static int getMaxPoll() {
+			try {
+				return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("maxpoll", "1"));
+			} catch (NumberFormatException i) {
+				return 1;
+			}
+		}
+		
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
@@ -63,7 +80,13 @@ import android.preference.PreferenceActivity;
 			getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 		}
 		
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {	        	
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {	    
+	        	if (key.equals("server")) {
+	        		Editor edit = sharedPreferences.edit();
+	        		edit.putString("protocol",sharedPreferences.getString("server", "").equals("pbxes.org")?"tcp":"udp");
+	        		edit.commit();
+	        		return;
+	        	}
  	        	if (!key.equals("dns")) {
  	        		Editor edit = sharedPreferences.edit();
  	        		edit.putString("dns", "");
@@ -83,6 +106,8 @@ import android.preference.PreferenceActivity;
         	getPreferenceScreen().findPreference("username").setSummary(getPreferenceScreen().getSharedPreferences().getString("username", "")); 
         	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
         	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", ""));
+        	getPreferenceScreen().findPreference("protocol").setSummary(getPreferenceScreen().getSharedPreferences().getString("protocol",
+        		getPreferenceScreen().getSharedPreferences().getString("server", "").equals("pbxes.org")?"tcp":"udp").toUpperCase());
         	getPreferenceScreen().findPreference("prefix").setSummary(getPreferenceScreen().getSharedPreferences().getString("prefix", "")); 
         	getPreferenceScreen().findPreference("minedge").setSummary("Signal >= "+getPreferenceScreen().getSharedPreferences().getString("minedge", "4")); 
         	getPreferenceScreen().findPreference("maxpoll").setSummary("Signal <= "+getPreferenceScreen().getSharedPreferences().getString("maxpoll", "1")); 

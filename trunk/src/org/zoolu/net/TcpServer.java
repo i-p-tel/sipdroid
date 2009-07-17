@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -24,6 +25,7 @@
 package org.zoolu.net;
 
 import java.net.ServerSocket;
+import java.io.IOException;
 import java.io.InterruptedIOException;
 
 /**
@@ -109,6 +111,11 @@ public class TcpServer extends Thread {
 	/** Stops running */
 	public void halt() {
 		stop = true;
+		try {
+			server_socket.close(); // modified
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/** Runs the server */
@@ -152,8 +159,9 @@ public class TcpServer extends Thread {
 
 	/** Gets a String representation of the Object */
 	public String toString() {
-		return "tcp:" + server_socket.getInetAddress() + ":"
-				+ server_socket.getLocalPort();
+		return "tcp:" // modified + server_socket.getInetAddress() + ":"
+				//+ server_socket.getLocalPort();
+		;
 	}
 
 }

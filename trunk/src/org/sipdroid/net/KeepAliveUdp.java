@@ -141,7 +141,7 @@ public class KeepAliveUdp extends Thread {
 	public void run() {
 		try {
 			while (!stop) {
-				sendToken();
+//				sendToken();
 				// System.out.print(".");
 				sleep(delta_time);
 				if (expire > 0 && System.currentTimeMillis() > expire)

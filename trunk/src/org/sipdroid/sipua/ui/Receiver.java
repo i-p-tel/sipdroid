@@ -41,6 +41,7 @@ import android.net.Uri;
 import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -50,32 +51,32 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import org.sipdroid.net.KeepAliveSip;
 import org.sipdroid.sipua.*;
 import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.Connection;
 
 	public class Receiver extends BroadcastReceiver {
 
-		public final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
-		public final static String ACTION_SIGNAL_STRENGTH_CHANGED = "android.intent.action.SIG_STR";
+		final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
+		final static String ACTION_SIGNAL_STRENGTH_CHANGED = "android.intent.action.SIG_STR";
 		
 		public final static int REGISTER_NOTIFICATION = 1;
 		public final static int CALL_NOTIFICATION = 2;
+		public final static int MISSED_CALL_NOTIFICATION = 3;
 		
-		public static boolean keepTop,isTop;
-		private static int oldtimeout;
-
-		public static SipdroidEngine mSipdroidEngine;
+		final static long[] vibratePattern = {0,1000,1000};
+		
+		private static int oldtimeout,cellAsu = -1;
+		private static SipdroidEngine mSipdroidEngine;
+		
 		public static Context mContext;
-		
 		public static SipdroidListener listener,listener_video;
 		public static Call ccCall;
 		public static Connection ccConn;
 		public static int call_state;
-		public static String pstn_state;
-		static int cellAsu = -1;
-		public static String laststate,lastnumber;	
+		
+		private static String pstn_state;
+		private static String laststate,lastnumber;	
 		
 		public static SipdroidEngine engine(Context context) {
 			mContext = context;
@@ -89,7 +90,8 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		static Ringtone oRingtone;
-		
+		static PowerManager.WakeLock wl;
+				
 		public static void onState(int state,String caller) {
 			if (ccCall == null) {
 		        ccCall = new Call();
@@ -111,7 +113,6 @@ import org.sipdroid.sipua.phone.Connection;
 						text2 = text2.substring(text2.indexOf("\"")+1,text2.lastIndexOf("\""));
 					broadcastCallStateChanged("RINGING", caller);
 			        mContext.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-					keepTop = true;
 					moveTop();
 					ccCall.setState(Call.State.INCOMING);
 					ccConn.setUserData(null);
@@ -122,10 +123,10 @@ import org.sipdroid.sipua.phone.Connection;
 					AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 					int rm = am.getRingerMode();
 					int vs = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-					if ((pstn_state == null || !pstn_state.equals("RINGING")) &&
+					if ((pstn_state == null || pstn_state.equals("IDLE")) &&
 							(rm == AudioManager.RINGER_MODE_VIBRATE ||
 							(rm == AudioManager.RINGER_MODE_NORMAL && vs == AudioManager.VIBRATE_SETTING_ON)))
-						v.vibrate(5000);
+						v.vibrate(vibratePattern,1);
 					if (am.getStreamVolume(AudioManager.STREAM_RING) > 0) 
 					{				 
 						String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone", "");
@@ -137,8 +138,15 @@ import org.sipdroid.sipua.phone.Connection;
 						oRingtone = RingtoneManager.getRingtone(mContext, oUriSipRingtone);
 						oRingtone.play();						
 					}
+					if (wl == null) {
+						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+						wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+								PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "Sipdroid");
+					}
+					wl.acquire();
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
+					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
 					engine(mContext).register();
 					broadcastCallStateChanged("OFFHOOK", caller);
 					moveTop();
@@ -152,7 +160,6 @@ import org.sipdroid.sipua.phone.Connection;
 				case UserAgent.UA_STATE_IDLE:
 					broadcastCallStateChanged("IDLE", null);
 					screenOff(false);
-					keepTop = false;
 					onText(CALL_NOTIFICATION, null, 0,0);
 					ccCall.setState(Call.State.DISCONNECTED);
 					if (listener != null)
@@ -164,11 +171,13 @@ import org.sipdroid.sipua.phone.Connection;
 						oRingtone.stop();
 						oRingtone = null;
 					}
+					if (wl != null && wl.isHeld())
+						wl.release();
+			        mContext.startActivity(createIntent(InCallScreen.class));
 					break;
 				case UserAgent.UA_STATE_INCALL:
 					broadcastCallStateChanged("OFFHOOK", null);
 					screenOff(true);
-					keepTop = false;
 					if (ccCall.base == 0) {
 						ccCall.base = SystemClock.elapsedRealtime();
 					}
@@ -179,13 +188,17 @@ import org.sipdroid.sipua.phone.Connection;
 						oRingtone.stop();
 						oRingtone = null;
 					}
+					if (wl != null && wl.isHeld())
+						wl.release();
+			        mContext.startActivity(createIntent(InCallScreen.class));
 					break;
 				case UserAgent.UA_STATE_HOLD:
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_on_hold), android.R.drawable.stat_sys_phone_call_on_hold,ccCall.base);
 					ccCall.setState(Call.State.HOLDING);
+			        mContext.startActivity(createIntent(InCallScreen.class));
 					break;
 				}
-				if (call_state == UserAgent.UA_STATE_IDLE || call_state == UserAgent.UA_STATE_INCOMING_CALL) {
+				if (call_state == UserAgent.UA_STATE_IDLE) {
 			        (new Thread() {
 						public void run() {
 
@@ -193,22 +206,15 @@ import org.sipdroid.sipua.phone.Connection;
 								sleep(2000);
 							} catch (InterruptedException e) {
 							}
-							switch (call_state) {
-							case UserAgent.UA_STATE_IDLE:
-								if (ccConn.date != 0) {
-									ccConn.log(ccCall.base);
-									ccConn.date = 0;
-								}
-								engine(mContext).listen();
-								break;
-							case UserAgent.UA_STATE_INCOMING_CALL:
-								moveTop();
-								break;
+							if (ccConn.date != 0) {
+								ccConn.log(ccCall.base);
+								ccConn.date = 0;
 							}
+							engine(mContext).listen();
 						}
 					}).start();   
 				}
-		        mContext.startActivity(createIntent(InCallScreen.class));
+		        updateSleep();
 			}
 		}
 		
@@ -217,9 +223,21 @@ import org.sipdroid.sipua.phone.Connection;
 	        if (text != null) {
 		        Notification notification = new Notification();
 		        notification.icon = mInCallResId;
-		        notification.contentIntent = PendingIntent.getActivity(mContext, 0,
-		                createIntent(Sipdroid.class), 0);
-		        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+		        if (type == MISSED_CALL_NOTIFICATION) {
+		        	notification.contentIntent = PendingIntent.getActivity(mContext, 0,
+			                createCallLogIntent(), 0);
+		        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
+	        	} else {
+			        notification.contentIntent = PendingIntent.getActivity(mContext, 0,
+			                createIntent(Sipdroid.class), 0);
+		        	notification.flags |= Notification.FLAG_ONGOING_EVENT;
+		        }
+		        if (mInCallResId == R.drawable.sym_presence_away) {
+		        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+		        	notification.ledARGB = 0xffff0000; /* red */
+		        	notification.ledOnMS = 125;
+		        	notification.ledOffMS = 2875;
+		        }
 		        RemoteViews contentView = new RemoteViews(mContext.getPackageName(),
                         R.layout.ongoing_call_notification);
 		        contentView.setImageViewResource(R.id.icon, notification.icon);
@@ -274,7 +292,7 @@ import org.sipdroid.sipua.phone.Connection;
 			}).start();   
 		}
 		
-		public static void broadcastCallStateChanged(String state,String number) {
+		static void broadcastCallStateChanged(String state,String number) {
 			if (state == null) {
 				state = laststate;
 				number = lastnumber;
@@ -311,7 +329,6 @@ import org.sipdroid.sipua.phone.Connection;
 	        	if (oldtimeout == 0) {
 	        		oldtimeout = Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000);
 		        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 1);
-		        	Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
 	        	}
 	        } else {
 	        	if (oldtimeout == 0 && Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000) == 1)
@@ -323,24 +340,44 @@ import org.sipdroid.sipua.phone.Connection;
 	        }
 		}
 		
-		public static Intent createIntent(Class<?>cls) {
+		static void updateSleep() {
+	        ContentResolver cr = mContext.getContentResolver();
+			int get = Settings.System.getInt(cr, Settings.System.WIFI_SLEEP_POLICY, -1);
+			int set;
+			
+			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wlan",false) && (
+					call_state != UserAgent.UA_STATE_IDLE ||
+					cellAsu == -1 || cellAsu <= org.sipdroid.sipua.ui.Settings.getMaxPoll() ||
+					Sipdroid.market ||
+					!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("3g",false)))
+				set = Settings.System.WIFI_SLEEP_POLICY_NEVER;
+			else
+				set = Settings.System.WIFI_SLEEP_POLICY_DEFAULT;
+			if (set != get)
+				Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, set);
+		}
+		
+		static Intent createIntent(Class<?>cls) {
         	Intent startActivity = new Intent();
         	startActivity.setClass(mContext,cls);
     	    startActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     	    return startActivity;
 		}
 		
+		public static Intent createCallLogIntent() {
+	        Intent intent = new Intent(Intent.ACTION_VIEW, null);
+	        intent.setType("vnd.android.cursor.dir/calls");
+	        return intent;
+		}
+		
 		public static void moveTop() {
-	    	if (!Sipdroid.release) Log.i("SipUA:","moveTop "+isTop);
 			onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call, 0);
-			if (!isTop)
-				mContext.startActivity(createIntent(Activity2.class)); 
+			mContext.startActivity(createIntent(Activity2.class)); 
 		}
 
-		static boolean on_wlan;
-		
 		public static boolean isFast(boolean for_a_call) {
 			Context context = mContext;
+			boolean on_wlan;
 			
         	TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         	WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -348,9 +385,12 @@ import org.sipdroid.sipua.phone.Connection;
 
         	if (wi != null)
         		if (!Sipdroid.release) Log.i("SipUA:","isFast() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())+" "+cellAsu);
-        	if (wi != null && WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR)
-        		return on_wlan = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("wlan",false);
-        	on_wlan = false;
+        	if (wi != null && WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR) {
+        		on_wlan = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("wlan",false);
+        		engine(mContext).keepAlive(on_wlan);
+        		return on_wlan;
+        	}
+         	engine(mContext).keepAlive(false);
         	if (Sipdroid.market || !PreferenceManager.getDefaultSharedPreferences(context).getBoolean("3g",false))
         		return false;
         	if (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS)
@@ -359,35 +399,27 @@ import org.sipdroid.sipua.phone.Connection;
         		if (!for_a_call)
         			return true;
         		else
-        			return cellAsu >= Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString("minedge", "4"));
+        			return cellAsu == -1 || cellAsu >= org.sipdroid.sipua.ui.Settings.getMinEdge();
         	return false;
 		}
-		
-		public static KeepAliveSip ka;
 		
 	    @Override
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
         	if (!Sipdroid.release) Log.i("SipUA:",intentAction);
+        	if (mContext == null) mContext = context;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
 	        	engine(context).register();
 	        } else
 	        if (intentAction.equals("android.intent.action.ANY_DATA_STATE")) {
 	        	engine(context).register();
-	        	if (keepTop) moveTop();
 	        } else
-			if (intentAction.equals(Intent.ACTION_SCREEN_ON)) {
-			    if (keepTop) moveTop();
-			} else
 	        if (intentAction.equals(Intent.ACTION_SCREEN_OFF)) {
 	        	screenOff(false);
 	        } else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
 	    		pstn_state = intent.getStringExtra("state");
-	    		if (pstn_state.equals("RINGING") && call_state == UserAgent.UA_STATE_IDLE)
-	    			engine(context).register();
-	    		else
 	    		if (pstn_state.equals("IDLE") && call_state != UserAgent.UA_STATE_IDLE)
 	    			broadcastCallStateChanged(null,null);
 	    		if ((pstn_state.equals("OFFHOOK") && call_state == UserAgent.UA_STATE_INCALL) ||
@@ -402,17 +434,7 @@ import org.sipdroid.sipua.phone.Connection;
 	        	else if (cellAsu >= 4) cellAsu = 2;
 	        	else cellAsu = 1;
 	        	if (!Sipdroid.release) Log.i("SipUA:","cellAsu "+cellAsu);
-	        	if (cellAsu <= Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString("maxpoll", "1")) && on_wlan) {
-	        		if (ka == null) {
-	        			ka = new KeepAliveSip(Receiver.engine(context).sip_provider,15000);
-	        			alarm(15, LoopAlarm.class);
-	        		}
-	        	} else
-	        		if (ka != null) {
-	        			ka.halt();
-	        			ka = null;
-	        			alarm(0, LoopAlarm.class);
-	        		}	        	
+	        	updateSleep();
 	        }
 		}   
 }

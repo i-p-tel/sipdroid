@@ -33,7 +33,7 @@ public class OneShotLocation extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Location loc;
 
-		if (!Sipdroid.release) Log.i("SipUA:",intent.getExtras().toString());
+		if (!Sipdroid.release) Log.i("SipUA:","location "+intent.getExtras().toString());
     	loc = (Location)intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED);
     	if (loc != null) {
     		Receiver.pos(false);

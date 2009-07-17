@@ -47,13 +47,13 @@ public class CallScreen extends Activity {
 		MenuItem m = menu.add(0, HOLD_MENU_ITEM, 0, R.string.menu_hold);
 		m.setIcon(R.drawable.sym_call_hold_on);
 		m = menu.add(0, HANG_UP_MENU_ITEM, 0, R.string.menu_endCall);
-		m.setIcon(R.drawable.sym_call_end);
+		m.setIcon(R.drawable.ic_menu_end_call);
 		m = menu.add(0, MUTE_MENU_ITEM, 0, R.string.menu_mute);
 		m.setIcon(R.drawable.mute);
 		m = menu.add(0, SPEAKER_MENU_ITEM, 0, R.string.menu_speaker);
 		m.setIcon(R.drawable.sym_call_speakerphone_on);
 		m = menu.add(0, DTMF_MENU_ITEM, 0, R.string.menu_dtmf);
-		m.setIcon(R.drawable.sym_incoming_call_answer_options);
+		m.setIcon(R.drawable.ic_menu_dial_pad);
 		m = menu.add(0, VIDEO_MENU_ITEM, 0, R.string.menu_video);
 		m.setIcon(android.R.drawable.ic_menu_camera);
 				

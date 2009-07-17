@@ -39,7 +39,6 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -71,9 +70,8 @@ public class InCallScreen extends CallScreen {
 	@Override
 	public void onPause() {
 		super.onPause();
-		Receiver.isTop = false;
     	if (!Sipdroid.release) Log.i("SipUA:","on pause");
-		if (Receiver.keepTop) Receiver.moveTop();
+		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL) Receiver.moveTop();
 		reenableKeyguard();
 		if (socket != null) {
 			socket.close();
@@ -82,11 +80,8 @@ public class InCallScreen extends CallScreen {
 	}
 	
 	void moveBack() {
-		if ((Receiver.ccConn != null && !Receiver.ccConn.isIncoming()) || 
-				(Receiver.ccCall != null && Receiver.ccCall.base != 0)) {
-	        Intent intent = new Intent(Intent.ACTION_VIEW, null);
-	        intent.setType("vnd.android.cursor.dir/calls");
-	        startActivity(intent);
+		if ((Receiver.ccConn != null && !Receiver.ccConn.isIncoming())) {
+	        startActivity(Receiver.createCallLogIntent());
 		}
 		moveTaskToBack(true);
 	}
@@ -118,7 +113,6 @@ public class InCallScreen extends CallScreen {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Receiver.isTop = true;
     	if (!Sipdroid.release) Log.i("SipUA:","on resume");
 		switch (Receiver.call_state) {
 		case UserAgent.UA_STATE_INCOMING_CALL:
@@ -232,7 +226,6 @@ public class InCallScreen extends CallScreen {
 		if (m_receiver == null) {
 			IntentFilter intentfilter = new IntentFilter();
 			intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
-			intentfilter.addAction(Intent.ACTION_SCREEN_ON);
         	m_receiver = new Receiver();
         	registerReceiver(m_receiver, intentfilter);     
 		}
@@ -302,7 +295,6 @@ public class InCallScreen extends CallScreen {
         // or (2) "don't answer" if there's a current ringing call.
 
         case KeyEvent.KEYCODE_BACK:
-        	if (!Sipdroid.release) Log.i("SipUA:","keycode back "+(SystemClock.uptimeMillis()-event.getEventTime()));
     		Receiver.engine(this).rejectcall();      
             return true;
 
