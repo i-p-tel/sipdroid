@@ -145,18 +145,12 @@ Sipdroid runs standard SIP. For full interoperability register Sipdroid to [http
 Possible issues when registering directly to other SIP servers are:
 
  * Battery drain on 3G/EDGE,
- * No ringing,
+ * Unreliable incoming calls,
  * Poor voice in send direction,
  * One way voice, or
  * No connection at all
 
 *Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged into a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
-
-=== Gizmo ===
-
-PBXes is interoperable with most SIP providers. One exception is Gizmo which does not allow PBXes to fork for incoming calls. Using Gizmo directly, without PBXes, would result in a *battery drain on 3G/EDGE standby* as mentioned above.
-
-So if you want to use Gizmo and have a good battery performance, use it with PBXes and add a second provider to do the forking to your mobile number.
 
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
@@ -205,7 +199,7 @@ We noticed that choppy voice on WLANs can be resolved by turning off Latitude wi
 
 === Netcounter ===
 
-This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs you should not install the present version. It wakes the device too often thus draining the battery.
+This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs only you should not install the present version. It wakes the device too often thus draining the battery.
 
 === Ambient Light Sensor ===
 
@@ -214,17 +208,3 @@ This [http://www.cyrket.com/package/org.pbxes.light2 tool] is recommended to sav
 === ChompSMS ===
 
 This is the equivalent to Sipdroid for SMS.
-
-== Troubleshooting ==
-
-=== Incoming calls only work for a few minutes after startup. ===
-
-As described above Sipdroid relies on a parallel call from the mobile network to wake up. This is to ensure reachability and saves battery power.
-
-If you cannot set up call forking as described you have the option of enabling "WLAN Polling" mode. Normally this only gets chosen if you loose mobile network while WLAN is available. By raising the signal level threshold to 4 bars you can have this mode run permanently. So you won't need call forking while in wireless LANS.
-
-Running polling mode in mobile networks would drain your battery within a few hours and would not make any technical sense either.
-
-=== My battery is empty after a few hours. ===
-
-Please see above Providers/What SIP providers is Sipdroid compatible with?
