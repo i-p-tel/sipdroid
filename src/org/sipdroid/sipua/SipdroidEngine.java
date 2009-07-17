@@ -274,22 +274,21 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 	KeepAliveSip ka;
 	
-	public boolean keepAlive() {
+	public void keepAlive() {
 		if (ka != null && isRegistered())
 			try {
 				ka.sendToken();
-				return true;
+				Receiver.alarm(60, LoopAlarm.class);
 			} catch (IOException e) {
 				if (!Sipdroid.release) e.printStackTrace();
 			}
-		return false;
 	}
 	
 	public void keepAlive(boolean on_wlan) {
        	if (on_wlan) {
     		if (ka == null)
-    			ka = new KeepAliveSip(sip_provider,15000);
-    		Receiver.alarm(15, LoopAlarm.class);
+    			ka = new KeepAliveSip(sip_provider,60000);
+    		Receiver.alarm(60, LoopAlarm.class);
     	} else
     		if (ka != null) {
     			ka.halt();
