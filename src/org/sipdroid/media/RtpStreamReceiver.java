@@ -24,7 +24,6 @@ package org.sipdroid.media;
 import java.io.IOException;
 import java.net.SocketException;
 
-import org.sipdroid.net.KeepAliveSip;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
@@ -146,7 +145,6 @@ public class RtpStreamReceiver extends Thread {
 		speakermode = AudioManager.MODE_IN_CALL;
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
-		KeepAliveSip ka = new KeepAliveSip(Receiver.engine(Receiver.mContext).sip_provider,15000);
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 		int oldvibrate = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
@@ -258,7 +256,6 @@ public class RtpStreamReceiver extends Thread {
 		} catch (InterruptedException e) {
 		}
 		tg.stopTone();
-		ka.halt();
 		
 		rtp_socket.close();
 		rtp_socket = null;

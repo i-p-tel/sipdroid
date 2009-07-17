@@ -1,7 +1,6 @@
 package org.sipdroid.sipua.phone;
 
 import org.sipdroid.sipua.ui.Receiver;
-import org.sipdroid.sipua.ui.Sipdroid;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -186,11 +185,6 @@ public class Connection
             People.markAsContacted(resolver, ci.person_id);
         }
 
-        if (callType == CallLog.Calls.INCOMING_TYPE || callType == CallLog.Calls.MISSED_TYPE) {
-        	resolver.delete(Calls.CONTENT_URI, Calls.TYPE + "=" + Calls.MISSED_TYPE + " AND " +
-        			Calls.DATE + ">" + (start-30000), null);
-        }
-
         Uri result = resolver.insert(Calls.CONTENT_URI, values);
         
         return result;
@@ -220,6 +214,8 @@ public class Connection
 	        callLogType = (duration == 0 ?
 	                       CallLog.Calls.MISSED_TYPE :
 	                       CallLog.Calls.INCOMING_TYPE);
+	        if (callLogType == CallLog.Calls.MISSED_TYPE)
+	        	Receiver.onText(Receiver.MISSED_CALL_NOTIFICATION, number, android.R.drawable.stat_notify_missed_call, 0);
 	    } else {
 	        callLogType = CallLog.Calls.OUTGOING_TYPE;
 	    }

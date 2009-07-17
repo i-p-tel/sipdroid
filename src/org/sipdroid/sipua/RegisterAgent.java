@@ -280,6 +280,10 @@ public class RegisterAgent implements TransactionClientListener {
 			else
 			{
 				CurrentState = UNREGISTERED;
+				if (listener != null)
+				{
+					listener.onUaRegistrationSuccess(this, target, contact, result);
+				}
 			}
 		}
 	}
@@ -308,6 +312,11 @@ public class RegisterAgent implements TransactionClientListener {
 				else
 				{
 					CurrentState = REGISTERED;
+					if (listener != null)
+					{
+						listener.onUaRegistrationFailure(this, target, contact,
+								result);
+					}
 				}
 				
 				printLog("Registration failure: " + result, LogLevel.HIGH);
@@ -409,6 +418,11 @@ public class RegisterAgent implements TransactionClientListener {
 			else
 			{
 				CurrentState = REGISTERED;
+				if (listener != null)
+				{
+					listener.onUaRegistrationFailure(this, target, contact,
+							"Timeout");
+				}
 			}
 		}
 	}

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="pstn_name">Über Sprachdienst anrufen</string>
-    <string name="sip_name">Über IP anrufen, wenn verfügbar</string>
+    <string name="pstn_name">Telefon</string>
+    <string name="sip_name">Sipdroid, wenn verfügbar</string>
 <string name="menuButtonHint">Drücken Sie auf Menü für Anrufoptionen, die Rufaufbautaste zum Halten oder Zurück, um den Anruf zu beenden.</string>
 <string name="menuButtonHint2">Drücken Sie auf Menü zum Abheben oder Zurück, um den Anruf abzuweisen.</string>
 <string name="about">Sipdroid ist ein freier SIP-Client für Android
@@ -29,6 +29,7 @@
 <string name="settings_account">Zugangsdaten</string>
 <string name="settings_username">Benutzername</string>
 <string name="settings_password">Paßwort</string>
+<string name="settings_protocol">Protokoll</string>
 <string name="settings_options">Optionen</string>
 <string name="settings_wlan">WLAN verwenden</string>
 <string name="settings_3g">3G/EDGE verwenden</string>
@@ -43,8 +44,8 @@
 <string name="settings_callback2">Wenn keine geeignete Datenverbindung verfügbar</string>
 <string name="settings_pref">Bevorzugte Anrufart</string>
     <string-array name="pref_display_values">
-        <item>SIP, wenn verfügbar</item>
-        <item>Sprachdienst</item>
+        <item>Sipdroid, wenn verfügbar</item>
+        <item>Telefon</item>
     </string-array>
 <string name="menu_settings">Einstellungen</string>
 <string name="settings_advanced_options">Erweiterte Einstellungen</string>   

@@ -44,7 +44,7 @@ public class SipRingtonePreference extends RingtonePreference
     protected void onPrepareRingtonePickerIntent(Intent ringtonePickerIntent) 
     {    	
         super.onPrepareRingtonePickerIntent(ringtonePickerIntent);
-        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, false);
+        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
         ringtonePickerIntent.putExtras(new Intent( RingtoneManager.ACTION_RINGTONE_PICKER));
     }

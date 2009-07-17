@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -198,8 +199,9 @@ public class TcpConnection extends Thread {
 
 	/** Gets a String representation of the Object */
 	public String toString() {
-		return "tcp:" + socket.getLocalAddress() + ":" + socket.getLocalPort()
-				+ "<->" + socket.getAddress() + ":" + socket.getPort();
+		return "tcp:" // modified + socket.getLocalAddress() + ":" + socket.getLocalPort()
+//				+ "<->" + socket.getAddress() + ":" + socket.getPort();
+		;
 	}
 
 }

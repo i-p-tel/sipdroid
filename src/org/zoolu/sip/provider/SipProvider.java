@@ -25,6 +25,7 @@
 
 package org.zoolu.sip.provider;
 
+import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.net.*;
 import org.zoolu.sip.header.*;
@@ -1152,7 +1153,7 @@ public class SipProvider implements Configurable, TransportListener,
 
 	/** Removes a Connection */
 	private void removeConnection(ConnectionIdentifier conn_id) {
-		if (connections.containsKey(conn_id)) {
+		if (connections != null && connections.containsKey(conn_id)) { // modified
 			ConnectedTransport conn = (ConnectedTransport) connections
 					.get(conn_id);
 			conn.halt();
@@ -1181,6 +1182,7 @@ public class SipProvider implements Configurable, TransportListener,
 			ConnectionIdentifier conn_id = new ConnectionIdentifier(
 					(ConnectedTransport) transport);
 			removeConnection(conn_id);
+			Receiver.engine(Receiver.mContext).register(); // modified
 		}
 		if (error != null)
 			printException(error, LogLevel.HIGH);

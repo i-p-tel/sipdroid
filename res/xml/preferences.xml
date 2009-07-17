@@ -18,6 +18,12 @@
 	            android:key="port"
 	            android:title="Port"
 	            />
+		<ListPreference
+			android:key="protocol"
+			android:title="@string/settings_protocol"
+		    android:entries="@array/protocol_display_values"
+		    android:entryValues="@array/protocol_values"
+		    android:dialogTitle="@string/settings_protocol" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_options">
 		<CheckBoxPreference
