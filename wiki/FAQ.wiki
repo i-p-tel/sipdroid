@@ -75,7 +75,11 @@ Android reserves the red key for the built-in dialer of the phone. So Sipdroid i
 
 ==== When ringing ====
 
-Incoming SIP calls can be identified by the turquoise icon in the status bar. As usual pressing the green call button answers the call.
+Incoming SIP calls can be identified by the turquoise icon in the status bar. 
+
+Green call button: Answer call
+
+BACK button: Reject call
 
 ==== While in call ====
 
