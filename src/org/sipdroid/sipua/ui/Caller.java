@@ -28,6 +28,8 @@ import java.util.regex.PatternSyntaxException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -94,9 +96,22 @@ public class Caller extends BroadcastReceiver {
     			else 
     			{
 	        		if (number != null && !intent.getBooleanExtra("android.phone.extra.ALREADY_CALLED",false)) {
-	    				String sPrefix = PreferenceManager.getDefaultSharedPreferences(context).getString("prefix", "");			
-    					if(!number.startsWith(sPrefix))
-	    					number = sPrefix + number;    		 
+	        		    	// Migrate the "prefix" option. TODO Remove this code in a future release.
+	        		    	SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+	        		    	if (sp.contains("prefix")) {
+	        		    	    String prefix = sp.getString("prefix", "");
+	        		    	    Editor editor = sp.edit();
+	        		    	    if (!prefix.trim().equals("")) {
+	        		    		editor.putString("search", "(.*)," + prefix + "\\1");
+	        		    	    }
+	        		    	    editor.remove("prefix");
+	        		    	    editor.commit();
+	        		    	}
+	        		    	
+	        		    	// Search & replace.
+	    				String search = sp.getString("search", "");
+	    				number = searchReplaceNumber(search, number);
+	    				
 						if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("par",false)) 
 	    				{
 	    					String orig = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");	
@@ -121,7 +136,7 @@ public class Caller extends BroadcastReceiver {
 	         			                if (type == Phones.TYPE_MOBILE || type == Phones.TYPE_HOME || type == Phones.TYPE_WORK) 
 	         			                {
 	         			                	if (!number.equals("")) number = number + "&";
-	         			                	number = number + sPrefix + n;	         			                	
+	         			                	number = number + searchReplaceNumber(search, n);
 	        			                }
 	        			            }
 	        			            phonesCursor.close();
@@ -134,6 +149,46 @@ public class Caller extends BroadcastReceiver {
 	            }
 	        }
 	    }
+		
+		private String searchReplaceNumber(String pattern, String number) {
+		    // Comma should be safe as separator.
+		    String[] split = pattern.split(",");
+		    // We need exactly 2 parts: search and replace. Otherwise
+		    // we just return the current number.
+		    if (split.length != 2)
+			return number;
+
+		    String modNumber = split[1];
+		    
+		    try {
+			// Compiles the regular expression. This could be done
+			// when the user modify the pattern... TODO Optimize
+			// this, only compile once.
+			Pattern p = Pattern.compile(split[0]);
+    		    	Matcher m = p.matcher(number);
+    		    	// Main loop of the function.
+    		    	if (m.matches()) {
+    		    	    for (int i = 0; i < m.groupCount() + 1; i++) {
+    		    		String r = m.group(i);
+    		    		if (r != null) {
+    		    		    modNumber = modNumber.replace("\\" + i, r);
+    		    		}
+    		    	    }
+    		    	}
+    		    	// If the modified number is the same as the replacement
+    		    	// value, we guess that the user typed a bad replacement
+    		    	// value and we use the original number.
+    		    	if (modNumber.equals(split[1])) {
+    		    	    modNumber = number;
+    		    	}
+		    } catch (PatternSyntaxException e) {
+			// Wrong pattern syntax. Give back the original number.
+			modNumber = number;
+		    }
+		    
+		    // Returns the modified number.
+		    return modNumber;
+		}
 	    
 	    Vector<String> getTokens(String sInput, String sDelimiter)
 	    {

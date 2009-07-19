@@ -108,7 +108,7 @@ import android.preference.PreferenceManager;
         	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", ""));
         	getPreferenceScreen().findPreference("protocol").setSummary(getPreferenceScreen().getSharedPreferences().getString("protocol",
         		getPreferenceScreen().getSharedPreferences().getString("server", "").equals("pbxes.org")?"tcp":"udp").toUpperCase());
-        	getPreferenceScreen().findPreference("prefix").setSummary(getPreferenceScreen().getSharedPreferences().getString("prefix", "")); 
+        	getPreferenceScreen().findPreference("search").setSummary(getPreferenceScreen().getSharedPreferences().getString("search", "")); 
         	getPreferenceScreen().findPreference("minedge").setSummary("Signal >= "+getPreferenceScreen().getSharedPreferences().getString("minedge", "4")); 
         	getPreferenceScreen().findPreference("maxpoll").setSummary("Signal <= "+getPreferenceScreen().getSharedPreferences().getString("maxpoll", "1")); 
         	getPreferenceScreen().findPreference("excludepat").setSummary(getPreferenceScreen().getSharedPreferences().getString("excludepat", "")); 

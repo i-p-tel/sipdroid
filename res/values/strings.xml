@@ -60,7 +60,7 @@
     </string-array>
 <string name="settings_advanced_options">Advanced Options</string>   
 <string name="settings_pbxes_options">PBXes Features</string>   
-<string name="settings_prefix">Prefix</string> 
+<string name="settings_search">Search &amp; Replace</string> 
 <string name="settings_minedge">Signal Bars for EDGE Calls</string>
 <string name="settings_maxpoll">Signal Bars for WLAN Polling</string>
 <string name="settings_excludepat">Exclude Pattern</string>
