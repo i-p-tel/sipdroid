@@ -54,8 +54,8 @@
 	            android:hint="1"
 	        />
 	        <EditTextPreference
-	            android:key="prefix"
-	            android:title="@string/settings_prefix"
+	            android:key="search"
+	            android:title="@string/settings_search"
 	        />
 	       	<EditTextPreference
 	            android:key="excludepat"
