@@ -1,4 +1,5 @@
-#Changes in each release of Sipdroid
+#summary Changes in each release of Sipdroid
+#labels Featured
 
 === Beta-Versions ===
 
