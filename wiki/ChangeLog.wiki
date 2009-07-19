@@ -3,50 +3,50 @@
 
 === Beta-Versions ===
 
-* 1.0.2
-  * Receive calls over SIP (call forking is obsolete)
-  * Fix issues 74, 77, 81
+  * 1.0.2
+    * Receive calls over SIP (call forking is obsolete)
+    *  Fix issues 74, 77, 81
 
-* 1.0.1
-  * Fix issue 27
-  * Add ringtone
+  * 1.0.1
+    * Fix issue 27
+    * Add ringtone
 
-* 1.0.0
-  * Fix issue 15 (accept any realm for auth)
-  * Add callback mode
+  * 1.0.0
+    * Fix issue 15 (accept any realm for auth)
+    * Add callback mode
 
-* 0.9.11
-  * Add location upload to webcall pages
+  * 0.9.11
+    * Add location upload to webcall pages
 
-* 0.9.10
-  * Add WLAN active mode
+  * 0.9.10
+    * Add WLAN active mode
 
-* 0.9.9
-  * Improve voice quality
-  * Fix issues 58, 61
+  * 0.9.9
+    * Improve voice quality
+    * Fix issues 58, 61
 
-* 0.9.8
-  * Add video reception
-  * Add exclude pattern (issues 11, 34)
+  * 0.9.8
+    * Add video reception
+    * Add exclude pattern (issues 11, 34)
 
-* 0.9.7
-  * Video transmission (tested to X-Lite)
+  * 0.9.7
+    * Video transmission (tested to X-Lite)
 
-* 0.9.6
-  * Fix issues 17, 36 "custom prefix",
-  * 17 "vibrate on incoming"
-  * Change escape digit from # to +
+  * 0.9.6
+    * Fix issues 17, 36 "custom prefix",
+    * 17 "vibrate on incoming"
+    * Change escape digit from # to +
 
-* 0.9.5
-  * Fix issues 33, 6 "register on HTC build of android"
-  * Speakerphone
-  * sip: intents
+  * 0.9.5
+    * Fix issues 33, 6 "register on HTC build of android"
+    * Speakerphone
+    * sip: intents
 
-* 0.9.4
-  * Fix issue 25
+  * 0.9.4
+    * Fix issue 25
 
-* 0.9.3
-  * UI bugs fixed
+  * 0.9.3
+    * UI bugs fixed
 
-* 0.9
-  * Initial version Apr 27, 2009
+  * 0.9
+    * Initial version Apr 27, 2009
