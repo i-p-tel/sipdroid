@@ -49,4 +49,4 @@
     * UI bugs fixed
 
   * 0.9
-    * Initial version Apr 27, 2009
+    * First public beta on Apr 27, 2009
