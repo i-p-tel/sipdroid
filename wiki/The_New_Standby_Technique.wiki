@@ -9,7 +9,7 @@ When Sipdroid was first published the phone had to be woken up by cellular calls
 
 Although this scheme simplified software design users complained about complicated set-up and call answer.
 
-In *Sipdroid release 1.0.2* a totally new scheme was introduced. The first developer who mentioned the idea for sipdroid.org was [http://code.google.com/p/sipdroid/issues/detail?id=17&can=1 John Kielkopf]. Later we discovered that there were already several others (e.g. [http://research.nokia.com/files/NRCTR2008002.pdf Nokia]) who did research in this area before.
+In *Sipdroid release 1.0.2* a totally new scheme was introduced. The first developer who mentioned the idea for Sipdroid was [http://code.google.com/p/sipdroid/issues/detail?id=17&can=1 John Kielkopf]. Later we discovered that there were already several others (e.g. [http://research.nokia.com/files/NRCTR2008002.pdf Nokia]) who did research in this area before.
 
 Sipdroid developers [http://code.google.com/p/sipdroid/people/list zlabunk and wavehill09]  laid more fundaments by adding vibrate and ringtone functionality.
 
