@@ -23,7 +23,7 @@ This project publishes Sipdroid for free under the terms of [http://www.gnu.org/
 
 === How much will Sipdroid drain the battery? (Constantly running Internet connection?) ===
 
-When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time).
+When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about five days of stand-by time).
 
 === How much bandwidth is required? ===
 
