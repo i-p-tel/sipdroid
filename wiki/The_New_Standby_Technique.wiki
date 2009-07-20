@@ -52,4 +52,4 @@ So Sipdroid could maintain its early standby times while extending functionality
 
 == Implications for the future ==
 
-More and more always-on services evolve. At the moment we know of VoIP of course, the Google services (Mail, IM, Sync), E-Mail. Although TCP based software does only transmit a few keepalive packets, every service lowers standby time by about 10%. So for the future we want to look for other data activity and piggyback keep alive transmission to them.
+More and more always-on services evolve. At the moment we know of VoIP (of course), the Google services (Mail, IM, Sync), E-Mail. Although TCP based software does only transmit a few keepalive packets, every service lowers standby time by about 10%. So for the future we want to look for other data activity and piggyback keep alive transmission to them.
