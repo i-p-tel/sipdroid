@@ -27,9 +27,9 @@ Most commonly UDP protocol is used to carry SIP signaling and voice packets. Whe
 
 == The new technique ==
 
-Sipdroid now uses TCP for the signaling connection and keeps the port open.
+Sipdroid now uses TCP for the signaling connection and keeps the corresponding port open.
 
-Sipdroid's "mothership" [http://pbxes.org PBXes] (we took this nice image from [http://www.morethantechnical.com/2009/07/16/voip-for-android-is-in-town/ Arnon's blog] had also to be extended because - as most SIP services - it did not support TCP up to now. (So if your service cannot handle SIP over TCP you can use PBXes to translate between the protocols.)
+Sipdroid's "mothership" [http://pbxes.org PBXes] (we took this nice image from [http://www.morethantechnical.com/2009/07/16/voip-for-android-is-in-town/ Arnon's blog]) had also to be extended because - as most SIP services - it did not support TCP up to now. (So if your service cannot handle SIP over TCP you can use PBXes to translate between the protocols.)
 
 Sipdroid now also contains the necessary code to ring and turn on the screen when a call comes in.
 
