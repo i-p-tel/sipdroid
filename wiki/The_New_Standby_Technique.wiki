@@ -15,7 +15,7 @@ Sipdroid developers [http://code.google.com/p/sipdroid/people/list zlabunk and w
 
 == NAT traversal ==
 
-Most networks, no matter if LAN, wireless or mobile, today use NAT routers to provide enough addresses to their clients. The NAT proxy cannot keep connections open forever. Depending on the protocol type used the timeouts are typically (reproduced from [http://research.nokia.com/files/NRCTR2008002.pdf here]):
+Most networks, no matter if LAN, wireless or mobile, today use NAT routers to provide enough addresses to their clients. The NAT proxy cannot keep connections open forever. Depending on protocol type used timeouts are typically (reproduced from [http://research.nokia.com/files/NRCTR2008002.pdf here]):
 
 || Protocol || Timeout ||
 || UDP || 40s to 300s ||
