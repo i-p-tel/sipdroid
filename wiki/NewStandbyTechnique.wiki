@@ -1,0 +1,57 @@
+#summary How Sipdroid maintains Registration
+#labels Featured
+
+|| Copyright (C) 2009 The Sipdroid Open Source Project. The following article is part of Sipdroid. Sipdroid is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. ||
+
+<wiki:toc max_depth="5" />
+
+== Introduction ==
+
+When Sipdroid was first published the phone had to be woken up by cellular calls to see incoming SIP invites. The reason for this early approach was that the developer version of Cupcake left wireless LAN completely inactive during sleep mode. When Cupcake was finalized wireless LAN and 3G radio still ran while the screen was turned off. We did not change anything to above concept to avoid permanently sending keep alive packets over 3G which would have caused the radio to stay on most of the time thus totally draining the battery within about 15 hours.
+
+Although this scheme simplified software design users complained about complicated set-up and call answer.
+
+In *Sipdroid release 1.0.2* a totally new scheme was introduced. The first developer who mentioned the idea for Sipdroid was [http://code.google.com/p/sipdroid/issues/detail?id=17&can=1 John Kielkopf]. Later we discovered that there were already several others (e.g. [http://research.nokia.com/files/NRCTR2008002.pdf Nokia]) who did research in this area before.
+
+Sipdroid developers [http://code.google.com/p/sipdroid/people/list zlabunk and wavehill09]  laid more fundaments by adding vibrate and ringtone functionality.
+
+== NAT traversal ==
+
+Most networks, no matter if LAN, wireless or mobile, today use NAT routers to provide enough addresses to their clients. The NAT proxy cannot keep connections open forever. Depending on protocol type used timeouts are typically (reproduced from [http://research.nokia.com/files/NRCTR2008002.pdf here]):
+
+|| Protocol || Timeout ||
+|| UDP || 40s to 300s ||
+|| TCP || 30min to 1440min ||
+
+TCP timeouts are much longer. So for NAT traversal much less packets have to be sent over TCP compared to UDP.
+
+Most commonly UDP protocol is used to carry SIP signaling and voice packets. When SIP was [http://tools.ietf.org/html/rfc2543 defined] TCP was included as an alternative protocol since the very beginning.
+
+== The new technique ==
+
+Sipdroid now uses TCP for the signaling connection and keeps the corresponding port open.
+
+Sipdroid's "mothership" [http://pbxes.org PBXes] (we took this nice image from [http://www.morethantechnical.com/2009/07/16/voip-for-android-is-in-town/ Arnon's blog]) had also to be extended because - as most SIP services - it did not support TCP up to now. (So if your service cannot handle SIP over TCP you can use PBXes to translate between the protocols.)
+
+Sipdroid now also contains the necessary code to ring and turn on the screen when a call comes in.
+
+== Dynamic IP ==
+
+While registered over 3G Sipdroid is informed about IP address changes by the operating system and re-registers accordingly. In Wireless LANs the router may also change its public IP. For detecting such changes Sipdroid sends probe packets over WLAN every minute. 
+
+== Results ==
+
+The following standby times have been measured with good 3G and wireless LAN signal levels
+on ADP1.5 operating system using PBXes as server platform (compare this to 15 hours standby on 3G with SIP over UDP):
+
+|| Network Type || Standby Time ||
+|| Wireless LAN || 70h ||
+|| 3G || 140h ||
+
+3G offers superior standby performance. Wireless LAN is better when talking. This is supported by Android's policy of switching of Wireless LAN while sleeping. Sipdroid keeps WLAN active (ealier confusingly called "polling") if there is no suitable mobile network available.
+
+So Sipdroid could maintain its early standby times while extending functionality to a self-contained phone. 
+
+== Implications for the future ==
+
+More and more always-on services evolve. At the moment we know of VoIP (of course), the Google services (Mail, IM, Sync), and E-Mail. Although TCP based software does only transmit a few keepalive packets, every service lowers standby time by about 10%. So for the future we want to look for other data activity and piggyback keep alive transmission to them.
