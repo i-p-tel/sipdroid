@@ -17,7 +17,7 @@ Gizmo5 publishes Guava which is based on Sipdroid.
 
 == Warning ==
 
-Don't install guava.apk from their site, not even for testing. Since it is not listed in the Android Market, it might easily contain malicious code infecting your device. A company that disrespects copyright laws is very likely to harm you in other ways, too!
+*Don't install guava.apk from their site, not even for testing. Since it is not listed in the Android Market, it might easily contain malicious code infecting your device. A company that disrespects copyright laws is very likely to harm you in other ways, too!*
 
 == Protecting our Rights ==
 
@@ -56,7 +56,7 @@ http://sipdroid.googlecode.com/svn/images/gizmo_copyright_violation.png
 
 == Claims ==
 
-Users should not have to jump thru five hoops if they want to get the source code. For taking intellectual property from an open source project it is expected to:
+Users should not have to jump thru five hoops if they want to get the source code. When taking intellectual property from an open source project one expects a publisher to:
 
   * Mention the original authors right away. In this case only after downloading and completing 5 required of about 10 settings, the menu and copyright box get accessible.
   * Offer sources and binary in the same place.
