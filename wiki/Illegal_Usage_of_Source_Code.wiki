@@ -5,7 +5,7 @@
 
 <wiki:toc max_depth="5" />
 
-= Illegal Usage of Sipdroid by Gizmo, Inc. =
+= Illegal Usage of Sipdroid by Gizmo5, Inc. =
 
 == Existing Violations ==
 
