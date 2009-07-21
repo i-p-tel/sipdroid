@@ -51,7 +51,7 @@ http://sipdroid.googlecode.com/svn/images/gizmo_copyright_violation.png
 
 == Reactions ==
 
-  * Michael Robertson replied by email:
+  * Michael Robertson, founder of Gizmo5, replied by Email
 
 {{{
 Pascal,
@@ -112,7 +112,26 @@ troublesome NATS and routers.
 -- MR
 }}}
 
-  * Michael Robertson, founder of Gizmo5, replied on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]. He provided a [http://gizmo5.com/guava.tgz download link] for the modified source.
+  * and on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]. He provided a [http://gizmo5.com/guava.tgz download link] for the modified source.
+
+  * Chris DiBona from Google responded:
+
+{{{
+Hi Pascal and other Sipdroiders. 
+A couple of things; 
+1) The Guava package is not in the android market, they host it on 
+their site. 
+2) The about box does give credit, and shows the truncated GPL, noting 
+the copyright holders including siphone, sipdroid, hughes systique, 
+andoird and university of parma, it. 
+That's all I wanted to share at this point. It is kind of mistargeted 
+in that you dmca'd google as we aren't involved with gizmo5 and we 
+don't host the app on the android market. Did you email michael 
+robertson over at Gizmo5? He's all over the internet. Press emails 
+sometimes sit in limbo at companies. 
+Good luck and happy hacking.. 
+Chris 
+}}}
 
 == Claims ==
 
