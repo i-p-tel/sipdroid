@@ -25,7 +25,7 @@ It looks like Michael Robertson, the face behind Gizmo5, isn't doing this the fi
 
   * Sent Email to Gizmo5
 
-{{{
+<pre>
 -------- Original-Nachricht --------
 Betreff: From Sipdroid Open Source Project...
 Datum: Tue, 21 Jul 2009 00:34:55 +0200
@@ -43,7 +43,7 @@ This is highly abominable because you're stealing intellectual property. Please 
 -- 
 Regards,
 Pascal Merle
-}}}
+</pre>
 
   * Sent takedown notice under the DMCA to Google Android team
 
@@ -55,7 +55,7 @@ http://sipdroid.googlecode.com/svn/images/gizmo_copyright_violation.png
 
   * Michael Robertson, founder of Gizmo5, replied by Email
 
-{{{
+<pre>
 Pascal,
 
 We did not publish Guava in violation of the GNU public license. The
@@ -112,13 +112,13 @@ registration in addition to UDP. We've found this often helps traverse
 troublesome NATS and routers.
 
 -- MR
-}}}
+</pre>
 
   * and on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]. He provided a [http://gizmo5.com/guava.tgz download link] for the modified source.
 
   * Chris DiBona from Google responded:
 
-{{{
+<pre>
 Hi Pascal and other Sipdroiders. 
 A couple of things; 
 1) The Guava package is not in the android market, they host it on 
@@ -133,7 +133,7 @@ robertson over at Gizmo5? He's all over the internet. Press emails
 sometimes sit in limbo at companies. 
 Good luck and happy hacking.. 
 Chris 
-}}}
+</pre>
 
 == Claims ==
 
