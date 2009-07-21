@@ -1,0 +1,62 @@
+#summary Illegal Usage of Sipdroid
+#labels Featured
+
+|| Copyright (C) 2009 The Sipdroid Open Source Project. The following article is part of Sipdroid. Sipdroid is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. ||
+
+<wiki:toc max_depth="5" />
+
+= Illegal Usage of Sipdroid by Gizmo, Inc. =
+
+== Existing Violations ==
+
+Gizmo5 publishes Guava which is based on Sipdroid.
+
+  * No source code is offered on their [http://gizmo5.com/guava download site].
+  * The copyright message accessible after program start has been removed.
+  * Their [http://nosimcard.blogspot.com/ blog] does not give any credits to Sipdroid.
+
+== Warning ==
+
+Don't install guava.apk from their site, not even for testing. Since it is not listed in the Android Market, it might easily contain malicious code infecting your device. A company that disrespects copyright laws is very likely to harm you in other ways, too!
+
+== Protecting our Rights ==
+
+  * Sent Email to Gizmo5
+
+{{{
+-------- Original-Nachricht --------
+Betreff: From Sipdroid Open Source Project...
+Datum: Tue, 21 Jul 2009 00:34:55 +0200
+Organisation: i-p-tel GmbH
+An: press@gizmo5inc.com
+
+Dear sirs,
+
+you published "Guava" in violation of the GNU public license.
+
+Furthermore you removed the copyright notice. This is violating copyright laws.
+
+This is highly abominable because you're stealing intellectual property. Please stop immediately. We will inform legal authorities.
+
+-- 
+Regards,
+Pascal Merle
+}}}
+
+  * Sent takedown notice under the DMCA to Google Android team
+
+http://sipdroid.googlecode.com/svn/images/gizmo_copyright_violation.png
+
+  * Sent GPL violation reports to [http://gpl-violations.org] and [http://fsfe.org/projects/ftf/reporting-fixing-violations.en.html Freedom Task Force (FTF)]
+
+== Reactions ==
+
+  * Gizmo has not yet replied to our Email.
+  * Michael Robertson, founder of Gizmo5, replied on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]. He provided a [http://gizmo5.com/guava.tgz download link] for the modified source.
+
+== Claims ==
+
+Users should not have to jump thru five hoops if they want to get the source code. For taking intellectual property from an open source project it is expected to:
+
+  * Mention the original authors right away. In this case only after downloading and completing 5 required of about 10 settings, the menu and copyright box get accessible.
+  * Offer sources and binary in the same place.
