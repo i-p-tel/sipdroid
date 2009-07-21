@@ -15,6 +15,8 @@ Gizmo5 publishes Guava which is based on Sipdroid.
   * The copyright message accessible after program start has been removed.
   * Their [http://nosimcard.blogspot.com/ blog] does not give any credits to Sipdroid.
 
+It looks like Michael Robertson, the face behind Gizmo5, isn't doing this the first time. See [http://www.interesting-people.org/archives/interesting-people/200204/msg00128.html Bruce Peren's email] to Robert.
+
 == Warning ==
 
 *Don't install guava.apk from their site, not even for testing. Since it is not listed in the Android Market, it might easily contain malicious code infecting your device. A company that disrespects copyright laws is very likely to harm you in other ways, too!*
