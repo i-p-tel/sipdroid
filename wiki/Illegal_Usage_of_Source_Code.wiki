@@ -70,6 +70,7 @@ combined with Google Voice it's really a fantastic value for consumers
 SMS without paying the carriers. Yeah.
 
 In addition the source code is available at: http://gizmo5.com/guava.tgz
+
 But you already know that and want to stir up controversy. That's cool
 by me.
 
