@@ -51,7 +51,67 @@ http://sipdroid.googlecode.com/svn/images/gizmo_copyright_violation.png
 
 == Reactions ==
 
-  * Gizmo has not yet replied to our Email.
+  * Michael Robertson replied by email:
+
+{{{
+Pascal,
+
+We did not publish Guava in violation of the GNU public license. The
+about screen says "Guava is based on SIPdroid." and lists all the
+copyright holders of the software. I'm not sure why you're telling
+people we removed the copyright notices. I guess you want to stir up
+controversy. If it helps people find out about SIPdroid and GUAVA then
+I'm all for that. I actually appreciate you reaching out reporters and
+telling them about GUAVA because it helps get the word out. When
+combined with Google Voice it's really a fantastic value for consumers
+- a totally free phone with US number for making/receiving calls AND
+SMS without paying the carriers. Yeah.
+
+In addition the source code is available at: http://gizmo5.com/guava.tgz
+But you already know that and want to stir up controversy. That's cool
+by me.
+
+I appreciate your enthusiasm to stand up for open source, but I don't
+understand why you didn't just send me email if you had an issue? Or
+send an email to the blog http://www.noSIMcard.com ? I'm also a big
+believer in open source. I've spent millions of my own money support
+open source initiatives and more money from the companies that I've
+started and run to support open source. Of course people know I did
+Lindows/Linspire and we built lots of code and paid for other code
+which went back to the community. A small example is Firefox's
+'underline in red when I do a misspelling' - that's code I paid to
+have written and gave to Mozilla. Way back at MP3.com we gave money to
+support an unknown open source database called Mysql which went onto
+bigger things.
+
+The ironic thing is that I tried to contact you at PBXes.org and let
+you know about our project but there were no email addresses listed on
+your website that I could find. So I tried guessing your address:
+pascal@pbxes.org and pascal.merle@pbxes.org and those both bounced. So
+then I tried submitting a customer support ticket, but your system is
+broken and doesn't allow new users to signup (at least it didn't for
+any of the several usernames I tried to register). Sorry you didn't
+get a heads-up on our project.
+
+I see the complaints from some about you tying your company pbxes.org
+into the software. I see from this thread that some people have a
+problem with that. You can't please all the people all the time.
+
+As we stated on the blog, GUAVA is alpha now so lots of issues.
+Biggest issue is that the software does not automatically re-register
+whenever the net changes or has a hiccup. This causes the software to
+become unregistered if you leave it running for awhile or change wifi
+networks. We're rewriting the registration portion of the code to put
+it in its own thread so it will automatically reconnect if there's a
+disturbance in the network. Hope to have that done later this week.
+
+You might want to also look at the code we added to use TCP for
+registration in addition to UDP. We've found this often helps traverse
+troublesome NATS and routers.
+
+-- MR
+}}}
+
   * Michael Robertson, founder of Gizmo5, replied on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]. He provided a [http://gizmo5.com/guava.tgz download link] for the modified source.
 
 == Claims ==
