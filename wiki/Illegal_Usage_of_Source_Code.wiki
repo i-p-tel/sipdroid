@@ -60,3 +60,7 @@ Users should not have to jump thru five hoops if they want to get the source cod
 
   * Mention the original authors right away. In this case only after downloading and completing 5 required of about 10 settings, the menu and copyright box get accessible.
   * Offer sources and binary in the same place.
+
+== Discussion ==
+
+A [http://groups.google.com/group/sipdroid-developers/browse_thread/thread/72cf357c21667ec3 discussion] on this issue is held in our developers group.
