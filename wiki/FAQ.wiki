@@ -25,7 +25,7 @@ This project publishes Sipdroid for free under the terms of [http://www.gnu.org/
 
 === How much will Sipdroid drain the battery? (Constantly running Internet connection?) ===
 
-When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about five days of stand-by time).  See [http://code.google.com/p/sipdroid/wiki/The_New_Standby_Technique article] for background.
+When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about five days of stand-by time).  See [http://code.google.com/p/sipdroid/wiki/NewStandbyTechnique article] for background.
 
 === How much bandwidth is required? ===
 
@@ -158,7 +158,7 @@ Possible issues when registering directly to other SIP servers are:
 
 *Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged into a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
 
-For the future it is expected that SIP providers will become more interoperable (see also [http://code.google.com/p/sipdroid/wiki/The_New_Standby_Technique article]). As Sipdroid is a true open source project attracting many software developers, the application and its documentation will be updated as more information gets available.
+For the future it is expected that SIP providers will become more interoperable (see also [http://code.google.com/p/sipdroid/wiki/NewStandbyTechnique article]). As Sipdroid is a true open source project attracting many software developers, the application and its documentation will be updated as more information gets available.
 
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
