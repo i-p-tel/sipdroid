@@ -1,0 +1,7 @@
+#summary Invalid Usage of Sipdroid Sources by Gizmo5
+
+We would like to make you aware of the fact that Sipdroid is an open source software under the GNU General Public License v3. The provider you are using, Gizmo5, has used Sipdroid's source code violating this License.
+
+You can still use Sipdroid for testcalls with Gizmo5 (after a 5 minute interval) and check interoperability of Sipdroid with Gizmo5. But please refrain from using Sipdroid with Gizmo5 for more than that before the issue with Gizmo5 has been resolved.
+
+See also [http://code.google.com/p/sipdroid/wiki/Illegal_Usage_of_Source_Code] for the whole story.
