@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ * 
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ * 
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ 
+/////////////////////////////////////////////////////////////////////
+// these are the main messages of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+ 
+ -->
 <resources>
     <string name="pstn_name">Phone</string>
     <string name="sip_name">Sipdroid, when available</string>
@@ -62,7 +88,7 @@
 <string name="settings_pbxes_options">PBXes Features</string>   
 <string name="settings_search">Search &amp; Replace</string> 
 <string name="settings_minedge">Signal Bars for EDGE Calls</string>
-<string name="settings_maxpoll">Signal Bars for WLAN Polling</string>
+<string name="settings_maxpoll">Signal Bars for WLAN Active</string>
 <string name="settings_excludepat">Exclude Pattern</string>
 <string name="settings_sipringtone">SIP Ringtone</string>
 <string name="sipringtone_summary">Set ringtone for incoming SIP call</string>

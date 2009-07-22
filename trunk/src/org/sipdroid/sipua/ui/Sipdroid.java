@@ -39,6 +39,11 @@ import android.view.Window;
 import android.view.View.OnKeyListener;
 import android.widget.AutoCompleteTextView;
 
+/////////////////////////////////////////////////////////////////////
+// this the main activity of Sipdroid
+// for modifying it additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
 public class Sipdroid extends Activity {
 
 	public static final boolean release = true;
