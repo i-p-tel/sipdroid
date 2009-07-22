@@ -54,7 +54,7 @@ http://sipdroid.googlecode.com/svn/images/gizmo_copyright_violation.png
 
   * For a few days Michael Robertson provided a [http://gizmo5.com/guava.tgz download link] for the modified source on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]. The entry has later been hidden from index and search by marking it "other".
 
-  * and replied by Email
+  * And he replied by Email
 
 <pre>
 Pascal,
