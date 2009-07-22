@@ -3,9 +3,13 @@
 
 === Beta-Versions ===
 
+  * 1.0.3
+    * Replaced "prefix" option with a "search & replace" (issue 83)
+    * Bugfixes
+
   * 1.0.2
     * Receive calls over SIP (call forking is obsolete)
-    *  Fix issues 74, 77, 81
+    * Fix issues 74, 77, 81
 
   * 1.0.1
     * Fix issue 27
