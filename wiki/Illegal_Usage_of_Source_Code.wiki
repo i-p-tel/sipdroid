@@ -53,7 +53,9 @@ http://sipdroid.googlecode.com/svn/images/gizmo_copyright_violation.png
 
 == Reactions ==
 
-  * Michael Robertson, founder of Gizmo5, replied by Email
+  * Michael Robertson provided a [http://gizmo5.com/guava.tgz download link] for the modified source on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]
+
+  * and replied by Email
 
 <pre>
 Pascal,
@@ -115,9 +117,7 @@ troublesome NATS and routers.
 -- MR
 </pre>
 
-  * and on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]. He provided a [http://gizmo5.com/guava.tgz download link] for the modified source.
-
-  * Chris DiBona from Google responded:
+  * Chris DiBona from Google responded
 
 <pre>
 Hi Pascal and other Sipdroiders. 
