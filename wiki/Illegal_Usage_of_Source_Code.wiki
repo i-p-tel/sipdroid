@@ -13,7 +13,6 @@ Gizmo5 publishes Guava which is based on Sipdroid.
 
   * No source code is offered on their [http://gizmo5.com/guava download site].
   * The copyright message accessible after program start has been removed.
-  * Their [http://nosimcard.blogspot.com/ blog] does not give any credits to Sipdroid.
 
 It looks like Michael Robertson, the face behind Gizmo5, isn't doing this the first time. See [http://www.interesting-people.org/archives/interesting-people/200204/msg00128.html Bruce Peren's email] to Robert.
 
@@ -53,7 +52,7 @@ http://sipdroid.googlecode.com/svn/images/gizmo_copyright_violation.png
 
 == Reactions ==
 
-  * Michael Robertson provided a [http://gizmo5.com/guava.tgz download link] for the modified source on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]
+  * For a few days Michael Robertson provided a [http://gizmo5.com/guava.tgz download link] for the modified source on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]. The entry has later been hidden from index and search by marking it "other".
 
   * and replied by Email
 
