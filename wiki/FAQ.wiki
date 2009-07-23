@@ -93,6 +93,23 @@ BACK button: End call
 
 You need to open Sipdroid's settings and uncheck "Use WLAN" to disable it.
 
+=== How can I modify phone numbers on the fly? Where is the prefix option? ===
+
+The _prefix_ option has been replaced by a more generic and flexible _search & replace_ feature. The "search & replace" option, available in *Advanced Options*, has the following form: `<search>,<replace>`
+
+`<search>` is a [http://java.sun.com/docs/books/tutorial/essential/regex/ Java regular expression] with one or more [http://java.sun.com/docs/books/tutorial/essential/regex/groups.html groups] which can be then use in `<replace>`
+
+`<replace>` is a string with reference to group(s) from the `<search>` field.
+
+If the regular expression is not valid or the format is wrong, the original number is used.
+
+Examples:
+
+|| _Search & Replace_ || _Description_ ||
+|| `\+41(.*),0041\1` || replace +41791111111 with 0041791111111 ||
+|| `(.*),123\1` || add 123 in front of the number (prefix) ||
+|| `(.*),\1123` || add 123 at the end of the number (postfix) ||
+
 === How do I exclude certain numbers from Sipdroid? ===
 
 Choose *Advanced Options* and enter your pattern in the *exclude pattern* field.
