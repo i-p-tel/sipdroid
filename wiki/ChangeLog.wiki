@@ -4,7 +4,7 @@
 === Beta-Versions ===
 
   * 1.0.4
-    * Enable calling messenger users from GTalk, AIM, MSN, Yahoo, ICQ
+    * Enable calling messenger users on GTalk, AIM, MSN, Yahoo, ICQ
 
   * 1.0.3
     * Replaced "prefix" option with a "search & replace" (issue 83)
