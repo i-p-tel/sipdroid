@@ -110,7 +110,8 @@ public class Caller extends BroadcastReceiver {
 	        		    	
 	        		    	// Search & replace.
 	    				String search = sp.getString("search", "");
-	    				number = searchReplaceNumber(search, number);
+	    				String callthru_number = number = searchReplaceNumber(search, number);
+	    				String callthru_prefix;
 	    				
 						if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("par",false)) 
 	    				{
@@ -145,6 +146,11 @@ public class Caller extends BroadcastReceiver {
 	    				}
 	    				if (Receiver.engine(context).call(number))
 	    					setResultData(null);
+	    				else if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("callthru",false) &&
+	    						(callthru_prefix = PreferenceManager.getDefaultSharedPreferences(context).getString("callthru2","")).length() > 0) {
+	    					callthru_number = (callthru_prefix+","+callthru_number+"#").replaceAll(",", ",p");
+	    					setResultData(callthru_number);
+	    				}
 	        		}
 	            }
 	        }
