@@ -5,6 +5,7 @@
 
   * 1.0.4
     * Enable calling messenger users on GTalk, AIM, MSN, Yahoo, ICQ
+    * Add callthru option
 
   * 1.0.3
     * Replaced "prefix" option with a "search & replace" (issue 83)
@@ -20,13 +21,13 @@
 
   * 1.0.0
     * Fix issue 15 (accept any realm for auth)
-    * Add callback mode
+    * Add callback option
 
   * 0.9.11
     * Add location upload to webcall pages
 
   * 0.9.10
-    * Add WLAN active mode
+    * Add WLAN active option
 
   * 0.9.9
     * Improve voice quality
