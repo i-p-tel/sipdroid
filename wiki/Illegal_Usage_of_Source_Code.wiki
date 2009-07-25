@@ -10,6 +10,9 @@
 
 On July 23, 2009 Gizmo5 provided a link to the modified source code at the place that is required by the GPL open source license.
 
+Regarding the missing copyright message we have added additional terms according to GPL 
+section 7 for future cases.
+
 == Violations ==
 
 Gizmo5 published Guava which is based on Sipdroid.
