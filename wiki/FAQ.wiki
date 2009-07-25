@@ -244,3 +244,7 @@ Sipdroid can be used to add true VoIP calling to the original Google Voice app. 
 
   * [http://groups.google.com/group/sipdroid-users/browse_thread/thread/490ad4790f0c93a Sipdroid Users' Group]
   * [http://iiordanov.blogspot.com/2009/07/sipdroid-gv-guava.html Iordans's blog]
+
+=== Google Talk ===
+
+See [http://code.google.com/p/sipdroid/wiki/FAQ#How_can_I_dial_a_Google_Talk_ID?_(Or_any_other_SIP_URI?) above]
