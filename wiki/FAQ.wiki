@@ -55,7 +55,7 @@ If you are interested in developing and contributing to the project please insta
 
 == User Interface ==
 
-=== How can I dial my contacts over IP / over PSTN? ===
+=== How can I dial my contacts over Sipdroid / over Phone? ===
 
 In settings you can specify your preferred call type. This is used when clicking a "Call" tab of a contact. When clicking on the "Text" tab of a contact you get a menu like this:
 
@@ -63,17 +63,25 @@ http://sipdroid.googlecode.com/svn/images/choose.png
 
 "Messaging" lets you proceed with sending SMS/MMS. The other two let you override your call type manually.
 
-=== How can I dial a phone number over IP / over PSTN? ===
+=== How can I dial a phone number over Sipdroid / over Phone? ===
 
-When entering a phone number in the dialer add a "+" sign to toggle call type. If your preferred call type is SIP adding a + behind the number calls over PSTN.
+When entering a phone number in the dialer add a "+" sign to toggle call type. If your preferred call type is Sipdroid adding a + behind the number calls over Phone.
 
-NOTE: Don't add anything to emergency numbers. They are always dialed over PSTN.
+NOTE: Don't add anything to emergency numbers. They are always dialed over Phone.
 
 http://sipdroid.googlecode.com/svn/images/choose2.png
 
 === How can I dial a Google Talk ID? (Or any other SIP URI?) ===
 
-That's what the "Called Party Address" field in Sipdroid is for. You can enter any SIP URI here. For reaching Google Talk, you must replace the domain part of GTalk id (@gmail.com) with gtalk2voip.com. Other messengers can be reached as well. See [http://gtalk2voip.com gtalk2voip] for more info.
+When clicking on the "Chat" tab of a contact you get a menu like this:
+
+http://sipdroid.googlecode.com/svn/images/choose3.png
+
+Choosing Sipdroid makes a voice call to a PC over instant messaging. All the recipient has to do is either invite user service@gtalk2voip.com (gtalk2voip@yahoo.com for Yahoo! Messenger) to his friend list, or submit his user id from [http://gtalk2voip.com/ gtalk2voip main page], to become reachable from Sipdroid.
+
+This works for Google Talk, MSN, Yahoo, AIM, and ICQ users.
+
+If you want to call any other SIP URI you can enter it into the "Called Party Address" field in Sipdroid. Or add it to a contact as one of the three unsupported messengers Jabber, QQ or Skype, and use above method to dial the SIP URI from contacts.
 
 === How are the buttons assigned? ===
 
@@ -134,7 +142,7 @@ To exclude by *both* phone type and number:
 Suppose you got an Internet connection, but not good enough for a SIP
 call.
 
-Normally the phone would fall back to PSTN in this case.
+Normally the phone would fall back to Phone in this case.
 
 Enabling "trigger callback" will instead ask the PBX to initiate a
 callback to your mobile number, and connect the call to the dialed contact.
@@ -184,7 +192,7 @@ For the future it is expected that SIP providers will become more interoperable 
 === What advantages do I get by signing up for the Free Account at PBXes? ===
 
   * You can register several trunks to use multiple telephony service providers of your choice.
-  * [http://pbxes.org pbxes.org] routes incoming calls over SIP and PSTN to you. If you are online you can take it as VoIP, if off line you can take it as GSM.
+  * [http://pbxes.org pbxes.org] routes incoming calls over Sipdroid or Phone to you. If you are online you get them over VoIP, if off line you get them over GSM.
 
 === Which features are supported in Sipdroid? ===
 
