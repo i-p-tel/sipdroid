@@ -39,8 +39,20 @@ public class SIPUri extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		Uri uri = getIntent().getData();
-		String target = uri.getSchemeSpecificPart();
-		Log.v("SIPUri", "sip uri: " + uri);
+		String target;
+		if (uri.getScheme().equals("sip"))
+			target = uri.getSchemeSpecificPart();
+		else {
+			if (uri.getAuthority().equals("aim") ||
+					uri.getAuthority().equals("yahoo") ||
+					uri.getAuthority().equals("icq") ||
+					uri.getAuthority().equals("gtalk") ||
+					uri.getAuthority().equals("msn"))
+				target = uri.getLastPathSegment().replaceAll("@","_at_") + "@" + uri.getAuthority() + ".gtalk2voip.com";
+			else
+				target = uri.getLastPathSegment();
+		}
+		if (!Sipdroid.release) Log.v("SIPUri", "sip uri: " + target);
 		Receiver.engine(this).call(target);
 	}
 }

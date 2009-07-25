@@ -61,6 +61,7 @@ import android.preference.PreferenceManager;
 				edit.putString("server", "pbxes.org");
 				edit.putString("pref", "SIP");				
 				edit.commit();
+	        	Receiver.engine(this).updateDNS();
 			}
 			if (Sipdroid.market) {
 				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
@@ -83,15 +84,15 @@ import android.preference.PreferenceManager;
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {	    
 	        	if (key.equals("server")) {
 	        		Editor edit = sharedPreferences.edit();
+ 	        		edit.putString("dns", "");
+	        		edit.commit();
+		        	Receiver.engine(this).updateDNS();
+		        	Checkin.checkin(false);
 	        		edit.putString("protocol",sharedPreferences.getString("server", "").equals("pbxes.org")?"tcp":"udp");
 	        		edit.commit();
 	        		return;
 	        	}
  	        	if (!key.equals("dns")) {
- 	        		Editor edit = sharedPreferences.edit();
- 	        		edit.putString("dns", "");
- 	        		edit.commit();
- 		        	Receiver.engine(this).updateDNS();
  		        	Receiver.engine(this).halt();
 					try {
 						Thread.sleep(500);
@@ -99,6 +100,7 @@ import android.preference.PreferenceManager;
 					}
 		    		Receiver.engine(this).StartEngine();
 		    		updateSummaries();        
+		    		Receiver.updateSleep();
 	 	        }
         }
         

@@ -450,7 +450,7 @@ public class UserAgent extends CallListenerAdapter {
 			return;
 		}
 		printLog("INCOMING", LogLevel.HIGH);
-		if (!Receiver.isFast(true)) {
+		if (!Receiver.isFast()) {
 			listen();
 			return;
 		}

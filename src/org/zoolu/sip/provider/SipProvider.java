@@ -376,6 +376,11 @@ public class SipProvider implements Configurable, TransportListener,
 			tcp_server.halt();
 			tcp_server = null;
 		}
+		haltConnections();
+		connections = null;
+	}
+
+	public void haltConnections() { // modified
 		if (connections != null) {
 			printLog("connections are going down", LogLevel.LOWER);
 			for (Enumeration<ConnectedTransport> e = connections.elements(); e
@@ -383,10 +388,10 @@ public class SipProvider implements Configurable, TransportListener,
 				ConnectedTransport c = e.nextElement();
 				c.halt();
 			}
-			connections = null;
+			connections = new Hashtable<ConnectionIdentifier, ConnectedTransport>(10);
 		}
 	}
-
+	
 	/** Stops the SipProviders. */
 	public void halt() {
 		printLog("halt: SipProvider is going down", LogLevel.MEDIUM);

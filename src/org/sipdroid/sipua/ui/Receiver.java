@@ -67,7 +67,7 @@ import org.sipdroid.sipua.phone.Connection;
 		final static long[] vibratePattern = {0,1000,1000};
 		
 		private static int oldtimeout,cellAsu = -1;
-		private static SipdroidEngine mSipdroidEngine;
+		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
 		public static SipdroidListener listener,listener_video;
@@ -144,6 +144,7 @@ import org.sipdroid.sipua.phone.Connection;
 								PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "Sipdroid");
 					}
 					wl.acquire();
+		        	Checkin.checkin(true);
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
@@ -156,6 +157,7 @@ import org.sipdroid.sipua.phone.Connection;
 					ccConn.setIncoming(false);
 					ccConn.date = System.currentTimeMillis();
 					ccCall.base = 0;
+		        	Checkin.checkin(true);
 					break;
 				case UserAgent.UA_STATE_IDLE:
 					broadcastCallStateChanged("IDLE", null);
@@ -255,7 +257,7 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		public static void registered() {
-			if (call_state != UserAgent.UA_STATE_INCALL && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) &&
+			if (call_state == UserAgent.UA_STATE_IDLE && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) &&
 					PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","").length() > 0)
 				pos(true);
 		}
@@ -282,7 +284,7 @@ import org.sipdroid.sipua.phone.Connection;
 				        URL url = new URL(PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","")+
 				        		"?"+opt);
 				        BufferedReader in;
-							in = new BufferedReader(new InputStreamReader(url.openStream()));
+						in = new BufferedReader(new InputStreamReader(url.openStream()));
 				        in.close();
 					} catch (IOException e) {
 						if (!Sipdroid.release) e.printStackTrace();
@@ -340,7 +342,7 @@ import org.sipdroid.sipua.phone.Connection;
 	        }
 		}
 		
-		static void updateSleep() {
+		public static void updateSleep() {
 	        ContentResolver cr = mContext.getContentResolver();
 			int get = Settings.System.getInt(cr, Settings.System.WIFI_SLEEP_POLICY, -1);
 			int set;
@@ -348,8 +350,7 @@ import org.sipdroid.sipua.phone.Connection;
 			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wlan",false) && (
 					call_state != UserAgent.UA_STATE_IDLE ||
 					cellAsu == -1 || cellAsu <= org.sipdroid.sipua.ui.Settings.getMaxPoll() ||
-					Sipdroid.market ||
-					!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("3g",false)))
+					!isFast2()))
 				set = Settings.System.WIFI_SLEEP_POLICY_NEVER;
 			else
 				set = Settings.System.WIFI_SLEEP_POLICY_DEFAULT;
@@ -375,31 +376,31 @@ import org.sipdroid.sipua.phone.Connection;
 			mContext.startActivity(createIntent(Activity2.class)); 
 		}
 
-		public static boolean isFast(boolean for_a_call) {
-			Context context = mContext;
-			boolean on_wlan;
-			
-        	TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        	WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		public static boolean on_wlan;
+		
+		public static boolean isFast() {
+        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         	WifiInfo wi = wm.getConnectionInfo();
 
         	if (wi != null)
         		if (!Sipdroid.release) Log.i("SipUA:","isFast() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())+" "+cellAsu);
         	if (wi != null && WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR) {
-        		on_wlan = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("wlan",false);
-        		engine(mContext).keepAlive(on_wlan);
+        		on_wlan = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wlan",false);
         		return on_wlan;
         	}
-         	engine(mContext).keepAlive(false);
-        	if (Sipdroid.market || !PreferenceManager.getDefaultSharedPreferences(context).getBoolean("3g",false))
+        	on_wlan = false;
+         	return isFast2();
+		}
+		
+		static boolean isFast2() {
+        	TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+
+        	if (Sipdroid.market || !PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("3g",false))
         		return false;
         	if (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS)
         		return true;
         	if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
-        		if (!for_a_call)
-        			return true;
-        		else
-        			return cellAsu == -1 || cellAsu >= org.sipdroid.sipua.ui.Settings.getMinEdge();
+       			return cellAsu >= org.sipdroid.sipua.ui.Settings.getMinEdge();
         	return false;
 		}
 		
@@ -410,9 +411,11 @@ import org.sipdroid.sipua.phone.Connection;
         	if (mContext == null) mContext = context;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
 	        	engine(context).register();
+	        	updateSleep();
 	        } else
 	        if (intentAction.equals("android.intent.action.ANY_DATA_STATE")) {
 	        	engine(context).register();
+	        	updateSleep();
 	        } else
 	        if (intentAction.equals(Intent.ACTION_SCREEN_OFF)) {
 	        	screenOff(false);
@@ -434,6 +437,8 @@ import org.sipdroid.sipua.phone.Connection;
 	        	else if (cellAsu >= 4) cellAsu = 2;
 	        	else cellAsu = 1;
 	        	if (!Sipdroid.release) Log.i("SipUA:","cellAsu "+cellAsu);
+	        	if (cellAsu >= org.sipdroid.sipua.ui.Settings.getMinEdge() &&
+	        			!engine(context).isRegistered()) engine(context).register();
 	        	updateSleep();
 	        }
 		}   

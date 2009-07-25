@@ -219,6 +219,7 @@
               android:layout_gravity="center_horizontal"
               android:layout_marginTop="4dip"
               android:visibility="gone"
+              android:gravity="center"
               />
 
 </LinearLayout>
