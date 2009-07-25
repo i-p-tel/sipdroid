@@ -71,6 +71,10 @@ NOTE: Don't add anything to emergency numbers. They are always dialed over PSTN.
 
 http://sipdroid.googlecode.com/svn/images/choose2.png
 
+=== How can I dial a Google Talk ID? (Or any other SIP URI?) ===
+
+That's what the "Called Party Address" field in Sipdroid is for. You can enter any SIP URI here. For reaching Google Talk, you must replace the domain part of GTalk id (@gmail.com) with gtalk2voip.com. Other messengers can be reached as well. See [http://gtalk2voip.com gtalk2voip] for more info.
+
 === How are the buttons assigned? ===
 
 Android reserves the red key for the built-in dialer of the phone. So Sipdroid is controlled by the BACK button instead.
