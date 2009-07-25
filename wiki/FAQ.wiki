@@ -237,3 +237,10 @@ This [http://www.cyrket.com/package/org.pbxes.light2 tool] is recommended to sav
 === ChompSMS ===
 
 This is the equivalent to Sipdroid for SMS.
+
+=== Google Voice ===
+
+Sipdroid can be used to add true VoIP calling to the original Google Voice app. Both integrate amazingly good, and you don't need to share your Google username & password with anybody else than Google itself. Further info is available at:
+
+  * [http://groups.google.com/group/sipdroid-users/browse_thread/thread/490ad4790f0c93a Sipdroid Users' Group]
+  * [http://iiordanov.blogspot.com/2009/07/sipdroid-gv-guava.html Iordans's blog]
