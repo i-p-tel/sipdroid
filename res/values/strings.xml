@@ -66,6 +66,8 @@
 <string name="settings_posurl">URL for Location/Callback</string>
 <string name="settings_callback">Trigger Callback</string>
 <string name="settings_callback2">If no suitable data network available</string>
+<string name="settings_callthru">Trigger Callthru</string>
+<string name="settings_callthru2">Prefix for Callthru</string>
 <string name="settings_pref">Preferred Call Type</string>
     <string-array name="pref_display_values">
         <item>Sipdroid, when available</item>

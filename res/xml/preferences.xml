@@ -90,6 +90,15 @@
 				android:key="callback"
 				android:title="@string/settings_callback"
 				android:summary="@string/settings_callback2" />
+			<CheckBoxPreference
+				android:key="callthru"
+				android:title="@string/settings_callthru"
+				android:summary="@string/settings_callback2" />
+	       	<EditTextPreference
+	            android:key="callthru2"
+	            android:title="@string/settings_callthru2"
+	            android:hint="Accessno.,PIN#"
+	        />
 		</PreferenceCategory>
     </PreferenceScreen>  
 </PreferenceScreen>

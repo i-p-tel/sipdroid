@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
@@ -92,6 +93,11 @@ import android.preference.PreferenceManager;
 	        		edit.commit();
 	        		return;
 	        	}
+        		if (sharedPreferences.getBoolean("callback",false) && sharedPreferences.getBoolean("callthru",false)) {
+ 	        		CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(
+ 	        				key.equals("callback")?"callthru":"callback");
+	        		cb.setChecked(false);
+	        	}
  	        	if (!key.equals("dns")) {
  		        	Receiver.engine(this).halt();
 					try {
@@ -115,6 +121,7 @@ import android.preference.PreferenceManager;
         	getPreferenceScreen().findPreference("maxpoll").setSummary("Signal <= "+getPreferenceScreen().getSharedPreferences().getString("maxpoll", "1")); 
         	getPreferenceScreen().findPreference("excludepat").setSummary(getPreferenceScreen().getSharedPreferences().getString("excludepat", "")); 
         	getPreferenceScreen().findPreference("posurl").setSummary(getPreferenceScreen().getSharedPreferences().getString("posurl", "")); 
+        	getPreferenceScreen().findPreference("callthru2").setSummary(getPreferenceScreen().getSharedPreferences().getString("callthru2", "")); 
         	if (getPreferenceScreen().getSharedPreferences().getString("pref", "").equals("SIP")) {
         		getPreferenceScreen().findPreference("pref").setSummary(getResources().getStringArray(R.array.pref_display_values)[0]);
         		getPreferenceScreen().findPreference("par").setEnabled(true);
@@ -126,6 +133,10 @@ import android.preference.PreferenceManager;
         		getPreferenceScreen().findPreference("minedge").setEnabled(true);
         	else
         		getPreferenceScreen().findPreference("minedge").setEnabled(false);
+        	if (getPreferenceScreen().getSharedPreferences().getBoolean("callthru", false))
+        		getPreferenceScreen().findPreference("callthru2").setEnabled(true);
+        	else
+        		getPreferenceScreen().findPreference("callthru2").setEnabled(false);
            	if (getPreferenceScreen().getSharedPreferences().getString("posurl", "").length() > 0) {
         		getPreferenceScreen().findPreference("pos").setEnabled(true);
         		getPreferenceScreen().findPreference("callback").setEnabled(true);

@@ -42,6 +42,8 @@
 <string name="settings_posurl">URL für Position/Callback</string>
 <string name="settings_callback">Callback auslösen</string>
 <string name="settings_callback2">Wenn keine geeignete Datenverbindung verfügbar</string>
+<string name="settings_callthru">Callthru auslösen</string>
+<string name="settings_callthru2">Prefix für Callthru</string>
 <string name="settings_pref">Bevorzugte Anrufart</string>
     <string-array name="pref_display_values">
         <item>Sipdroid, wenn verfügbar</item>

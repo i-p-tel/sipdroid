@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * Copyright (C) 2009 Nominet UK and contributed to
  * the Sipdroid Open Source Project
  * 
