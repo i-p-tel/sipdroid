@@ -147,7 +147,9 @@ public class RtpStreamReceiver extends Thread {
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 		int oldvibrate = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+		int oldvibrate2 = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
+		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,AudioManager.VIBRATE_SETTING_OFF);
 		AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
 				4096, AudioTrack.MODE_STREAM);
 		track.setStereoVolume(AudioTrack.getMaxVolume()/3,AudioTrack.getMaxVolume()/3);
@@ -249,6 +251,7 @@ public class RtpStreamReceiver extends Thread {
 		track.stop();
 		am.setMode(AudioManager.MODE_NORMAL);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
+		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {

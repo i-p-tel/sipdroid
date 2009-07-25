@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -23,6 +24,7 @@
 
 package org.zoolu.net;
 
+import java.net.InetSocketAddress;
 import java.net.Socket; // import java.net.InetAddress;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -45,28 +47,12 @@ public class TcpSocket {
 		socket = sock;
 	}
 
-	/** Creates a new TcpSocket */
-	public TcpSocket(String host, int port) throws java.io.IOException {
-		socket = new Socket(host, port);
-	}
-
-	/** Creates a new TcpSocket */
-	public TcpSocket(String host, int port, IpAddress local_ipaddr,
-			int local_port) throws java.io.IOException {
-		socket = new Socket(host, port, local_ipaddr.getInetAddress(),
-				local_port);
-	}
-
 	/** Creates a new UdpSocket */
 	public TcpSocket(IpAddress ipaddr, int port) throws java.io.IOException {
-		socket = new Socket(ipaddr.getInetAddress(), port);
-	}
-
-	/** Creates a new UdpSocket */
-	public TcpSocket(IpAddress ipaddr, int port, IpAddress local_ipaddr,
-			int local_port) throws java.io.IOException {
-		socket = new Socket(ipaddr.getInetAddress(), port, local_ipaddr
-				.getInetAddress(), local_port);
+//		socket = new Socket(ipaddr.getInetAddress(), port); modified
+		socket = new Socket();
+		socket.connect(new InetSocketAddress(ipaddr.toString(), port),
+				Thread.currentThread().getName().equals("main")?1000:0);
 	}
 
 	/** Closes this socket. */

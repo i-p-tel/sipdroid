@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -142,7 +143,7 @@ public class TransactionClient extends Transaction {
 					&& (statusIs(STATE_TRYING) || statusIs(STATE_PROCEEDING))) {
 				printLog("Retransmission timeout expired", LogLevel.HIGH);
 				// retransmission only for unreliable transport
-				if (connection_id == null) {
+				if (true || connection_id == null) { // modified
 					sip_provider.sendMessage(request);
 					long timeout = 2 * retransmission_to.getTime();
 					if (timeout > SipStack.max_retransmission_timeout

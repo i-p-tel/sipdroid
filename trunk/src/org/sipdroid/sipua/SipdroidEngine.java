@@ -38,6 +38,7 @@ import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 public class SipdroidEngine implements RegisterAgentListener {
@@ -51,6 +52,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 	/** Register Agent */
 	private RegisterAgent ra;
 
+	private KeepAliveSip ka;
+	
 	/** UserAgentProfile */
 	private UserAgentProfile user_profile;
 
@@ -97,6 +100,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			ra = new RegisterAgent(sip_provider, user_profile.from_url,
 					user_profile.contact_url, user_profile.username,
 					user_profile.realm, user_profile.passwd, this, user_profile);
+			ka = new KeepAliveSip(sip_provider,100000);
 
 			register();
 			listen();
@@ -136,11 +140,20 @@ public class SipdroidEngine implements RegisterAgentListener {
 		return ua.remote_media_address;
 	}
 	
+	public void expire() {
+		if (ra != null && ra.CurrentState == RegisterAgent.REGISTERED) {
+			ra.CurrentState = RegisterAgent.UNREGISTERED;
+			Receiver.onText(Receiver.REGISTER_NOTIFICATION, null, 0, 0);
+		}
+		register();
+	}
+	
 	public void register() {	
-		if (!Receiver.isFast(false)) {
-			if (user_profile != null && !user_profile.username.equals("") &&
-					!user_profile.realm.equals("") &&
-					ra != null && ra.unregister()) {
+		if (user_profile == null || user_profile.username.equals("") ||
+				user_profile.realm.equals("")) return;
+		if (!Receiver.isFast()) {
+			if (ra != null && ra.unregister()) {
+				Receiver.alarm(0, LoopAlarm.class);
 				Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
 				wl.acquire();
 			}
@@ -155,7 +168,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public void halt() { // modified
 		if (wl.isHeld())
 			wl.release();
-		keepAlive(false);
+		if (ka != null) {
+			Receiver.alarm(0, LoopAlarm.class);
+			ka.halt();
+		}
 		Receiver.onText(Receiver.REGISTER_NOTIFICATION, null, 0, 0);
 		if (ra != null)
 			ra.halt();
@@ -176,22 +192,30 @@ public class SipdroidEngine implements RegisterAgentListener {
 	
 	public void onUaRegistrationSuccess(RegisterAgent ra, NameAddress target,
 			NameAddress contact, String result) {
-		if (isRegistered())
+		if (isRegistered()) {
+			if (Receiver.on_wlan)
+				Receiver.alarm(60, LoopAlarm.class);
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.regok),R.drawable.sym_presence_available,0);
-		else
+		} else
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION, null, 0,0);
 		Receiver.registered();
 		if (wl.isHeld())
 			wl.release();
 	}
 
+	static long lasthalt;
+	
 	/** When a UA failed on (un)registering. */
 	public void onUaRegistrationFailure(RegisterAgent ra, NameAddress target,
 			NameAddress contact, String result) {
 		Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.regfailed)+" ("+result+")",R.drawable.sym_presence_away,0);
 		if (wl.isHeld())
 			wl.release();
-		updateDNS();
+		if (SystemClock.elapsedRealtime() > lasthalt + 45000) {
+			lasthalt = SystemClock.elapsedRealtime();
+			sip_provider.haltConnections();
+			updateDNS();
+		}
 	}
 	
 	public void updateDNS() {
@@ -226,7 +250,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public boolean call(String target_url) {
 		ua.printLog("UAC: CALLING " + target_url);
 		
-		if (!isRegistered() || !Receiver.isFast(true)) {
+		if (!isRegistered() || !Receiver.isFast()) {
 			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean("callback",false) &&
 					PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("posurl","").length() > 0) {
 				Receiver.url("n="+Uri.decode(target_url));
@@ -272,29 +296,13 @@ public class SipdroidEngine implements RegisterAgentListener {
 			Receiver.onState(state,text);
 	}
 
-	KeepAliveSip ka;
-	
 	public void keepAlive() {
-		if (ka != null && isRegistered())
+		if (ka != null && Receiver.on_wlan && isRegistered())
 			try {
 				ka.sendToken();
 				Receiver.alarm(60, LoopAlarm.class);
 			} catch (IOException e) {
 				if (!Sipdroid.release) e.printStackTrace();
 			}
-	}
-	
-	public void keepAlive(boolean on_wlan) {
-       	if (on_wlan) {
-    		if (ka == null)
-    			ka = new KeepAliveSip(sip_provider,60000);
-    		Receiver.alarm(60, LoopAlarm.class);
-    	} else
-    		if (ka != null) {
-    			ka.halt();
-    			ka = null;
-    			Receiver.alarm(0, LoopAlarm.class);
-    		}	        	
-
 	}
 }

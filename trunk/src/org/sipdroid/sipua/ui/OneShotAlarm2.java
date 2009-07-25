@@ -34,7 +34,7 @@ public class OneShotAlarm2 extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
     	if (!Sipdroid.release) Log.i("SipUA:","alarm2");
         if (SipStack.default_transport_protocols[0].equals(SipProvider.PROTO_TCP) &&
-        		 Receiver.engine(context).isRegistered())
+        		 Receiver.mSipdroidEngine != null && Receiver.mSipdroidEngine.isRegistered())
            	context.startService(new Intent(context,RegisterService.class));
         else
         	context.stopService(new Intent(context,RegisterService.class));
