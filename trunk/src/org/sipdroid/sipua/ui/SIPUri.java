@@ -22,13 +22,20 @@
 
 package org.sipdroid.sipua.ui;
 
+import org.sipdroid.sipua.R;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 
 public class SIPUri extends Activity {
+
+	private static AlertDialog m_AlertDlg;
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -54,6 +61,21 @@ public class SIPUri extends Activity {
 				target = uri.getLastPathSegment();
 		}
 		if (!Sipdroid.release) Log.v("SIPUri", "sip uri: " + target);
-		Receiver.engine(this).call(target);
+		if (m_AlertDlg != null) 
+			m_AlertDlg.cancel();
+		if (!Receiver.engine(this).call(target)) {
+			m_AlertDlg = new AlertDialog.Builder(this)
+			.setMessage(R.string.notfast)
+			.setTitle(R.string.app_name)
+			.setIcon(R.drawable.icon22)
+			.setCancelable(true)
+			.setOnCancelListener(new OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					finish();
+				}
+			})
+			.show();
+		}
 	}
 }
