@@ -139,14 +139,13 @@ To exclude by *both* phone type and number:
 
 === What is "Trigger Callback/Callthru"? ===
 
-Suppose you got an Internet connection, but not good enough for a SIP
-call. Normally the phone would fall back to Phone in this case.
+Suppose you are outside your wireless LAN, or got a mobile Internet connection, but not good enough for a SIP call. Normally the phone would fall back to Phone in this case.
 
   * Enabling "trigger callback" will instead ask the PBX to initiate a callback to your mobile number, and connect the call to the dialed contact.
     * This makes sense if you like the PBX features (like calling a SIP URI, simultaneous outbound, ability to transfer calls), or if it's cheaper than a call from your mobile. I was using the function for calling international numbers. Some plans allow you to get unlimited calls from a certain number. That number could be assigned to your PBX.
 
   * Enabling "trigger callthru" will call a PBX's trunk/DID (or any other calling card platform), dial PIN & destination number as DTMF tones, and connect you.
-    * This is nice if you have unlimited minutes nationwide or to a certain number, and want to use that to dial out or dial international calls.
+    * This is nice if you have unlimited minutes to a certain number or nationwide, and want to use them to dial out or dial internationally.
 
 Exclude pattern and search & replace get applied in the same way as for SIP calls.
 
