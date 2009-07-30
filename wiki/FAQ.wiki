@@ -63,7 +63,7 @@ http://sipdroid.googlecode.com/svn/images/choose.png
 
 "Messaging" lets you proceed with sending SMS/MMS. The other two let you override your call type manually.
 
-=== How can I dial a phone number over Sipdroid / over Phone? ===
+=== How can I dial a number over Sipdroid / over Phone? ===
 
 When entering a phone number in the dialer add a "+" sign to toggle call type. If your preferred call type is Sipdroid adding a + behind the number calls over Phone.
 
@@ -85,7 +85,7 @@ If you want to call any other SIP URI you can enter it into the "Called Party Ad
 
 === How are the buttons assigned? ===
 
-Android reserves the red key for the built-in dialer of the phone. So Sipdroid is controlled by the BACK button instead.
+Android reserves the red key for the built-in dialer of the Phone. So Sipdroid is controlled by the BACK button instead.
 
 ==== When ringing ====
 
@@ -141,7 +141,7 @@ To exclude by *both* phone type and number:
 
 === What is "Trigger Callback/Callthru"? ===
 
-Suppose you are outside your wireless LAN, or got a mobile Internet connection, but not good enough for a SIP call. Normally the phone would fall back to Phone in this case.
+Suppose you are outside your wireless LAN, or got a mobile Internet connection, but not good enough for a SIP call. Normally the dialer would fall back to Phone in this case.
 
   * Enabling "trigger callback" will instead ask the PBX to initiate a callback to your mobile number, and connect the call to the dialed contact.
     * This makes sense if you like the PBX features (like calling a SIP URI, simultaneous outbound, etc.), or if it's cheaper than a call from your mobile. I was using the function while roaming with a local SIM card. Some plans also allow you to get unlimited calls from a certain number. That number could be assigned to your PBX.
