@@ -37,15 +37,15 @@ Sipdroid now also contains the necessary code to ring and turn on the screen whe
 
 == Dynamic IP ==
 
-This was a problem in Wireless LANs where a router could change its public IP without notice. For detecting such changes Sipdroid now sends probe packets over WLAN every minute. 
+Wireless LAN routers can change their public IPs without notice. Sipdroid now sends probe packets every minute over WLANs to detect such changes. 
 
 == Results ==
 
-The following standby times have been measured under parameters:
+Standby times have been measured under the following parameters:
 
-  * good 3G and wireless LAN signal levels
-  * ADP1.5 operating system
-  * PBXes as server platform
+  * 3G and wireless LAN: 3 bars
+  * operating system: ADP1.5
+  * server platform: PBXes
 
 || Network Type || Standby Time ||
 || Wireless LAN || 70h ||
