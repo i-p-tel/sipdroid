@@ -1,26 +1,24 @@
 #summary Illegal Usage of Source Code
 
-|| Copyright (C) 2009 The Sipdroid Open Source Project. The following article is part of Sipdroid. Sipdroid is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. ||
-
 <wiki:toc max_depth="5" />
 
-= Illegal Usage of Sipdroid by Gizmo5, Inc. =
+== Illegal Usage of Sipdroid by Gizmo5, Inc. ==
 
-== Resolved ==
+=== Resolved ===
 
 On July 23, 2009 Gizmo5 provided a link to the modified source code at the place that is required by the GPL open source license.
 
 Regarding the missing copyright message we have added additional terms according to GPL 
 section 7 for future cases.
 
-== Violations ==
+=== Violations ===
 
 Gizmo5 published Guava which is based on Sipdroid.
 
   * No source code was offered on their [http://gizmo5.com/guava download site].
   * The copyright message accessible after first startup of the program start has been removed.
 
-== Protecting our Rights ==
+=== Protecting our Rights ===
 
   * Sent Email to Gizmo5
 
@@ -50,7 +48,7 @@ http://sipdroid.googlecode.com/svn/images/gizmo_copyright_violation.png
 
   * Sent GPL violation reports to [http://gpl-violations.org] and [http://fsfe.org/projects/ftf/reporting-fixing-violations.en.html Freedom Task Force (FTF)]
 
-== Reactions ==
+=== Reactions ===
 
   * For a few days Michael Robertson provided a [http://gizmo5.com/guava.tgz download link] for the modified source on his [http://guava.uservoice.com/pages/23533-guava-/suggestions/263364-make-the-source-code-available-for-download Guava Feedback Forum]. The entry has later been hidden from index and search by marking it "other".
 
@@ -135,13 +133,13 @@ Good luck and happy hacking..
 Chris 
 </pre>
 
-== Claims ==
+=== Claims ===
 
 Users should not have to jump thru five hoops if they want to get the source code. When taking intellectual property from an open source project one expects a publisher to:
 
   * Mention the original authors right away. In this case only after downloading and completing 5 required of about 10 settings, the menu and copyright box get accessible.
   * Offer sources and binary in the same place.
 
-== Discussion ==
+=== Discussion ===
 
 A [http://groups.google.com/group/sipdroid-developers/browse_thread/thread/72cf357c21667ec3 discussion] on this issue is held in our developers group.
