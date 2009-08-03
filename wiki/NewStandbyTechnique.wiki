@@ -52,7 +52,7 @@ Standby times have been measured under the following parameters:
 || 3G (TCP) || 140h ||
 || 3G (UDP) || 15h ||
 
-3G offers superior standby performance. Wireless LAN is better when talking. This is supported by Android's policy of switching of Wireless LAN while sleeping. Sipdroid keeps WLAN active (ealier confusingly called "polling") if there is no suitable mobile network available.
+3G offers superior standby performance. Wireless LAN is better when talking. This is supported by Android's policy switching off Wireless LAN while sleeping. Sipdroid keeps WLAN active (ealier confusingly called "polling") if there is no suitable mobile network available.
 
 So Sipdroid could maintain its early standby times while extending functionality to a self-contained phone. 
 
