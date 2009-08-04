@@ -183,7 +183,7 @@ Possible issues when registering directly to other SIP servers are:
  * One way voice, or
  * No connection at all
 
-*Private as well as public SIP servers are usually not made or properly configured for serving mobile clients. As you can see there is not just one issue. It's a bunch of adjustments to account for phones that are not plugged into a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
+*As you can see there is not just one issue. When Nokia released its SIP client in 2006 PBXes was the first to support it. It's a bunch of adjustments to account for phones that are not plugged into a single network, are battery powered and Java based. So unless you are a developer we don't recommend spending much time in getting your plain-vanilla Asterisk box suited for Sipdroid. Instead register your Asterisk to PBXes, too.*
 
 For the future it is expected that SIP providers will become more interoperable (see also [http://code.google.com/p/sipdroid/wiki/NewStandbyTechnique article]). As Sipdroid is a true open source project attracting many software developers, the application and its documentation will be updated as more information gets available.
 
