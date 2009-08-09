@@ -5,7 +5,7 @@
 
   * 1.0.5 (not released yet)
     * Profiles
-    * Fix issues 20, 91, 3 "Not able to close sipdroid"
+    * Fix issues 20, 91, 92, 3 "Not able to close sipdroid"
 
   * 1.0.4
     * Enable calling messenger users on GTalk, AIM, MSN, Yahoo, ICQ
