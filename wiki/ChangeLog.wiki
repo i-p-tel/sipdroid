@@ -3,6 +3,10 @@
 
 === Beta-Versions ===
 
+  * 1.0.5 (not released yet)
+    * Speedup call answer, memorize volume
+    * Fix issues 20, 91, 3 "Not able to close sipdroid"
+
   * 1.0.4
     * Enable calling messenger users on GTalk, AIM, MSN, Yahoo, ICQ
     * Add callthru option
