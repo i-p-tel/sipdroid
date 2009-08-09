@@ -4,7 +4,7 @@
 === Beta-Versions ===
 
   * 1.0.5 (not released yet)
-    * Speedup call answer, memorize volume
+    * Profiles
     * Fix issues 20, 91, 3 "Not able to close sipdroid"
 
   * 1.0.4
