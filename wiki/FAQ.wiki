@@ -254,3 +254,7 @@ Sipdroid can be used to add true VoIP calling to the GV app. Both integrate amaz
 === Google Talk ===
 
 See [http://code.google.com/p/sipdroid/wiki/FAQ#How_can_I_dial_a_Google_Talk_ID?_(Or_any_other_SIP_URI?) above]
+
+=== Overclock Widget ===
+
+This tool allows you to set the CPU frequency depending on screen on/off. It's useful to limit CPU to 128 MHz while screen is off, and let it run at 528 MHz while screen is on. This enhances call and standby times and speeds up response times. The effect is not big though.
