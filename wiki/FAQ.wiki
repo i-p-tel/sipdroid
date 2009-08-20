@@ -25,7 +25,7 @@ This project publishes Sipdroid for free under the terms of [http://www.gnu.org/
 
 === How much will Sipdroid drain the battery? (Constantly running Internet connection?) ===
 
-When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about five days of stand-by time).  See [http://code.google.com/p/sipdroid/wiki/NewStandbyTechnique article] for background.
+When using [http://pbxes.org pbxes.org] the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time).  See [http://code.google.com/p/sipdroid/wiki/NewStandbyTechnique article] for background.
 
 === How much bandwidth is required? ===
 
@@ -228,21 +228,21 @@ The username to be entered in Sipdroid consists of account name, a dash ('-') an
 
 == Android Applications ==
 
-=== Latitude ===
-
-We noticed that choppy voice on WLANs can be resolved by turning off Latitude within Google Maps/Latitude/Privacy. An alternative is uploading position to a webcall page in PBXes.
-
-=== Netcounter ===
-
-This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs only you should not install the present version. It wakes the device too often thus draining the battery.
-
 === Ambient Light Sensor ===
 
 This [http://www.cyrket.com/package/org.pbxes.light2 tool] is recommended to save battery. It uses the camera to adjust screen brightness.
 
+=== Battery Hours ===
+
+Another [http://www.cyrket.com/package/org.pbxes.eta tool] which measures and displays your remaining standby time.
+
 === ChompSMS ===
 
 This is the equivalent to Sipdroid for SMS.
+
+=== Google Talk ===
+
+See [http://code.google.com/p/sipdroid/wiki/FAQ#How_can_I_dial_a_Google_Talk_ID?_(Or_any_other_SIP_URI?) above]
 
 === GV ===
 
@@ -251,9 +251,13 @@ Sipdroid can be used to add true VoIP calling to the GV app. Both integrate amaz
   * [http://groups.google.com/group/sipdroid-users/browse_thread/thread/490ad4790f0c93a Sipdroid Users' Group]
   * [http://iiordanov.blogspot.com/2009/07/sipdroid-gv-guava.html Iordans's blog]
 
-=== Google Talk ===
+=== Latitude ===
 
-See [http://code.google.com/p/sipdroid/wiki/FAQ#How_can_I_dial_a_Google_Talk_ID?_(Or_any_other_SIP_URI?) above]
+We noticed that choppy voice on WLANs can be resolved by turning off Latitude within Google Maps/Latitude/Privacy. An alternative is uploading position to a webcall page in PBXes.
+
+=== Netcounter ===
+
+This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs only you should not install the present version. It wakes the device too often thus draining the battery.
 
 === Overclock Widget ===
 
