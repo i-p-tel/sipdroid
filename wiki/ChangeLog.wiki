@@ -3,7 +3,7 @@
 
 === Beta-Versions ===
 
-  * 1.0.5 (to be released in early September)
+  * 1.0.5
     * Auto-Answer
     * Fix issues 20, 57, 73, 91, 92, 3 "Not able to close sipdroid"
 
