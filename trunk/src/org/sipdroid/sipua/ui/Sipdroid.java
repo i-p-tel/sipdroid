@@ -27,17 +27,29 @@ import org.sipdroid.sipua.UserAgent;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.CallLog.Calls;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnKeyListener;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.CursorAdapter;
+import android.widget.Filterable;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 /////////////////////////////////////////////////////////////////////
 // this the main activity of Sipdroid
@@ -54,6 +66,7 @@ public class Sipdroid extends Activity {
 	public static final int CONFIGURE_MENU_ITEM = FIRST_MENU_ID + 1;
 	public static final int CALL_MENU_ITEM = FIRST_MENU_ID + 2;
 	public static final int ABOUT_MENU_ITEM = FIRST_MENU_ID + 3;
+	public static final int EXIT_MENU_ITEM = FIRST_MENU_ID + 4;
 
 	private static AlertDialog m_AlertDlg;
 	AutoCompleteTextView sip_uri_box;
@@ -64,8 +77,66 @@ public class Sipdroid extends Activity {
 		
 		if (!Receiver.engine(this).isRegistered())
 			Receiver.engine(this).register();
+		if (Receiver.engine(this).isRegistered()) {
+		    ContentResolver content = getContentResolver();
+		    Cursor cursor = content.query(Calls.CONTENT_URI,
+		            PROJECTION, Calls.NUMBER+" like ?", new String[] { "%@%" }, Calls.DEFAULT_SORT_ORDER);
+		    CallsAdapter adapter = new CallsAdapter(this, cursor);
+		    sip_uri_box.setAdapter(adapter);
+		}
 	}
 	
+	public static class CallsAdapter extends CursorAdapter implements Filterable {
+	    public CallsAdapter(Context context, Cursor c) {
+	        super(context, c);
+	        mContent = context.getContentResolver();
+	    }
+	
+	    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+	        final LayoutInflater inflater = LayoutInflater.from(context);
+	        final TextView view = (TextView) inflater.inflate(
+	                android.R.layout.simple_dropdown_item_1line, parent, false);
+	        view.setText(cursor.getString(1));
+	        return view;
+	    }
+	
+	    @Override
+	    public void bindView(View view, Context context, Cursor cursor) {
+	        ((TextView) view).setText(cursor.getString(1));
+	    }
+	
+	    @Override
+	    public String convertToString(Cursor cursor) {
+	        return cursor.getString(1);
+	    }
+	
+	    @Override
+	    public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
+	        if (getFilterQueryProvider() != null) {
+	            return getFilterQueryProvider().runQuery(constraint);
+	        }
+	
+	        StringBuilder buffer;
+	        String[] args;
+	        buffer = new StringBuilder();
+	        buffer.append(Calls.NUMBER);
+	        buffer.append(" LIKE ?");
+	        args = new String[] { (constraint != null && constraint.length() > 0?
+	       				constraint.toString() : "%@") + "%"};
+	
+	        return mContent.query(Calls.CONTENT_URI, PROJECTION,
+	                buffer.toString(), args,
+	                Calls.DEFAULT_SORT_ORDER);
+	    }
+	
+	    private ContentResolver mContent;        
+	}
+	
+	private static final String[] PROJECTION = new String[] {
+        Calls._ID,
+        Calls.NUMBER,
+	};
+
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -83,9 +154,25 @@ public class Sipdroid extends Activity {
 		        return false;
 		    }
 		});
-
+		sip_uri_box.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				call_menu();
+			}
+		});
+		on(this,true);
 	}
 
+	public static boolean on(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("on",false);
+	}
+	
+	public static void on(Context context,boolean on) {
+		Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		edit.putBoolean("on",on);
+		edit.commit();
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -98,6 +185,8 @@ public class Sipdroid extends Activity {
 
 		MenuItem m = menu.add(0, ABOUT_MENU_ITEM, 0, R.string.menu_about);
 		m.setIcon(android.R.drawable.ic_menu_info_details);
+		m = menu.add(0, EXIT_MENU_ITEM, 0, R.string.menu_exit);
+		m.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		m = menu.add(0, CALL_MENU_ITEM, 0, R.string.menu_call);
 		m.setIcon(android.R.drawable.ic_menu_call);
 		m = menu.add(0, CONFIGURE_MENU_ITEM, 0, R.string.menu_settings);
@@ -169,6 +258,19 @@ public class Sipdroid extends Activity {
 			
 		case CALL_MENU_ITEM: 
 			call_menu();
+			break;
+			
+		case EXIT_MENU_ITEM: 
+			Receiver.reRegister(0);
+			Receiver.engine(this).unregister();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e1) {
+			}
+			on(this,false);
+			Receiver.engine(this).halt();
+			Receiver.mSipdroidEngine = null;
+			finish();
 			break;
 			
 		case CONFIGURE_MENU_ITEM: {

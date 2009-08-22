@@ -91,7 +91,6 @@ public abstract class CallListenerAdapter implements ExtendedCallListener {
 	 */
 	public void onCallIncoming(Call call, NameAddress callee,
 			NameAddress caller, String sdp, Message invite) { // printLog("INCOMING");
-		call.ring();
 		String local_session;
 		if (sdp != null && sdp.length() > 0) {
 			SessionDescriptor remote_sdp = new SessionDescriptor(sdp);
@@ -107,6 +106,7 @@ public abstract class CallListenerAdapter implements ExtendedCallListener {
 			local_session = new_sdp.toString();
 		} else
 			local_session = call.getLocalSessionDescriptor();
+		call.ring(local_session);
 		// accept immediatly
 		call.accept(local_session);
 	}

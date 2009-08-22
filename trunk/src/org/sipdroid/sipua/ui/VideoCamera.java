@@ -22,8 +22,8 @@ package org.sipdroid.sipua.ui;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
@@ -33,18 +33,17 @@ import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaRecorder;
+import android.net.LocalServerSocket;
+import android.net.LocalSocket;
+import android.net.LocalSocketAddress;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.StatFs;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -59,7 +58,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class VideoCamera extends CallScreen implements 
-	SipdroidListener, SurfaceHolder.Callback, MediaRecorder.OnErrorListener, MediaRecorder.OnInfoListener {
+	SipdroidListener, SurfaceHolder.Callback, MediaRecorder.OnErrorListener {
 	
 	Thread t;
 	Context mContext = this;
@@ -68,22 +67,10 @@ public class VideoCamera extends CallScreen implements
 
     private static int UPDATE_RECORD_TIME = 1;
     
-    private static final long NO_STORAGE_ERROR = -1L;
-    private static final long CANNOT_STAT_ERROR = -2L;
-    private static final long LOW_STORAGE_THRESHOLD = 512L * 1024L;
-
-    private static final int STORAGE_STATUS_OK = 0;
-    private static final int STORAGE_STATUS_LOW = 1;
-    private static final int STORAGE_STATUS_NONE = 2;
-
     private static final float VIDEO_ASPECT_RATIO = 176.0f / 144.0f;
     VideoPreview mVideoPreview;
     SurfaceHolder mSurfaceHolder = null;
     ImageView mVideoFrame;
-
-    private static final int MAX_RECORDING_DURATION_MS = 10 * 60 * 1000;
-
-    private int mStorageStatus = STORAGE_STATUS_OK;
 
     private MediaRecorder mMediaRecorder;
     private boolean mMediaRecorderRecording = false;
@@ -100,7 +87,6 @@ public class VideoCamera extends CallScreen implements
     int mCurrentZoomIndex = 0;
 
     private TextView mRecordingTimeView;
-    private boolean mRecordingTimeCountsDown = false;
 
     ArrayList<MenuItem> mGalleryItems = new ArrayList<MenuItem>();
 
@@ -109,7 +95,9 @@ public class VideoCamera extends CallScreen implements
 
     private Handler mHandler = new MainHandler();
     long started;
-    
+	LocalSocket receiver,sender;
+	LocalServerSocket lss;
+
     /** This Handler is used to post message back onto the main thread of the application */
     private class MainHandler extends Handler {
         @Override
@@ -117,15 +105,6 @@ public class VideoCamera extends CallScreen implements
                     if (mMediaRecorderRecording) {
                         long now = SystemClock.elapsedRealtime();
                         long delta = now - Receiver.ccCall.base;
-
-                        // Starting a minute before reaching the max duration
-                        // limit, we'll countdown the remaining time instead.
-                        boolean countdown_remaining_time =
-                            (now - started >= MAX_RECORDING_DURATION_MS - 60000);
-
-                        if (countdown_remaining_time) {
-                            delta = Math.max(0, MAX_RECORDING_DURATION_MS - (now-started));
-                        }
 
                         long seconds = (delta + 500) / 1000;  // round to nearest
                         long minutes = seconds / 60;
@@ -151,19 +130,6 @@ public class VideoCamera extends CallScreen implements
                         }
                         mRecordingTimeView.setText(getResources().getString(R.string.card_title_in_progress)+" "+text);
 
-                        if (mRecordingTimeCountsDown != countdown_remaining_time) {
-                            // Avoid setting the color on every update, do it only
-                            // when it needs changing.
-
-                            mRecordingTimeCountsDown = countdown_remaining_time;
-
-                            int color = getResources().getColor(
-                                    countdown_remaining_time ? R.color.recording_time_remaining_text
-                                                             : R.color.recording_time_elapsed_text);
-
-                            mRecordingTimeView.setTextColor(color);
-                        }
-
                         // Work around a limitation of the T-Mobile G1: The T-Mobile
                         // hardware blitter can't pixel-accurately scale and clip at the same time,
                         // and the SurfaceFlinger doesn't attempt to work around this limitation.
@@ -173,16 +139,6 @@ public class VideoCamera extends CallScreen implements
                         mHandler.sendEmptyMessageDelayed(UPDATE_RECORD_TIME, 1000);
                     }
          }
-    };
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_MEDIA_EJECT)) {
-            	finish();
-            }
-        }
     };
 
     /** Called with the activity is first created. */
@@ -210,15 +166,6 @@ public class VideoCamera extends CallScreen implements
         mVideoFrame = (ImageView) findViewById(R.id.video_frame);
     }
 
-    private int getStorageStatus(boolean mayHaveSd) {
-        long remaining = mayHaveSd ? getAvailableStorage() : NO_STORAGE_ERROR;
-        if (remaining == NO_STORAGE_ERROR) {
-            return STORAGE_STATUS_NONE;
-        }
-        return remaining < LOW_STORAGE_THRESHOLD
-                ? STORAGE_STATUS_LOW : STORAGE_STATUS_OK;
-    }
-
 	int speakermode;
 
 	@Override
@@ -227,11 +174,17 @@ public class VideoCamera extends CallScreen implements
 
         mPausing = false;
 
-        // install an intent filter to receive SD card related events.
-        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_MEDIA_EJECT);
-        intentFilter.addDataScheme("file");
-        registerReceiver(mReceiver, intentFilter);
-        mStorageStatus = getStorageStatus(true);
+		receiver = new LocalSocket();
+		try {
+			lss = new LocalServerSocket("Sipdroid");
+			receiver.connect(new LocalSocketAddress("Sipdroid"));
+			sender = lss.accept();
+		} catch (IOException e1) {
+			if (!Sipdroid.release) e1.printStackTrace();
+			finish();
+			return;
+		}
+		Receiver.screenOff(false);
 
         initializeVideo();
     }
@@ -248,7 +201,15 @@ public class VideoCamera extends CallScreen implements
 
         mPausing = true;
 
-        unregisterReceiver(mReceiver);
+        try {
+			lss.close();
+	        receiver.close();
+	        sender.close();
+		} catch (IOException e) {
+			if (!Sipdroid.release) e.printStackTrace();
+		}
+		Receiver.screenOff(true);
+		finish();
     }
 
 	/*
@@ -306,24 +267,6 @@ public class VideoCamera extends CallScreen implements
         mSurfaceHolder = null;
     }
 
-
-    /**
-     * Returns
-     * @return number of bytes available, or an ERROR code.
-     */
-    private static long getAvailableStorage() {
-        try {
-                String storageDirectory = Environment.getExternalStorageDirectory().toString();
-                StatFs stat = new StatFs(storageDirectory);
-                return ((long)stat.getAvailableBlocks() * (long)stat.getBlockSize());
-        } catch (Exception ex) {
-            // if we can't stat the filesystem then we don't know how many
-            // free bytes exist.  It might be zero but just leave it
-            // blank since we really don't know.
-            return CANNOT_STAT_ERROR;
-        }
-    }
-
     private void cleanupEmptyFile() {
         if (mCameraVideoFilename != null) {
             File f = new File(mCameraVideoFilename);
@@ -352,17 +295,9 @@ public class VideoCamera extends CallScreen implements
 
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mMediaRecorder.setOutputFile(sender.getFileDescriptor());
 
-        mMediaRecorder.setMaxDuration(MAX_RECORDING_DURATION_MS);
-
-        if (mStorageStatus != STORAGE_STATUS_OK) {
-            finish();
-        } else {
-                createVideoPath();
-                mMediaRecorder.setOutputFile(mCameraVideoFilename);
-        }
-
-        boolean videoQualityHigh = false;
+		boolean videoQualityHigh = false;
 
         if (intent.hasExtra(MediaStore.EXTRA_VIDEO_QUALITY)) {
             int extraVideoQuality = intent.getIntExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
@@ -382,24 +317,13 @@ public class VideoCamera extends CallScreen implements
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H263);
         mMediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
 
-        long remaining = getAvailableStorage();
-        // remaining >= LOW_STORAGE_THRESHOLD at this point, reserve a quarter
-        // of that to make it more likely that recording can complete successfully.
-        try {
-            mMediaRecorder.setMaxFileSize(remaining - LOW_STORAGE_THRESHOLD / 4);
-        } catch (RuntimeException exception) {
-            // We are going to ignore failure of setMaxFileSize here, as
-            // a) The composer selected may simply not support it, or
-            // b) The underlying media framework may not handle 64-bit range
-            //    on the size restriction.
-        }
-
         try {
             mMediaRecorder.prepare();
         } catch (IOException exception) {
             Log.e(TAG, "prepare failed for " + mCameraVideoFilename);
             releaseMediaRecorder();
             finish();
+            return false;
         }
         mMediaRecorderRecording = false;
 
@@ -416,17 +340,7 @@ public class VideoCamera extends CallScreen implements
             mMediaRecorder = null;
         }
     }
-    
-    private void createVideoPath() {
-        String title = "Sipdroid";
-        String cameraDirPath = Environment.getExternalStorageDirectory().toString() + "/DCIM/Camera";
-        File cameraDir = new File(cameraDirPath);
-        cameraDir.mkdirs();
-        String filename = cameraDirPath + "/" + title + ".3gp";
-        mCameraVideoFilename = filename;
-        Log.v(TAG, "Current camera video filename: " + mCameraVideoFilename);
-    }
-
+        
     private void deleteCurrentVideo() {
         if (mCurrentVideoFilename != null) {
             deleteVideoFile(mCurrentVideoFilename);
@@ -450,23 +364,9 @@ public class VideoCamera extends CallScreen implements
         }
     }
 
-    // from MediaRecorder.OnInfoListener
-    public void onInfo(MediaRecorder mr, int what, int extra) {
-        if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-            finish();
-        } else if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED) {
-            finish();
-        }
-    }
-
     private void startVideoRecording() {
         Log.v(TAG, "startVideoRecording");
         if (!mMediaRecorderRecording) {
-
-            if (mStorageStatus != STORAGE_STATUS_OK) {
-                Log.v(TAG, "Storage issue, ignore the start request");
-                return;
-            }
 
             // Check mMediaRecorder to see whether it is initialized or not.
             if (mMediaRecorder == null && initializeVideo() == false ) {
@@ -476,7 +376,6 @@ public class VideoCamera extends CallScreen implements
 
             try {
                 mMediaRecorder.setOnErrorListener(this);
-                mMediaRecorder.setOnInfoListener(this);
                 mMediaRecorder.start();   // Recording is now started
             } catch (RuntimeException e) {
                 Log.e(TAG, "Could not start media recorder. ", e);
@@ -500,8 +399,6 @@ public class VideoCamera extends CallScreen implements
     					RtpSocket rtp_socket = null;
     					int seqn = 0;
     					int num,number = 0,src,dest;
-    					File f;
-    					FileInputStream fis = null;
 
     					try {
     						rtp_socket = new RtpSocket(new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
@@ -511,21 +408,17 @@ public class VideoCamera extends CallScreen implements
     						if (!Sipdroid.release) e.printStackTrace();
     						return;
     					}		
-    					while (fis == null) {
-    						try {
-    							f = new File(mCameraVideoFilename);
-    							fis = new FileInputStream(f);
-    							fis.skip(0x22);
-    						} catch (Exception e) {
-    							try {
-    								sleep(1000);
-    							} catch (InterruptedException e2) {
-    								rtp_socket.getDatagramSocket().close();
-    								return;
-    							}
-    						}
-    					}
-    					rtp_packet.setPayloadType(103);
+    					
+    					InputStream fis = null;
+						try {
+		   					fis = receiver.getInputStream();
+						} catch (IOException e1) {
+							if (!Sipdroid.release) e1.printStackTrace();
+							rtp_socket.getDatagramSocket().close();
+							return;
+						}
+						
+     					rtp_packet.setPayloadType(103);
     					android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
     					while (Receiver.listener_video != null) {
     						num = -1;

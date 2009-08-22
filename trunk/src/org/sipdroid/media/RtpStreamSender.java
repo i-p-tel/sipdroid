@@ -22,13 +22,15 @@
 package org.sipdroid.media;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.Random;
 
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
-import org.sipdroid.sipua.ui.RegisterService;
+import org.sipdroid.sipua.UserAgent;
+import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 
 import android.media.AudioFormat;
@@ -131,8 +133,8 @@ public class RtpStreamSender extends Thread {
 		return running;
 	}
 	
-	public void mute() {
-		muted = !muted;
+	public boolean mute() {
+		return muted = !muted;
 	}
 
 	public static int delay = 0;
@@ -156,6 +158,15 @@ public class RtpStreamSender extends Thread {
 			if (s < sm) sm = s;
 			if (s > smin) nearend = 3000/5;
 			else if (nearend > 0) nearend--;
+		}
+		for (i = 0; i < len; i++) {
+			j = lin[i+off];
+			if (j > 6550)
+				lin[i+off] = 6550*5;
+			else if (j < -6550)
+				lin[i+off] = -6550*5;
+			else
+				lin[i+off] = (short)(j*5);
 		}
 		r = (double)len/100000;
 		smin = sm*r + smin*(1-r);
@@ -202,12 +213,16 @@ public class RtpStreamSender extends Thread {
 		short[] lin = new short[frame_size*11];
 		int num,ring = 0;
 		random = new Random();
+		InputStream alerting = null;
+		try {
+			alerting = Receiver.mContext.getAssets().open("alerting");
+		} catch (IOException e2) {
+			if (!Sipdroid.release) e2.printStackTrace();
+		}
 		while (running) {
-			 RegisterService.hold = true;
-			 if (muted) {
+			 if (muted || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 				record.stop();
-				while (running && muted) {
-					RegisterService.hold = true;
+				while (running && (muted || Receiver.call_state == UserAgent.UA_STATE_HOLD)) {
 					try {
 						sleep(1000);
 					} catch (InterruptedException e1) {
@@ -224,8 +239,16 @@ public class RtpStreamSender extends Thread {
 	 			 else if (nearend == 0)
 	 				 p = 0.9*p + 0.1*s;
 			 }
-			 
-			 G711.linear2alaw(lin, ring%(frame_size*11), buffer, num);
+			 if (Receiver.call_state != UserAgent.UA_STATE_INCALL && alerting != null) {
+				 try {
+					if (alerting.available() < frame_size)
+						alerting.reset();
+					alerting.read(buffer,12,frame_size);
+				 } catch (IOException e) {
+					if (!Sipdroid.release) e.printStackTrace();
+				 }
+			 } else
+				 G711.linear2alaw(lin, ring%(frame_size*11), buffer, num);
  			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
  			 rtp_packet.setTimestamp(time);

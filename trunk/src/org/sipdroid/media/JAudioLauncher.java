@@ -128,9 +128,8 @@ public class JAudioLauncher implements MediaLauncher
 
    public boolean muteMedia()
    {
-	   if (sender != null) sender.mute();
-	   if (receiver != null) 
-		   return receiver.mute();
+	   if (sender != null)
+		   return sender.mute();
 	   return false;
    }
    

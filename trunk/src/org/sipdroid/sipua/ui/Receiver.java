@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 import android.app.AlarmManager;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -63,6 +64,7 @@ import org.sipdroid.sipua.phone.Connection;
 		public final static int REGISTER_NOTIFICATION = 1;
 		public final static int CALL_NOTIFICATION = 2;
 		public final static int MISSED_CALL_NOTIFICATION = 3;
+		public final static int AUTO_ANSWER_NOTIFICATION = 4;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
@@ -70,12 +72,12 @@ import org.sipdroid.sipua.phone.Connection;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
-		public static SipdroidListener listener,listener_video;
+		public static SipdroidListener listener_video;
 		public static Call ccCall;
 		public static Connection ccConn;
 		public static int call_state;
 		
-		private static String pstn_state;
+		public static String pstn_state;
 		private static String laststate,lastnumber;	
 		
 		public static SipdroidEngine engine(Context context) {
@@ -113,30 +115,35 @@ import org.sipdroid.sipua.phone.Connection;
 						text2 = text2.substring(text2.indexOf("\"")+1,text2.lastIndexOf("\""));
 					broadcastCallStateChanged("RINGING", caller);
 			        mContext.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-					moveTop();
 					ccCall.setState(Call.State.INCOMING);
 					ccConn.setUserData(null);
 					ccConn.setAddress(text,text2);
 					ccConn.setIncoming(true);
 					ccConn.date = System.currentTimeMillis();
 					ccCall.base = 0;
+					moveTop();
 					AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 					int rm = am.getRingerMode();
 					int vs = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-					if ((pstn_state == null || pstn_state.equals("IDLE")) &&
-							(rm == AudioManager.RINGER_MODE_VIBRATE ||
-							(rm == AudioManager.RINGER_MODE_NORMAL && vs == AudioManager.VIBRATE_SETTING_ON)))
+			        KeyguardManager mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+					if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_on", false) &&
+							!mKeyguardManager.inKeyguardRestrictedInputMode())
 						v.vibrate(vibratePattern,1);
-					if (am.getStreamVolume(AudioManager.STREAM_RING) > 0) 
-					{				 
-						String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone", "");
-						Uri oUriSipRingtone = null;
-						if(!TextUtils.isEmpty(sUriSipRingtone))
-							oUriSipRingtone = Uri.parse(sUriSipRingtone);
-						else
-							oUriSipRingtone = Settings.System.DEFAULT_RINGTONE_URI;						
-						oRingtone = RingtoneManager.getRingtone(mContext, oUriSipRingtone);
-						oRingtone.play();						
+					else {
+						if ((pstn_state == null || pstn_state.equals("IDLE")) &&
+								(rm == AudioManager.RINGER_MODE_VIBRATE ||
+								(rm == AudioManager.RINGER_MODE_NORMAL && vs == AudioManager.VIBRATE_SETTING_ON)))
+							v.vibrate(vibratePattern,1);
+						if (am.getStreamVolume(AudioManager.STREAM_RING) > 0) {				 
+							String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone", "");
+							Uri oUriSipRingtone = null;
+							if(!TextUtils.isEmpty(sUriSipRingtone))
+								oUriSipRingtone = Uri.parse(sUriSipRingtone);
+							else
+								oUriSipRingtone = Settings.System.DEFAULT_RINGTONE_URI;						
+							oRingtone = RingtoneManager.getRingtone(mContext, oUriSipRingtone);
+							oRingtone.play();						
+						}
 					}
 					if (wl == null) {
 						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
@@ -150,13 +157,13 @@ import org.sipdroid.sipua.phone.Connection;
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
 					engine(mContext).register();
 					broadcastCallStateChanged("OFFHOOK", caller);
-					moveTop();
 					ccCall.setState(Call.State.DIALING);
 					ccConn.setUserData(null);
 					ccConn.setAddress(caller,caller);
 					ccConn.setIncoming(false);
 					ccConn.date = System.currentTimeMillis();
 					ccCall.base = 0;
+					moveTop();
 		        	Checkin.checkin(true);
 					break;
 				case UserAgent.UA_STATE_IDLE:
@@ -164,8 +171,6 @@ import org.sipdroid.sipua.phone.Connection;
 					screenOff(false);
 					onText(CALL_NOTIFICATION, null, 0,0);
 					ccCall.setState(Call.State.DISCONNECTED);
-					if (listener != null)
-						listener.onHangup();
 					if (listener_video != null)
 						listener_video.onHangup();
 					v.cancel();
@@ -226,13 +231,24 @@ import org.sipdroid.sipua.phone.Connection;
 		        Notification notification = new Notification();
 		        notification.icon = mInCallResId;
 		        if (type == MISSED_CALL_NOTIFICATION) {
-		        	notification.contentIntent = PendingIntent.getActivity(mContext, 0,
-			                createCallLogIntent(), 0);
 		        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		        	notification.setLatestEventInfo(mContext, text, mContext.getString(R.string.app_name),
+		        			PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0));
 	        	} else {
 			        notification.contentIntent = PendingIntent.getActivity(mContext, 0,
-			                createIntent(Sipdroid.class), 0);
+			                createIntent(type == AUTO_ANSWER_NOTIFICATION?
+			                		AutoAnswer.class:Sipdroid.class), 0);
 		        	notification.flags |= Notification.FLAG_ONGOING_EVENT;
+			        RemoteViews contentView = new RemoteViews(mContext.getPackageName(),
+	                        R.layout.ongoing_call_notification);
+			        contentView.setImageViewResource(R.id.icon, notification.icon);
+					if (base != 0) {
+						contentView.setChronometer(R.id.text1, base, text+" (%s)", true);
+					} else if (type == REGISTER_NOTIFICATION && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false))
+						contentView.setTextViewText(R.id.text1, text+"/"+mContext.getString(R.string.settings_pos3));
+					else
+						contentView.setTextViewText(R.id.text1, text);
+					notification.contentView = contentView;
 		        }
 		        if (mInCallResId == R.drawable.sym_presence_away) {
 		        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
@@ -240,20 +256,41 @@ import org.sipdroid.sipua.phone.Connection;
 		        	notification.ledOnMS = 125;
 		        	notification.ledOffMS = 2875;
 		        }
-		        RemoteViews contentView = new RemoteViews(mContext.getPackageName(),
-                        R.layout.ongoing_call_notification);
-		        contentView.setImageViewResource(R.id.icon, notification.icon);
-				if (base != 0) {
-					contentView.setChronometer(R.id.text1, base, text+" (%s)", true);
-				} else if (type == REGISTER_NOTIFICATION && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false))
-					contentView.setTextViewText(R.id.text1, text+", "+mContext.getString(R.string.settings_pos3));
-				else
-					contentView.setTextViewText(R.id.text1, text);
-				notification.contentView = contentView;
 		        mNotificationMgr.notify(type,notification);
 	        } else {
 	        	mNotificationMgr.cancel(type);
 	        }
+	        if (type != AUTO_ANSWER_NOTIFICATION)
+	        	updateAutoAnswer();
+		}
+		
+		static void updateAutoAnswer() {
+			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_ondemand", false) &&
+				Sipdroid.on(mContext)) {
+				if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_demand", false))
+					updateAutoAnswer(1);
+				else
+					updateAutoAnswer(0);
+			} else
+				updateAutoAnswer(-1);
+		}
+		
+		private static int autoAnswerState = -1;
+		
+		static void updateAutoAnswer(int status) {
+			if (status != autoAnswerState) {
+				switch (autoAnswerState = status) {
+				case 0:
+					Receiver.onText(Receiver.AUTO_ANSWER_NOTIFICATION,mContext.getString(R.string.auto_disabled),R.drawable.auto_answer_disabled,0);
+					break;
+				case 1:
+					Receiver.onText(Receiver.AUTO_ANSWER_NOTIFICATION,mContext.getString(R.string.auto_enabled),R.drawable.auto_answer,0);
+					break;
+				case -1:
+					Receiver.onText(Receiver.AUTO_ANSWER_NOTIFICATION, null, 0, 0);
+					break;
+				}
+			}
 		}
 		
 		public static void registered() {
@@ -371,6 +408,12 @@ import org.sipdroid.sipua.phone.Connection;
 	        return intent;
 		}
 		
+		public static Intent createHomeIntent() {
+	        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+	        intent.addCategory(Intent.CATEGORY_HOME);
+	        return intent;
+		}
+		
 		public static void moveTop() {
 			onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call, 0);
 			mContext.startActivity(createIntent(Activity2.class)); 
@@ -407,6 +450,7 @@ import org.sipdroid.sipua.phone.Connection;
 	    @Override
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
+	        if (!Sipdroid.on(context)) return;
         	if (!Sipdroid.release) Log.i("SipUA:",intentAction);
         	if (mContext == null) mContext = context;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){

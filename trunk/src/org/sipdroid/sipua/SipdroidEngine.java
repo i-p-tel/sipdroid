@@ -36,6 +36,7 @@ import org.zoolu.sip.provider.SipStack;
 
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -64,7 +65,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public boolean StartEngine() {
 		try {
 			PowerManager pm = (PowerManager) getUIContext().getSystemService(Context.POWER_SERVICE);
-			wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid");
+			if (wl == null) wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid");
 
 			String opt_via_addr = "127.0.0.1";
 			
@@ -148,15 +149,19 @@ public class SipdroidEngine implements RegisterAgentListener {
 		register();
 	}
 	
+	public void unregister() {
+		if (ra != null && ra.unregister()) {
+			Receiver.alarm(0, LoopAlarm.class);
+			Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
+			wl.acquire();
+		}		
+	}
+	
 	public void register() {	
 		if (user_profile == null || user_profile.username.equals("") ||
 				user_profile.realm.equals("")) return;
 		if (!Receiver.isFast()) {
-			if (ra != null && ra.unregister()) {
-				Receiver.alarm(0, LoopAlarm.class);
-				Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
-				wl.acquire();
-			}
+			unregister();
 		} else {
 			if (ra != null && ra.register()) {
 				Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
@@ -211,11 +216,11 @@ public class SipdroidEngine implements RegisterAgentListener {
 		Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.regfailed)+" ("+result+")",R.drawable.sym_presence_away,0);
 		if (wl.isHeld())
 			wl.release();
-		if (SystemClock.elapsedRealtime() > lasthalt + 45000) {
-			lasthalt = SystemClock.elapsedRealtime();
+		if (SystemClock.uptimeMillis() > lasthalt + 45000) {
+			lasthalt = SystemClock.uptimeMillis();
 			sip_provider.haltConnections();
-			updateDNS();
 		}
+		updateDNS();
 	}
 	
 	public void updateDNS() {
@@ -281,13 +286,17 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	public void togglemute() {
-		if (ua.call_state == UserAgent.UA_STATE_HOLD)
-			ua.reInvite(null, 0);
+		if (ua.muteMediaApplication())
+			Receiver.onText(Receiver.CALL_NOTIFICATION, getUIContext().getString(R.string.menu_mute), android.R.drawable.stat_notify_call_mute,Receiver.ccCall.base);
 		else
-			ua.muteMediaApplication();
+			Receiver.onText(Receiver.CALL_NOTIFICATION, getUIContext().getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call,Receiver.ccCall.base);			
 	}
 	
 	public int speaker(int mode) {
+		if (mode == AudioManager.MODE_NORMAL)
+			Receiver.onText(Receiver.CALL_NOTIFICATION, getUIContext().getString(R.string.menu_speaker), android.R.drawable.stat_sys_speakerphone,Receiver.ccCall.base);
+		else
+			Receiver.onText(Receiver.CALL_NOTIFICATION, getUIContext().getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call,Receiver.ccCall.base);
 		return ua.speakerMediaApplication(mode);
 	}
 	

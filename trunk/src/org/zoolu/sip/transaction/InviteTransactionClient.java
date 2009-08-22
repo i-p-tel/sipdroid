@@ -157,7 +157,7 @@ public class InviteTransactionClient extends TransactionClient {
 			if (to.equals(retransmission_to) && statusIs(STATE_TRYING)) {
 				printLog("Retransmission timeout expired", LogLevel.HIGH);
 				// retransmission only in case of unreliable transport
-				if (connection_id == null) {
+				if (true || connection_id == null) {
 					sip_provider.sendMessage(request);
 					long timeout = 2 * retransmission_to.getTime();
 					retransmission_to = new Timer(timeout, retransmission_to

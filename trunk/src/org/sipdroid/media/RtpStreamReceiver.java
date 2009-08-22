@@ -27,14 +27,17 @@ import java.net.SocketException;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
+import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.ToneGenerator;
+import android.preference.PreferenceManager;
 
 /**
  * RtpStreamReceiver is a generic stream receiver. It receives packets from RTP
@@ -56,7 +59,7 @@ public class RtpStreamReceiver extends Thread {
 
 	/** Whether it is running */
 	boolean running;
-	boolean muted;
+	AudioManager am;
 	public static int speakermode;
 	
 	/**
@@ -87,15 +90,12 @@ public class RtpStreamReceiver extends Thread {
 		running = false;
 	}
 	
-	public boolean mute() {
-		muted = !muted;
-		return muted;
-	}
-
 	public int speaker(int mode) {
 		int old = speakermode;
 		
+		saveVolume();
 		speakermode = mode;
+		restoreVolume();
 		return old;
 	}
 
@@ -126,6 +126,20 @@ public class RtpStreamReceiver extends Thread {
 		smin = sm*r + smin*(1-r);
 	}
 	
+	void restoreVolume() {
+		am.setStreamVolume(AudioManager.STREAM_MUSIC,
+				PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("volume"+speakermode, 
+				am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)*
+				(speakermode == AudioManager.MODE_NORMAL?4:3)/4
+				),0);
+	}
+	
+	void saveVolume() {
+		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+		edit.putInt("volume"+speakermode,am.getStreamVolume(AudioManager.STREAM_MUSIC));
+		edit.commit();
+	}
+	
 	/** Runs it in a new Thread. */
 	public void run() {
 		if (rtp_socket == null) {
@@ -141,13 +155,14 @@ public class RtpStreamReceiver extends Thread {
 			println("Reading blocks of max " + buffer.length + " bytes");
 
 		running = true;
-		muted = false;
 		speakermode = AudioManager.MODE_IN_CALL;
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
-		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
+		am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 		int oldvibrate = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
 		int oldvibrate2 = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
+		int oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+		restoreVolume();
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,AudioManager.VIBRATE_SETTING_OFF);
 		AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
@@ -178,9 +193,9 @@ public class RtpStreamReceiver extends Thread {
 		}
 		System.gc();
 		while (running) {
-			if (muted) {
+			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 				track.pause();
-				while (running && muted) {
+				while (running && Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 					try {
 						sleep(1000);
 					} catch (InterruptedException e1) {
@@ -231,7 +246,7 @@ public class RtpStreamReceiver extends Thread {
 				 } else
 					 user += track.write(lin,0,len);
 				 
-				 if (user >= luser + 8000) {
+				 if (user >= luser + 8000 && Receiver.call_state == UserAgent.UA_STATE_INCALL) {
 					 if (am.getMode() != speakermode) {
 						 am.setMode(speakermode);
 						 switch (speakermode) {
@@ -252,6 +267,8 @@ public class RtpStreamReceiver extends Thread {
 		am.setMode(AudioManager.MODE_NORMAL);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
+		saveVolume();
+		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {

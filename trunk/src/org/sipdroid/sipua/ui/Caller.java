@@ -89,7 +89,7 @@ public class Caller extends BroadcastReceiver {
 				}
 				noexclude = 0;
 
-    			if (!sip_type)
+    			if (!sip_type || !Sipdroid.on(context))
     			{
     				setResultData(number);
     			} 

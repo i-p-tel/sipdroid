@@ -457,9 +457,9 @@ public class InviteDialog extends Dialog implements TransactionClientListener,
 	 * Signals that the phone is ringing. This method should be called when the
 	 * InviteDialog is in D_INVITED or D_ReINVITED state
 	 */
-	public void ring() {
+	public void ring(String sdp) { // modified
 		printLog("inside ring()", LogLevel.MEDIUM);
-		respond(180, SipResponses.reasonOf(180), null, null);
+		respond(180, SipResponses.reasonOf(180), null, sdp);
 	}
 
 	/**
@@ -488,10 +488,13 @@ public class InviteDialog extends Dialog implements TransactionClientListener,
 		printLog("inside refuse()", LogLevel.MEDIUM);
 		// refuse(480,"Temporarily Unavailable");
 		// refuse(603,"Decline");
-		// refuse(403, SipResponses.reasonOf(403));
-		refuse(486, SipResponses.reasonOf(486)); // modified
+		refuse(403, SipResponses.reasonOf(403));
 	}
 
+	public void busy() {
+		refuse(486, SipResponses.reasonOf(486)); // modified		
+	}
+	
 	/**
 	 * Termiante the call. This method should be called when the InviteDialog is
 	 * in D_CALL state
