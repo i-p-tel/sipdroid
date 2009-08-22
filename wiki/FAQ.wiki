@@ -41,14 +41,6 @@ See http://android-developers.blogspot.com/2009/04/android-15-is-here.html for d
 
 The update for the other phones comes over the air, starting May 1st, 2009.
 
-=== What does "full" version mean? ===
-
-There is a download at Android Market which is limited to usage within Wireless LANs only. 
-
-The download available [http://code.google.com/p/sipdroid/downloads/list here] can be used on 3G and EDGE networks as well. Please check the contractual terms with your mobile operator before using that one (see above).
-
-Upgrading through Android Market always reverts to the limited version.
-
 === What build environment is needed for Sipdroid? ===
 
 If you are interested in developing and contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] and [http://subclipse.tigris.org/install.html Subclipse] for building the source code.
@@ -102,10 +94,6 @@ Incoming SIP calls can be identified by the turquoise icon in the status bar.
   * Green call button: Toggle on-hold
 
   * BACK button: End call
-
-=== How can I switch Sipdroid on and off? ===
-
-You need to open Sipdroid's settings and uncheck "Use WLAN" to disable it.
 
 === How can I modify phone numbers on the fly? Where is the prefix option? ===
 
