@@ -46,6 +46,7 @@ public class SIPUri extends Activity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+		Sipdroid.on(this,true);
 		Uri uri = getIntent().getData();
 		String target;
 		if (uri.getScheme().equals("sip"))

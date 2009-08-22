@@ -20,6 +20,7 @@
 
 package org.sipdroid.sipua.ui;
 
+import org.sipdroid.sipua.UserAgent;
 import org.zoolu.sip.provider.SipProvider;
 import org.zoolu.sip.provider.SipStack;
 
@@ -28,8 +29,6 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class RegisterService extends Service {
-	public static boolean hold;
-	
     @Override
     public void onCreate() {
     	super.onCreate();
@@ -39,7 +38,8 @@ public class RegisterService extends Service {
     @Override
     public void onStart(Intent intent, int id) {
          super.onStart(intent,id);
-         if (SipStack.default_transport_protocols[0].equals(SipProvider.PROTO_TCP))
+         if (SipStack.default_transport_protocols[0].equals(SipProvider.PROTO_TCP)
+        		 || Receiver.call_state != UserAgent.UA_STATE_IDLE)
         	 Receiver.alarm(10*60, OneShotAlarm2.class);
          else
         	 Receiver.alarm(45, OneShotAlarm2.class);

@@ -1,6 +1,7 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/settings_account">
+	<PreferenceScreen android:title="@string/settings_account">
+      <PreferenceCategory android:title="@string/settings_account">
 	    <EditTextPreference
 	            android:key="username"
 	            android:title="@string/settings_username"
@@ -24,8 +25,10 @@
 		    android:entries="@array/protocol_display_values"
 		    android:entryValues="@array/protocol_values"
 		    android:dialogTitle="@string/settings_protocol" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/settings_options">
+      </PreferenceCategory>
+    </PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_options">
+      <PreferenceCategory android:title="@string/settings_options">
 		<CheckBoxPreference
 			android:key="wlan"
 			android:title="@string/settings_wlan"
@@ -40,7 +43,16 @@
 		    android:entries="@array/pref_display_values"
 		    android:entryValues="@array/pref_values"
 		    android:dialogTitle="@string/settings_pref" />
-    </PreferenceCategory>
+		<CheckBoxPreference
+			android:key="auto_on"
+			android:title="@string/settings_auto_on"
+			android:summary="@string/settings_auto_on2" />
+		<CheckBoxPreference
+			android:key="auto_ondemand"
+			android:title="@string/settings_auto_ondemand"
+			android:summary="@string/settings_auto_ondemand2" />
+      </PreferenceCategory>
+    </PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_advanced_options">
 		<PreferenceCategory android:title="@string/settings_advanced_options">
 	        <EditTextPreference

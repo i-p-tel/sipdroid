@@ -22,6 +22,7 @@ package org.sipdroid.sipua.ui;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.HashMap;
 
 import org.sipdroid.media.G711;
 import org.sipdroid.net.RtpPacket;
@@ -29,16 +30,20 @@ import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
+import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.CallCard;
 import org.sipdroid.sipua.phone.Phone;
 
-import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -47,18 +52,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
-public class InCallScreen extends CallScreen {
+public class InCallScreen extends CallScreen implements View.OnClickListener {
 
 	private static Receiver m_receiver;
 	CallCard mCallCard;
 	Phone ccPhone;
 	
-    KeyguardManager mKeyguardManager;
-    KeyguardManager.KeyguardLock mKeyguardLock;
-    boolean enabled;
-    
     public void onDestroy() {
 		super.onDestroy();
 		if (m_receiver != null) {
@@ -72,52 +75,47 @@ public class InCallScreen extends CallScreen {
 		super.onPause();
     	if (!Sipdroid.release) Log.i("SipUA:","on pause");
 		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL) Receiver.moveTop();
-		reenableKeyguard();
 		if (socket != null) {
 			socket.close();
 			socket = null;
 		}
+		if (t != null) {
+			running = false;
+			t.interrupt();
+		}
 	}
 	
 	void moveBack() {
-		if ((Receiver.ccConn != null && !Receiver.ccConn.isIncoming())) {
-	        startActivity(Receiver.createCallLogIntent());
+		if (Receiver.ccConn != null && !Receiver.ccConn.isIncoming()) {
+			// after an outgoing call don't fall back to the contact
+			// or call log because it is too easy to dial accidentally from there
+	        startActivity(Receiver.createHomeIntent());
 		}
 		moveTaskToBack(true);
 	}
 	
-	void disableKeyguard() {
-		if (enabled) {
-			mKeyguardLock.disableKeyguard();
-			enabled = false;
-		}
-	}
-	
-	void reenableKeyguard() {
-		if (!enabled) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-			}
-			mKeyguardLock.reenableKeyguard();
-			enabled = true;
-		}
-	}
-	
 	SipdroidSocket socket;
 	Context mContext = this;
-	int running;
 	int speakermode;
 	long speakervalid;
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
     	if (!Sipdroid.release) Log.i("SipUA:","on resume");
 		switch (Receiver.call_state) {
 		case UserAgent.UA_STATE_INCOMING_CALL:
-			callCardMenuButtonHint.setText(R.string.menuButtonHint2);
+			if (Receiver.pstn_state != null && Receiver.pstn_state.equals("RINGING"))
+				callCardMenuButtonHint.setText(R.string.menuButtonHint3);
+			else
+				callCardMenuButtonHint.setText(R.string.menuButtonHint2);
 			callCardMenuButtonHint.setVisibility(View.VISIBLE);
+			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_on", false) &&
+					!mKeyguardManager.inKeyguardRestrictedInputMode())
+				mHandler.sendEmptyMessageDelayed(0, 1000);
+			else if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_ondemand", false) &&
+					PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_demand", false))
+				mHandler.sendEmptyMessageDelayed(1, 10000);
 			break;
 		case UserAgent.UA_STATE_INCALL:
 			if (socket == null && Receiver.engine(mContext).getLocalVideo() != 0 && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString("server","").equals("pbxes.org"))
@@ -167,8 +165,16 @@ public class InCallScreen extends CallScreen {
 						}
 					}
 		        }).start();  
+			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				mDialerDrawer.close();
+				mDialerDrawer.setVisibility(View.GONE);
+			} else
+				mDialerDrawer.setVisibility(View.VISIBLE);
 		case UserAgent.UA_STATE_HOLD:
-            callCardMenuButtonHint.setText(R.string.menuButtonHint);
+			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+				callCardMenuButtonHint.setText(R.string.menuButtonHint4);
+			else
+	            callCardMenuButtonHint.setText(R.string.menuButtonHint);
 			callCardMenuButtonHint.setVisibility(View.VISIBLE);
 			break;
 		case UserAgent.UA_STATE_IDLE:
@@ -190,29 +196,110 @@ public class InCallScreen extends CallScreen {
 			callCardMenuButtonHint.setVisibility(View.INVISIBLE);
 			break;
 		}
+		if (Receiver.call_state != UserAgent.UA_STATE_INCALL) {
+			mDialerDrawer.close();
+			mDialerDrawer.setVisibility(View.GONE);
+		}
 		if (Receiver.ccCall != null) mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
-		disableKeyguard();
+	    if (t == null) {
+			mDigits.setText("");
+	        (t = new Thread() {
+				public void run() {
+					int len = 0;
+
+					running = true;
+					for (;;) {
+						if (len != mDigits.getText().length()) {
+							Receiver.engine(Receiver.mContext).info(mDigits.getText().charAt(len++));
+							continue;
+						}
+						if (!running) {
+							t = null;
+							break;
+						}
+						try {
+							sleep(100000);
+						} catch (InterruptedException e) {
+						}
+					}
+				}
+			}).start();
+	    }
 	}
 	
+    Handler mHandler = new Handler() {
+    	public void handleMessage(Message msg) {
+    		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL) {
+    			answer();
+    			if (msg.what == 1)
+    				Receiver.engine(mContext).speaker(AudioManager.MODE_NORMAL);
+    		}
+    	}
+    };
+
 	ViewGroup mInCallPanel;
 	TextView callCardMenuButtonHint;
+	SlidingDrawer mDialerDrawer;
 	
     public void initInCallScreen() {
         mInCallPanel = (ViewGroup) findViewById(R.id.inCallPanel);
         View callCardLayout = getLayoutInflater().inflate(
                     R.layout.call_card_popup,
                     mInCallPanel);
+        mDialerDrawer = (SlidingDrawer) findViewById(R.id.dialer_container);
         mCallCard = (CallCard) callCardLayout.findViewById(R.id.callCard);
         mCallCard.reset();
         callCardMenuButtonHint = mCallCard.getMenuButtonHint();
         mCallCard.displayOnHoldCallStatus(ccPhone,null);
         mCallCard.displayOngoingCallStatus(ccPhone,null);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+        	mCallCard.updateForLandscapeMode();
         
         // Have the WindowManager filter out touch events that are "too fat".
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
+
+	    mDigits = (EditText) findViewById(R.id.digits);
+        mDisplayMap.put(R.id.one, '1');
+        mDisplayMap.put(R.id.two, '2');
+        mDisplayMap.put(R.id.three, '3');
+        mDisplayMap.put(R.id.four, '4');
+        mDisplayMap.put(R.id.five, '5');
+        mDisplayMap.put(R.id.six, '6');
+        mDisplayMap.put(R.id.seven, '7');
+        mDisplayMap.put(R.id.eight, '8');
+        mDisplayMap.put(R.id.nine, '9');
+        mDisplayMap.put(R.id.zero, '0');
+        mDisplayMap.put(R.id.pound, '#');
+        mDisplayMap.put(R.id.star, '*');
+
+        View button;
+        for (int viewId : mDisplayMap.keySet()) {
+            button = findViewById(viewId);
+            button.setOnClickListener(this);
+        }
     }
     
-	@Override
+	Thread t;
+	EditText mDigits;
+	boolean running;
+    private static final HashMap<Integer, Character> mDisplayMap =
+        new HashMap<Integer, Character>();
+    
+	public void onClick(View v) {
+        int viewId = v.getId();
+
+        // if the button is recognized
+        if (mDisplayMap.containsKey(viewId)) {
+                    appendDigit(mDisplayMap.get(viewId));
+        }
+    }
+
+    void appendDigit(final char c) {
+        mDigits.getText().append(c);
+        t.interrupt();
+    }
+
+    @Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
@@ -229,16 +316,13 @@ public class InCallScreen extends CallScreen {
         	m_receiver = new Receiver();
         	registerReceiver(m_receiver, intentfilter);     
 		}
-
-        mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-        mKeyguardLock = mKeyguardManager.newKeyguardLock("Sipdroid");
-        enabled = true;
 	}
 		
 	@Override
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
-		if (Receiver.call_state == UserAgent.UA_STATE_INCALL || Receiver.call_state == UserAgent.UA_STATE_HOLD) callCardMenuButtonHint.setVisibility(View.VISIBLE);	
+		if (Receiver.call_state == UserAgent.UA_STATE_INCALL || Receiver.call_state == UserAgent.UA_STATE_HOLD)
+			callCardMenuButtonHint.setVisibility(View.VISIBLE);	
 	}
 	
 	@Override
@@ -249,13 +333,11 @@ public class InCallScreen extends CallScreen {
 		if (Receiver.call_state == UserAgent.UA_STATE_INCALL || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(true);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(true);
-			menu.findItem(DTMF_MENU_ITEM).setVisible(true);
 			menu.findItem(SPEAKER_MENU_ITEM).setVisible(true);
 			menu.findItem(VIDEO_MENU_ITEM).setVisible(Receiver.engine(this).getRemoteVideo() != 0);
 		} else {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(false);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(false);
-			menu.findItem(DTMF_MENU_ITEM).setVisible(false);
 			menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
 			menu.findItem(SPEAKER_MENU_ITEM).setVisible(false);
 		}
@@ -263,20 +345,41 @@ public class InCallScreen extends CallScreen {
 		return result;
 	}
 
+	void answer() {
+		if (Receiver.ccCall != null) {
+			Receiver.ccCall.setState(Call.State.ACTIVE);
+			Receiver.ccCall.base = SystemClock.elapsedRealtime();
+			mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
+			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				mDialerDrawer.close();
+				mDialerDrawer.setVisibility(View.GONE);
+				callCardMenuButtonHint.setText(R.string.menuButtonHint4);
+			} else {
+				mDialerDrawer.setVisibility(View.VISIBLE);
+            	callCardMenuButtonHint.setText(R.string.menuButtonHint);
+			}
+		}
+        (new Thread() {
+			public void run() {
+        		Receiver.engine(mContext).answercall();
+			}
+		}).start();   
+	}
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
         case KeyEvent.KEYCODE_MENU:
         	if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL) {
-        		Receiver.engine(this).answercall();
-        		return true;
+        		answer();
+				return true;
         	}
         	break;
         	
         case KeyEvent.KEYCODE_CALL:
         	switch (Receiver.call_state) {
         	case UserAgent.UA_STATE_INCOMING_CALL: // does not come thru any more
-        		Receiver.engine(this).answercall();
+        		answer();
         		return true;
         	case UserAgent.UA_STATE_INCALL:
         	case UserAgent.UA_STATE_HOLD:
@@ -303,8 +406,14 @@ public class InCallScreen extends CallScreen {
             // easy to press accidentally.
         	return true;
         }
+        if (Receiver.call_state == UserAgent.UA_STATE_INCALL) {
+	        char number = event.getNumber();
+	        if (Character.isDigit(number) || number == '*' || number == '#') {
+	        	appendDigit(number);
+	        	return true;
+	        }
+        }
         return super.onKeyDown(keyCode, event);
 	}
-
 
 }

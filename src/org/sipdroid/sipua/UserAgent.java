@@ -421,12 +421,10 @@ public class UserAgent extends CallListenerAdapter {
 		}
 	}
 	
-	public void muteMediaApplication() {
+	public boolean muteMediaApplication() {
 		if (audio_app != null)
-			if (audio_app.muteMedia())
-				changeStatus(UA_STATE_HOLD);
-			else
-				changeStatus(UA_STATE_INCALL);
+			return audio_app.muteMedia();
+		return false;
 	}
 
 	public int speakerMediaApplication(int mode) {
@@ -451,13 +449,12 @@ public class UserAgent extends CallListenerAdapter {
 		}
 		printLog("INCOMING", LogLevel.HIGH);
 		if (!Receiver.isFast()) {
+			call.busy();
 			listen();
 			return;
 		}
 		
 		changeStatus(UA_STATE_INCOMING_CALL,caller.toString());
-		
-		call.ring();
 		
 		if (sdp != null) { 
 			// Create the new SDP
@@ -472,6 +469,8 @@ public class UserAgent extends CallListenerAdapter {
 			new_sdp = SdpTools.sdpAttirbuteSelection(new_sdp, "rtpmap");
 			local_session = new_sdp.toString();
 		}
+		call.ring(local_session);		
+		launchMediaApplication();
 	}
 
 	/**
@@ -564,8 +563,6 @@ public class UserAgent extends CallListenerAdapter {
 
 		changeStatus(UA_STATE_INCALL);
 		
-		launchMediaApplication();
-		
 		if (user_profile.hangup_time > 0)
 		{
 			this.automaticHangup(user_profile.hangup_time);
@@ -580,7 +577,10 @@ public class UserAgent extends CallListenerAdapter {
 			return;
 		}
 		printLog("RE-INVITE-ACCEPTED/CALL", LogLevel.HIGH);
-		muteMediaApplication(); // modified
+		if (statusIs(UA_STATE_HOLD))
+			changeStatus(UA_STATE_INCALL);
+		else
+			changeStatus(UA_STATE_HOLD);
 	}
 
 	/** Callback function called when arriving a 4xx (re-invite/modify failure) */

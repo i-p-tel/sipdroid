@@ -45,6 +45,10 @@ import java.util.Hashtable;
 import java.io.IOException;
 import org.zoolu.tools.HashSet;
 import org.zoolu.tools.Iterator;
+
+import android.content.Context;
+import android.os.PowerManager;
+
 import java.util.Enumeration;
 import java.util.Date;
 
@@ -1024,7 +1028,7 @@ public class SipProvider implements Configurable, TransportListener,
 
 			// is there any listeners?
 			if (listeners == null || listeners.size() == 0) {
-				printLog("no listener found: meesage discarded.", LogLevel.HIGH);
+				printLog("no listener found: message discarded.", LogLevel.HIGH);
 				return;
 			}
 
@@ -1174,10 +1178,18 @@ public class SipProvider implements Configurable, TransportListener,
 	}
 
 	// ************************* Callback methods *************************
-
+	PowerManager pm;
+	PowerManager.WakeLock wl;
+	
 	/** When a new SIP message is received. */
 	public void onReceivedMessage(Transport transport, Message msg) {
+		if (pm == null) {
+			pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
+			wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid");
+		}
+		wl.acquire(); // modified
 		processReceivedMessage(msg);
+		wl.release();
 	}
 
 	/** When Transport terminates. */
@@ -1187,7 +1199,8 @@ public class SipProvider implements Configurable, TransportListener,
 			ConnectionIdentifier conn_id = new ConnectionIdentifier(
 					(ConnectedTransport) transport);
 			removeConnection(conn_id);
-			Receiver.engine(Receiver.mContext).register(); // modified
+			if (Sipdroid.on(Receiver.mContext))
+				Receiver.engine(Receiver.mContext).register(); // modified
 		}
 		if (error != null)
 			printException(error, LogLevel.HIGH);

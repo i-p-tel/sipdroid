@@ -29,6 +29,7 @@ package org.sipdroid.sipua.phone;
 
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 //import android.pim.ContactsAsyncHelper;
@@ -244,7 +245,7 @@ public class CallCard extends FrameLayout
         int callCardBackgroundResid = 0;
 
         // Background frame resources are different between portrait/landscape:
-        boolean landscapeMode = false; // InCallScreen.ConfigurationHelper.isLandscape();
+        boolean landscapeMode = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         switch (state) {
             case ACTIVE:
@@ -436,6 +437,7 @@ public class CallCard extends FrameLayout
             mElapsedTime.setTextColor(mTextColorConnected);
             mElapsedTime.setBase(call.base);
             mElapsedTime.start();
+            mElapsedTime.setVisibility(View.VISIBLE);
             mUpperTitle.setText("");
         } else if (state == Call.State.DISCONNECTED) {
             // Use the "lower title" (in red).
@@ -456,6 +458,8 @@ public class CallCard extends FrameLayout
             // All other states use the "upper title":
             mUpperTitle.setText(cardTitle);
             mLowerTitleViewGroup.setVisibility(View.INVISIBLE);
+            if (state != Call.State.HOLDING)
+            	mElapsedTime.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -923,7 +927,7 @@ public class CallCard extends FrameLayout
      *
      * @see InCallScreen.applyConfigurationToLayout()
      */
-    /* package */ void updateForLandscapeMode() {
+    /* package */ public void updateForLandscapeMode() {
         if (DBG) log("updateForLandscapeMode()...");
 
         // The main CallCard's minimum height is smaller in landscape mode

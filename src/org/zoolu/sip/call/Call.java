@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -167,9 +168,10 @@ public class Call implements InviteDialogListener {
 	}
 
 	/** Rings back for the incoming call */
-	public void ring() {
+	public void ring(String sdp) { // modified
+		local_sdp = sdp;
 		if (dialog != null)
-			dialog.ring();
+			dialog.ring(sdp);
 	}
 
 	/** Respond to a incoming call (invite) with <i>resp</i> */
@@ -233,6 +235,11 @@ public class Call implements InviteDialogListener {
 			dialog.cancel();
 			dialog.bye();
 		}
+	}
+	
+	public void busy() {
+		if (dialog != null)
+			dialog.busy(); // modified
 	}
 
 	// ************** Inherited from InviteDialogListener **************

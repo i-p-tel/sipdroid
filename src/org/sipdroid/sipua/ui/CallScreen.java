@@ -5,9 +5,13 @@ import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
 
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,7 +40,6 @@ public class CallScreen extends Activity {
 	public static final int HANG_UP_MENU_ITEM = FIRST_MENU_ID + 1;
 	public static final int HOLD_MENU_ITEM = FIRST_MENU_ID + 2;
 	public static final int MUTE_MENU_ITEM = FIRST_MENU_ID + 3;
-	public static final int DTMF_MENU_ITEM = FIRST_MENU_ID + 4;
 	public static final int VIDEO_MENU_ITEM = FIRST_MENU_ID + 5;
 	public static final int SPEAKER_MENU_ITEM = FIRST_MENU_ID + 6;
 
@@ -45,15 +48,13 @@ public class CallScreen extends Activity {
 		boolean result = super.onCreateOptionsMenu(menu);
 
 		MenuItem m = menu.add(0, HOLD_MENU_ITEM, 0, R.string.menu_hold);
-		m.setIcon(R.drawable.sym_call_hold_on);
+		m.setIcon(android.R.drawable.stat_sys_phone_call_on_hold);
 		m = menu.add(0, HANG_UP_MENU_ITEM, 0, R.string.menu_endCall);
 		m.setIcon(R.drawable.ic_menu_end_call);
 		m = menu.add(0, MUTE_MENU_ITEM, 0, R.string.menu_mute);
-		m.setIcon(R.drawable.mute);
+		m.setIcon(android.R.drawable.stat_notify_call_mute);
 		m = menu.add(0, SPEAKER_MENU_ITEM, 0, R.string.menu_speaker);
-		m.setIcon(R.drawable.sym_call_speakerphone_on);
-		m = menu.add(0, DTMF_MENU_ITEM, 0, R.string.menu_dtmf);
-		m.setIcon(R.drawable.ic_menu_dial_pad);
+		m.setIcon(android.R.drawable.stat_sys_speakerphone);
 		m = menu.add(0, VIDEO_MENU_ITEM, 0, R.string.menu_video);
 		m.setIcon(android.R.drawable.ic_menu_camera);
 				
@@ -83,15 +84,6 @@ public class CallScreen extends Activity {
 					AudioManager.MODE_IN_CALL:AudioManager.MODE_NORMAL);
 			break;
 					
-		case DTMF_MENU_ITEM:
-			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) Receiver.engine(this).togglehold();
-			try {
-				intent = new Intent(this, org.sipdroid.sipua.ui.DTMF.class);
-				startActivity(intent);
-			} catch (ActivityNotFoundException e) {
-			}
-			break;
-
 		case VIDEO_MENU_ITEM:
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) Receiver.engine(this).togglehold();
 			try {
@@ -105,4 +97,48 @@ public class CallScreen extends Activity {
 		return result;
 	}
 	
+	long enabletime;
+    KeyguardManager mKeyguardManager;
+    KeyguardManager.KeyguardLock mKeyguardLock;
+    boolean enabled;
+    
+	void disableKeyguard() {
+		if (enabled) {
+			mKeyguardLock.disableKeyguard();
+			enabled = false;
+			enabletime = SystemClock.elapsedRealtime();
+		}
+	}
+	
+	void reenableKeyguard() {
+		if (!enabled) {
+			if (SystemClock.elapsedRealtime() < enabletime + 500)
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+				}
+			mKeyguardLock.reenableKeyguard();
+			enabled = true;
+		}
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+    	if (!Sipdroid.release) Log.i("SipUA:","on start");
+    	if (mKeyguardManager == null) {
+	        mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+	        mKeyguardLock = mKeyguardManager.newKeyguardLock("Sipdroid");
+	        enabled = true;
+    	}
+        disableKeyguard();
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+    	if (!Sipdroid.release) Log.i("SipUA:","on stop");
+		reenableKeyguard();
+	}
+
 }

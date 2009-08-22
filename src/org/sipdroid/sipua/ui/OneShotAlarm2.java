@@ -20,6 +20,7 @@ package org.sipdroid.sipua.ui;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+import org.sipdroid.sipua.UserAgent;
 import org.zoolu.sip.provider.SipProvider;
 import org.zoolu.sip.provider.SipStack;
 
@@ -33,8 +34,9 @@ public class OneShotAlarm2 extends BroadcastReceiver {
     @Override
 	public void onReceive(Context context, Intent intent) {
     	if (!Sipdroid.release) Log.i("SipUA:","alarm2");
-        if (SipStack.default_transport_protocols[0].equals(SipProvider.PROTO_TCP) &&
-        		 Receiver.mSipdroidEngine != null && Receiver.mSipdroidEngine.isRegistered())
+        if (Receiver.call_state != UserAgent.UA_STATE_IDLE || (
+        		SipStack.default_transport_protocols[0].equals(SipProvider.PROTO_TCP) &&
+        		Receiver.mSipdroidEngine != null && Receiver.mSipdroidEngine.isRegistered()))
            	context.startService(new Intent(context,RegisterService.class));
         else
         	context.stopService(new Intent(context,RegisterService.class));

@@ -25,4 +25,32 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         </RelativeLayout>  <!-- End of inCallPanel -->
 
     </FrameLayout>  <!-- End of mainFrame -->
+
+    <!-- The sliding drawer control containing the DTMF dialer.  This has been
+         moved so that it is a sibling of mainFrame, instead of being a child.
+         Doing so allows us to expand to the full width of the screen, instead
+         of being confined to the mainFrame's layout -->
+    <SlidingDrawer
+        android:id="@+id/dialer_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+
+        android:topOffset="5px"
+        android:bottomOffset="7px"
+        android:handle="@+id/dialer_tab"
+        android:content="@+id/dtmf_dialer"
+		android:allowSingleTap="false">
+		
+       <ImageButton
+           android:id="@id/dialer_tab"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:src="@drawable/ic_dialpad_tray"
+           android:background="@drawable/tray_handle_normal"/>
+
+        <include
+            layout="@layout/dtmf_twelve_key_dialer"
+            android:id="@id/dtmf_dialer"/>
+
+    </SlidingDrawer>
 </AbsoluteLayout>

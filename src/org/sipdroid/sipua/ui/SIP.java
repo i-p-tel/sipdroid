@@ -50,6 +50,7 @@ public class SIP extends Activity {
 		super.onCreate(saved);
 		Intent intent;
 		Uri uri;
+		Sipdroid.on(this,true);
 		if ((intent = getIntent()) != null
 			&& (uri = intent.getData()) != null)
 				callPSTN(uri.toString());
