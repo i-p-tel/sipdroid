@@ -12,4 +12,6 @@
   <string name="menu_mute">靜音</string>
   <string name="menu_speaker">喇叭</string>
   <string name="unknown">無法辨識</string>
+  <string name="slide_hint_down_to_end_call">向下滑動即可結束通話。</string>
+  <string name="slide_hint_up_to_answer">向上滑動即可接聽。</string>
  </resources>

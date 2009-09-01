@@ -12,4 +12,6 @@
   <string name="menu_mute">Silenciar</string>
   <string name="menu_speaker">Altavoz</string>
   <string name="unknown">Desconocido</string>
+  <string name="slide_hint_down_to_end_call">Deslícese hacia abajo para finalizar la llamada.</string>
+  <string name="slide_hint_up_to_answer">Deslícese hacia arriba para responder.</string>
 </resources>

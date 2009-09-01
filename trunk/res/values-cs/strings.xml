@@ -8,4 +8,5 @@
   <string name="card_title_on_hold">Přidržený</string>
   <string name="menu_call">Volat</string>
   <string name="unknown">Neznámý</string>
+  <string name="slide_hint_up_to_answer">Vysunutím přijmete hovor</string>
 </resources>

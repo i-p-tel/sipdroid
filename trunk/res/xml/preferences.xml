@@ -5,19 +5,23 @@
 	    <EditTextPreference
 	            android:key="username"
 	            android:title="@string/settings_username"
+	            android:singleLine="true"
 	            />
 	    <EditTextPreference
 	            android:key="password"
 	            android:title="@string/settings_password"
 	            android:password="true"
+	            android:singleLine="true"
 	            />	
 	    <EditTextPreference
 	            android:key="server"
 	            android:title="Server"
+	            android:singleLine="true"
 	            />	
 	    <EditTextPreference
 	            android:key="port"
 	            android:title="Port"
+	            android:singleLine="true"
 	            />
 		<ListPreference
 			android:key="protocol"
@@ -55,23 +59,29 @@
     </PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_advanced_options">
 		<PreferenceCategory android:title="@string/settings_advanced_options">
-	        <EditTextPreference
-	            android:key="minedge"
-	            android:title="@string/settings_minedge"
-	            android:hint="4"
-	        />
-	        <EditTextPreference
-	            android:key="maxpoll"
-	            android:title="@string/settings_maxpoll"
-	            android:hint="1"
-	        />
+			<ListPreference
+				android:key="minedge"
+				android:title="@string/settings_minedge"
+			    android:entries="@array/bars"
+			    android:entryValues="@array/bars"
+			    android:defaultValue="4"
+			    android:dialogTitle="@string/settings_minedge" />
+			<ListPreference
+				android:key="maxpoll"
+				android:title="@string/settings_maxpoll"
+			    android:entries="@array/bars"
+			    android:entryValues="@array/bars"
+			    android:defaultValue="1"
+			    android:dialogTitle="@string/settings_maxpoll" />
 	        <EditTextPreference
 	            android:key="search"
 	            android:title="@string/settings_search"
+	            android:singleLine="true"
 	        />
 	       	<EditTextPreference
 	            android:key="excludepat"
 	            android:title="@string/settings_excludepat"
+	            android:singleLine="true"
 	        />
 	        <org.sipdroid.sipua.ui.SipRingtonePreference
 	        	android:key="sipringtone"
@@ -81,6 +91,14 @@
 	        	android:persistent="false"
 	        	android:ringtoneType="ringtone"
 	        /> 
+			<ListPreference
+				android:key="eargain"
+				android:title="@string/settings_eargain"
+				android:summary="@string/settings_eargain2"
+			    android:entries="@array/eargain_display_values"
+			    android:entryValues="@array/eargain_values"
+			    android:defaultValue="0.25"
+			    android:dialogTitle="@string/settings_eargain" />
 	    </PreferenceCategory>    
     </PreferenceScreen>  
 	<PreferenceScreen android:title="@string/settings_pbxes_options">
@@ -93,6 +111,7 @@
 	            android:key="posurl"
 	            android:title="@string/settings_posurl"
 	            android:hint="http://pbxes.org/name"
+	            android:singleLine="true"
 	        />
 			<CheckBoxPreference
 				android:key="pos"
@@ -110,6 +129,7 @@
 	            android:key="callthru2"
 	            android:title="@string/settings_callthru2"
 	            android:hint="Accessno.,PIN#"
+	            android:singleLine="true"
 	        />
 		</PreferenceCategory>
     </PreferenceScreen>  

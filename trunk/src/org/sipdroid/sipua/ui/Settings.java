@@ -37,7 +37,7 @@ import android.preference.PreferenceManager;
 			try {
 				return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("minedge", "4"));
 			} catch (NumberFormatException i) {
-				return 1;
+				return 4;
 			}			
 		}
 		

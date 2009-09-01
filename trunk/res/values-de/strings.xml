@@ -29,10 +29,6 @@
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="pstn_name">Telefon</string>
     <string name="sip_name">Sipdroid, wenn verfügbar</string>
-<string name="menuButtonHint">Drücken Sie auf Menü für Anrufoptionen, die Rufaufbautaste zum Halten oder Zurück, um den Anruf zu beenden.</string>
-<string name="menuButtonHint2">Drücken Sie die Rufaufbautaste zum Abheben oder Zurück, um den Anruf abzuweisen.</string>
-<string name="menuButtonHint3">Drücken Sie auf Menü zum Abheben oder Zurück, um den Anruf abzuweisen.</string>
-<string name="menuButtonHint4">"Drücken Sie auf Menü für Anrufoptionen, die Rufaufbautaste zum Halten oder Zurück, um den Anruf zu beenden  \u2022  Zum Wählen Tastatur verwenden"</string>
 <string name="about">Sipdroid ist ein freier SIP-Client für Android
 \n
 \nSiehe http://sipdroid.org für weitere Infos
@@ -91,6 +87,14 @@
 <string name="settings_advanced_options">Erweiterte Einstellungen</string>   
 <string name="settings_minedge">Signalstärke für EDGE-Anrufe</string>
 <string name="settings_maxpoll">Signalstärke for WLAN-Abfrage</string>
+<string name="settings_eargain">Hörerlautstärke</string>
+<string name="settings_eargain2">Kann ein Echo beim Gesprächspartner hervorrufen</string>
+    <string-array name="eargain_display_values">
+        <item>Leise (kein Echo)</item>
+        <item>Mittel</item>
+        <item>Laut (evtl. Echo beim Gesprächspartner)</item>
+        <item>Sehr laut</item>
+    </string-array>
 <string name="menu_exit">Beenden</string>
 <string name="menu_about">Info</string>
 <string name="menu_dtmf">DTMF senden</string>
@@ -106,4 +110,6 @@
   <string name="menu_speaker">Lautsprecher</string>
   <string name="menu_mute">Stumm</string>
   <string name="unknown">Unbekannt</string>
+  <string name="slide_hint_down_to_end_call">Nach unten schieben, um das Gepräch zu beenden.</string>
+  <string name="slide_hint_up_to_answer">Nach oben schieben, um zu antworten.</string>
 </resources>
