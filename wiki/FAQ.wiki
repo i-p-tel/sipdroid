@@ -15,7 +15,7 @@ Often mobile phone operators forbid using VoIP in the contract's fine print. The
 
 The following plans are suitable for unlimited hotspot/3G usage:
 
-  * Germany: [https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php debitel Talk and Surf S], all T-Mobile plans with VoIP Option and all [http://www.de.o2.com/ext/o2/wizard/index?page_id=15698;tree_id=303;category_id=;year=;page=1;state=online;style=portal O2 customers with Internet Packs]
+  * Germany: [https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php debitel Talk and Surf S], all T-Mobile and Vodafone plans with VoIP Option, and all [http://www.de.o2.com/ext/o2/wizard/index?page_id=15698;tree_id=303;category_id=;year=;page=1;state=online;style=portal O2 customers with Internet Packs]
 
 [http://code.google.com/p/sipdroid/w/edit/FAQ Add] more!
 
@@ -77,23 +77,9 @@ If you want to call any other SIP URI you can enter it into the "Called Party Ad
 
 === How are the buttons assigned? ===
 
-Android reserves the red key for the built-in dialer of the Phone. So Sipdroid is controlled by the BACK button instead.
+Android reserves the red key for turning screen off and the green call button for answering a phone call. That's why they don't always work for Sipdroid, e.g. when screen is turned on the red key will first switch screen off, and then end call on another press.  The green button will not work for Sipdroid if there is a phone call ringing at the same time. In this case the green button will answer the GSM call.
 
-==== When ringing ====
-
-Incoming SIP calls can be identified by the turquoise icon in the status bar. 
-
-  * MENU or green call button: Answer call
-
-  * BACK button: Reject call
-
-  * If both, Phone and Sipdroid, are ringing (which can happen during handoff or when call forwarding isn't setup properly): MENU answers SIP call / green call button answers Phone call.
-
-==== While in call ====
-
-  * Green call button: Toggle on-hold
-
-  * BACK button: End call
+That's why Sipdroid offers a sliding card. A call is off-hook if the card is on top of the screen, and it is on-hook on the bottom. Just slide up to answer. Slide down to end call. If you want to reject an incoming call press the BACK button. The BACK button will always end call.
 
 === How can I modify phone numbers on the fly? Where is the prefix option? ===
 
