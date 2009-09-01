@@ -33,10 +33,11 @@ import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.CallCard;
 import org.sipdroid.sipua.phone.Phone;
+import org.sipdroid.sipua.phone.SlidingCardManager;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -45,6 +46,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -53,23 +55,33 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
-import android.widget.TextView;
 
 public class InCallScreen extends CallScreen implements View.OnClickListener {
 
-	private static Receiver m_receiver;
 	CallCard mCallCard;
 	Phone ccPhone;
+	int oldtimeout;
 	
-    public void onDestroy() {
-		super.onDestroy();
-		if (m_receiver != null) {
-			unregisterReceiver(m_receiver);
-			m_receiver = null;
-		}
+	void screenOff(boolean off) {
+        ContentResolver cr = getContentResolver();
+        
+        if (off) {
+        	if (oldtimeout == 0) {
+        		oldtimeout = Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000);
+	        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 1);
+        	}
+        } else {
+        	if (oldtimeout == 0 && Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000) == 1)
+        		oldtimeout = 60000;
+        	if (oldtimeout != 0) {
+	        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, oldtimeout);
+        		oldtimeout = 0;
+        	}
+        }
 	}
-
+	
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -83,6 +95,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			running = false;
 			t.interrupt();
 		}
+		screenOff(false);
 	}
 	
 	void moveBack() {
@@ -105,11 +118,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     	if (!Sipdroid.release) Log.i("SipUA:","on resume");
 		switch (Receiver.call_state) {
 		case UserAgent.UA_STATE_INCOMING_CALL:
-			if (Receiver.pstn_state != null && Receiver.pstn_state.equals("RINGING"))
-				callCardMenuButtonHint.setText(R.string.menuButtonHint3);
-			else
-				callCardMenuButtonHint.setText(R.string.menuButtonHint2);
-			callCardMenuButtonHint.setVisibility(View.VISIBLE);
 			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_on", false) &&
 					!mKeyguardManager.inKeyguardRestrictedInputMode())
 				mHandler.sendEmptyMessageDelayed(0, 1000);
@@ -170,15 +178,9 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 				mDialerDrawer.setVisibility(View.GONE);
 			} else
 				mDialerDrawer.setVisibility(View.VISIBLE);
-		case UserAgent.UA_STATE_HOLD:
-			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-				callCardMenuButtonHint.setText(R.string.menuButtonHint4);
-			else
-	            callCardMenuButtonHint.setText(R.string.menuButtonHint);
-			callCardMenuButtonHint.setVisibility(View.VISIBLE);
+		    screenOff(true);
 			break;
 		case UserAgent.UA_STATE_IDLE:
-			callCardMenuButtonHint.setVisibility(View.INVISIBLE);
 			if (Receiver.ccConn != null && Receiver.ccConn.date != 0) {
 		        (new Thread() {
 					public void run() {
@@ -192,15 +194,13 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			} else
 				moveBack();
 			break;
-		case UserAgent.UA_STATE_OUTGOING_CALL:
-			callCardMenuButtonHint.setVisibility(View.INVISIBLE);
-			break;
 		}
 		if (Receiver.call_state != UserAgent.UA_STATE_INCALL) {
 			mDialerDrawer.close();
 			mDialerDrawer.setVisibility(View.GONE);
 		}
 		if (Receiver.ccCall != null) mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
+        if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
 	    if (t == null) {
 			mDigits.setText("");
 	        (t = new Thread() {
@@ -237,19 +237,29 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     	}
     };
 
-	ViewGroup mInCallPanel;
-	TextView callCardMenuButtonHint;
+	ViewGroup mInCallPanel,mMainFrame;
 	SlidingDrawer mDialerDrawer;
+	SlidingCardManager mSlidingCardManager;
 	
     public void initInCallScreen() {
         mInCallPanel = (ViewGroup) findViewById(R.id.inCallPanel);
+        mMainFrame = (ViewGroup) findViewById(R.id.mainFrame);
         View callCardLayout = getLayoutInflater().inflate(
                     R.layout.call_card_popup,
                     mInCallPanel);
-        mDialerDrawer = (SlidingDrawer) findViewById(R.id.dialer_container);
         mCallCard = (CallCard) callCardLayout.findViewById(R.id.callCard);
         mCallCard.reset();
-        callCardMenuButtonHint = mCallCard.getMenuButtonHint();
+
+        mSlidingCardManager = new SlidingCardManager();
+        mSlidingCardManager.init(ccPhone, this, mMainFrame);
+        SlidingCardManager.WindowAttachNotifierView wanv =
+            new SlidingCardManager.WindowAttachNotifierView(this);
+	    wanv.setSlidingCardManager(mSlidingCardManager);
+	    wanv.setVisibility(View.GONE);
+	    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(0, 0);
+	    mMainFrame.addView(wanv, lp);
+
+        mDialerDrawer = (SlidingDrawer) findViewById(R.id.dialer_container);
         mCallCard.displayOnHoldCallStatus(ccPhone,null);
         mCallCard.displayOngoingCallStatus(ccPhone,null);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -309,27 +319,12 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		setContentView(R.layout.incall);
 		
 		initInCallScreen();
-
-		if (m_receiver == null) {
-			IntentFilter intentfilter = new IntentFilter();
-			intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
-        	m_receiver = new Receiver();
-        	registerReceiver(m_receiver, intentfilter);     
-		}
 	}
 		
-	@Override
-	public void onOptionsMenuClosed(Menu menu) {
-		super.onOptionsMenuClosed(menu);
-		if (Receiver.call_state == UserAgent.UA_STATE_INCALL || Receiver.call_state == UserAgent.UA_STATE_HOLD)
-			callCardMenuButtonHint.setVisibility(View.VISIBLE);	
-	}
-	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean result = super.onPrepareOptionsMenu(menu);
 
-		callCardMenuButtonHint.setVisibility(View.INVISIBLE);
 		if (Receiver.call_state == UserAgent.UA_STATE_INCALL || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(true);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(true);
@@ -345,19 +340,37 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		return result;
 	}
 
-	void answer() {
+	public void reject() {
 		if (Receiver.ccCall != null) {
+			Receiver.stopRingtone();
+			Receiver.ccCall.setState(Call.State.DISCONNECTED);
+			mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
+			mDialerDrawer.close();
+			mDialerDrawer.setVisibility(View.GONE);
+	        if (mSlidingCardManager != null)
+	        	mSlidingCardManager.showPopup();
+		}
+        (new Thread() {
+			public void run() {
+        		Receiver.engine(mContext).rejectcall();
+			}
+		}).start();   	
+    }
+	
+	public void answer() {
+		if (Receiver.ccCall != null) {
+			Receiver.stopRingtone();
 			Receiver.ccCall.setState(Call.State.ACTIVE);
 			Receiver.ccCall.base = SystemClock.elapsedRealtime();
 			mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
 			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 				mDialerDrawer.close();
 				mDialerDrawer.setVisibility(View.GONE);
-				callCardMenuButtonHint.setText(R.string.menuButtonHint4);
 			} else {
 				mDialerDrawer.setVisibility(View.VISIBLE);
-            	callCardMenuButtonHint.setText(R.string.menuButtonHint);
 			}
+	        if (mSlidingCardManager != null)
+	        	mSlidingCardManager.showPopup();
 		}
         (new Thread() {
 			public void run() {
@@ -370,7 +383,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
         case KeyEvent.KEYCODE_MENU:
-        	if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL) {
+        	if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL && mSlidingCardManager == null) {
         		answer();
 				return true;
         	}
@@ -378,33 +391,33 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
         	
         case KeyEvent.KEYCODE_CALL:
         	switch (Receiver.call_state) {
-        	case UserAgent.UA_STATE_INCOMING_CALL: // does not come thru any more
+        	case UserAgent.UA_STATE_INCOMING_CALL:
         		answer();
-        		return true;
+        		break;
         	case UserAgent.UA_STATE_INCALL:
         	case UserAgent.UA_STATE_HOLD:
        			Receiver.engine(this).togglehold();
-       			return true;
-        	default:
-	            // consume KEYCODE_CALL so PhoneWindow doesn't do anything with it
-	            return true;
+       			break;
         	}
-
-        // Note there's no KeyEvent.KEYCODE_ENDCALL case here.
-        // The standard system-wide handling of the ENDCALL key
-        // (see PhoneWindowManager's handling of KEYCODE_ENDCALL)
-        // already implements exactly what the UI spec wants,
-        // namely (1) "hang up" if there's a current active call,
-        // or (2) "don't answer" if there's a current ringing call.
+            // consume KEYCODE_CALL so PhoneWindow doesn't do anything with it
+            return true;
 
         case KeyEvent.KEYCODE_BACK:
-    		Receiver.engine(this).rejectcall();      
+    		reject();      
             return true;
 
         case KeyEvent.KEYCODE_CAMERA:
             // Disable the CAMERA button while in-call since it's too
             // easy to press accidentally.
         	return true;
+        	
+        case KeyEvent.KEYCODE_VOLUME_DOWN:
+        case KeyEvent.KEYCODE_VOLUME_UP:
+        	if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL) {
+        		Receiver.stopRingtone();
+        		return true;
+        	}
+        	break;
         }
         if (Receiver.call_state == UserAgent.UA_STATE_INCALL) {
 	        char number = event.getNumber();
@@ -415,5 +428,15 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
         }
         return super.onKeyDown(keyCode, event);
 	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_ENDCALL) {
+    		reject();      
+            return true;			
+		}
+		return false;
+	}
+	
 
 }

@@ -68,7 +68,7 @@ import org.sipdroid.sipua.phone.Connection;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
-		private static int oldtimeout,cellAsu = -1;
+		private static int cellAsu = -1;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
@@ -94,6 +94,15 @@ import org.sipdroid.sipua.phone.Connection;
 		static Ringtone oRingtone;
 		static PowerManager.WakeLock wl;
 				
+		public static void stopRingtone() {
+			android.os.Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+			v.cancel();
+			if (Receiver.oRingtone != null) {
+				Receiver.oRingtone.stop();
+				Receiver.oRingtone = null;
+			}
+		}
+		
 		public static void onState(int state,String caller) {
 			if (ccCall == null) {
 		        ccCall = new Call();
@@ -168,33 +177,23 @@ import org.sipdroid.sipua.phone.Connection;
 					break;
 				case UserAgent.UA_STATE_IDLE:
 					broadcastCallStateChanged("IDLE", null);
-					screenOff(false);
 					onText(CALL_NOTIFICATION, null, 0,0);
 					ccCall.setState(Call.State.DISCONNECTED);
 					if (listener_video != null)
 						listener_video.onHangup();
-					v.cancel();
-					if (oRingtone != null) {
-						oRingtone.stop();
-						oRingtone = null;
-					}
+					stopRingtone();
 					if (wl != null && wl.isHeld())
 						wl.release();
 			        mContext.startActivity(createIntent(InCallScreen.class));
 					break;
 				case UserAgent.UA_STATE_INCALL:
 					broadcastCallStateChanged("OFFHOOK", null);
-					screenOff(true);
 					if (ccCall.base == 0) {
 						ccCall.base = SystemClock.elapsedRealtime();
 					}
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call,ccCall.base);
 					ccCall.setState(Call.State.ACTIVE);
-					v.cancel();
-					if (oRingtone != null) {
-						oRingtone.stop();
-						oRingtone = null;
-					}
+					stopRingtone();
 					if (wl != null && wl.isHeld())
 						wl.release();
 			        mContext.startActivity(createIntent(InCallScreen.class));
@@ -361,24 +360,6 @@ import org.sipdroid.sipua.phone.Connection;
        		alarm(renew_time-15, OneShotAlarm.class);
 		}
 
-		public static void screenOff(boolean off) {
-	        ContentResolver cr = mContext.getContentResolver();
-	        
-	        if (off) {
-	        	if (oldtimeout == 0) {
-	        		oldtimeout = Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000);
-		        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 1);
-	        	}
-	        } else {
-	        	if (oldtimeout == 0 && Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000) == 1)
-	        		oldtimeout = 60000;
-	        	if (oldtimeout != 0) {
-		        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, oldtimeout);
-	        		oldtimeout = 0;
-	        	}
-	        }
-		}
-		
 		public static void updateSleep() {
 	        ContentResolver cr = mContext.getContentResolver();
 			int get = Settings.System.getInt(cr, Settings.System.WIFI_SLEEP_POLICY, -1);
@@ -460,9 +441,6 @@ import org.sipdroid.sipua.phone.Connection;
 	        if (intentAction.equals("android.intent.action.ANY_DATA_STATE")) {
 	        	engine(context).register();
 	        	updateSleep();
-	        } else
-	        if (intentAction.equals(Intent.ACTION_SCREEN_OFF)) {
-	        	screenOff(false);
 	        } else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {

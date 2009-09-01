@@ -167,7 +167,10 @@ public class RtpStreamReceiver extends Thread {
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,AudioManager.VIBRATE_SETTING_OFF);
 		AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
 				4096, AudioTrack.MODE_STREAM);
-		track.setStereoVolume(AudioTrack.getMaxVolume()/3,AudioTrack.getMaxVolume()/3);
+		track.setStereoVolume(AudioTrack.getMaxVolume()*
+				Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25"))
+				,AudioTrack.getMaxVolume()*
+				Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25")));
 		track.play();
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
@@ -251,7 +254,10 @@ public class RtpStreamReceiver extends Thread {
 						 am.setMode(speakermode);
 						 switch (speakermode) {
 						 case AudioManager.MODE_IN_CALL:
-								track.setStereoVolume(AudioTrack.getMaxVolume()/3,AudioTrack.getMaxVolume()/3);
+								track.setStereoVolume(AudioTrack.getMaxVolume()*
+										Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25"))
+										,AudioTrack.getMaxVolume()*
+										Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25")));
 								break;
 						 case AudioManager.MODE_NORMAL:
 								track.setStereoVolume(AudioTrack.getMaxVolume(),AudioTrack.getMaxVolume());
@@ -264,7 +270,8 @@ public class RtpStreamReceiver extends Thread {
 			}
 		}
 		track.stop();
-		am.setMode(AudioManager.MODE_NORMAL);
+		if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE"))
+			am.setMode(AudioManager.MODE_NORMAL);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 		saveVolume();

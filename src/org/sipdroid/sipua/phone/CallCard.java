@@ -103,6 +103,10 @@ public class CallCard extends FrameLayout
     static final int CALLCARD_SIDE_MARGIN_LANDSCAPE = 50;
     static final float TITLE_TEXT_SIZE_LANDSCAPE = 22F;  // scaled pixels
 
+    public void update(int x,int y,int w,int h) {
+    	setPadding(0, y, 0, 0);
+    }
+    
     public CallCard(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -886,9 +890,16 @@ public class CallCard extends FrameLayout
         view.setVisibility(View.VISIBLE);
     }
 
-     @Override
+    private SlidingCardManager mSlidingCardManager;
+    
+    @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-         return true;
+        if (mSlidingCardManager != null) mSlidingCardManager.handleCallCardTouchEvent(ev);
+        return true;
+    }
+    
+    public void setSlidingCardManager(SlidingCardManager slidingCardManager) {
+        mSlidingCardManager = slidingCardManager;
     }
 
     /**

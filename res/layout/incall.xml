@@ -22,10 +22,79 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_height="fill_parent"
                         >
 
+            <!-- Slide hints: if the "sliding card" feature is enabled,
+                 one or the other of these is visible at any given moment
+                 (see updateCardSlideHints()). -->
+
+            <!-- Slide hint and arrow *above* the main body of the card,
+                 shown when the card is in the *bottom* position. -->
+            <!-- This hint's position onscreen is static: the Y value is set
+                 so that the hint will be visible just above the top edge of
+                 the CallCard when the CallCard is in the "bottom" position.
+                 The resources here describe the portrait mode layout; see
+                 InCallScreen.ConfigurationHelper.applyConfigurationToLayout()
+                 for the differences in landscape mode. -->
+            <LinearLayout android:id="@+id/slideUp"
+                          android:orientation="vertical"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentBottom="true"
+                          android:background="@null"
+                          android:visibility="gone"
+                          >
+                <TextView android:id="@+id/slideUpHint"
+                          android:layout_gravity="center_horizontal"
+                          android:gravity="center_horizontal"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textColor="?android:attr/textColorSecondary"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@android:drawable/arrow_up_float"
+                    />
+            </LinearLayout>
+
+            <!-- Slide hint and arrow *below* the main body of the card,
+                 shown when the card is in the *top* position. -->
+            <!-- This hint's position onscreen is static: the Y value is set
+                 so that the hint will be visible just below the bottom edge of
+                 the CallCard when the CallCard is in the "top" position.
+                 The resources here describe the portrait mode layout; see
+                 InCallScreen.ConfigurationHelper.applyConfigurationToLayout()
+                 for the differences in landscape mode. -->
+            <LinearLayout android:id="@+id/slideDown"
+                          android:orientation="vertical"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentTop="true"
+                           android:background="@null"
+                          android:visibility="gone"
+                          >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@android:drawable/arrow_down_float"
+                    />
+                <TextView
+                    android:id="@+id/slideDownHint"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
         </RelativeLayout>  <!-- End of inCallPanel -->
 
     </FrameLayout>  <!-- End of mainFrame -->
-
+    
     <!-- The sliding drawer control containing the DTMF dialer.  This has been
          moved so that it is a sibling of mainFrame, instead of being a child.
          Doing so allows us to expand to the full width of the screen, instead
@@ -53,4 +122,5 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@id/dtmf_dialer"/>
 
     </SlidingDrawer>
+
 </AbsoluteLayout>

@@ -23,7 +23,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     >
 
     <!-- The CallCard displays info to the user about the currently active
@@ -210,7 +210,6 @@
          incall_screen.xml, which is anchored to the bottom of the
          screen.) -->
     <TextView android:id="@+id/menuButtonHint"
-              android:text="@string/menuButtonHint"
               android:textAppearance="?android:attr/textAppearanceMedium"
               android:textSize="18sp"
               android:textColor="?android:attr/textColorSecondary"

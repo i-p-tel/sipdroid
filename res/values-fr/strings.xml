@@ -12,4 +12,6 @@
   <string name="menu_mute">Muet</string>
   <string name="unknown">Inconnu</string>
   <string name="menu_speaker">Haut-parleur</string>
+  <string name="slide_hint_down_to_end_call">Faites glisser vers le bas pour terminer l\'appel.</string>
+  <string name="slide_hint_up_to_answer">Faites glisser vers le haut pour répondre.</string>
 </resources>

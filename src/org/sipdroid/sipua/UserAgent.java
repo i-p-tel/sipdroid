@@ -789,7 +789,7 @@ public class UserAgent extends CallListenerAdapter {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-			printLog("RE-INVITING/MODIFING");
+			printLog("RE-INVITING/MODIFYING");
 			if (call != null && call.isOnCall()) {
 				printLog("REFER/TRANSFER");
 				call.modify(contact, body);

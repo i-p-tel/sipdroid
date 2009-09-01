@@ -184,7 +184,6 @@ public class VideoCamera extends CallScreen implements
 			finish();
 			return;
 		}
-		Receiver.screenOff(false);
 
         initializeVideo();
     }
@@ -208,7 +207,6 @@ public class VideoCamera extends CallScreen implements
 		} catch (IOException e) {
 			if (!Sipdroid.release) e.printStackTrace();
 		}
-		Receiver.screenOff(true);
 		finish();
     }
 
@@ -224,7 +222,7 @@ public class VideoCamera extends CallScreen implements
        			Receiver.engine(this).togglehold();            	
             case KeyEvent.KEYCODE_BACK:
             	finish();
-            	break;
+            	return true;
                 
             case KeyEvent.KEYCODE_CAMERA:
                 // Disable the CAMERA button while in-call since it's too
