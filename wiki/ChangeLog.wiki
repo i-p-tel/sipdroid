@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.0.6
+    * Fix issues 71, 80, 115, 117, 118, 121
+
   * 1.0.5
     * Auto-Answer
     * Fix issues 20, 57, 73, 91, 92, 3 "Not able to close sipdroid"
