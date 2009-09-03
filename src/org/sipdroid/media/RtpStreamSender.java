@@ -37,6 +37,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.preference.PreferenceManager;
 
 /**
  * RtpStreamSender is a generic stream sender. It takes an InputStream and sends
@@ -113,7 +114,8 @@ public class RtpStreamSender extends Thread {
 			int dest_port) {
 		this.p_type = payload_type;
 		this.frame_rate = frame_rate;
-		this.frame_size = 1024; //15
+		this.frame_size = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("server","").equals("pbxes.org")?
+				1024:frame_size; //15
 		this.do_sync = do_sync;
 		try {
 			rtp_socket = new RtpSocket(src_socket, InetAddress
