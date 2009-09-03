@@ -39,9 +39,9 @@ public class JAudioLauncher implements MediaLauncher
    /** Sample size [bytes] */
    int sample_size=1;
    /** Frame size [bytes] */
-   int frame_size=500;
+   int frame_size=160;
    /** Frame rate [frames per second] */
-   int frame_rate=16; //=sample_rate/(frame_size/sample_size);
+   int frame_rate=50; //=sample_rate/(frame_size/sample_size);
    boolean signed=false; 
    boolean big_endian=false;
 
