@@ -23,6 +23,7 @@ package org.sipdroid.sipua.ui;
 import org.sipdroid.sipua.R;
 import org.zoolu.sip.provider.SipStack;
 
+import android.content.ContentResolver;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -30,6 +31,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 	public class Settings extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
@@ -39,14 +41,6 @@ import android.preference.PreferenceManager;
 			} catch (NumberFormatException i) {
 				return 4;
 			}			
-		}
-		
-		public static int getMaxPoll() {
-			try {
-				return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("maxpoll", "1"));
-			} catch (NumberFormatException i) {
-				return 1;
-			}
 		}
 		
 		@Override
@@ -97,19 +91,37 @@ import android.preference.PreferenceManager;
  	        		CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(
  	        				key.equals("callback")?"callthru":"callback");
 	        		cb.setChecked(false);
+	        		return;
 	        	}
+        		if (key.equals("wlan") || key.equals("3g"))
+        			updateSleep();
  	        	if (!key.equals("dns")) {
  		        	Receiver.engine(this).halt();
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-					}
 		    		Receiver.engine(this).StartEngine();
 		    		updateSummaries();        
-		    		Receiver.updateSleep();
 	 	        }
         }
-        
+
+		void updateSleep() {
+	        ContentResolver cr = getContentResolver();
+			int get = android.provider.Settings.System.getInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, -1);
+			int set = get;
+			boolean wlan = getPreferenceScreen().getSharedPreferences().getBoolean("wlan", false);
+			boolean g3 = getPreferenceScreen().getSharedPreferences().getBoolean("3g", false);
+			
+			if (g3) {
+				set = android.provider.Settings.System.WIFI_SLEEP_POLICY_DEFAULT;
+				if (set != get)
+					Toast.makeText(this, R.string.settings_policy_default, Toast.LENGTH_LONG).show();
+			} else if (wlan) {
+				set = android.provider.Settings.System.WIFI_SLEEP_POLICY_NEVER;
+				if (set != get)
+					Toast.makeText(this, R.string.settings_policy_never, Toast.LENGTH_LONG).show();
+			}
+			if (set != get)
+				android.provider.Settings.System.putInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, set);
+		}
+	
         public void updateSummaries() {
         	getPreferenceScreen().findPreference("username").setSummary(getPreferenceScreen().getSharedPreferences().getString("username", "")); 
         	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
@@ -118,7 +130,6 @@ import android.preference.PreferenceManager;
         		getPreferenceScreen().getSharedPreferences().getString("server", "").equals("pbxes.org")?"tcp":"udp").toUpperCase());
         	getPreferenceScreen().findPreference("search").setSummary(getPreferenceScreen().getSharedPreferences().getString("search", "")); 
         	getPreferenceScreen().findPreference("minedge").setSummary("Signal >= "+getPreferenceScreen().getSharedPreferences().getString("minedge", "4")); 
-        	getPreferenceScreen().findPreference("maxpoll").setSummary("Signal <= "+getPreferenceScreen().getSharedPreferences().getString("maxpoll", "1")); 
         	getPreferenceScreen().findPreference("excludepat").setSummary(getPreferenceScreen().getSharedPreferences().getString("excludepat", "")); 
         	getPreferenceScreen().findPreference("posurl").setSummary(getPreferenceScreen().getSharedPreferences().getString("posurl", "")); 
         	getPreferenceScreen().findPreference("callthru2").setSummary(getPreferenceScreen().getSharedPreferences().getString("callthru2", "")); 

@@ -31,7 +31,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
@@ -52,6 +51,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.sipua.*;
 import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.Connection;
@@ -60,6 +60,7 @@ import org.sipdroid.sipua.phone.Connection;
 
 		final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
 		final static String ACTION_SIGNAL_STRENGTH_CHANGED = "android.intent.action.SIG_STR";
+		final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
 		
 		public final static int REGISTER_NOTIFICATION = 1;
 		public final static int CALL_NOTIFICATION = 2;
@@ -116,6 +117,7 @@ import org.sipdroid.sipua.phone.Connection;
 				switch(call_state)
 				{
 				case UserAgent.UA_STATE_INCOMING_CALL:
+					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
 					String text = caller.toString();
 					if (text.indexOf("<sip:") >= 0 && text.indexOf("@") >= 0)
 						text = text.substring(text.indexOf("<sip:")+5,text.indexOf("@"));
@@ -163,6 +165,7 @@ import org.sipdroid.sipua.phone.Connection;
 		        	Checkin.checkin(true);
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
+					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
 					engine(mContext).register();
 					broadcastCallStateChanged("OFFHOOK", caller);
@@ -220,7 +223,6 @@ import org.sipdroid.sipua.phone.Connection;
 						}
 					}).start();   
 				}
-		        updateSleep();
 			}
 		}
 		
@@ -360,22 +362,6 @@ import org.sipdroid.sipua.phone.Connection;
        		alarm(renew_time-15, OneShotAlarm.class);
 		}
 
-		public static void updateSleep() {
-	        ContentResolver cr = mContext.getContentResolver();
-			int get = Settings.System.getInt(cr, Settings.System.WIFI_SLEEP_POLICY, -1);
-			int set;
-			
-			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wlan",false) && (
-					call_state != UserAgent.UA_STATE_IDLE ||
-					cellAsu == -1 || cellAsu <= org.sipdroid.sipua.ui.Settings.getMaxPoll() ||
-					!isFast2()))
-				set = Settings.System.WIFI_SLEEP_POLICY_NEVER;
-			else
-				set = Settings.System.WIFI_SLEEP_POLICY_DEFAULT;
-			if (set != get)
-				Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, set);
-		}
-		
 		static Intent createIntent(Class<?>cls) {
         	Intent startActivity = new Intent();
         	startActivity.setClass(mContext,cls);
@@ -436,11 +422,9 @@ import org.sipdroid.sipua.phone.Connection;
         	if (mContext == null) mContext = context;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
 	        	engine(context).register();
-	        	updateSleep();
 	        } else
-	        if (intentAction.equals("android.intent.action.ANY_DATA_STATE")) {
+	        if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
 	        	engine(context).register();
-	        	updateSleep();
 	        } else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
@@ -461,7 +445,6 @@ import org.sipdroid.sipua.phone.Connection;
 	        	if (!Sipdroid.release) Log.i("SipUA:","cellAsu "+cellAsu);
 	        	if (cellAsu >= org.sipdroid.sipua.ui.Settings.getMinEdge() &&
 	        			!engine(context).isRegistered()) engine(context).register();
-	        	updateSleep();
 	        }
 		}   
 }

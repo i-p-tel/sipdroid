@@ -25,6 +25,8 @@ import java.net.InetAddress;
 import java.util.HashMap;
 
 import org.sipdroid.media.G711;
+import org.sipdroid.media.RtpStreamReceiver;
+import org.sipdroid.media.RtpStreamSender;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
@@ -57,9 +59,15 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
+import android.widget.TextView;
 
 public class InCallScreen extends CallScreen implements View.OnClickListener {
 
+	final int MSG_ANSWER = 1;
+	final int MSG_ANSWER_SPEAKER = 2;
+	final int MSG_BACK = 3;
+	final int MSG_TICK = 4;
+	
 	CallCard mCallCard;
 	Phone ccPhone;
 	int oldtimeout;
@@ -120,10 +128,10 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		case UserAgent.UA_STATE_INCOMING_CALL:
 			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_on", false) &&
 					!mKeyguardManager.inKeyguardRestrictedInputMode())
-				mHandler.sendEmptyMessageDelayed(0, 1000);
+				mHandler.sendEmptyMessageDelayed(MSG_ANSWER, 1000);
 			else if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_ondemand", false) &&
 					PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_demand", false))
-				mHandler.sendEmptyMessageDelayed(1, 10000);
+				mHandler.sendEmptyMessageDelayed(MSG_ANSWER_SPEAKER, 10000);
 			break;
 		case UserAgent.UA_STATE_INCALL:
 			if (socket == null && Receiver.engine(mContext).getLocalVideo() != 0 && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString("server","").equals("pbxes.org"))
@@ -181,17 +189,9 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		    screenOff(true);
 			break;
 		case UserAgent.UA_STATE_IDLE:
-			if (Receiver.ccConn != null && Receiver.ccConn.date != 0) {
-		        (new Thread() {
-					public void run() {
-						try {
-							sleep(2000);
-						} catch (InterruptedException e) {
-						}
-						moveBack();
-					}
-				}).start();   
-			} else
+			if (Receiver.ccConn != null && Receiver.ccConn.date != 0)
+				mHandler.sendEmptyMessageDelayed(MSG_BACK, 2000);
+			else
 				moveBack();
 			break;
 		}
@@ -209,16 +209,17 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 
 					running = true;
 					for (;;) {
-						if (len != mDigits.getText().length()) {
-							Receiver.engine(Receiver.mContext).info(mDigits.getText().charAt(len++));
-							continue;
-						}
 						if (!running) {
 							t = null;
 							break;
 						}
+						if (len != mDigits.getText().length()) {
+							Receiver.engine(Receiver.mContext).info(mDigits.getText().charAt(len++));
+							continue;
+						}
+						mHandler.sendEmptyMessage(MSG_TICK);
 						try {
-							sleep(100000);
+							sleep(1000);
 						} catch (InterruptedException e) {
 						}
 					}
@@ -229,10 +230,33 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	
     Handler mHandler = new Handler() {
     	public void handleMessage(Message msg) {
-    		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL) {
-    			answer();
-    			if (msg.what == 1)
+    		switch (msg.what) {
+    		case MSG_ANSWER:
+        		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL)
+        			answer();
+        		break;
+    		case MSG_ANSWER_SPEAKER:
+        		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL) {
+        			answer();
     				Receiver.engine(mContext).speaker(AudioManager.MODE_NORMAL);
+        		}
+        		break;
+    		case MSG_BACK:
+    			moveBack();
+    			break;
+    		case MSG_TICK:
+    			if (RtpStreamReceiver.good != 0) {
+    				if (RtpStreamSender.m == 2)
+	    				mStats.setText(Math.round(RtpStreamReceiver.loss/RtpStreamReceiver.good*100)+"% loss, "+
+	    						Math.round(RtpStreamReceiver.lost/RtpStreamReceiver.good*100)+"% lost, "+
+	    						Math.round(RtpStreamReceiver.late/RtpStreamReceiver.good*100)+"% late");
+    				else
+	    				mStats.setText(Math.round(RtpStreamReceiver.lost/RtpStreamReceiver.good*100)+"% lost, "+
+	    						Math.round(RtpStreamReceiver.late/RtpStreamReceiver.good*100)+"% late");
+    				mStats.setVisibility(View.VISIBLE);
+    			} else
+    				mStats.setVisibility(View.GONE);
+    			break;
     		}
     	}
     };
@@ -240,6 +264,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	ViewGroup mInCallPanel,mMainFrame;
 	SlidingDrawer mDialerDrawer;
 	SlidingCardManager mSlidingCardManager;
+	TextView mStats;
 	
     public void initInCallScreen() {
         mInCallPanel = (ViewGroup) findViewById(R.id.inCallPanel);
@@ -259,6 +284,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(0, 0);
 	    mMainFrame.addView(wanv, lp);
 
+	    mStats = (TextView) findViewById(R.id.stats);
         mDialerDrawer = (SlidingDrawer) findViewById(R.id.dialer_container);
         mCallCard.displayOnHoldCallStatus(ccPhone,null);
         mCallCard.displayOngoingCallStatus(ccPhone,null);

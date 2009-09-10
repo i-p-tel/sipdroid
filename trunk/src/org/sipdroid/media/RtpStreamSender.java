@@ -33,11 +33,13 @@ import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 
 /**
  * RtpStreamSender is a generic stream sender. It takes an InputStream and sends
@@ -188,6 +190,8 @@ public class RtpStreamSender extends Thread {
 		}
 	}
 	
+	public static int m;
+	
 	/** Runs it in a new Thread. */
 	public void run() {
 		if (rtp_socket == null)
@@ -200,8 +204,10 @@ public class RtpStreamSender extends Thread {
 		long byte_rate = frame_rate * frame_size;
 		long frame_time = (frame_size * 1000) / byte_rate;
 		double p = 0;
-
+		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("improve",false);
 		running = true;
+		m = 1;
 
 		if (DEBUG)
 			println("Reading blocks of " + buffer.length + " bytes");
@@ -257,8 +263,16 @@ public class RtpStreamSender extends Thread {
  			 rtp_packet.setPayloadLength(num);
  			 try {
  				 rtp_socket.send(rtp_packet);
+ 				 if (m == 2)
+ 					 rtp_socket.send(rtp_packet);
  			 } catch (IOException e) {
  			 }
+ 			 if (improve && RtpStreamReceiver.good != 0 &&
+ 					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01 &&
+ 					 tm.getNetworkType() != TelephonyManager.NETWORK_TYPE_EDGE)        	
+ 				 m = 2;
+ 			 else
+ 				 m = 1;
  			 time += num;
 		}
 		record.stop();

@@ -270,6 +270,7 @@ public class Sipdroid extends Activity {
 			on(this,false);
 			Receiver.engine(this).halt();
 			Receiver.mSipdroidEngine = null;
+			stopService(new Intent(this,RegisterService.class));
 			finish();
 			break;
 			
