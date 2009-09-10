@@ -19,7 +19,7 @@ Creating a modified TCP stack is beyond the scope of Sipdroid, and it looks like
 
 Motivated by the fact that one packet loss will likely be followed by more if the network is faulty we instead request retransmissions for the future. When packet losses get less retransmissions are immediately stopped.
 
-This is done when the option "Improve Audio" is activated. While packet loss climbs over 1% the call uses double bandwidth, and the ratio of lost data should drop to the square root of its value, e.g. at a packet loss of 10% (0.1) we expect 1% lost packets (0.01) when all frames are sent twice.
+This is done when the option "Improve Audio" is activated. When packet loss climbs over 1% the call will use double bandwidth, and the ratio of lost data should drop to the square root of its original value, e.g. at a packet loss of 10% (0.1) we expect 1% lost packets (0.01) when all frames are sent twice.
 
 Of course this won't work when bandwidth is the bottleneck. So if you don't have HSDPA/HSUPA on your 3G network you will not want to enable this option. On HSDPA/HSUPA and Wifi quality can only get better. Latency is not affected.
 
