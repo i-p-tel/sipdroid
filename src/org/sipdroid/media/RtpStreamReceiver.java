@@ -31,6 +31,7 @@ import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioFormat;
@@ -38,6 +39,7 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.ToneGenerator;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 
 /**
  * RtpStreamReceiver is a generic stream receiver. It receives packets from RTP
@@ -140,6 +142,8 @@ public class RtpStreamReceiver extends Thread {
 		edit.commit();
 	}
 	
+	public static float good, late, lost, loss;
+	
 	/** Runs it in a new Thread. */
 	public void run() {
 		if (rtp_socket == null) {
@@ -162,11 +166,16 @@ public class RtpStreamReceiver extends Thread {
 		int oldvibrate = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
 		int oldvibrate2 = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
 		int oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        ContentResolver cr = Receiver.mContext.getContentResolver();
+		int oldpolicy = android.provider.Settings.System.getInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, 
+				Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+		Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY,
+				Settings.System.WIFI_SLEEP_POLICY_NEVER);
 		restoreVolume();
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,AudioManager.VIBRATE_SETTING_OFF);
 		AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
-				4096, AudioTrack.MODE_STREAM);
+				BUFFER_SIZE*2*2, AudioTrack.MODE_STREAM);
 		track.setStereoVolume(AudioTrack.getMaxVolume()*
 				Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25"))
 				,AudioTrack.getMaxVolume()*
@@ -174,13 +183,13 @@ public class RtpStreamReceiver extends Thread {
 		track.play();
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
-		int user, server, lserver, luser, cnt, todo, headroom, len, timeout = 0;
+		int user, server, lserver, luser, cnt, todo, headroom, len, timeout = 1, seq = 0, cnt2 = 0, m = 1,
+			expseq, getseq, vm = 1;
+		boolean islate;
 		user = 0;
 		lserver = 0;
 		luser = -8000;
 		cnt = 0;
-		user += track.write(lin,0,BUFFER_SIZE);
-		user += track.write(lin,0,BUFFER_SIZE);
 		try {
 			rtp_socket.getDatagramSocket().setSoTimeout(1);
 			for (;;)
@@ -206,18 +215,29 @@ public class RtpStreamReceiver extends Thread {
 				}
 				System.gc();
 				track.play();
+				timeout = 1;
+				seq = 0;
 			}
 			try {
 				rtp_socket.receive(rtp_packet);
+				if (timeout != 0) {
+					user += track.write(lin,0,BUFFER_SIZE);
+					user += track.write(lin,0,BUFFER_SIZE);
+				}
 				timeout = 0;
 			} catch (IOException e) {
 				rtp_socket.getDatagramSocket().disconnect();
-				if (++timeout >= 22) {
+				if (++timeout > 22) {
 					Receiver.engine(Receiver.mContext).rejectcall();
 					break;
 				}
 			}
 			if (running && timeout == 0) {		
+				 if (seq == rtp_packet.getSequenceNumber()) {
+					 m++;
+					 continue;
+				 }
+				 
 				 len = rtp_packet.getPayloadLength();		 
 				 G711.alaw2linear(buffer, lin, len);
 				 
@@ -230,24 +250,61 @@ public class RtpStreamReceiver extends Thread {
 				 if (headroom < 250) {
 					 todo = 625 - headroom;
 					 println("insert "+todo);
+					 islate = true;
 					 if (todo < len)
 						 user += track.write(lin,0,todo);
 					 else
 						 user += track.write(lin2,0,todo);
-				 } 
+				 } else
+					 islate = false;
 
 				 if (headroom > 1000)
 					 cnt += len;
 				 else
 					 cnt = 0;
 				 
-				 if (cnt > 1000 && lserver != server) {
+				 if (lserver == server)
+					 cnt2++;
+				 else
+					 cnt2 = 0;
+				 
+				 if (cnt > 1000 && cnt2 < 2) {
 					 todo = headroom - 625;
 					 println("cut "+todo);
 					 if (todo < len)
 						 user += track.write(lin,todo,len-todo);
 				 } else
 					 user += track.write(lin,0,len);
+				 
+				 if (seq != 0) {
+					 getseq = rtp_packet.getSequenceNumber()&0xff;
+					 expseq = ++seq&0xff;
+					 if (m == RtpStreamSender.m) vm = m;
+					 if (getseq != expseq) {
+						 if (expseq > getseq) {
+							 loss += expseq - getseq;
+							 lost += expseq - getseq;
+							 good += expseq - getseq - 1;
+						 } else {
+							 loss++;
+							 lost++;
+						 }
+					 } else {
+						 if (m < vm)
+							 loss++;
+						 if (islate)
+							 late++;
+					 }
+					 good++;
+					 if (good > 100) {
+						 good *= 0.99;
+						 lost *= 0.99;
+						 loss *= 0.99;
+						 late *= 0.99;
+					 }
+				 }
+				 m = 1;
+				 seq = rtp_packet.getSequenceNumber();
 				 
 				 if (user >= luser + 8000 && Receiver.call_state == UserAgent.UA_STATE_INCALL) {
 					 if (am.getMode() != speakermode) {
@@ -276,6 +333,7 @@ public class RtpStreamReceiver extends Thread {
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 		saveVolume();
 		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
+		Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {

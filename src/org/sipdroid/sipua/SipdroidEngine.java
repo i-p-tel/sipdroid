@@ -94,7 +94,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			SipStack.ua_info = version;
 			SipStack.server_info = version;
 				
-			sip_provider = new SipProvider(opt_via_addr, SipStack.default_port);
+			sip_provider = new SipProvider(opt_via_addr, 0);
 			CheckEngine();
 			
 			ua = new UserAgent(sip_provider, user_profile);

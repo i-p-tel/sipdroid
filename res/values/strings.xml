@@ -64,6 +64,8 @@
 <string name="settings_auto_ondemand2">Show toggle switch in status bar</string>
 <string name="settings_par2">Dials all of one person\'s phone numbers in parallel</string>
 <string name="settings_par">Simultaneous Outbound</string>
+<string name="settings_improve2">Requires paid account, newest software version (in Personal Data)</string>
+<string name="settings_improve">Improve Audio</string>
 <string name="settings_pos">Upload Location</string>
 <string name="settings_pos2">Displays your position on call page</string>
 <string name="settings_pos3">Uploading location</string>
@@ -94,7 +96,8 @@
 <string name="settings_pbxes_options">PBXes Features</string>   
 <string name="settings_search">Search &amp; Replace</string> 
 <string name="settings_minedge">Signal Bars for EDGE Calls</string>
-<string name="settings_maxpoll">Signal Bars for WLAN Active</string>
+<string name="settings_policy_never">Changed sleep policy to keep Wifi on.</string>
+<string name="settings_policy_default">Reset Wifi sleep policy to default.</string>
     <string-array name="bars">
         <item>1</item>
         <item>2</item>

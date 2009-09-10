@@ -20,29 +20,51 @@
 
 package org.sipdroid.sipua.ui;
 
-import org.sipdroid.sipua.UserAgent;
-import org.zoolu.sip.provider.SipProvider;
-import org.zoolu.sip.provider.SipStack;
-
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 
 public class RegisterService extends Service {
+	Receiver m_receiver;
+	Caller m_caller;
+	
+    public void onDestroy() {
+		super.onDestroy();
+		if (m_receiver != null) {
+			unregisterReceiver(m_receiver);
+			m_receiver = null;
+		}
+		if (m_caller != null) {
+			unregisterReceiver(m_caller);
+			m_caller = null;
+		}
+		Receiver.alarm(0, OneShotAlarm2.class);
+	}
+    
     @Override
     public void onCreate() {
     	super.onCreate();
+        if (m_receiver == null) {
+			 IntentFilter intentfilter = new IntentFilter();
+			 intentfilter.addAction(Receiver.ACTION_DATA_STATE_CHANGED);
+			 intentfilter.addAction(Receiver.ACTION_PHONE_STATE_CHANGED);
+			 intentfilter.addAction(Receiver.ACTION_SIGNAL_STRENGTH_CHANGED);
+	         registerReceiver(m_receiver = new Receiver(), intentfilter);      
+        }
+        if (m_caller == null) {
+        	IntentFilter intentfilter = new IntentFilter();
+			 intentfilter.addAction(Intent.ACTION_NEW_OUTGOING_CALL);
+			 intentfilter.setPriority(-1);
+	         registerReceiver(m_caller = new Caller(), intentfilter);      
+        }
         Receiver.engine(this).isRegistered();
     }
     
     @Override
     public void onStart(Intent intent, int id) {
          super.onStart(intent,id);
-         if (SipStack.default_transport_protocols[0].equals(SipProvider.PROTO_TCP)
-        		 || Receiver.call_state != UserAgent.UA_STATE_IDLE)
-        	 Receiver.alarm(10*60, OneShotAlarm2.class);
-         else
-        	 Receiver.alarm(45, OneShotAlarm2.class);
+         Receiver.alarm(10*60, OneShotAlarm2.class);
     }
 
 	@Override

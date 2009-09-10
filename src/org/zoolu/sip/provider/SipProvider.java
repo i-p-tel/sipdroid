@@ -268,7 +268,7 @@ public class SipProvider implements Configurable, TransportListener,
 		if (via_addr == null || via_addr.equalsIgnoreCase(AUTO_CONFIGURATION))
 			via_addr = IpAddress.getLocalHostAddress().toString();
 		host_port = port;
-		if (host_port <= 0)
+		if (host_port < 0) // modified
 			host_port = SipStack.default_port;
 		host_ipaddr = null;
 		if (ifaddr != null && !ifaddr.equalsIgnoreCase(ALL_INTERFACES)) {
