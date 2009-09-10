@@ -13,7 +13,7 @@ A solution that has been proposed is sending audio data over a reliable protocol
   * [http://www.win.tue.nl/~johanl/projects/QoS/Kozlov/tcp-fcw_natlab_03.ppt TCP-FCW – transport protocol for real-time transmissions on high-loss networks. Sergei Kozlov, 23-02-2004.]
   * [http://netarchlab.tsinghua.edu.cn/~wzl/pubs/2009_ICOIN_transport_measure.pdf The Internet Measurement of VoIP on different Transport Layer Protocols]
 
-Creating a modified TCP stack is beyond the scope of Sipdroid, and it looks like modifying TCP does not necessarily improve it. A major problem is that requesting retransmission of lost packets on demand adds one (or even more) round trip time to overall voice delay.
+Creating a modified TCP stack is beyond the scope of Sipdroid, and it looks like modifying TCP does not necessarily improve it. A major problem is that requesting retransmission of lost packets on demand adds one (or even more) round trip time(s) to overall voice delay.
 
 == How Sipdroid handles it ==
 
