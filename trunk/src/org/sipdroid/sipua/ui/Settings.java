@@ -54,6 +54,7 @@ import android.widget.Toast;
 				edit.putBoolean("wlan", true);
 				edit.putString("port", ""+SipStack.default_port);
 				edit.putString("server", "pbxes.org");
+				edit.putString("domain", "");
 				edit.putString("pref", "SIP");				
 				edit.commit();
 	        	Receiver.engine(this).updateDNS();
@@ -125,6 +126,11 @@ import android.widget.Toast;
         public void updateSummaries() {
         	getPreferenceScreen().findPreference("username").setSummary(getPreferenceScreen().getSharedPreferences().getString("username", "")); 
         	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
+        	if (getPreferenceScreen().getSharedPreferences().getString("domain","").length() == 0) {
+        		getPreferenceScreen().findPreference("domain").setSummary(getString(R.string.settings_domain_summary));
+        	} else {
+        		getPreferenceScreen().findPreference("domain").setSummary(getPreferenceScreen().getSharedPreferences().getString("domain", ""));
+        	}
         	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", ""));
         	getPreferenceScreen().findPreference("protocol").setSummary(getPreferenceScreen().getSharedPreferences().getString("protocol",
         		getPreferenceScreen().getSharedPreferences().getString("server", "").equals("pbxes.org")?"tcp":"udp").toUpperCase());

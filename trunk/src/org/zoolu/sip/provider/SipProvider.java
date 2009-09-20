@@ -266,7 +266,7 @@ public class SipProvider implements Configurable, TransportListener,
 			SipStack.init();
 		via_addr = viaddr;
 		if (via_addr == null || via_addr.equalsIgnoreCase(AUTO_CONFIGURATION))
-			via_addr = IpAddress.getLocalHostAddress().toString();
+			via_addr = IpAddress.localIpAddress;
 		host_port = port;
 		if (host_port < 0) // modified
 			host_port = SipStack.default_port;
@@ -494,6 +494,8 @@ public class SipProvider implements Configurable, TransportListener,
 
 	/** Gets via address. */
 	public String getViaAddress() {
+		via_addr = IpAddress.localIpAddress;
+
 		return via_addr;
 	}
 
@@ -1334,7 +1336,7 @@ public class SipProvider implements Configurable, TransportListener,
 				if (port > 0 && port != SipStack.default_port)
 					url += ":" + port;
 			} else {
-				url += via_addr;
+				url += getViaAddress();
 				if (host_port > 0 && host_port != SipStack.default_port)
 					url += ":" + host_port;
 			}

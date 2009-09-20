@@ -24,6 +24,9 @@
 package org.zoolu.net;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 /**
  * IpAddress is an IP address.
@@ -36,6 +39,9 @@ public class IpAddress {
 	/** The InetAddress */
 	InetAddress inet_address;
 
+	/** Local IP address */
+	public static String localIpAddress = "127.0.0.1";
+	
 	// ********************* Protected *********************
 
 	/** Creates an IpAddress */
@@ -110,14 +116,25 @@ public class IpAddress {
 		InetAddress iaddr = InetAddress.getByName(host_addr);
 		return new IpAddress(iaddr);
 	}
+	
+	/** Sets the local IP address into the variable <i>localIpAddress</i> */
+	public static void setLocalIpAddress() {
+		localIpAddress = "127.0.0.1";
 
-	/** Detects the default IP address of this host. */
-	public static IpAddress getLocalHostAddress() {
 		try {
-			return new IpAddress(java.net.InetAddress.getLocalHost());
-		} catch (java.net.UnknownHostException e) {
-			return new IpAddress("127.0.0.1");
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = en.nextElement();
+
+				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+					InetAddress inetAddress = enumIpAddr.nextElement();
+
+					if (!inetAddress.isLoopbackAddress()) {
+						localIpAddress = inetAddress.getHostAddress().toString();
+					}
+				}
+			}
+		} catch (SocketException ex) {
+			// do nothing
 		}
 	}
-
 }

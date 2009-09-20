@@ -35,6 +35,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -55,6 +56,7 @@ import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.sipua.*;
 import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.Connection;
+import org.zoolu.net.IpAddress;
 
 	public class Receiver extends BroadcastReceiver {
 
@@ -81,6 +83,8 @@ import org.sipdroid.sipua.phone.Connection;
 		public static String pstn_state;
 		private static String laststate,lastnumber;	
 		
+		public static MediaPlayer ringbackPlayer;
+
 		public static SipdroidEngine engine(Context context) {
 			mContext = context;
 			if (mSipdroidEngine == null) {
@@ -222,6 +226,10 @@ import org.sipdroid.sipua.phone.Connection;
 							engine(mContext).listen();
 						}
 					}).start();   
+				}
+				// stop the ringback player
+				if (ringbackPlayer != null && ringbackPlayer.isPlaying()) {
+					ringbackPlayer.stop();
 				}
 			}
 		}
@@ -424,6 +432,7 @@ import org.sipdroid.sipua.phone.Connection;
 	        	engine(context).register();
 	        } else
 	        if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
+	        	IpAddress.setLocalIpAddress();
 	        	engine(context).register();
 	        } else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
