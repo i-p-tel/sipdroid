@@ -18,6 +18,11 @@
 	            android:title="Server"
 	            android:singleLine="true"
 	            />	
+		<EditTextPreference
+				android:key="domain"
+				android:title="Domain"
+				android:singleLine="true"
+				/>
 	    <EditTextPreference
 	            android:key="port"
 	            android:title="Port"

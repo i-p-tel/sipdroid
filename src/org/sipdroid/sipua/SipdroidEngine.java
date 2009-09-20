@@ -67,12 +67,16 @@ public class SipdroidEngine implements RegisterAgentListener {
 			PowerManager pm = (PowerManager) getUIContext().getSystemService(Context.POWER_SERVICE);
 			if (wl == null) wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid");
 
-			String opt_via_addr = "127.0.0.1";
+			String opt_via_addr = IpAddress.localIpAddress;
 			
 			user_profile = new UserAgentProfile(null);
 			user_profile.username = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("username",""); // modified
 			user_profile.passwd = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("password","");
-			user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("server","");
+			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("domain","").length() == 0) {
+				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("server","");
+			} else {
+				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("domain","");
+			}
 			user_profile.from_url = user_profile.username
 					+ "@"
 					+ user_profile.realm;			

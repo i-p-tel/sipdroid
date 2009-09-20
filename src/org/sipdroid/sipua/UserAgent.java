@@ -28,6 +28,7 @@ import org.sipdroid.media.JAudioLauncher;
 import org.sipdroid.media.MediaLauncher;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
+import org.zoolu.net.IpAddress;
 import org.zoolu.sdp.AttributeField;
 import org.zoolu.sdp.ConnectionField;
 import org.zoolu.sdp.MediaDescriptor;
@@ -46,6 +47,8 @@ import org.zoolu.sip.provider.SipStack;
 import org.zoolu.tools.Log;
 import org.zoolu.tools.LogLevel;
 import org.zoolu.tools.Parser;
+
+import android.media.MediaPlayer;
 
 /**
  * Simple SIP user agent (UA). It includes audio/video applications.
@@ -263,6 +266,9 @@ public class UserAgent extends CallListenerAdapter {
 		
 		target_url = sip_provider.completeNameAddress(target_url).toString();
 		
+		// recreate the SDP to get the new IPAddress if it was changed
+		initSessionDescriptor();
+
 		if (user_profile.no_offer)
 		{
 			call.call(target_url);
@@ -505,6 +511,11 @@ public class UserAgent extends CallListenerAdapter {
 			return;
 		}
 		printLog("RINGING", LogLevel.HIGH);
+		if (Receiver.ringbackPlayer == null || ! Receiver.ringbackPlayer.isPlaying()) {
+			Receiver.ringbackPlayer = MediaPlayer.create(Receiver.mContext, R.raw.ringback);
+			Receiver.ringbackPlayer.setLooping(true);
+			Receiver.ringbackPlayer.start();
+		}
 	}
 
 	/** Callback function called when arriving a 2xx (call accepted) */
@@ -771,7 +782,7 @@ public class UserAgent extends CallListenerAdapter {
 		} else {
 			new_sdp = new SessionDescriptor(
 					sdp.getOrigin(), sdp.getSessionName(), new ConnectionField(
-							"IP4", "127.0.0.1"), new TimeField());
+							"IP4", IpAddress.localIpAddress), new TimeField());
 		}
 		new_sdp.addMediaDescriptors(sdp.getMediaDescriptors());
 		(new Thread() {

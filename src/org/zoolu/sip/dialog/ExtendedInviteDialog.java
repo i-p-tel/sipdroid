@@ -230,16 +230,29 @@ public class ExtendedInviteDialog extends org.zoolu.sip.dialog.InviteDialog {
 		StatusLine status_line = msg.getStatusLine();
 		int code = status_line.getCode();
 		String reason = status_line.getReason();
+		
+		boolean isErr401 = false;
+		boolean isErr407 = false;
 
 		// AUTHENTICATION-BEGIN
-		if ((code == 401 && attempts < MAX_ATTEMPTS
-				&& msg.hasWwwAuthenticateHeader() && msg
-				.getWwwAuthenticateHeader().getRealmParam().equalsIgnoreCase(
-						realm))
-				|| (code == 407 && attempts < MAX_ATTEMPTS
-						&& msg.hasProxyAuthenticateHeader() && msg
-						.getProxyAuthenticateHeader().getRealmParam()
-						.equalsIgnoreCase(realm))) {
+		if (attempts < MAX_ATTEMPTS) {
+			switch (code) {
+				case 401:
+					if (msg.hasWwwAuthenticateHeader()) {
+						realm = msg.getWwwAuthenticateHeader().getRealmParam();
+						isErr401 = true;
+					}
+					break;
+
+				case 407:
+					if (msg.hasProxyAuthenticateHeader()) {
+						realm = msg.getProxyAuthenticateHeader().getRealmParam();
+						isErr407 = true;
+					}
+			}
+		}
+
+		if (isErr401 | isErr407) {
 			attempts++;
 			Message req = tc.getRequestMessage();
 			req.setCSeqHeader(req.getCSeqHeader().incSequenceNumber());

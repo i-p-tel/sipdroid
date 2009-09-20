@@ -26,6 +26,8 @@ package org.zoolu.sdp;
 
 import java.util.Vector;
 
+import org.zoolu.net.IpAddress;
+
 /* HSC CHANGE STARTS */
 // import java.util.Enumeration;
 // PersonalJava
@@ -164,7 +166,7 @@ public class SessionDescriptor {
 	 */
 	public SessionDescriptor(String owner, String address) {
 		if (address == null)
-			address = "127.0.0.1";
+			address = IpAddress.localIpAddress;
 		if (owner == null)
 			owner = "user@" + address;
 		init(new OriginField(owner, "0", "0", address), new SessionNameField(
@@ -178,7 +180,7 @@ public class SessionDescriptor {
 	 * o=user@127.0.0.1 s=Session SIP/SDP c=127.0.0.1 t=0 0
 	 */
 	public SessionDescriptor() {
-		String address = "127.0.0.1";
+		String address = IpAddress.localIpAddress;
 		String owner = "user@" + address;
 		init(new OriginField(owner, "0", "0", address), new SessionNameField(
 				"Session SIP/SDP"), new ConnectionField("IP4", address),
