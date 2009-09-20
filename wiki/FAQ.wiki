@@ -183,7 +183,7 @@ http://sipdroid.googlecode.com/svn/images/priv.png
   * Call Transfer
   * Conferences
   * Video Reception (Video Transmission is supported by Sipdroid natively)
-  * Publish location on webcall page
+  * Announce location
   * Trigger callback or callthru (if no suitable data network available)
 
 You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Video Streaming, Call Recording, Handoff of calls between networks).
@@ -224,12 +224,8 @@ Sipdroid can be used to add true VoIP calling to the GV app. Both integrate amaz
 
 === Latitude ===
 
-We noticed that choppy voice on WLANs can be resolved by turning off Latitude within Google Maps/Latitude/Privacy. An alternative is uploading position to a webcall page in PBXes.
+We noticed that choppy voice on WLANs can be resolved by turning off Latitude within Google Maps/Latitude/Privacy. An alternative is uploading position to PBXes and announcing it to contacts when they call you.
 
 === Netcounter ===
 
 This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs only you should not install the present version. It wakes the device too often thus draining the battery.
-
-=== Overclock Widget ===
-
-This tool allows you to set the CPU frequency depending on screen on/off. It's useful to limit CPU to 128 MHz while screen is off, and let it run at 528 MHz while screen is on. This enhances call and standby times and speeds up response times. The effect is not big though.
