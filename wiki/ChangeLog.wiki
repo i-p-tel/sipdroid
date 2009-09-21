@@ -4,7 +4,7 @@
 === Beta-Versions ===
 
   * 1.0.8
-    * Fix issues 95, 124
+    * Fix issues 9, 31, 95, 98, 124
     * Improve Audio Option
 
   * 1.0.7
