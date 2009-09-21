@@ -55,6 +55,7 @@
 <string name="settings_account">Zugangsdaten</string>
 <string name="settings_username">Benutzername</string>
 <string name="settings_password">Paßwort</string>
+<string name="settings_domain_summary">Nur eintragen, wenn Domain und Server verschieden sind</string>
 <string name="settings_protocol">Protokoll</string>
 <string name="settings_options">Anrufeinstellungen</string>
 <string name="settings_wlan">WLAN verwenden</string>
@@ -66,11 +67,11 @@
 <string name="settings_auto_ondemand2">Option in Statusleiste anzeigen</string>
 <string name="settings_par">Gleichzeitige Anwahl</string>
 <string name="settings_par2">Wählt alle Nummern eines Gesprächspartners gleichzeitig an</string>
-<string name="settings_improve2">Erfordert bezahlten Account, newest software version (Persönliche Angaben)</string>
+<string name="settings_improve2">Erfordert bezahlten Account, neueste Software-Version (Persönliche Angaben)</string>
 <string name="settings_improve">Bessere Tonqualität</string>
-<string name="settings_pos">Position hochladen</string>
-<string name="settings_pos2">Zeigt Ihre Position im Web</string>
-<string name="settings_pos3">Position hochgeladen</string>
+<string name="settings_pos">Position aktualisieren</string>
+<string name="settings_pos2">Kann PBXes-Kontakten angesagt werden (erfordert Premium-Account)</string>
+<string name="settings_pos3">Position aktualisiert</string>
 <string name="settings_posurl">URL für Position/Callback</string>
 <string name="settings_callback">Callback auslösen</string>
 <string name="settings_callback2">Wenn keine geeignete Datenverbindung verfügbar</string>

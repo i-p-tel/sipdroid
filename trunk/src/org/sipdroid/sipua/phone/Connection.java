@@ -214,8 +214,6 @@ public class Connection
 	        callLogType = (duration == 0 ?
 	                       CallLog.Calls.MISSED_TYPE :
 	                       CallLog.Calls.INCOMING_TYPE);
-	        if (callLogType == CallLog.Calls.MISSED_TYPE)
-	        	Receiver.onText(Receiver.MISSED_CALL_NOTIFICATION, number, android.R.drawable.stat_notify_missed_call, 0);
 	    } else {
 	        callLogType = CallLog.Calls.OUTGOING_TYPE;
 	    }
@@ -229,6 +227,8 @@ public class Connection
 	        } else {
 	            ci = ((PhoneUtils.CallerInfoToken) o).currentInfo;
 	        }
+	        if (callLogType == CallLog.Calls.MISSED_TYPE)
+	        	Receiver.onText(Receiver.MISSED_CALL_NOTIFICATION, ci != null?ci.name:number, android.R.drawable.stat_notify_missed_call, 0);
 	        addCall(ci, Receiver.mContext, number, isPrivateNumber,
 	                callLogType, date, (int) duration / 1000);
 	    }

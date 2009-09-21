@@ -54,7 +54,7 @@
 <string name="settings_account">SIP Account Settings</string>
 <string name="settings_username">Username</string>
 <string name="settings_password">Password</string>
-<string name="settings_domain_summary">You can leave it empty if it is the same as the Server.</string>
+<string name="settings_domain_summary">Leave empty if same as server</string>
 <string name="settings_options">Call Options</string>
 <string name="settings_wlan">Use WLAN</string>
 <string name="settings_3g">Use 3G/EDGE</string>
@@ -67,9 +67,9 @@
 <string name="settings_par">Simultaneous Outbound</string>
 <string name="settings_improve2">Requires paid account, newest software version (in Personal Data)</string>
 <string name="settings_improve">Improve Audio</string>
-<string name="settings_pos">Upload Location</string>
-<string name="settings_pos2">Displays your position on call page</string>
-<string name="settings_pos3">Uploading location</string>
+<string name="settings_pos">Update Location</string>
+<string name="settings_pos2">Can be announced to PBXes contacts (requires premium account)</string>
+<string name="settings_pos3">Updating location</string>
 <string name="settings_posurl">URL for Location/Callback</string>
 <string name="settings_callback">Trigger Callback</string>
 <string name="settings_callback2">If no suitable data network available</string>
