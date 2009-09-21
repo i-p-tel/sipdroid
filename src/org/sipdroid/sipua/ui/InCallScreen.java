@@ -94,7 +94,15 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	public void onPause() {
 		super.onPause();
     	if (!Sipdroid.release) Log.i("SipUA:","on pause");
-		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL) Receiver.moveTop();
+    	switch (Receiver.call_state) {
+    	case UserAgent.UA_STATE_INCOMING_CALL:
+    		Receiver.moveTop();
+    		break;
+    	case UserAgent.UA_STATE_IDLE:
+    		if (Receiver.ccCall != null)
+    			mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
+    		break;
+    	}
 		if (socket != null) {
 			socket.close();
 			socket = null;

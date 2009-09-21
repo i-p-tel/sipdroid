@@ -169,7 +169,8 @@ public class RtpStreamReceiver extends Thread {
         ContentResolver cr = Receiver.mContext.getContentResolver();
 		int oldpolicy = android.provider.Settings.System.getInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, 
 				Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-		Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY,
+		if (oldpolicy != Settings.System.WIFI_SLEEP_POLICY_NEVER)
+			Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY,
 				Settings.System.WIFI_SLEEP_POLICY_NEVER);
 		restoreVolume();
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
@@ -333,7 +334,8 @@ public class RtpStreamReceiver extends Thread {
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 		saveVolume();
 		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
-		Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
+		if (oldpolicy != Settings.System.WIFI_SLEEP_POLICY_NEVER)
+			Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {

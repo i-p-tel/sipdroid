@@ -86,6 +86,7 @@
 	    <receiver android:name=".ui.OneShotAlarm2"/>
 	    <receiver android:name=".ui.LoopAlarm"/>
 	    <receiver android:name=".ui.OneShotLocation"/>
+	    <receiver android:name=".ui.LoopLocation"/>
 	    <receiver android:name=".ui.Caller"/>
         <receiver android:name=".ui.Receiver" android:enabled="true">
 	      	<intent-filter>

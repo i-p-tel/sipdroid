@@ -303,24 +303,30 @@ import org.zoolu.net.IpAddress;
 		}
 		
 		public static void registered() {
-			if (call_state == UserAgent.UA_STATE_IDLE && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) &&
-					PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","").length() > 0)
-				pos(true);
+			pos(true);
 		}
 		
 		public static void pos(boolean enabled) {
 	        Intent intent = new Intent(mContext, OneShotLocation.class);
 	        PendingIntent sender = PendingIntent.getBroadcast(mContext,
 	                0, intent, 0);
+	        Intent loopintent = new Intent(mContext, LoopLocation.class);
+	        PendingIntent loopsender = PendingIntent.getBroadcast(mContext,
+	                0, loopintent, 0);
 	        LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 			AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
 			lm.removeUpdates(sender);
 			am.cancel(sender);
-			if (enabled) {
-				lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, sender);
-				lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, sender);
-				am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+10*1000, sender);
-			}
+			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) &&
+					PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","").length() > 0) {
+				if (call_state == UserAgent.UA_STATE_IDLE && enabled) {
+					lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, sender);
+					am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+10*1000, sender);
+					lm.removeUpdates(loopsender);
+					lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10*60000, 3000, loopsender);
+				}
+			} else
+				lm.removeUpdates(loopsender);
 		}
 
 		public static void url(final String opt) {
