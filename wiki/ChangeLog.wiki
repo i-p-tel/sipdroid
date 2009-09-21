@@ -3,8 +3,11 @@
 
 === Beta-Versions ===
 
+  * 1.0.9
+    * Urgent bugfix to 1.0.8 (issue 139)
+
   * 1.0.8
-    * Fix issues 9, 31, 95, 98, 124
+    * Fix issues 31, 95, 98, 124
     * Improve Audio Option
 
   * 1.0.7
@@ -65,7 +68,7 @@
     * sip: intents
 
   * 0.9.4
-    * Fix issue 25
+    * Urgent bugfix to 0.9.3 (issue 25)
 
   * 0.9.3
     * UI bugs fixed
