@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.1.0
+    * New skin
+
   * 1.0.9
     * Urgent bugfix to 1.0.8 (issue 139)
 
