@@ -78,7 +78,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
         if (off) {
         	if (oldtimeout == 0) {
         		oldtimeout = Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000);
-	        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 1);
+	        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 12000);
         	}
         } else {
         	if (oldtimeout == 0 && Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000) == 1)
