@@ -71,7 +71,6 @@ public class SIPUri extends Activity {
 			.setIcon(R.drawable.icon22)
 			.setCancelable(true)
 			.setOnCancelListener(new OnCancelListener() {
-				@Override
 				public void onCancel(DialogInterface dialog) {
 					finish();
 				}
