@@ -408,7 +408,8 @@ import org.zoolu.net.IpAddress;
 
         	if (wi != null)
         		if (!Sipdroid.release) Log.i("SipUA:","isFast() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())+" "+cellAsu);
-        	if (wi != null && WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR) {
+        	if (wi != null && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
+        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
         		on_wlan = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wlan",false);
         		return on_wlan;
         	}
