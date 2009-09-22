@@ -276,7 +276,6 @@ public class ExtendedInviteDialog extends org.zoolu.sip.dialog.InviteDialog {
 			transactions.remove(tc.getTransactionId());
 			tc = new TransactionClient(sip_provider, req, this);
 			transactions.put(tc.getTransactionId(), tc);
-			tc.getRequestMessage().setAuthorizationHeader(ah);
 			tc.request();
 		} else
 		// AUTHENTICATION-END
