@@ -127,7 +127,7 @@ import android.widget.Toast;
         	getPreferenceScreen().findPreference("username").setSummary(getPreferenceScreen().getSharedPreferences().getString("username", "")); 
         	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
         	if (getPreferenceScreen().getSharedPreferences().getString("domain","").length() == 0) {
-        		getPreferenceScreen().findPreference("domain").setSummary(getString(R.string.settings_domain_summary));
+        		getPreferenceScreen().findPreference("domain").setSummary(getString(R.string.settings_domain2));
         	} else {
         		getPreferenceScreen().findPreference("domain").setSummary(getPreferenceScreen().getSharedPreferences().getString("domain", ""));
         	}
