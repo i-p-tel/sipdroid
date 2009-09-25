@@ -15,6 +15,7 @@ Often mobile phone operators forbid using VoIP in the contract's fine print. The
 
 The following plans are suitable for unlimited hotspot/3G usage:
 
+  * USA: "T-Mobile has *no restrictions* on using SIP as a signaling protocol." ([http://groups.google.com/group/android-developers/browse_thread/thread/9e471b66e7f397b1/d5051b3d37c79beb?hl=en&ie=UTF-8&q=sipdroid#d5051b3d37c79beb source])
   * Germany: [https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php debitel Talk and Surf S], all T-Mobile and Vodafone plans with VoIP Option, and all [http://www.de.o2.com/ext/o2/wizard/index?page_id=15698;tree_id=303;category_id=;year=;page=1;state=online;style=portal O2 customers with Internet Packs]
 
 [http://code.google.com/p/sipdroid/w/edit/FAQ Add] more!
