@@ -136,7 +136,6 @@ import org.zoolu.net.IpAddress;
 					ccConn.setIncoming(true);
 					ccConn.date = System.currentTimeMillis();
 					ccCall.base = 0;
-					moveTop();
 					AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 					int rm = am.getRingerMode();
 					int vs = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
@@ -160,6 +159,7 @@ import org.zoolu.net.IpAddress;
 							oRingtone.play();						
 						}
 					}
+					moveTop();
 					if (wl == null) {
 						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 						wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |

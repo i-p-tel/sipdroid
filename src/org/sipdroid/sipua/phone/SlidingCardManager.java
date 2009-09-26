@@ -234,8 +234,9 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
             mSlideUp.setLayoutParams(lp);
             lp = (RelativeLayout.LayoutParams) mSlideDown.getLayoutParams();
             // Equivalent to setting android:layout_marginTop in XML
-            lp.topMargin = height+10;
+            lp.topMargin = height;
             mSlideDown.setLayoutParams(lp);
+            height += 10;
         }
         final int popupBottomPosY = mainFrameY + mMainFrame.getHeight() - height;
 
