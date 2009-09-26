@@ -3,6 +3,10 @@
 
 === Beta-Versions ===
 
+  * 1.1.1
+    * Add calling users on Skype
+    * Czech translation
+
   * 1.1.0
     * New skin
 
