@@ -4,6 +4,8 @@
 
 <wiki:toc max_depth="5" />
 
+== Einleitung ==
+
 === Was ist bei der Nutzung zu beachten? ===
 
 Sipdroid erlaubt Ihnen die Auswahl, wo VoIP-Dienste genutzt werden sollen: Nur innerhalb von WLANs, in 3G- oder EDGE-Netzen. Wenn VoIP-Dienste auch außerhalb des eigenen WLANs mobil genutzt werden sollen, empfiehlt sich ein Blick in das Kleingedruckte des Mobilfunkvertrages:
