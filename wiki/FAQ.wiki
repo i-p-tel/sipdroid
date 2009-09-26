@@ -64,17 +64,25 @@ NOTE: Don't add anything to emergency numbers. They are always dialed over Phone
 
 http://sipdroid.googlecode.com/svn/images/choose2.png
 
-=== How can I dial a Google Talk ID? (Or any other SIP URI?) ===
+=== How can I dial a Skype ID? (Or any other SIP URI?) ===
+
+==== From Contacts ====
 
 When clicking on the "Chat" tab of a contact you get a menu like this:
 
 http://sipdroid.googlecode.com/svn/images/choose3.png
 
-Choosing Sipdroid makes a voice call to a PC over instant messaging. All the recipient has to do is either invite user service@gtalk2voip.com (gtalk2voip@yahoo.com for Yahoo! Messenger) to his friend list, or submit his user id from [http://gtalk2voip.com/ gtalk2voip main page], to become reachable from Sipdroid.
+Choosing Sipdroid makes a voice call to a PC over instant messaging.
 
-This works for Google Talk, MSN, Yahoo, AIM, and ICQ users.
+Calling Skype users requires registering to PBXes. The callee needs to allow anonymous calls.
 
-If you want to call any other SIP URI you can enter it into the "Called Party Address" field in Sipdroid. Or add it to a contact as one of the three unsupported messengers Jabber, QQ or Skype, and use above method to dial the SIP URI from contacts.
+This also works for Google Talk, MSN, Yahoo, AIM, and ICQ users. All these recipients have to do is either invite user service@gtalk2voip.com (gtalk2voip@yahoo.com for Yahoo! Messenger) to his friend list, or submit his user id from [http://gtalk2voip.com/ gtalk2voip main page], to become reachable from Sipdroid.
+
+If you want to call any other SIP URI add it to a contact as one of the two unsupported messengers, Jabber or QQ, and use above method to dial the SIP URI from contacts.
+
+==== From Sipdroid window ====
+
+You can enter SIP URIs into the "Called Party Address" field in Sipdroid. For calling Skype users enter the Skype name followed by @skype into "Called Party Address". Calling Skype users requires registering to PBXes. 
 
 === How are the buttons assigned? ===
 
@@ -185,6 +193,7 @@ http://sipdroid.googlecode.com/svn/images/priv.png
   * Conferences
   * Video Reception (Video Transmission is supported by Sipdroid natively)
   * Trigger callback or callthru (if no suitable data network available)
+  * Calls to Skype users
 
 You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Video Streaming, Announce Location, Call Recording, Improved Audio, Handoff of calls between networks).
 
@@ -216,7 +225,7 @@ This is the equivalent to Sipdroid for SMS.
 
 === Google Talk ===
 
-See [http://code.google.com/p/sipdroid/wiki/FAQ#How_can_I_dial_a_Google_Talk_ID?_(Or_any_other_SIP_URI?) above]
+See [http://code.google.com/p/sipdroid/wiki/FAQ#How_can_I_dial_a_Skype_ID?_(Or_any_other_SIP_URI?) above]
 
 === GV ===
 
