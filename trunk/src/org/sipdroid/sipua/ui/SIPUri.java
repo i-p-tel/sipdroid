@@ -58,6 +58,8 @@ public class SIPUri extends Activity {
 					uri.getAuthority().equals("gtalk") ||
 					uri.getAuthority().equals("msn"))
 				target = uri.getLastPathSegment().replaceAll("@","_at_") + "@" + uri.getAuthority() + ".gtalk2voip.com";
+			else if (uri.getAuthority().equals("skype"))
+				target = uri.getLastPathSegment() + "@" + uri.getAuthority();
 			else
 				target = uri.getLastPathSegment();
 		}

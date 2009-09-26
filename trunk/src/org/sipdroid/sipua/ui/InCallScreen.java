@@ -68,6 +68,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	final int MSG_BACK = 3;
 	final int MSG_TICK = 4;
 	
+	final int SCREEN_OFF_TIMEOUT = 12000;
+	
 	CallCard mCallCard;
 	Phone ccPhone;
 	int oldtimeout;
@@ -78,10 +80,10 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
         if (off) {
         	if (oldtimeout == 0) {
         		oldtimeout = Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000);
-	        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 12000);
+	        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, SCREEN_OFF_TIMEOUT);
         	}
         } else {
-        	if (oldtimeout == 0 && Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000) == 1)
+        	if (oldtimeout == 0 && Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000) == SCREEN_OFF_TIMEOUT)
         		oldtimeout = 60000;
         	if (oldtimeout != 0) {
 	        	Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, oldtimeout);
