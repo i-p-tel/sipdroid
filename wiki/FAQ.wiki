@@ -74,7 +74,7 @@ http://sipdroid.googlecode.com/svn/images/choose3.png
 
 Choosing Sipdroid makes a voice call to a PC over instant messaging.
 
-Calling Skype users requires registering to PBXes. The callee needs to allow anonymous calls.
+Calling Skype users requires registering to PBXes. The callee needs to allow anonymous calls, or calls from "skype.pbxes.org".
 
 This also works for Google Talk, MSN, Yahoo, AIM, and ICQ users. All these recipients have to do is either invite user service@gtalk2voip.com (gtalk2voip@yahoo.com for Yahoo! Messenger) to his friend list, or submit his user id from [http://gtalk2voip.com/ gtalk2voip main page], to become reachable from Sipdroid.
 
