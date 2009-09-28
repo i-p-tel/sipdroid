@@ -43,6 +43,14 @@ import android.widget.Toast;
 			}			
 		}
 		
+		public static float getEarGain() {
+			try {
+				return Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25"));
+			} catch (NumberFormatException i) {
+				return (float)0.25;
+			}			
+		}
+
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
@@ -86,17 +94,25 @@ import android.widget.Toast;
 		        	Checkin.checkin(false);
 	        		edit.putString("protocol",sharedPreferences.getString("server", "").equals("pbxes.org")?"tcp":"udp");
 	        		edit.commit();
-	        		return;
-	        	}
+	        	} else
         		if (sharedPreferences.getBoolean("callback",false) && sharedPreferences.getBoolean("callthru",false)) {
  	        		CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(
  	        				key.equals("callback")?"callthru":"callback");
 	        		cb.setChecked(false);
-	        		return;
-	        	}
-        		if (key.equals("wlan") || key.equals("3g"))
-        			updateSleep();
- 	        	if (!key.equals("dns")) {
+	        	} else
+ 	        	if (key.equals("wlan") ||
+ 	        			key.equals("3g") ||
+ 	        			key.equals("username") ||
+ 	        			key.equals("password") ||
+ 	        			key.equals("domain") ||
+ 	        			key.equals("server") ||
+ 	        			key.equals("port") ||
+ 	        			key.equals("protocol") ||
+ 	        			key.equals("minedge") ||
+ 	        			key.equals("pos") ||
+ 	        			key.equals("posurl")) {
+ 	        		if (key.equals("wlan") || key.equals("3g"))
+ 	        			updateSleep();
  		        	Receiver.engine(this).halt();
 		    		Receiver.engine(this).StartEngine();
 		    		updateSummaries();        

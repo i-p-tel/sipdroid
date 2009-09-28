@@ -268,6 +268,7 @@ public class Sipdroid extends Activity {
 			} catch (InterruptedException e1) {
 			}
 			on(this,false);
+			Receiver.pos(true);
 			Receiver.engine(this).halt();
 			Receiver.mSipdroidEngine = null;
 			stopService(new Intent(this,RegisterService.class));
