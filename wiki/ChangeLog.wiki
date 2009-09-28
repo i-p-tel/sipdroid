@@ -49,7 +49,7 @@
     * Add callback option
 
   * 0.9.11
-    * Add location upload to webcall pages
+    * Add location upload
 
   * 0.9.10
     * Add WLAN active option
