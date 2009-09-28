@@ -33,6 +33,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -192,6 +193,9 @@ import org.zoolu.net.IpAddress;
 					if (wl != null && wl.isHeld())
 						wl.release();
 			        mContext.startActivity(createIntent(InCallScreen.class));
+					ccConn.log(ccCall.base);
+					ccConn.date = 0;
+					engine(mContext).listen();
 					break;
 				case UserAgent.UA_STATE_INCALL:
 					broadcastCallStateChanged("OFFHOOK", null);
@@ -211,23 +215,7 @@ import org.zoolu.net.IpAddress;
 			        mContext.startActivity(createIntent(InCallScreen.class));
 					break;
 				}
-				if (call_state == UserAgent.UA_STATE_IDLE) {
-			        (new Thread() {
-						public void run() {
-
-							try {
-								sleep(2000);
-							} catch (InterruptedException e) {
-							}
-							if (ccConn.date != 0) {
-								ccConn.log(ccCall.base);
-								ccConn.date = 0;
-							}
-							engine(mContext).listen();
-						}
-					}).start();   
-				}
-				// stop the ringback player
+				pos(true);
 				if (ringbackPlayer != null && ringbackPlayer.isPlaying()) {
 					ringbackPlayer.stop();
 				}
@@ -306,29 +294,59 @@ import org.zoolu.net.IpAddress;
 			pos(true);
 		}
 		
-		public static void pos(boolean enabled) {
-	        Intent intent = new Intent(mContext, OneShotLocation.class);
-	        PendingIntent sender = PendingIntent.getBroadcast(mContext,
-	                0, intent, 0);
-	        Intent loopintent = new Intent(mContext, LoopLocation.class);
-	        PendingIntent loopsender = PendingIntent.getBroadcast(mContext,
-	                0, loopintent, 0);
-	        LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-			AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-			lm.removeUpdates(sender);
-			am.cancel(sender);
-			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) &&
-					PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","").length() > 0) {
-				if (call_state == UserAgent.UA_STATE_IDLE && enabled) {
-					lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, sender);
-					am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+10*1000, sender);
-					lm.removeUpdates(loopsender);
-					lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10*60000, 3000, loopsender);
+		static LocationManager lm;
+		static AlarmManager am;
+		static PendingIntent gps_sender,net_sender;
+		static boolean gps_enabled,net_enabled;
+		
+		static final int GPS_UPDATES = 4000*1000;
+		static final int NET_UPDATES = 600*1000;
+		
+		public static void pos(boolean enable) {
+	        if (lm == null) lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+			if (am == null) am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+			pos_gps(false);
+			if (enable) {
+				pos_net(false);
+				if (call_state == UserAgent.UA_STATE_IDLE && Sipdroid.on(mContext) &&
+						PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) &&
+						PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","").length() > 0) {
+					Location last = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+					if (last == null || System.currentTimeMillis() - last.getTime() > GPS_UPDATES)
+						pos_gps(true);
+					pos_net(true);
 				}
-			} else
-				lm.removeUpdates(loopsender);
+			}
 		}
 
+		static void pos_gps(boolean enable) {
+			if (gps_sender == null) {
+		        Intent intent = new Intent(mContext, OneShotLocation.class);
+		        gps_sender = PendingIntent.getBroadcast(mContext,
+		                0, intent, 0);
+			}
+	        if (enable) {
+				lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, GPS_UPDATES, 3000, gps_sender);
+				am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+10*1000, gps_sender);	        	
+	        } else {
+				am.cancel(gps_sender);
+				lm.removeUpdates(gps_sender);
+	        }
+		}
+		
+		static void pos_net(boolean enable) {
+			if (net_sender == null) {
+		        Intent loopintent = new Intent(mContext, LoopLocation.class);
+		        net_sender = PendingIntent.getBroadcast(mContext,
+		                0, loopintent, 0);
+			}
+			if (enable) {
+				lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, NET_UPDATES, 3000, net_sender);
+			} else {
+				lm.removeUpdates(net_sender);
+			}
+		}
+		
 		public static void url(final String opt) {
 	        (new Thread() {
 				public void run() {

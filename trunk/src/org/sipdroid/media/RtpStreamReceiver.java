@@ -62,6 +62,7 @@ public class RtpStreamReceiver extends Thread {
 	/** Whether it is running */
 	boolean running;
 	AudioManager am;
+	ContentResolver cr;
 	public static int speakermode;
 	
 	/**
@@ -142,6 +143,35 @@ public class RtpStreamReceiver extends Thread {
 		edit.commit();
 	}
 	
+	void saveSettings() {
+		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("oldvalid",false)) {
+			int oldvibrate = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+			int oldvibrate2 = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
+			if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).contains("oldvibrate2"))
+				oldvibrate2 = AudioManager.VIBRATE_SETTING_ON;
+			int oldpolicy = android.provider.Settings.System.getInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, 
+					Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+			edit.putInt("oldvibrate", oldvibrate);
+			edit.putInt("oldvibrate2", oldvibrate2);
+			edit.putInt("oldpolicy", oldpolicy);
+			edit.putBoolean("oldvalid", true);
+			edit.commit();
+		}
+	}
+	
+	void restoreSettings() {
+		int oldvibrate = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldvibrate",0);
+		int oldvibrate2 = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldvibrate2",0);
+		int oldpolicy = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldpolicy",0);
+		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
+		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
+		Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
+		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+		edit.putBoolean("oldvalid", false);
+		edit.commit();
+	}
+
 	public static float good, late, lost, loss;
 	
 	/** Runs it in a new Thread. */
@@ -163,29 +193,24 @@ public class RtpStreamReceiver extends Thread {
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 		am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
-		int oldvibrate = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-		int oldvibrate2 = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
-		int oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        ContentResolver cr = Receiver.mContext.getContentResolver();
-		int oldpolicy = android.provider.Settings.System.getInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, 
-				Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-		if (oldpolicy != Settings.System.WIFI_SLEEP_POLICY_NEVER)
-			Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY,
-				Settings.System.WIFI_SLEEP_POLICY_NEVER);
-		restoreVolume();
+        cr = Receiver.mContext.getContentResolver();
+		saveSettings();
+		Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_NEVER);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,AudioManager.VIBRATE_SETTING_OFF);
+		int oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+		restoreVolume();
 		AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
 				BUFFER_SIZE*2*2, AudioTrack.MODE_STREAM);
 		track.setStereoVolume(AudioTrack.getMaxVolume()*
-				Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25"))
+				org.sipdroid.sipua.ui.Settings.getEarGain()
 				,AudioTrack.getMaxVolume()*
-				Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25")));
+				org.sipdroid.sipua.ui.Settings.getEarGain());
 		track.play();
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
 		int user, server, lserver, luser, cnt, todo, headroom, len, timeout = 1, seq = 0, cnt2 = 0, m = 1,
-			expseq, getseq, vm = 1;
+			expseq, getseq, vm = 1, gap;
 		boolean islate;
 		user = 0;
 		lserver = 0;
@@ -281,15 +306,12 @@ public class RtpStreamReceiver extends Thread {
 					 getseq = rtp_packet.getSequenceNumber()&0xff;
 					 expseq = ++seq&0xff;
 					 if (m == RtpStreamSender.m) vm = m;
-					 if (getseq != expseq) {
-						 if (expseq > getseq) {
-							 loss += expseq - getseq;
-							 lost += expseq - getseq;
-							 good += expseq - getseq - 1;
-						 } else {
-							 loss++;
-							 lost++;
-						 }
+					 gap = (getseq - expseq) & 0xff;
+					 if (gap > 0) {
+						 if (gap > 100) gap = 1;
+						 loss += gap;
+						 lost += gap;
+						 good += gap - 1;
 					 } else {
 						 if (m < vm)
 							 loss++;
@@ -313,9 +335,9 @@ public class RtpStreamReceiver extends Thread {
 						 switch (speakermode) {
 						 case AudioManager.MODE_IN_CALL:
 								track.setStereoVolume(AudioTrack.getMaxVolume()*
-										Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25"))
+										org.sipdroid.sipua.ui.Settings.getEarGain()
 										,AudioTrack.getMaxVolume()*
-										Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25")));
+										org.sipdroid.sipua.ui.Settings.getEarGain());
 								break;
 						 case AudioManager.MODE_NORMAL:
 								track.setStereoVolume(AudioTrack.getMaxVolume(),AudioTrack.getMaxVolume());
@@ -330,12 +352,9 @@ public class RtpStreamReceiver extends Thread {
 		track.stop();
 		if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE"))
 			am.setMode(AudioManager.MODE_NORMAL);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 		saveVolume();
 		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
-		if (oldpolicy != Settings.System.WIFI_SLEEP_POLICY_NEVER)
-			Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
+		restoreSettings();
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {

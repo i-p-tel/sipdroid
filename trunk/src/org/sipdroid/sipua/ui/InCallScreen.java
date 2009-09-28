@@ -42,6 +42,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -103,6 +104,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     	case UserAgent.UA_STATE_IDLE:
     		if (Receiver.ccCall != null)
     			mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
+			mHandler.sendEmptyMessageDelayed(MSG_BACK, 2000);
     		break;
     	}
 		if (socket != null) {
@@ -199,9 +201,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		    screenOff(true);
 			break;
 		case UserAgent.UA_STATE_IDLE:
-			if (Receiver.ccConn != null && Receiver.ccConn.date != 0)
-				mHandler.sendEmptyMessageDelayed(MSG_BACK, 2000);
-			else
+			if (!mHandler.hasMessages(MSG_BACK))
 				moveBack();
 			break;
 		}
@@ -216,15 +216,21 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	        (t = new Thread() {
 				public void run() {
 					int len = 0;
-
+					ToneGenerator tg = null;
+					
 					running = true;
+					if (Settings.System.getInt(getContentResolver(),
+							Settings.System.DTMF_TONE_WHEN_DIALING, 1) == 1)
+						tg = new ToneGenerator(AudioManager.STREAM_MUSIC, (int)(ToneGenerator.MAX_VOLUME*org.sipdroid.sipua.ui.Settings.getEarGain()));
 					for (;;) {
 						if (!running) {
 							t = null;
 							break;
 						}
 						if (len != mDigits.getText().length()) {
+							if (tg != null) tg.startTone(mToneMap.get(mDigits.getText().charAt(len)));
 							Receiver.engine(Receiver.mContext).info(mDigits.getText().charAt(len++));
+							if (tg != null) tg.stopTone();
 							continue;
 						}
 						mHandler.sendEmptyMessage(MSG_TICK);
@@ -317,6 +323,19 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
         mDisplayMap.put(R.id.zero, '0');
         mDisplayMap.put(R.id.pound, '#');
         mDisplayMap.put(R.id.star, '*');
+        
+        mToneMap.put('1', ToneGenerator.TONE_DTMF_1);
+        mToneMap.put('2', ToneGenerator.TONE_DTMF_2);
+        mToneMap.put('3', ToneGenerator.TONE_DTMF_3);
+        mToneMap.put('4', ToneGenerator.TONE_DTMF_4);
+        mToneMap.put('5', ToneGenerator.TONE_DTMF_5);
+        mToneMap.put('6', ToneGenerator.TONE_DTMF_6);
+        mToneMap.put('7', ToneGenerator.TONE_DTMF_7);
+        mToneMap.put('8', ToneGenerator.TONE_DTMF_8);
+        mToneMap.put('9', ToneGenerator.TONE_DTMF_9);
+        mToneMap.put('0', ToneGenerator.TONE_DTMF_0);
+        mToneMap.put('#', ToneGenerator.TONE_DTMF_P);
+        mToneMap.put('*', ToneGenerator.TONE_DTMF_S);
 
         View button;
         for (int viewId : mDisplayMap.keySet()) {
@@ -330,6 +349,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	boolean running;
     private static final HashMap<Integer, Character> mDisplayMap =
         new HashMap<Integer, Character>();
+    private static final HashMap<Character, Integer> mToneMap =
+        new HashMap<Character, Integer>();
     
 	public void onClick(View v) {
         int viewId = v.getId();
@@ -439,7 +460,10 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
             return true;
 
         case KeyEvent.KEYCODE_BACK:
-    		reject();      
+        	if (mDialerDrawer.isOpened())
+        		mDialerDrawer.animateClose();
+        	else
+        		reject();      
             return true;
 
         case KeyEvent.KEYCODE_CAMERA:
