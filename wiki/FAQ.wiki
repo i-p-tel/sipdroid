@@ -82,7 +82,7 @@ If you want to call any other SIP URI add it to a contact as one of the two unsu
 
 ==== From Sipdroid window ====
 
-You can enter SIP URIs into the "Called Party Address" field in Sipdroid. For calling Skype users enter the Skype name followed by @skype into "Called Party Address". Calling Skype users requires registering to PBXes. 
+You can enter SIP URIs into the "Called Party Address" field in Sipdroid. For calling Skype users enter the Skype name followed by *"@skype"* into "Called Party Address". Calling Skype users requires registering to PBXes. 
 
 === How are the buttons assigned? ===
 
