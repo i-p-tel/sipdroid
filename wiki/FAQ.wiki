@@ -46,6 +46,15 @@ The update for the other phones comes over the air, starting May 1st, 2009.
 
 If you are interested in developing and contributing to the project please install [http://developer.android.com/sdk/1.1_r1/installing.html Eclipse] and [http://subclipse.tigris.org/install.html Subclipse] for building the source code.
 
+After the sources are done downloading, you see the following in "Package Explorer" 
+in Eclipse.
+
+> SipUA 326 [http://sipdroid.googlecode.com/svn, Trunk: trunk]
+
+Right click on SipUA and select Properties in the drop down menu (last option). Click 
+on Android (assumes the Android SDK is installed and configured in Eclipse). In the 
+"Project Build Target" select "Android 1.6" (Target Name).
+
 == User Interface ==
 
 === How can I dial my contacts over Sipdroid / over Phone? ===
