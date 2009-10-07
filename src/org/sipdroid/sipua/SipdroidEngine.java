@@ -71,15 +71,23 @@ public class SipdroidEngine implements RegisterAgentListener {
 			
 			user_profile = new UserAgentProfile(null);
 			user_profile.username = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("username",""); // modified
+			user_profile.callerid = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid", "");
 			user_profile.passwd = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("password","");
 			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("domain","").length() == 0) {
 				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("server","");
 			} else {
 				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("domain","");
 			}
+			if (user_profile.callerid == "") {
 			user_profile.from_url = user_profile.username
 					+ "@"
-					+ user_profile.realm;			
+					+ user_profile.realm;
+			}
+			else {
+				user_profile.from_url = user_profile.callerid
+				+ "@"
+				+ user_profile.realm;
+			}
 			user_profile.contact_url = user_profile.username
 					+ "@"
 					+ opt_via_addr;
