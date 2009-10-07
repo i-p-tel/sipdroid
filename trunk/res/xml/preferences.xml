@@ -30,8 +30,7 @@
 				android:title="@string/settings_protocol"
 				android:entries="@array/protocol_display_values"
 				android:entryValues="@array/protocol_values"
-				android:dialogTitle="@string/settings_protocol" />
-		</PreferenceCategory>
+				android:dialogTitle="@string/settings_protocol" /></PreferenceCategory>
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_options">
 		<PreferenceCategory android:title="@string/settings_options">
@@ -91,7 +90,7 @@
 				android:entryValues="@array/eargain_values"
 				android:defaultValue="0.25"
 				android:dialogTitle="@string/settings_eargain" />
-		</PreferenceCategory>
+		<EditTextPreference android:singleLine="true" android:title="@string/callerid" android:key="callerid"></EditTextPreference></PreferenceCategory>
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_pbxes_options">
 		<PreferenceCategory android:title="@string/settings_pbxes_options">

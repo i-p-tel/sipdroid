@@ -160,4 +160,5 @@
 
 <string name="ongoing">Current Call</string>
 <string name="onHold">On hold</string>
+<string name="callerid">Caller ID</string>
 </resources>

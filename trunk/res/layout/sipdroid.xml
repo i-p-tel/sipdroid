@@ -7,7 +7,7 @@ android:background="#736f6e"
 xmlns:android="http://schemas.android.com/apk/res/android"
 >
 
-<TextView android:id="@+id/txt_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#ffffff" android:typeface="serif" android:layout_x="12px" android:layout_y="8px" android:textSize="24px" android:text="@string/app_name"></TextView>
+<TextView android:id="@+id/txt_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#ffffff" android:typeface="serif" android:layout_x="12px" android:layout_y="8px" android:textSize="24px" android:text='@string/app_name'></TextView>
 <org.sipdroid.sipua.ui.InstantAutoCompleteTextView
 android:id="@+id/txt_callee"
 android:layout_width="302px"
@@ -18,7 +18,7 @@ android:singleLine="true"
 android:layout_y="40px"
 android:hint="@string/hint"
 android:inputType="textEmailAddress"
-android:imeOptions="actionSend|flagNoExtractUi"/>
+android:imeOptions="actionSend|flagNoExtractUi"></org.sipdroid.sipua.ui.InstantAutoCompleteTextView>
 <AbsoluteLayout
 android:id="@+id/top_box_layout"
 android:layout_width="fill_parent"

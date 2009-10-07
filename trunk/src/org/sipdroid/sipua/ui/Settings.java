@@ -110,7 +110,8 @@ import android.widget.Toast;
  	        			key.equals("protocol") ||
  	        			key.equals("minedge") ||
  	        			key.equals("pos") ||
- 	        			key.equals("posurl")) {
+ 	        			key.equals("posurl") ||
+ 	        			key.equals("callerid")) {
  	        		if (key.equals("wlan") || key.equals("3g"))
  	        			updateSleep();
  		        	Receiver.engine(this).halt();
@@ -140,6 +141,7 @@ import android.widget.Toast;
 		}
 	
         public void updateSummaries() {
+        	getPreferenceScreen().findPreference("callerid").setSummary(getPreferenceScreen().getSharedPreferences().getString("callerid",""));
         	getPreferenceScreen().findPreference("username").setSummary(getPreferenceScreen().getSharedPreferences().getString("username", "")); 
         	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
         	if (getPreferenceScreen().getSharedPreferences().getString("domain","").length() == 0) {
