@@ -51,6 +51,8 @@
 <string name="regok">Registered</string>
 <string name="regfailed">Registration failed</string>
 
+<string name="voicemail">Message(s) Waiting</string>
+
 <string name="auto_enabled">Auto-Answer/Speakerphone</string>
 <string name="auto_disabled">Auto-Answer off</string>
 <string name="hint">Called Party Address</string>
@@ -91,6 +93,8 @@
 <string name="settings_auto_on2">Short vibrating alert when screen is on</string>
 <string name="settings_auto_ondemand">Auto-Answer on demand</string>
 <string name="settings_auto_ondemand2">Show toggle switch in status bar</string>
+<string name="settings_MWI">Check for Voicemail</string>
+<string name="settings_MWI2">Subscribe to SIP message waiting</string>
 
 <string name="settings_advanced_options">Advanced Options</string>
 <string name="settings_minedge">Signal Bars for EDGE Calls</string>

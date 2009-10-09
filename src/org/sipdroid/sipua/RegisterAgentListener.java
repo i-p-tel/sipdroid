@@ -29,6 +29,8 @@ public interface RegisterAgentListener {
 	public void onUaRegistrationSuccess(RegisterAgent ra, NameAddress target,
 			NameAddress contact, String result);
 
+    public void onMWIUpdate(boolean voicemail, int number, String vmacc);
+
 	/** When a UA failed on (un)registering. */
 	public void onUaRegistrationFailure(RegisterAgent ra, NameAddress target,
 			NameAddress contact, String result);

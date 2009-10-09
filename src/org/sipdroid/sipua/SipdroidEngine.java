@@ -216,8 +216,24 @@ public class SipdroidEngine implements RegisterAgentListener {
 		} else
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION, null, 0,0);
 		Receiver.registered();
+		if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean("MWI_enabled",true)) {
+			ra.startMWI();
+		}
 		if (wl.isHeld())
 			wl.release();
+	}
+
+    public void onMWIUpdate(boolean voicemail, int number, String vmacc) {
+		if (voicemail) {
+			String msgs = getUIContext().getString(R.string.voicemail);
+			if (number != 0) {
+				msgs = msgs + ": " + number;
+			}
+			Receiver.MWI_account = vmacc;
+			Receiver.onText(Receiver.MWI_NOTIFICATION, msgs,android.R.drawable.stat_notify_voicemail,0);
+		} else {
+			Receiver.onText(Receiver.MWI_NOTIFICATION, null, 0,0);
+		}
 	}
 
 	static long lasthalt;
@@ -233,6 +249,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			sip_provider.haltConnections();
 		}
 		updateDNS();
+		ra.stopMWI();
 	}
 	
 	public void updateDNS() {

@@ -56,6 +56,10 @@
 				android:key="auto_ondemand"
 				android:title="@string/settings_auto_ondemand"
 				android:summary="@string/settings_auto_ondemand2" />
+			<CheckBoxPreference
+				android:key="MWI_enabled"
+				android:title="@string/settings_MWI"
+				android:summary="@string/settings_MWI2" />
 		</PreferenceCategory>
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_advanced_options">
