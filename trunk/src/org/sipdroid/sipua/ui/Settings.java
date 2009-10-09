@@ -60,6 +60,7 @@ import android.widget.Toast;
 				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
 				
 				edit.putBoolean("wlan", true);
+				edit.putBoolean("MWI_enabled", true);
 				edit.putString("port", ""+SipStack.default_port);
 				edit.putString("server", "pbxes.org");
 				edit.putString("domain", "");
@@ -111,7 +112,8 @@ import android.widget.Toast;
  	        			key.equals("minedge") ||
  	        			key.equals("pos") ||
  	        			key.equals("posurl") ||
- 	        			key.equals("callerid")) {
+ 	        			key.equals("callerid") ||
+					key.equals("MWI_enabled")) {
  	        		if (key.equals("wlan") || key.equals("3g"))
  	        			updateSleep();
  		        	Receiver.engine(this).halt();

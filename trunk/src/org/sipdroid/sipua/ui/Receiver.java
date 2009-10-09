@@ -69,6 +69,7 @@ import org.zoolu.net.IpAddress;
 		public final static int CALL_NOTIFICATION = 2;
 		public final static int MISSED_CALL_NOTIFICATION = 3;
 		public final static int AUTO_ANSWER_NOTIFICATION = 4;
+		public final static int MWI_NOTIFICATION = 5;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
@@ -82,6 +83,7 @@ import org.zoolu.net.IpAddress;
 		public static int call_state;
 		
 		public static String pstn_state;
+		public static String MWI_account;
 		private static String laststate,lastnumber;	
 		
 		public static MediaPlayer ringbackPlayer;
@@ -227,14 +229,18 @@ import org.zoolu.net.IpAddress;
 	        if (text != null) {
 		        Notification notification = new Notification();
 		        notification.icon = mInCallResId;
-		        if (type == MISSED_CALL_NOTIFICATION) {
+			if (type == MISSED_CALL_NOTIFICATION) {
 		        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		        	notification.setLatestEventInfo(mContext, text, mContext.getString(R.string.app_name),
 		        			PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0));
 	        	} else {
-			        notification.contentIntent = PendingIntent.getActivity(mContext, 0,
+				if (type == MWI_NOTIFICATION) {
+					notification.contentIntent = PendingIntent.getActivity(mContext, 0, createMWIIntent(), 0);	
+				} else {
+					notification.contentIntent = PendingIntent.getActivity(mContext, 0,
 			                createIntent(type == AUTO_ANSWER_NOTIFICATION?
 			                		AutoAnswer.class:Sipdroid.class), 0);
+				}
 		        	notification.flags |= Notification.FLAG_ONGOING_EVENT;
 			        RemoteViews contentView = new RemoteViews(mContext.getPackageName(),
 	                        R.layout.ongoing_call_notification);
@@ -411,6 +417,16 @@ import org.zoolu.net.IpAddress;
 	        Intent intent = new Intent(Intent.ACTION_MAIN, null);
 	        intent.addCategory(Intent.CATEGORY_HOME);
 	        return intent;
+		}
+
+	        static Intent createMWIIntent() {
+			Intent intent;
+
+			if (MWI_account != null)
+				intent = new Intent(Intent.ACTION_CALL, Uri.parse(MWI_account));
+			else
+				intent = new Intent(Intent.ACTION_DIAL);
+			return intent;
 		}
 		
 		public static void moveTop() {

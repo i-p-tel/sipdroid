@@ -27,6 +27,8 @@ import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.authentication.DigestAuthentication;
+import org.zoolu.sip.dialog.SubscriberDialog;
+import org.zoolu.sip.dialog.SubscriberDialogListener;
 import org.zoolu.sip.header.AuthorizationHeader;
 import org.zoolu.sip.header.ContactHeader;
 import org.zoolu.sip.header.ExpiresHeader;
@@ -44,12 +46,13 @@ import org.zoolu.sip.transaction.TransactionClient;
 import org.zoolu.sip.transaction.TransactionClientListener;
 import org.zoolu.tools.Log;
 import org.zoolu.tools.LogLevel;
+import org.zoolu.tools.Parser;
 
 /**
  * Register User Agent. It registers (one time or periodically) a contact
  * address with a registrar server.
  */
-public class RegisterAgent implements TransactionClientListener {
+public class RegisterAgent implements TransactionClientListener, SubscriberDialogListener {
 	/** Max number of registration attempts. */
 	static final int MAX_ATTEMPTS = 3;
 	
@@ -102,6 +105,11 @@ public class RegisterAgent implements TransactionClientListener {
 	int CurrentState = UNREGISTERED;
 
 	UserAgentProfile user_profile;
+
+	SubscriberDialog sd;
+	boolean alreadySubscribed = false;
+	Message currentSubscribeMessage;
+	public final int SUBSCRIPTION_EXPIRES = 184000;
 
 	/**
 	 * Creates a new RegisterAgent with authentication credentials (i.e.
@@ -223,7 +231,155 @@ public class RegisterAgent implements TransactionClientListener {
 
 	/** Unregister with the registrar server */
 	public boolean unregister() {
+		stopMWI();
 		return register(0);
+	}
+
+	public void stopMWI()
+	{
+		if (sd != null) {
+			synchronized (sd) {
+				sd.notify();
+			}
+		}
+		sd = null;
+		listener.onMWIUpdate(false, 0, null);
+	}
+
+	Message getSubscribeMessage(boolean current)
+	{
+		String empty = null;
+		Message req;
+
+		// Need to restart subscriber dialogue state engine
+		if (sd != null) {
+			synchronized (sd) {
+				sd.notify();
+			}
+		}
+		sd = new SubscriberDialog(sip_provider, "message-summary", "", this);
+		if (current) {
+			req = currentSubscribeMessage;
+			req.setCSeqHeader(req.getCSeqHeader().incSequenceNumber());
+		} else {
+			req = MessageFactory.createSubscribeRequest(sip_provider,
+				target.getAddress(), target, target,
+				contact, sd.getEvent(),
+				sd.getId(), empty, empty);
+		}
+		req.setExpiresHeader(new ExpiresHeader(SUBSCRIPTION_EXPIRES));
+		currentSubscribeMessage = req;
+		return req;
+	}
+		
+
+	public void startMWI()
+	{
+		if (alreadySubscribed) {
+			return;
+		}
+		Message req = getSubscribeMessage(false);
+		sd.subscribe(req);
+	}
+
+	void delayStartMWI()
+	{
+		Thread t = new Thread(new Runnable() {
+				public void run() {
+					Object o = new Object();
+					try {
+						synchronized (o) {
+							o.wait(10000);
+						}
+					} catch (Exception E) {
+					}
+					startMWI();
+				}
+			});
+		t.start();
+	}
+
+	// **************** Subscription callback functions *****************
+	public void onDlgSubscriptionSuccess(SubscriberDialog dialog, int code,
+			String reason, Message resp)
+	{
+		final int expires;
+		/* Can get replays of the subscription notice, so ignore */
+		if (alreadySubscribed) {
+			return;
+		}
+		alreadySubscribed = true;
+		if (resp.hasExpiresHeader()) {
+			expires = resp.getExpiresHeader().getDeltaSeconds();
+		} else {
+			expires  = SUBSCRIPTION_EXPIRES;
+		}
+		Thread t = new Thread(new Runnable() {
+				public void run() {
+					try {
+						synchronized (sd) {
+							sd.wait(expires*1000);
+						}
+						alreadySubscribed = false;
+						startMWI();
+					} catch(Exception E) {
+					}
+				}
+			});
+		t.start();
+	}
+
+	public void onDlgSubscriptionFailure(SubscriberDialog dialog, int code,
+			String reason, Message resp)
+	{
+		Message req = getSubscribeMessage(true);
+		if (handleAuthentication(code, resp, req)) {
+			sd.subscribe(req);
+		} else {
+			delayStartMWI();
+		}
+	}
+
+	public void onDlgSubscribeTimeout(SubscriberDialog dialog)
+	{
+		delayStartMWI();
+	}
+
+	public void onDlgSubscriptionTerminated(SubscriberDialog dialog)
+	{
+		alreadySubscribed = false;
+		startMWI();
+	}
+
+	public void onDlgNotify(SubscriberDialog dialog, NameAddress target,
+			NameAddress notifier, NameAddress contact, String state,
+			String content_type, String body, Message msg)
+	{
+		Parser p = new Parser(body);
+		final char[] propertysep = { ':', '\r', '\n' };
+		final char[] vmailsep = { '/' }; 
+		final char[] vmboxsep = { '@', '\r', '\n' };
+		String vmaccount = null;
+		boolean voicemail = false;
+		int nummsg = 0;
+		while (p.hasMore()) {
+			String property = p.getWord(propertysep);
+			p.skipChar();
+			p.skipWSP();
+			String value = p.getWord(p.CRLF);
+			if (property.equalsIgnoreCase("Messages-Waiting") && value.equalsIgnoreCase("yes")) {
+				voicemail = true;
+			} else if (property.equalsIgnoreCase("Voice-Message")) {
+				Parser np = new Parser(value);
+				String num = np.getWord(vmailsep);
+				nummsg = Integer.parseInt(num);
+			} else if (property.equalsIgnoreCase("Message-Account")) {
+				Parser np = new Parser(value);
+				// strip the @<pbx> because it may have nat problems
+				vmaccount = np.getWord(vmboxsep);
+			}
+		}
+		listener.onMWIUpdate(voicemail, nummsg, vmaccount);
 	}
 
 	// **************** Transaction callback functions *****************
@@ -324,7 +480,7 @@ public class RegisterAgent implements TransactionClientListener {
 		}
 	}
 	
-	private boolean generateRequestWithProxyAuthorizationheader(TransactionClient transaction,
+	private boolean generateRequestWithProxyAuthorizationheader(
 			Message resp, Message req){
 		if(resp.hasProxyAuthenticateHeader()
 				&& resp.getProxyAuthenticateHeader().getRealmParam()
@@ -338,20 +494,17 @@ public class RegisterAgent implements TransactionClientListener {
 			qop = (qop_options != null) ? "auth" : null;
 			
 			ProxyAuthorizationHeader ah = (new DigestAuthentication(
-					SipMethods.REGISTER, req.getRequestLine().getAddress()
+							req.getTransactionMethod(), req.getRequestLine().getAddress()
 							.toString(), pah, qop, null, username, passwd))
 					.getProxyAuthorizationHeader();
 			req.setProxyAuthorizationHeader(ah);
 			
-			TransactionClient t = new TransactionClient(sip_provider, req, this);
-			
-			t.request();
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean generateRequestWithWwwAuthorizationheader(TransactionClient transaction,
+	private boolean generateRequestWithWwwAuthorizationheader(
 			Message resp, Message req){
 		if(resp.hasWwwAuthenticateHeader()
 				&& resp.getWwwAuthenticateHeader().getRealmParam()
@@ -365,18 +518,26 @@ public class RegisterAgent implements TransactionClientListener {
 			qop = (qop_options != null) ? "auth" : null;
 			
 			AuthorizationHeader ah = (new DigestAuthentication(
-					SipMethods.REGISTER, req.getRequestLine().getAddress()
+							req.getTransactionMethod(), req.getRequestLine().getAddress()
 							.toString(), wah, qop, null, username, passwd))
 					.getAuthorizationHeader();
 			req.setAuthorizationHeader(ah);
-			
-			TransactionClient t = new TransactionClient(sip_provider, req, this);
-			
-			t.request();
 			return true;
 		}
 		return false;
 	}
+
+	private boolean handleAuthentication(int respCode, Message resp,
+					     Message req) {
+		switch (respCode) {
+		case 407:
+			return generateRequestWithProxyAuthorizationheader(resp, req);
+		case 401:
+			return generateRequestWithWwwAuthorizationheader(resp, req);
+		}
+		return false;
+	}
+		
 	
 	private boolean processAuthenticationResponse(TransactionClient transaction,
 			Message resp, int respCode){
@@ -385,11 +546,11 @@ public class RegisterAgent implements TransactionClientListener {
 			Message req = transaction.getRequestMessage();
 			req.setCSeqHeader(req.getCSeqHeader().incSequenceNumber());
 
-			switch(respCode) {
-			case 407:
-				return generateRequestWithProxyAuthorizationheader(transaction, resp, req);
-			case 401:
-				return generateRequestWithWwwAuthorizationheader(transaction, resp, req);
+			if (handleAuthentication(respCode, resp, req)) {
+				TransactionClient t = new TransactionClient(sip_provider, req, this);
+			
+				t.request();
+				return true;
 			}
 		}
 		return false;
