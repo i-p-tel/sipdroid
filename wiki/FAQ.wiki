@@ -198,7 +198,7 @@ Sipdroid presently supports basic call. All the typical PBX features are configu
 http://sipdroid.googlecode.com/svn/images/priv.png
 
   * Time-based routing for incoming calls
-  * Call Transfer
+  * Attended Call Transfer
   * Conferences
   * Video Reception (Video Transmission is supported by Sipdroid natively)
   * Trigger callback or callthru (if no suitable data network available)
