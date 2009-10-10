@@ -101,6 +101,7 @@
 <string name="settings_policy_never">Changed sleep policy to keep Wifi on.</string>
 <string name="settings_policy_default">Reset Wifi sleep policy to default.</string>
     <string-array name="bars">
+        <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>

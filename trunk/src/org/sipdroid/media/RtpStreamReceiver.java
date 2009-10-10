@@ -155,6 +155,7 @@ public class RtpStreamReceiver extends Thread {
 			edit.putInt("oldvibrate", oldvibrate);
 			edit.putInt("oldvibrate2", oldvibrate2);
 			edit.putInt("oldpolicy", oldpolicy);
+			edit.putInt("oldring",am.getStreamVolume(AudioManager.STREAM_RING));
 			edit.putBoolean("oldvalid", true);
 			edit.commit();
 		}
@@ -167,6 +168,7 @@ public class RtpStreamReceiver extends Thread {
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 		Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
+		am.setStreamVolume(AudioManager.STREAM_RING, PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0), 0);
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
 		edit.putBoolean("oldvalid", false);
 		edit.commit();
@@ -334,6 +336,9 @@ public class RtpStreamReceiver extends Thread {
 						 am.setMode(speakermode);
 						 switch (speakermode) {
 						 case AudioManager.MODE_IN_CALL:
+								am.setStreamVolume(AudioManager.STREAM_RING,(int)(
+										am.getStreamMaxVolume(AudioManager.STREAM_RING)*
+										org.sipdroid.sipua.ui.Settings.getEarGain()), 0);
 								track.setStereoVolume(AudioTrack.getMaxVolume()*
 										org.sipdroid.sipua.ui.Settings.getEarGain()
 										,AudioTrack.getMaxVolume()*

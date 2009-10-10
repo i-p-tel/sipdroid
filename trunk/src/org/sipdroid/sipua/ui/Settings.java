@@ -60,13 +60,16 @@ import android.widget.Toast;
 				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
 				
 				edit.putBoolean("wlan", true);
-				edit.putBoolean("MWI_enabled", true);
 				edit.putString("port", ""+SipStack.default_port);
 				edit.putString("server", "pbxes.org");
 				edit.putString("domain", "");
 				edit.putString("pref", "SIP");				
 				edit.commit();
 	        	Receiver.engine(this).updateDNS();
+			}
+			if (!getPreferenceScreen().getSharedPreferences().contains("MWI_enabled")) {
+				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("MWI_enabled");
+				cb.setChecked(true);
 			}
 			if (Sipdroid.market) {
 				Editor edit = getPreferenceScreen().getSharedPreferences().edit();

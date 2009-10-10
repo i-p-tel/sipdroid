@@ -51,6 +51,8 @@
 <string name="regok">Angemeldet</string>
 <string name="regfailed">Anmeldung fehlgeschlagen</string>
 
+<string name="voicemail">neue Nachricht(en)</string>
+
 <string name="auto_enabled">Autom. Rufannahme/Freisprechen</string>
 <string name="auto_disabled">Automatische Rufannahme aus</string>
 <string name="hint">Zieladresse</string>
@@ -84,6 +86,8 @@
 <string name="settings_auto_on2">Bei eingeschaltetem Bildschirm mit kurzem Vibrationsalarm</string>
 <string name="settings_auto_ondemand">Rufannahme nach Bedarf</string>
 <string name="settings_auto_ondemand2">Option in Statusleiste anzeigen</string>
+<string name="settings_MWI">Anrufbeantworter prüfen</string>
+<string name="settings_MWI2">Eingang neuer Nachrichten anzeigen</string>
 
 <string name="settings_advanced_options">Erweiterte Einstellungen</string>
 <string name="settings_minedge">Signalstärke für EDGE-Anrufe</string>

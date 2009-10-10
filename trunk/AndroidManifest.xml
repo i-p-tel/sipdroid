@@ -25,8 +25,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="1.1.1 beta"
-    android:versionCode="29">
+    android:versionName="1.1.2 beta"
+    android:versionCode="31">
 	<uses-sdk android:minSdkVersion="3" />
     <application android:icon="@drawable/icon64" android:label="@string/app_name">
         <activity android:name=".ui.Sipdroid" android:label="@string/app_name" android:launchMode="singleInstance"
@@ -60,8 +60,11 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SENDTO" />
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="imto" />
+                <data android:scheme="sip" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.Activity2" android:label="@string/app_name"

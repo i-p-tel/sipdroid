@@ -153,7 +153,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 						RtpPacket keepalive = new RtpPacket(new byte[12],0);
 						RtpPacket videopacket = new RtpPacket(new byte[1000],0);
 						
-						if (speakervalid == Receiver.ccConn.date) {
+						if (speakervalid != 0 && speakervalid == Receiver.ccConn.date) {
 							Receiver.engine(mContext).speaker(speakermode);
 							speakervalid = 0;
 						}

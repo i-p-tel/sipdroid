@@ -27,8 +27,10 @@ import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.authentication.DigestAuthentication;
+import org.zoolu.sip.dialog.Dialog;
 import org.zoolu.sip.dialog.SubscriberDialog;
 import org.zoolu.sip.dialog.SubscriberDialogListener;
+import org.zoolu.sip.header.AcceptHeader;
 import org.zoolu.sip.header.AuthorizationHeader;
 import org.zoolu.sip.header.ContactHeader;
 import org.zoolu.sip.header.ExpiresHeader;
@@ -42,11 +44,14 @@ import org.zoolu.sip.message.MessageFactory;
 import org.zoolu.sip.message.SipMethods;
 import org.zoolu.sip.provider.SipProvider;
 import org.zoolu.sip.provider.SipStack;
+import org.zoolu.sip.provider.TransactionIdentifier;
 import org.zoolu.sip.transaction.TransactionClient;
 import org.zoolu.sip.transaction.TransactionClientListener;
 import org.zoolu.tools.Log;
 import org.zoolu.tools.LogLevel;
 import org.zoolu.tools.Parser;
+
+import android.preference.PreferenceManager;
 
 /**
  * Register User Agent. It registers (one time or periodically) a contact
@@ -99,7 +104,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 	Log log;
 
 	/** Number of registration attempts. */
-	int attempts;
+	int attempts,subattempts;
 
 	/** Current State of the registrar component */
 	int CurrentState = UNREGISTERED;
@@ -268,6 +273,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 				sd.getId(), empty, empty);
 		}
 		req.setExpiresHeader(new ExpiresHeader(SUBSCRIPTION_EXPIRES));
+		req.setHeader(new AcceptHeader("application/simple-message-summary"));
 		currentSubscribeMessage = req;
 		return req;
 	}
@@ -275,7 +281,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 
 	public void startMWI()
 	{
-		if (alreadySubscribed) {
+		if (alreadySubscribed || !PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("MWI_enabled",true)) {
 			return;
 		}
 		Message req = getSubscribeMessage(false);
@@ -284,19 +290,22 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 
 	void delayStartMWI()
 	{
-		Thread t = new Thread(new Runnable() {
-				public void run() {
-					Object o = new Object();
-					try {
-						synchronized (o) {
-							o.wait(10000);
+		if (subattempts < MAX_ATTEMPTS){
+			subattempts++;
+			Thread t = new Thread(new Runnable() {
+					public void run() {
+						Object o = new Object();
+						try {
+							synchronized (o) {
+								o.wait(10000);
+							}
+						} catch (Exception E) {
 						}
-					} catch (Exception E) {
+						startMWI();
 					}
-					startMWI();
-				}
-			});
-		t.start();
+				});
+			t.start();
+		}
 	}
 
 	// **************** Subscription callback functions *****************
@@ -309,8 +318,11 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			return;
 		}
 		alreadySubscribed = true;
+		sip_provider.addSipProviderListener(new TransactionIdentifier(
+				SipMethods.NOTIFY), dialog);
 		if (resp.hasExpiresHeader()) {
-			expires = resp.getExpiresHeader().getDeltaSeconds();
+			if (0 == (expires = resp.getExpiresHeader().getDeltaSeconds()))
+				return;
 		} else {
 			expires  = SUBSCRIPTION_EXPIRES;
 		}
@@ -321,6 +333,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 							sd.wait(expires*1000);
 						}
 						alreadySubscribed = false;
+						subattempts = 0;
 						startMWI();
 					} catch(Exception E) {
 					}
@@ -333,7 +346,8 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			String reason, Message resp)
 	{
 		Message req = getSubscribeMessage(true);
-		if (handleAuthentication(code, resp, req)) {
+		if (handleAuthentication(code, resp, req) && subattempts < MAX_ATTEMPTS) {
+			subattempts++;
 			sd.subscribe(req);
 		} else {
 			delayStartMWI();
@@ -366,7 +380,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			String property = p.getWord(propertysep);
 			p.skipChar();
 			p.skipWSP();
-			String value = p.getWord(p.CRLF);
+			String value = p.getWord(Parser.CRLF);
 			if (property.equalsIgnoreCase("Messages-Waiting") && value.equalsIgnoreCase("yes")) {
 				voicemail = true;
 			} else if (property.equalsIgnoreCase("Voice-Message")) {

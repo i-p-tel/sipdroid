@@ -78,6 +78,7 @@ public class SIPUri extends Activity {
 				}
 			})
 			.show();
-		}
+		} else
+			finish();
 	}
 }
