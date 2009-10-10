@@ -162,7 +162,7 @@ public class UserAgentProfile extends Configure {
 	/** Video port */
 	public int video_port = 21070;
 	/** Video avp */
-	public int video_avp = 17;
+	public int video_avp = 103;
 
 	// ************************** Costructors *************************
 

@@ -266,9 +266,6 @@ public class UserAgent extends CallListenerAdapter {
 		
 		target_url = sip_provider.completeNameAddress(target_url).toString();
 		
-		// recreate the SDP to get the new IPAddress if it was changed
-		initSessionDescriptor();
-
 		if (user_profile.no_offer)
 		{
 			call.call(target_url);

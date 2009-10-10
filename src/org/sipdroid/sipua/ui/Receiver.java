@@ -229,18 +229,35 @@ import org.zoolu.net.IpAddress;
 	        if (text != null) {
 		        Notification notification = new Notification();
 		        notification.icon = mInCallResId;
-			if (type == MISSED_CALL_NOTIFICATION) {
-		        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
-		        	notification.setLatestEventInfo(mContext, text, mContext.getString(R.string.app_name),
-		        			PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0));
+				if (type == MISSED_CALL_NOTIFICATION) {
+			        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
+			        	notification.setLatestEventInfo(mContext, text, mContext.getString(R.string.app_name),
+			        			PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0));
 	        	} else {
-				if (type == MWI_NOTIFICATION) {
-					notification.contentIntent = PendingIntent.getActivity(mContext, 0, createMWIIntent(), 0);	
-				} else {
-					notification.contentIntent = PendingIntent.getActivity(mContext, 0,
-			                createIntent(type == AUTO_ANSWER_NOTIFICATION?
-			                		AutoAnswer.class:Sipdroid.class), 0);
-				}
+	        		switch (type) {
+		        	case MWI_NOTIFICATION:
+						notification.contentIntent = PendingIntent.getActivity(mContext, 0, 
+								createMWIIntent(), 0);	
+			        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+			        	notification.ledARGB = 0xff00ff00; /* green */
+			        	notification.ledOnMS = 125;
+			        	notification.ledOffMS = 2875;
+						break;
+		        	case AUTO_ANSWER_NOTIFICATION:
+						notification.contentIntent = PendingIntent.getActivity(mContext, 0,
+				                createIntent(AutoAnswer.class), 0);
+						break;
+		        	default:
+						notification.contentIntent = PendingIntent.getActivity(mContext, 0,
+					            createIntent(Sipdroid.class), 0);
+				        if (mInCallResId == R.drawable.sym_presence_away) {
+				        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+				        	notification.ledARGB = 0xffff0000; /* red */
+				        	notification.ledOnMS = 125;
+				        	notification.ledOffMS = 2875;
+				        }
+		        		break;
+		        	}			
 		        	notification.flags |= Notification.FLAG_ONGOING_EVENT;
 			        RemoteViews contentView = new RemoteViews(mContext.getPackageName(),
 	                        R.layout.ongoing_call_notification);
@@ -252,12 +269,6 @@ import org.zoolu.net.IpAddress;
 					else
 						contentView.setTextViewText(R.id.text1, text);
 					notification.contentView = contentView;
-		        }
-		        if (mInCallResId == R.drawable.sym_presence_away) {
-		        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
-		        	notification.ledARGB = 0xffff0000; /* red */
-		        	notification.ledOnMS = 125;
-		        	notification.ledOffMS = 2875;
 		        }
 		        mNotificationMgr.notify(type,notification);
 	        } else {
@@ -419,7 +430,7 @@ import org.zoolu.net.IpAddress;
 	        return intent;
 		}
 
-	        static Intent createMWIIntent() {
+	    static Intent createMWIIntent() {
 			Intent intent;
 
 			if (MWI_account != null)
@@ -486,7 +497,7 @@ import org.zoolu.net.IpAddress;
 		    			engine(context).togglehold();
 	        } else
 	        if (intentAction.equals(ACTION_SIGNAL_STRENGTH_CHANGED)) {
-	        	cellAsu = intent.getIntExtra("asu", 0);
+	        	cellAsu = intent.getIntExtra("asu", intent.getIntExtra("GsmSignalStrength", 0));
 	        	if (cellAsu <= 0 || cellAsu == 99) cellAsu = 0;
 	        	else if (cellAsu >= 16) cellAsu = 4;
 	        	else if (cellAsu >= 8) cellAsu = 3;

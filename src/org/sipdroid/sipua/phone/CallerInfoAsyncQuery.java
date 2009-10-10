@@ -280,7 +280,10 @@ public class CallerInfoAsyncQuery {
     public static CallerInfoAsyncQuery startQuery(int token, Context context, String number, String number2, 
             OnQueryCompleteListener listener, Object cookie) {
         //contruct the URI object and start Query.
-        Uri contactRef = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, number);
+    	String number_search = number;
+        if (number.contains("&"))
+        	number_search = number.substring(0,number.indexOf("&"));
+        Uri contactRef = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, number_search);
         
         CallerInfoAsyncQuery c = new CallerInfoAsyncQuery();
         c.allocate(context, contactRef);

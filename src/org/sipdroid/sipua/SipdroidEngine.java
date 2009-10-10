@@ -216,9 +216,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 		} else
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION, null, 0,0);
 		Receiver.registered();
-		if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean("MWI_enabled",true)) {
-			ra.startMWI();
-		}
+		ra.subattempts = 0;
+		ra.startMWI();
 		if (wl.isHeld())
 			wl.release();
 	}
