@@ -149,8 +149,11 @@
 <string name="menu_call">Dial</string>
 <string name="menu_mute">Mute</string>
 <string name="menu_hold">Hold</string>
+<string name="menu_transfer">Transfer</string>
 <string name="menu_speaker">Speaker</string>
 <string name="menu_endCall">End call</string>
+
+<string name="transfer_title">Transfer Call to</string>
 
 <string name="card_title_dialing">Dialing</string>
 <string name="card_title_in_progress">Call in progress</string>
