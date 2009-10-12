@@ -312,6 +312,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public void togglehold() {
 		ua.reInvite(null, 0);
 	}
+
+	public void transfer(String number) {
+		ua.transfer(number);
+	}
 	
 	public void togglemute() {
 		if (ua.muteMediaApplication())

@@ -3,17 +3,22 @@ package org.sipdroid.sipua.ui;
 import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
+import org.sipdroid.sipua.ui.InstantAutoCompleteTextView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.SystemClock;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 /*
  * Copyright (C) 2009 The Sipdroid Open Source Project
@@ -35,13 +40,16 @@ import android.view.MenuItem;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-public class CallScreen extends Activity {
+public class CallScreen extends Activity implements DialogInterface.OnClickListener {
 	public static final int FIRST_MENU_ID = Menu.FIRST;
 	public static final int HANG_UP_MENU_ITEM = FIRST_MENU_ID + 1;
 	public static final int HOLD_MENU_ITEM = FIRST_MENU_ID + 2;
 	public static final int MUTE_MENU_ITEM = FIRST_MENU_ID + 3;
 	public static final int VIDEO_MENU_ITEM = FIRST_MENU_ID + 5;
 	public static final int SPEAKER_MENU_ITEM = FIRST_MENU_ID + 6;
+	public static final int TRANSFER_MENU_ITEM = FIRST_MENU_ID + 7;
+
+	private static EditText transferText;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,8 +65,29 @@ public class CallScreen extends Activity {
 		m.setIcon(android.R.drawable.stat_sys_speakerphone);
 		m = menu.add(0, VIDEO_MENU_ITEM, 0, R.string.menu_video);
 		m.setIcon(android.R.drawable.ic_menu_camera);
+		m = menu.add(0, TRANSFER_MENU_ITEM, 0, R.string.menu_transfer);
+		m.setIcon(android.R.drawable.ic_menu_call);
 				
 		return result;
+	}
+
+	public void onClick(DialogInterface dialog, int which)
+	{
+		if (which == DialogInterface.BUTTON_POSITIVE)
+			Receiver.engine(this).transfer(transferText.getText().toString());
+	}
+
+	private void transfer() {
+		transferText = new InstantAutoCompleteTextView(Receiver.mContext,null);
+		transferText.setInputType(InputType.TYPE_CLASS_TEXT |
+					  InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+
+		new AlertDialog.Builder(this)
+			.setTitle(Receiver.mContext.getString(R.string.transfer_title))
+			.setView(transferText)
+			.setPositiveButton(android.R.string.ok, this)
+			.setNegativeButton(android.R.string.cancel, this)
+			.show();
 	}
 
 	@Override
@@ -73,6 +102,10 @@ public class CallScreen extends Activity {
 			
 		case HOLD_MENU_ITEM:
 			Receiver.engine(this).togglehold();
+			break;
+
+		case TRANSFER_MENU_ITEM:
+			transfer();
 			break;
 			
 		case MUTE_MENU_ITEM:
