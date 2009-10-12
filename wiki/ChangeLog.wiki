@@ -3,6 +3,13 @@
 
 === Beta-Versions ===
 
+  * 1.1.2
+    * Fixes for Donut
+    * Message Waiting Indication
+    * Blind Transfer
+    * Caller ID
+    * Fix issue 155
+
   * 1.1.1
     * Add calling users on Skype
     * Czech translation
