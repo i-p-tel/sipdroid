@@ -236,6 +236,7 @@ import org.zoolu.net.IpAddress;
 	        	} else {
 	        		switch (type) {
 		        	case MWI_NOTIFICATION:
+			        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
 						notification.contentIntent = PendingIntent.getActivity(mContext, 0, 
 								createMWIIntent(), 0);	
 			        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;

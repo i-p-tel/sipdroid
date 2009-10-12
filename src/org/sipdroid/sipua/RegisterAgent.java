@@ -27,7 +27,6 @@ import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.authentication.DigestAuthentication;
-import org.zoolu.sip.dialog.Dialog;
 import org.zoolu.sip.dialog.SubscriberDialog;
 import org.zoolu.sip.dialog.SubscriberDialogListener;
 import org.zoolu.sip.header.AcceptHeader;
@@ -263,6 +262,8 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			}
 		}
 		sd = new SubscriberDialog(sip_provider, "message-summary", "", this);
+		sip_provider.addSipProviderListener(new TransactionIdentifier(
+				SipMethods.NOTIFY), sd);
 		if (current) {
 			req = currentSubscribeMessage;
 			req.setCSeqHeader(req.getCSeqHeader().incSequenceNumber());
@@ -281,10 +282,11 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 
 	public void startMWI()
 	{
-		if (alreadySubscribed || !PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("MWI_enabled",true)) {
+		if (alreadySubscribed)
 			return;
-		}
 		Message req = getSubscribeMessage(false);
+		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("MWI_enabled",true))
+			return;
 		sd.subscribe(req);
 	}
 
@@ -318,8 +320,6 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			return;
 		}
 		alreadySubscribed = true;
-		sip_provider.addSipProviderListener(new TransactionIdentifier(
-				SipMethods.NOTIFY), dialog);
 		if (resp.hasExpiresHeader()) {
 			if (0 == (expires = resp.getExpiresHeader().getDeltaSeconds()))
 				return;
@@ -369,6 +369,8 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			NameAddress notifier, NameAddress contact, String state,
 			String content_type, String body, Message msg)
 	{
+		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("MWI_enabled",true))
+			return;
 		Parser p = new Parser(body);
 		final char[] propertysep = { ':', '\r', '\n' };
 		final char[] vmailsep = { '/' }; 

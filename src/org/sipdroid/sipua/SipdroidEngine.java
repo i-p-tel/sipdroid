@@ -222,6 +222,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 			wl.release();
 	}
 
+	String lastmsgs;
+	
     public void onMWIUpdate(boolean voicemail, int number, String vmacc) {
 		if (voicemail) {
 			String msgs = getUIContext().getString(R.string.voicemail);
@@ -229,9 +231,13 @@ public class SipdroidEngine implements RegisterAgentListener {
 				msgs = msgs + ": " + number;
 			}
 			Receiver.MWI_account = vmacc;
-			Receiver.onText(Receiver.MWI_NOTIFICATION, msgs,android.R.drawable.stat_notify_voicemail,0);
+			if (lastmsgs == null || !msgs.equals(lastmsgs)) {
+				Receiver.onText(Receiver.MWI_NOTIFICATION, msgs,android.R.drawable.stat_notify_voicemail,0);
+				lastmsgs = msgs;
+			}
 		} else {
 			Receiver.onText(Receiver.MWI_NOTIFICATION, null, 0,0);
+			lastmsgs = null;
 		}
 	}
 
@@ -314,7 +320,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 
 	public void transfer(String number) {
-		ua.transfer(number);
+		ua.callTransfer(number, 0);
 	}
 	
 	public void togglemute() {
