@@ -2,7 +2,6 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<PreferenceScreen android:title="@string/settings_account">
-		<PreferenceCategory android:title="@string/settings_account">
 			<EditTextPreference
 				android:key="username"
 				android:title="@string/settings_username"
@@ -30,10 +29,9 @@
 				android:title="@string/settings_protocol"
 				android:entries="@array/protocol_display_values"
 				android:entryValues="@array/protocol_values"
-				android:dialogTitle="@string/settings_protocol" /></PreferenceCategory>
+				android:dialogTitle="@string/settings_protocol" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_options">
-		<PreferenceCategory android:title="@string/settings_options">
 			<CheckBoxPreference
 				android:key="wlan"
 				android:title="@string/settings_wlan"
@@ -60,10 +58,8 @@
 				android:key="MWI_enabled"
 				android:title="@string/settings_MWI"
 				android:summary="@string/settings_MWI2" />
-		</PreferenceCategory>
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_advanced_options">
-		<PreferenceCategory android:title="@string/settings_advanced_options">
 			<ListPreference
 				android:key="minedge"
 				android:title="@string/settings_minedge"
@@ -94,10 +90,10 @@
 				android:entryValues="@array/eargain_values"
 				android:defaultValue="0.25"
 				android:dialogTitle="@string/settings_eargain" />
-		<EditTextPreference android:singleLine="true" android:title="@string/callerid" android:key="callerid"></EditTextPreference></PreferenceCategory>
+		<EditTextPreference android:singleLine="true" android:title="@string/callerid" android:key="callerid">
+		</EditTextPreference>
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_pbxes_options">
-		<PreferenceCategory android:title="@string/settings_pbxes_options">
 			<CheckBoxPreference
 				android:key="par"
 				android:title="@string/settings_par"
@@ -128,6 +124,5 @@
 				android:title="@string/settings_callthru2"
 				android:hint="Accessno.,PIN#"
 				android:singleLine="true" />
-		</PreferenceCategory>
 	</PreferenceScreen> 
 </PreferenceScreen>

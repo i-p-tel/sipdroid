@@ -129,8 +129,11 @@
 <string name="menu_call">Wählen</string>
 <string name="menu_mute">Stumm</string>
 <string name="menu_hold">Halten</string>
+<string name="menu_transfer">Verbinden</string>
 <string name="menu_speaker">Lautsprecher</string>
 <string name="menu_endCall">Anruf beenden</string>
+
+<string name="transfer_title">Weiterverbinden mit</string>
 
 <string name="card_title_dialing">Rufaufbau</string>
 <string name="card_title_in_progress">Aktiver Anruf</string>

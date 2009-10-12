@@ -827,10 +827,6 @@ public class UserAgent extends CallListenerAdapter {
 			}
 	}
 
-	void transfer(String transfer_to) {
-		call.transfer(transfer_to);
-	}
-
 	/** Schedules an automatic answer event after <i>delay_time</i> secs. */
 	void automaticAccept(final int delay_time) {
 		(new Thread() {
