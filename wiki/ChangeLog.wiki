@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.1.3
+    * Urgent bugfix to 1.1.2 (new Caller ID implementation)
+
   * 1.1.2
     * Fixes for Donut
     * Message Waiting Indication
