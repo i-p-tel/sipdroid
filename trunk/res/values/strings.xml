@@ -28,8 +28,8 @@
 <resources>
 
 <string name="app_name">Sipdroid</string>
-<string name="pstn_name">Phone</string>
-<string name="sip_name">Sipdroid, when available</string>
+<string name="pstn_name">Phone Call</string>
+<string name="sip_name">Sipdroid Call, when available</string>
 
 <string name="about">Sipdroid is an open-source SIP client for Android
 \n
