@@ -78,15 +78,15 @@ public class SipdroidEngine implements RegisterAgentListener {
 			} else {
 				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("domain","");
 			}
-			if (user_profile.callerid == "") {
-			user_profile.from_url = user_profile.username
+			if (user_profile.callerid.equals("") || user_profile.realm.equals("pbxes.org")) {
+				user_profile.from_url = user_profile.username
 					+ "@"
 					+ user_profile.realm;
 			}
 			else {
 				user_profile.from_url = user_profile.callerid
-				+ "@"
-				+ user_profile.realm;
+					+ "@"
+					+ user_profile.realm;
 			}
 			user_profile.contact_url = user_profile.username
 					+ "@"
