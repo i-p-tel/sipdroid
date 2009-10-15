@@ -112,6 +112,7 @@ If the regular expression is not valid or the format is wrong, the original numb
 Examples:
 
 || _Search & Replace_ || _Description_ ||
+|| `\+*1*(.*),1\1` || fix for the common issue of contacts with or without 1 and +1 ||
 || `\+41(.*),0041\1` || replace +41791111111 with 0041791111111 ||
 || `(.*),123\1` || add 123 in front of the number (prefix) ||
 || `(.*),\1123` || add 123 at the end of the number (postfix) ||
@@ -247,3 +248,7 @@ We noticed that choppy voice on WLANs can be resolved by turning off Latitude wi
 === Netcounter ===
 
 This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs only you should not install the present version. It wakes the device too often thus draining the battery.
+
+=== Swapdroid ===
+
+My G1 got a slow after upgrading to *stock* ADP1.6. Home screen took several seconds to load. With this program it got *lightning fast!* It's a bit complicated to install because it requires the following applications to be installed manually: [http://www.koushikdutta.com/2008/11/update-to-superuser.html Superuser] and [http://benno.id.au/blog/2007/11/14/android-busybox Busybox].
