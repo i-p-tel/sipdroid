@@ -249,12 +249,6 @@ We noticed that choppy voice on WLANs can be resolved by turning off Latitude wi
 
 This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs only you should not install the present version. It wakes the device too often thus draining the battery.
 
-== Applications for developer phones ==
+== Hint for developer phones ==
 
-One limitation has been noticed on Android developer phones (ADP1). Luckily these phones allow root access for installation of the following apps to fix them.
-
-If you are running stock ADP1 images you need to manually install [http://www.koushikdutta.com/2008/11/update-to-superuser.html Superuser] and [http://benno.id.au/blog/2007/11/14/android-busybox Busybox] first.
-
-=== Swapdroid ===
-
-Due to limited memory home screen often takes several seconds to load. With this program you can add 64 MB of swap space.
+One limitation has been noticed on Android developer phones (ADP1). Due to limited memory home screen often takes several seconds to load. Luckily these phones allow root access. Issue the command "echo ro.HOME_APP_ADJ=0 >/data/local.prop" and reboot, to lock home screen in memory.
