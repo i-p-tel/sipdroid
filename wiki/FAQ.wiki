@@ -251,13 +251,9 @@ This is very nice to account your bandwidth usage on mobile networks. However, w
 
 == Applications for developer phones ==
 
-A few limitations have been noticed on Android developer phones (ADP1). Luckily these phones allow root access for installation of the following apps to fix them.
+One limitation has been noticed on Android developer phones (ADP1). Luckily these phones allow root access for installation of the following apps to fix them.
 
 If you are running stock ADP1 images you need to manually install [http://www.koushikdutta.com/2008/11/update-to-superuser.html Superuser] and [http://benno.id.au/blog/2007/11/14/android-busybox Busybox] first.
-
-=== Overclock Widget ===
-
-This tool allows you to set the CPU frequency depending on screen on/off. It's useful to set it to 128 MHz while screen is off. This doubles call and standby times.
 
 === Swapdroid ===
 
