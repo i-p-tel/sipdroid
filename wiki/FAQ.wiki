@@ -241,9 +241,9 @@ See [http://code.google.com/p/sipdroid/wiki/FAQ#How_can_I_dial_a_Skype_ID?_(Or_a
 
 Sipdroid can be used to add true VoIP calling to the GV app. Both integrate amazingly well. Further info is available at [http://iiordanov.blogspot.com/2009/07/sipdroid-gv-guava.html Iordans's blog].
 
-=== Latitude ===
+=== Latitude, Weather Widgets, ... ===
 
-We noticed that choppy voice on WLANs can be resolved by turning off Latitude within Google Maps/Latitude/Privacy. An alternative is uploading position to PBXes and announcing it to contacts when they call you.
+We noticed that choppy voice on WLANs can be resolved by turning off permanent location updates. Alternatives are uploading position to PBXes and announcing it to contacts when they call you, and "Snowstorm weather widget" that allows you to set location manually.
 
 === Netcounter ===
 
