@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ *
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ *
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+/////////////////////////////////////////////////////////////////////
+// these are the main messages of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+-->
+
+<resources>
+
+<string name="app_name">Sipdroid</string>
+<string name="pstn_name">Телефон</string>
+<string name="sip_name">Sipdroid, когда доступно</string>
+
+<string name="about">Sipdroid — свободный SIP-клиент для Android
+\n
+\nСмотрите дополнительную информацию на http://sipdroid.org
+\n
+\nВерсия ${VERSION}
+\nЭта программа выпущена для тестирования.
+\n
+\n© 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\n© 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\n© 2006 The Android Open Source Project (http://android.com)
+\n© 2005 Luca Veltri – University of Parma – Italy (http://mjsip.org)
+\n
+\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+\n
+\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details (http://www.gnu.org/licenses).</string>
+
+<string name="reg">Регистрация…</string>
+<string name="regok">Зарегистрирован</string>
+<string name="regfailed">Ошибка регистрации</string>
+
+<string name="voicemail">Ожидают сообщения</string>
+
+<string name="auto_enabled">Авто-ответ/Громкая связь</string>
+<string name="auto_disabled">Авто-ответ выключен</string>
+<string name="hint">Адреса собеседников</string>
+<string name="empty">Введите адрес собеседника в виде name@domain.com</string>
+<string name="notfast">Подходящая связь не найдена</string>
+
+<string name="settings_account">Настройки учётной записи SIP</string>
+<string name="settings_username">Имя пользователя</string>
+<string name="settings_password">Пароль</string>
+<string name="settings_server">Сервер</string>
+<string name="settings_domain">Домен</string>
+<string name="settings_domain2">Оставьте пустым, если совпадает с сервером</string>
+<string name="settings_port">Порт</string>
+<string name="settings_protocol">Протокол</string>
+    <string-array name="protocol_display_values">
+        <item>UDP (меньше задержки в 3G)</item>
+        <item>TCP (больше задержки в 3G)</item>
+    </string-array>
+    <string-array name="protocol_values">
+        <item>udp</item>
+        <item>tcp</item>
+    </string-array>
+
+<string name="settings_options">Настройки вызова</string>
+<string name="settings_wlan">Использовать WLAN</string>
+<string name="settings_3g">Использовать 3G/EDGE</string>
+<string name="settings_check">Убедитесь, что ваш мобильный оператор разрешает VoIP</string>
+<string name="settings_pref">Предпочитаемый тип вызова</string>
+    <string-array name="pref_display_values">
+        <item>Sipdroid, когда возможно</item>
+        <item>Телефон</item>
+    </string-array>
+    <string-array name="pref_values">
+        <item>SIP</item>
+        <item>PSTN</item>
+    </string-array>
+<string name="settings_auto_on">Авто-ответ</string>
+<string name="settings_auto_on2">Короткое предупреждение вибрацией, когда экран включён</string>
+<string name="settings_auto_ondemand">Авто-ответ по запросу</string>
+<string name="settings_auto_ondemand2">Показывать переключатель в строке состояния</string>
+<string name="settings_MWI">Проверка голосовой почты</string>
+<string name="settings_MWI2">Подписка на оставленные сообщения в SIP</string>
+
+<string name="settings_advanced_options">Дополнительные настройки</string>
+<string name="settings_minedge">Индикатор сигнала для EDGE-вызовов</string>
+<string name="settings_policy_never">Другая политика сна, чтобы держать Wi-Fi включённым.</string>
+<string name="settings_policy_default">Сбросить политику сна Wi-Fi к стандартной.</string>
+    <string-array name="bars">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+<string name="settings_search">Поиск и замена</string>
+<string name="settings_excludepat">Шаблон исключения</string>
+<string name="settings_sipringtone">Мелодия SIP-звонка</string>
+<string name="settings_sipringtone2">Выбор мелодии для входящего SIP-вызова</string>
+<string name="settings_sipringtone_dialog">Мелодии звонка</string>
+<string name="settings_eargain">Усиление звука</string>
+<string name="settings_eargain2">Регулировка громкости или подавление эха у собеседника</string>
+    <string-array name="eargain_display_values">
+        <item>Слабое (без эха)</item>
+        <item>Среднее</item>
+        <item>Сильное (может привести к эху у собеседника)</item>
+        <item>Самое сильное</item>
+    </string-array>
+    <string-array name="eargain_values">
+        <item>0.1</item>
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>1.0</item>
+    </string-array>
+
+<string name="settings_pbxes_options">Возможности PBX</string>
+<string name="settings_par">Одновременный дозвон</string>
+<string name="settings_par2">Параллельный набор всех номеров контакта</string>
+<string name="settings_improve">Улучшенный звук</string>
+<string name="settings_improve2">Требуется платный доступ и последняя версия программы (в личных данных)</string>
+<string name="settings_posurl">URL для местоположения/обратного вызова</string>
+<string name="settings_pos">Обновлять местоположение</string>
+<string name="settings_pos2">Можно уведомлять контакты из PBXes (требуется платный доступ)</string>
+<string name="settings_pos3">Обновление местоположения</string>
+<string name="settings_callback">Обратный вызов</string>
+<string name="settings_callback2">Если подходящая сеть недоступна</string>
+<string name="settings_callthru">Callthru</string>
+<string name="settings_callthru2">Префикс для Callthru</string>
+
+<string name="menu_settings">Настройки</string>
+<string name="menu_exit">Выйти</string>
+<string name="menu_about">О программе</string>
+<string name="menu_dtmf">Послать DTMF</string>
+<string name="menu_video">Послать видео</string>
+<string name="menu_call">Набрать</string>
+<string name="menu_mute">Выключить звук</string>
+<string name="menu_hold">Удержать</string>
+<string name="menu_transfer">Перевести</string>
+<string name="menu_speaker">Громкая связь</string>
+<string name="menu_endCall">Завершить вызов</string>
+
+<string name="transfer_title">Перевести вызов на</string>
+
+<string name="card_title_dialing">Набор номера</string>
+<string name="card_title_in_progress">Разговор</string>
+<string name="card_title_incoming_call">Входящий вызов</string>
+<string name="card_title_call_ended">Вызов закончен</string>
+<string name="card_title_on_hold">Удерживается</string>
+
+<string name="unknown">Неизвестно</string>
+
+<string name="slide_hint_down_to_end_call">Опустите, чтобы закончить вызов.</string>
+<string name="slide_hint_up_to_answer">Поднимите, чтобы ответить.</string>
+
+<string name="ongoing">Текущий вызов</string>
+<string name="onHold">Удерживается</string>
+<string name="callerid">ID звонящего</string>
+</resources>
