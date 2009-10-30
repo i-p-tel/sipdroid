@@ -1,17 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="card_title_call_ended">Appel terminé</string>
-  <string name="card_title_dialing">Numérotation</string>
-  <string name="card_title_in_progress">Appel en cours</string>
-  <string name="card_title_incoming_call">Appel entrant</string>
-  <string name="card_title_on_hold">En attente</string>
- <string name="menu_call">Numéroter</string>
-  <string name="menu_endCall">Terminer l\'appel</string>
-  <string name="menu_hold">En attente</string>
-  <string name="menu_mute">Muet</string>
-  <string name="unknown">Inconnu</string>
-  <string name="menu_speaker">Haut-parleur</string>
-  <string name="slide_hint_down_to_end_call">Faites glisser vers le bas pour terminer l\'appel.</string>
-  <string name="slide_hint_up_to_answer">Faites glisser vers le haut pour répondre.</string>
+<resources>
+
+	<string name="app_name">Sipdroid</string>
+	<string name="pstn_name">Téléphone</string>
+	<string name="sip_name">Sipdroid, si disponible</string>
+
+	<string name="about">Sipdroid est un client SIP open-source pour Android
+		\n
+		\nConsulter http://sipdroid.org pour plus d\'informations
+		\n
+		\nVersion ${VERSION}
+		\nLe logiciel a été sorti pour des tests.
+		\n
+		\nCopyright (C) 2009 Le projet Open Source Sipdroid (http://sipdroid.org)
+		\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+		\nCopyright (C) 2006 Le projet Open Source Android (http://android.com)
+		\nCopyright (C) 2005 Luca Veltri - University de Parme - Italie (http://mjsip.org)
+		\n
+		\nCe programme est un logiciel libre; vous pouvez le redistribuer et/ou le modifier selon les termes de la Licence Publique Générale GNU (GPL) comme publiée par la Free Software Foundation; ou en version 3 de la	licence, ou (à votre guise) n\'importe quelle autre version.
+		\n
+		\nCe programme est distribué dans l\'espoir qu\'il sera utile, mais SANS AUCUNE GARANTIE ; sans même la garantie implicite de COMMERCIALISATION ou D\'ADAPTATION A UN USAGE PARTICULIER. Consulter la GNU General Public License pour plus de détails (http://www.gnu.org/licenses).
+	</string>
+
+	<string name="reg">Enregistrement...</string>
+	<string name="regok">Enregistré</string>
+	<string name="regfailed">Echec de l\'enregistrement</string>
+
+	<string name="voicemail">Message(s) en Attente</string>
+
+	<string name="auto_enabled">Réponse Auto/Haut-parleur</string>
+	<string name="auto_disabled">Réponse Auto coupée</string>
+	<string name="hint">Adresse du correspondant appelé</string>
+	<string name="empty">Veuillez entrer une adresse pour le correspondant
+		appelé telle que nom@domaine.com</string>
+	<string name="notfast">Aucun réseau de données convenable de disponible
+	</string>
+
+	<string name="settings_account">Réglages du compte SIP</string>
+	<string name="settings_username">Nom d'utilisateur</string>
+	<string name="settings_password">Mot de passe</string>
+	<string name="settings_server">Serveur</string>
+	<string name="settings_domain">Domaine</string>
+	<string name="settings_domain2">Laisser vide si identique au serveur</string>
+	<string name="settings_port">Port</string>
+	<string name="settings_protocol">Protocole</string>
+	<string-array name="protocol_display_values">
+		<item>UDP (autonomie plus courte en 3G)</item>
+		<item>TCP (autonomie plus longue en 3G)</item>
+	</string-array>
+	<string-array name="protocol_values">
+		<item>udp</item>
+		<item>tcp</item>
+	</string-array>
+
+	<string name="settings_options">Options d'appel</string>
+	<string name="settings_wlan">Utiliser le WLAN</string>
+	<string name="settings_3g">Utiliser la 3G/EDGE</string>
+	<string name="settings_check">Vérifier auprès de votre opérateur mobile si il
+		permet la VoIP</string>
+	<string name="settings_pref">Type d\'appel préféré</string>
+	<string-array name="pref_display_values">
+		<item>Sipdroid, si disponible</item>
+		<item>Téléphone</item>
+	</string-array>
+	<string-array name="pref_values">
+		<item>SIP</item>
+		<item>PSTN</item>
+	</string-array>
+	<string name="settings_auto_on">Réponse Auto en service</string>
+	<string name="settings_auto_on2">Courtes vibrations d\'alerte quand l'écran est en
+		marche</string>
+	<string name="settings_auto_ondemand">Réponse Auto à la demande</string>
+	<string name="settings_auto_ondemand2">Affiche le bouton dans la barre de statut</string>
+	<string name="settings_MWI">Vérifier les messages vocaux</string>
+	<string name="settings_MWI2">S\'abonner à l'attente de messages SIP</string>
+
+	<string name="settings_advanced_options">Options Advancées</string>
+	<string name="settings_minedge">Barres de signal pour les appels EDGE</string>
+	<string name="settings_policy_never">Politique de mise en veille changée pour maintenir
+		le Wifi allumé.</string>
+	<string name="settings_policy_default">Retour aux paramètres par défaut de la politique de
+		mise en veille du Wifi.</string>
+	<string-array name="bars">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+	</string-array>
+	<string name="settings_search">Chercher &amp; Remplacer</string>
+	<string name="settings_excludepat">Exclure des motifs</string>
+	<string name="settings_sipringtone">Sonnerie SIP</string>
+	<string name="settings_sipringtone2">Définir la sonnerie pour un appel SIP entrant
+	</string>
+	<string name="settings_sipringtone_dialog">Sonneries</string>
+	<string name="settings_eargain">Gain des écouteurs</string>
+	<string name="settings_eargain2">Adjustement pour l\'augmentation du volume ou pour
+		limiter l'écho avec le correspondant</string>
+	<string-array name="eargain_display_values">
+		<item>Bas (sans écho)</item>
+		<item>Moyen</item>
+		<item>Elevé (peut provoquer un écho avec le correspondant)</item>
+		<item>Trés élevé</item>
+	</string-array>
+	<string-array name="eargain_values">
+		<item>0.1</item>
+		<item>0.25</item>
+		<item>0.5</item>
+		<item>1.0</item>
+	</string-array>
+
+	<string name="settings_pbxes_options">Caractéristiques PBXes</string>
+	<string name="settings_par">Appels simultanés</string>
+	<string name="settings_par2">Compose les numéros de téléphone de chacun en
+		paralèlle</string>
+	<string name="settings_improve">Améliorations audio</string>
+	<string name="settings_improve2">Nécessite un compte payant, la toute nouvelle
+		version du logiciel (cf. section "Personal Data")</string>
+	<string name="settings_posurl">URL de l'Adresse/Callback</string>
+	<string name="settings_pos">Mettre à jour de Location</string>
+	<string name="settings_pos2">Peut être indiqués aux contacts PBXes (Nécessite un
+		compte premium)</string>
+	<string name="settings_pos3">Mise à jour l'adresse</string>
+	<string name="settings_callback">Déclencher un Callback</string>
+	<string name="settings_callback2">Si aucun réseau de données convenable de disponible
+	</string>
+	<string name="settings_callthru">Déclencher un Callthru</string>
+	<string name="settings_callthru2">Préfixe pour le Callthru</string>
+
+	<string name="menu_settings">Paramètres</string>
+	<string name="menu_exit">Quitter</string>
+	<string name="menu_about">A propos de</string>
+	<string name="menu_dtmf">Envoi DTMF</string>
+	<string name="menu_video">Envoi Video</string>
+	<string name="menu_call">Numéroter</string>
+	<string name="menu_mute">Muet</string>
+	<string name="menu_hold">Mise en attente</string>
+	<string name="menu_transfer">Transfert</string>
+	<string name="menu_speaker">Haut-Parleur</string>
+	<string name="menu_endCall">Fin d'appel</string>
+
+	<string name="transfer_title">Transférer l\'appel vers</string>
+
+	<string name="card_title_dialing">Numérotation</string>
+	<string name="card_title_in_progress">Appel en cours</string>
+	<string name="card_title_incoming_call">Appel entrant</string>
+	<string name="card_title_call_ended">Appel terminé</string>
+	<string name="card_title_on_hold">En attente</string>
+
+	<string name="unknown">Inconnu</string>
+
+	<string name="slide_hint_down_to_end_call">Faîtes glisser vers le bas pour terminer l\'appel.
+	</string>
+	<string name="slide_hint_up_to_answer">Faîtes glisser vers le haut pour répondre.</string>
+
+	<string name="ongoing">Appel en cours</string>
+	<string name="onHold">En attente</string>
+	<string name="callerid">ID du correspondant</string>
 </resources>
