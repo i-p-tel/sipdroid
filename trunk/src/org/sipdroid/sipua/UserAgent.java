@@ -527,6 +527,10 @@ public class UserAgent extends CallListenerAdapter {
 		
 		printLog("ACCEPTED/CALL", LogLevel.HIGH);
 		
+		if (!statusIs(UA_STATE_OUTGOING_CALL)) { // modified
+			hangup();
+			return;
+		}
 		changeStatus(UA_STATE_INCALL);
 		
 		if (user_profile.no_offer) {

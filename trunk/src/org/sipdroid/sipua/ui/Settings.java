@@ -62,7 +62,6 @@ import android.widget.Toast;
 				edit.putBoolean("wlan", true);
 				edit.putString("port", ""+SipStack.default_port);
 				edit.putString("server", "pbxes.org");
-				edit.putString("domain", "");
 				edit.putString("pref", "SIP");				
 				edit.commit();
 	        	Receiver.engine(this).updateDNS();

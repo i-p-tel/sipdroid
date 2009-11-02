@@ -116,6 +116,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			t.interrupt();
 		}
 		screenOff(false);
+		if (mCallCard.mElapsedTime != null) mCallCard.mElapsedTime.stop();
 	}
 	
 	void moveBack() {
@@ -370,8 +371,9 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
+		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
 		G711.init();
-		
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.incall);
 		
@@ -415,6 +417,11 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     }
 	
 	public void answer() {
+        (new Thread() {
+			public void run() {
+        		Receiver.engine(mContext).answercall();
+			}
+		}).start();   
 		if (Receiver.ccCall != null) {
 			Receiver.stopRingtone();
 			Receiver.ccCall.setState(Call.State.ACTIVE);
@@ -429,11 +436,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	        if (mSlidingCardManager != null)
 	        	mSlidingCardManager.showPopup();
 		}
-        (new Thread() {
-			public void run() {
-        		Receiver.engine(mContext).answercall();
-			}
-		}).start();   
 	}
 	
 	@Override

@@ -20,10 +20,12 @@
 				android:title="@string/settings_domain"
 				android:summary="@string/settings_domain2"
 				android:singleLine="true" />
-			<EditTextPreference
+			<ListPreference
 				android:key="port"
 				android:title="@string/settings_port"
-				android:singleLine="true" />
+				android:entries="@array/port_display_values"
+				android:entryValues="@array/port_values"
+				android:dialogTitle="@string/settings_port" />
 			<ListPreference
 				android:key="protocol"
 				android:title="@string/settings_protocol"
