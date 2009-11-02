@@ -1187,7 +1187,7 @@ public class SipProvider implements Configurable, TransportListener,
 	public void onReceivedMessage(Transport transport, Message msg) {
 		if (pm == null) {
 			pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
-			wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid");
+			wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.SipProvider");
 		}
 		wl.acquire(); // modified
 		processReceivedMessage(msg);

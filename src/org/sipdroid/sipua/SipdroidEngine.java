@@ -38,6 +38,7 @@ import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -65,7 +66,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public boolean StartEngine() {
 		try {
 			PowerManager pm = (PowerManager) getUIContext().getSystemService(Context.POWER_SERVICE);
-			if (wl == null) wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid");
+			if (wl == null) wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.SipdroidEngine");
 
 			String opt_via_addr = IpAddress.localIpAddress;
 			
@@ -101,7 +102,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 					user_profile.realm.equals("pbxes.org")?"tcp":"udp");
 			SipStack.default_port = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("port",""+SipStack.default_port));
 			
-			String version = "Sipdroid/" + Sipdroid.getVersion();
+			String version = "Sipdroid/" + Sipdroid.getVersion() + "/" + Build.MODEL;
 			SipStack.ua_info = version;
 			SipStack.server_info = version;
 				

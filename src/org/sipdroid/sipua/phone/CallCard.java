@@ -69,7 +69,7 @@ public class CallCard extends FrameLayout
     private ViewGroup mLowerTitleViewGroup;
     private TextView mLowerTitle;
     private ImageView mLowerTitleIcon;
-    private Chronometer mElapsedTime;
+    public Chronometer mElapsedTime;
 
     // Text colors, used with the lower title and "other call" info areas
     private int mTextColorConnected;

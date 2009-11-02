@@ -171,6 +171,7 @@ public class Sipdroid extends Activity {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		edit.putBoolean("on",on);
 		edit.commit();
+        if (on) Receiver.engine(context).isRegistered();
 	}
 	
 	@Override
