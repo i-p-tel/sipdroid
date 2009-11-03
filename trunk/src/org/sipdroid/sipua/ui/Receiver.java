@@ -106,8 +106,9 @@ import org.zoolu.net.IpAddress;
 			android.os.Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 			v.cancel();
 			if (Receiver.oRingtone != null) {
-				Receiver.oRingtone.stop();
+				Ringtone ringtone = Receiver.oRingtone;
 				Receiver.oRingtone = null;
+				ringtone.stop();
 			}
 		}
 		
