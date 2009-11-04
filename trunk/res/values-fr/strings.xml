@@ -107,7 +107,7 @@
 	<string name="settings_par2">Compose les numéros de téléphone de chacun en paralèlle</string>
 	<string name="settings_improve">Améliorations audio</string>
 	<string name="settings_improve2">Nécessite un compte payant, la dernière version du logiciel (cf. "Personal Data")</string>
-	<string name="settings_posurl">URL de l'Adresse/Callback</string>
+	<string name="settings_posurl">URL de l\'Adresse/Callback</string>
 	<string name="settings_pos">Mettre à jour de l'Adresse</string>
 	<string name="settings_pos2">Peut être indiqués aux contacts PBXes (Nécessite un compte premium)</string>
 	<string name="settings_pos3">MAJ de l\'adresse</string>
