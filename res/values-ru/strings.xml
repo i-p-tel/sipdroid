@@ -47,7 +47,7 @@
 \n
 \nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details (http://www.gnu.org/licenses).</string>
 
-<string name="reg">Регистрация...</string>
+<string name="reg">Регистрация…</string>
 <string name="regok">Зарегистрирован</string>
 <string name="regfailed">Ошибка регистрации</string>
 
@@ -55,11 +55,11 @@
 
 <string name="auto_enabled">Авто-ответ/Громкая связь</string>
 <string name="auto_disabled">Авто-ответ выключен</string>
-<string name="hint">Адреса собеседников</string>
+<string name="hint">Адрес собеседника</string>
 <string name="empty">Введите адрес собеседника в виде name@domain.com</string>
 <string name="notfast">Подходящая связь не найдена</string>
 
-<string name="settings_account">Настройки учётной записи SIP</string>
+<string name="settings_account">Учётная запись SIP</string>
 <string name="settings_username">Имя пользователя</string>
 <string name="settings_password">Пароль</string>
 <string name="settings_server">Сервер</string>
@@ -76,7 +76,7 @@
         <item>tcp</item>
     </string-array>
 
-<string name="settings_options">Настройки вызова</string>
+<string name="settings_options">Вызов</string>
 <string name="settings_wlan">Использовать WLAN</string>
 <string name="settings_3g">Использовать 3G/EDGE</string>
 <string name="settings_check">Убедитесь, что ваш мобильный оператор разрешает VoIP</string>
@@ -93,10 +93,10 @@
 <string name="settings_auto_on2">Короткое предупреждение вибрацией, когда экран включён</string>
 <string name="settings_auto_ondemand">Авто-ответ по запросу</string>
 <string name="settings_auto_ondemand2">Показывать переключатель в строке состояния</string>
-<string name="settings_MWI">Проверка голосовой почты</string>
+<string name="settings_MWI">Голосовая почта</string>
 <string name="settings_MWI2">Подписка на оставленные сообщения в SIP</string>
 
-<string name="settings_advanced_options">Дополнительные настройки</string>
+<string name="settings_advanced_options">Дополнительно</string>
 <string name="settings_minedge">Индикатор сигнала для EDGE-вызовов</string>
 <string name="settings_policy_never">Другая политика сна, чтобы держать Wi-Fi включённым.</string>
 <string name="settings_policy_default">Сбросить политику сна Wi-Fi к стандартной.</string>
@@ -117,7 +117,7 @@
     <string-array name="eargain_display_values">
         <item>Слабое (без эха)</item>
         <item>Среднее</item>
-        <item>Сильное (может привести к эху у собеседника)</item>
+        <item>Сильное (возможно эхо)</item>
         <item>Самое сильное</item>
     </string-array>
     <string-array name="eargain_values">
