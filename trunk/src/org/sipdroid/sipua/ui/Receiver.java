@@ -64,6 +64,8 @@ import org.zoolu.net.IpAddress;
 		final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
 		final static String ACTION_SIGNAL_STRENGTH_CHANGED = "android.intent.action.SIG_STR";
 		final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
+		final static String ACTION_DOCK_EVENT = "android.intent.action.DOCK_EVENT";
+		final static String EXTRA_DOCK_STATE = "android.intent.extra.DOCK_STATE";
 		
 		public final static int REGISTER_NOTIFICATION = 1;
 		public final static int CALL_NOTIFICATION = 2;
@@ -74,6 +76,7 @@ import org.zoolu.net.IpAddress;
 		final static long[] vibratePattern = {0,1000,1000};
 		
 		private static int cellAsu = -1;
+		public static int docked = -1;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
@@ -211,6 +214,8 @@ import org.zoolu.net.IpAddress;
 					if (wl != null && wl.isHeld())
 						wl.release();
 			        mContext.startActivity(createIntent(InCallScreen.class));
+		       		if (docked > 0)
+	    				engine(mContext).speaker(AudioManager.MODE_NORMAL);
 					break;
 				case UserAgent.UA_STATE_HOLD:
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_on_hold), android.R.drawable.stat_sys_phone_call_on_hold,ccCall.base);
@@ -499,15 +504,23 @@ import org.zoolu.net.IpAddress;
 		    			engine(context).togglehold();
 	        } else
 	        if (intentAction.equals(ACTION_SIGNAL_STRENGTH_CHANGED)) {
-	        	cellAsu = intent.getIntExtra("asu", intent.getIntExtra("GsmSignalStrength", 0));
-	        	if (cellAsu <= 0 || cellAsu == 99) cellAsu = 0;
+	        	cellAsu = intent.getIntExtra("asu", intent.getIntExtra("GsmSignalStrength", -1));
+	        	if (cellAsu == 99) cellAsu = 0;
 	        	else if (cellAsu >= 16) cellAsu = 4;
 	        	else if (cellAsu >= 8) cellAsu = 3;
 	        	else if (cellAsu >= 4) cellAsu = 2;
-	        	else cellAsu = 1;
+	        	else if (cellAsu > 0) cellAsu = 1;
 	        	if (!Sipdroid.release) Log.i("SipUA:","cellAsu "+cellAsu);
 	        	if (cellAsu >= org.sipdroid.sipua.ui.Settings.getMinEdge() &&
 	        			!engine(context).isRegistered()) engine(context).register();
+	        } else
+	        if (intentAction.equals(ACTION_DOCK_EVENT)) {
+	        	docked = intent.getIntExtra(EXTRA_DOCK_STATE, -1);
+	        	if (call_state == UserAgent.UA_STATE_INCALL)
+	        		if (docked > 0)
+	    				engine(mContext).speaker(AudioManager.MODE_NORMAL);
+	        		else
+	        			engine(mContext).speaker(AudioManager.MODE_IN_CALL);
 	        }
 		}   
 }
