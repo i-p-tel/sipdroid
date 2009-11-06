@@ -61,7 +61,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 	private SipProvider sip_provider;
 	
-	PowerManager.WakeLock wl;
+	static PowerManager.WakeLock wl;
 	
 	public boolean StartEngine() {
 		try {

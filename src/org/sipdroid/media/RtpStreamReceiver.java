@@ -302,7 +302,7 @@ public class RtpStreamReceiver extends Thread {
 				 islate = false;
 				 if (headroom < 250) { 
 						try {
-							rtp_socket.getDatagramSocket().setSoTimeout(0);
+							rtp_socket.getDatagramSocket().setSoTimeout(1);
 						} catch (SocketException e) {
 							if (!Sipdroid.release) e.printStackTrace();
 						}
