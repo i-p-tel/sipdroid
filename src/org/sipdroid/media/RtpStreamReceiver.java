@@ -369,6 +369,8 @@ public class RtpStreamReceiver extends Thread {
 								track.setStereoVolume(AudioTrack.getMaxVolume(),AudioTrack.getMaxVolume());
 								break;
 						 }
+						 saveVolume();
+						 restoreVolume();
 					 }
 					 luser = user;
 				 }
