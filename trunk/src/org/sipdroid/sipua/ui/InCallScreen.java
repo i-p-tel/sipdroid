@@ -464,7 +464,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
         case KeyEvent.KEYCODE_BACK:
         	if (mDialerDrawer.isOpened())
         		mDialerDrawer.animateClose();
-        	else
+        	else if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL)
         		reject();      
             return true;
 

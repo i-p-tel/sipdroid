@@ -70,7 +70,6 @@
         <activity android:name=".ui.Activity2" android:label="@string/app_name"
         	android:excludeFromRecents="true" android:taskAffinity=""/>
         <activity android:name=".ui.Settings" android:label="@string/app_name"
-        	android:theme="@android:style/Theme.Light"
         	android:excludeFromRecents="true" android:taskAffinity="">
         </activity>
         <activity android:name=".ui.VideoCamera" android:label="@string/menu_video"
