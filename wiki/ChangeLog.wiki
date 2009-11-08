@@ -3,8 +3,11 @@
 
 === Beta-Versions ===
 
+  * 1.1.7
+    * One more bugfix to 1.1.4
+
   * 1.1.6
-    * Another urgent bugfix for 1.1.4 (sorry for the frequent updates lately)
+    * Another urgent bugfix to 1.1.4 (sorry for the frequent updates lately)
     * Automatic switch to speaker phone in car/desk dock (untested)
 
   * 1.1.5
