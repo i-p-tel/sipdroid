@@ -5,6 +5,7 @@
 
   * 1.1.7
     * One more bugfix to 1.1.4
+    * Attempt to work better on Droid
 
   * 1.1.6
     * Another urgent bugfix to 1.1.4 (sorry for the frequent updates lately)
