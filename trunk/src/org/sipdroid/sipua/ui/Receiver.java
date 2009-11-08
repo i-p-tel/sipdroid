@@ -75,8 +75,7 @@ import org.zoolu.net.IpAddress;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
-		private static int cellAsu = -1;
-		public static int docked = -1;
+		private static int cellAsu = -1,docked = -1;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
