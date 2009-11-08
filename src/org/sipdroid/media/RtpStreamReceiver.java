@@ -240,7 +240,7 @@ public class RtpStreamReceiver extends Thread {
 		short lin2[] = new short[BUFFER_SIZE];
 		int user, server, lserver, luser, cnt, todo, headroom, len, timeout = 1, seq = 0, cnt2 = 0, m = 1,
 			expseq, getseq, vm = 1, gap, gseq;
-		boolean islate, received = false;
+		boolean islate;
 		user = 0;
 		lserver = 0;
 		luser = -8000;
@@ -264,10 +264,7 @@ public class RtpStreamReceiver extends Thread {
 				seq = 0;
 			}
 			try {
-				if (!received)
-					rtp_socket.receive(rtp_packet);
-				else
-					received = false;
+				rtp_socket.receive(rtp_packet);
 				if (timeout != 0) {
 					track.stop();
 					user += track.write(lin,0,BUFFER_SIZE);
@@ -299,31 +296,16 @@ public class RtpStreamReceiver extends Thread {
 				 server = track.getPlaybackHeadPosition();
 				 headroom = user-server;
 				 
-				 islate = false;
 				 if (headroom < 250) { 
-						try {
-							rtp_socket.getDatagramSocket().setSoTimeout(1);
-						} catch (SocketException e) {
-							if (!Sipdroid.release) e.printStackTrace();
-						}
-						try {
-							rtp_socket.receive(rtp_packet);
-							received = true;
-						} catch (IOException e1) {
-							todo = 875 - headroom;
-							println("insert "+todo);
-							islate = true;
-							if (todo <= len)
-								user += track.write(lin,0,todo);
-							else
-								user += track.write(lin2,0,todo);
-						}
-						try {
-							rtp_socket.getDatagramSocket().setSoTimeout(1000);
-						} catch (SocketException e) {
-							if (!Sipdroid.release) e.printStackTrace();
-						}
-				 }
+					todo = 875 - headroom;
+					println("insert "+todo);
+					islate = true;
+					if (todo <= len)
+						user += track.write(lin,0,todo);
+					else
+						user += track.write(lin2,0,todo);
+				 } else
+					 islate = false;
 
 				 if (headroom > 1500)
 					 cnt += len;
