@@ -266,7 +266,7 @@ public class RtpStreamReceiver extends Thread {
 			try {
 				rtp_socket.receive(rtp_packet);
 				if (timeout != 0) {
-					track.stop();
+					track.pause();
 					user += track.write(lin,0,BUFFER_SIZE);
 					user += track.write(lin,0,BUFFER_SIZE);
 					track.play();
