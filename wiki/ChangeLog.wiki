@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.1.8
+    * Bugfix to 1.1.4
+
   * 1.1.7
     * One more bugfix to 1.1.4
     * Attempt to work better on Droid
