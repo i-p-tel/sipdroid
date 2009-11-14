@@ -27,28 +27,15 @@
 	<string name="sip_name">Chamada Sipdroid, quando disponível</string>
 
 	<string name="about">Sipdroid é um cliente SIP open-source para o
-		Android
-		\n
-		\nVeja http://sipdroid.org para mais informações
-		\n
-		\nVersão $ (VERSION)
-		\nSoftware disponível para testes.
-		\n
-		\nCopyright 2009 The Sipdroid Open Source Project (http://sipdroid.org)
-		\nCopyright 2008 Hughes Systique Corporation, E.U.A. (http://hsc.com)
-		\nCopyright 2006 The Android Open Source Project (http://android.com)
-		\nCopyright 2005 Luca Veltri - Universidade de Parma - Itália
-		(http://mjsip.org)
-		\n
-		\nEste programa é livre, você pode redistribuí-lo e/ou modificá-lo sob os
-		termos da GNU General Public License conforme publicada pela Free
-		Software Foundation, versão 3 da Licença, ou (na sua opção) qualquer
-		versão posterior.
-		\n
-		\nEste programa é distribuído na esperança de que será útil, mas SEM
-		QUALQUER GARANTIA, mesmo sem a garantia implícita de COMERCIABILIDADE
-		ou ADEQUAÇÃO A UM DETERMINADO PROPÓSITO. Veja a GNU General Public
-		License para mais detalhes (http://www.gnu.org/licenses).</string>
+ Android\n\nVeja http://sipdroid.org para mais informações
+ \n\nVersão ${VERSION}\nSoftware disponível para testes.\n\nCopyright 2009 The Sipdroid Open Source Project (http://sipdroid.org)\nCopyright 2008 Hughes Systique Corporation, E.U.A. (http://hsc.com)\nCopyright 2006 The Android Open Source Project (http://android.com)
+\nCopyright 2005 Luca Veltri - Universidade de Parma - Itália
+ (http://mjsip.org)\n\nEste programa é livre, você pode redistribuí-lo e/ou modificá-lo sob os
+ termos da GNU General Public License conforme publicada pela Free
+ Software Foundation, versão 3 da Licença, ou (na sua opção) qualquer versão posterior.\n\nEste programa é distribuído na esperança de que será útil, mas SEM
+ QUALQUER GARANTIA, mesmo sem a garantia implícita de COMERCIABILIDADE
+ ou ADEQUAÇÃO A UM DETERMINADO PROPÓSITO. Veja a GNU General Public
+ License para mais detalhes (http://www.gnu.org/licenses).</string>
 
 	<string name="reg">Registando...</string>
 	<string name="regok">Registado</string>
@@ -125,7 +112,7 @@
 	<string name="settings_wlan">Usar WLAN</string>
 	<string name="settings_3g">Usar 3G/EDGE</string>
 	<string name="settings_check">Consulte o seu operador móvel, se ele permite VoIP</string>
-	<string name="settings_pref">Tipo de chamada preferida</string>
+	<string name="settings_pref">Tipo de chamada</string>
 	<string-array name="pref_display_values">
 		<item>Sipdroid, quando disponível</item>
 		<item>Telefone</item>
@@ -139,7 +126,7 @@
 	<string name="settings_auto_ondemand">Atender automático a pedido</string>
 	<string name="settings_auto_ondemand2">Mostrar botão na barra de estado</string>
 	<string name="settings_MWI">Verificar se há mensagens</string>
-	<string name="settings_MWI2">Subscrever mensagem em espera do SIP </string>
+	<string name="settings_MWI2">Subscrever mensagem em espera SIP </string>
 
 	<string name="settings_advanced_options">Opções Avançadas</string>
 	<string name="settings_minedge">Barras de sinal para chamadas EDGE</string>
@@ -176,11 +163,11 @@
 	<string name="settings_par">Chamadas Simultâneas</string>
 	<string name="settings_par2">Marcar todos os números de uma pessoa em paralelo</string>
 	<string name="settings_improve">Melhorar Áudio</string>
-	<string name="settings_improve2">Requer conta paga, a versão mais recente do software (em Personal Data)</string>
+	<string name="settings_improve2">Requer conta paga (em Personal Data)</string>
 	<string name="settings_posurl">URL para Localização/Callback</string>
-	<string name="settings_pos">Atualizar Local</string>
+	<string name="settings_pos">Actualizar Local</string>
 	<string name="settings_pos2">Pode ser anunciado aos contactos do PBXes (requer conta premium)</string>
-	<string name="settings_pos3">Atualizando Local</string>
+	<string name="settings_pos3">Actualizando Local</string>
 	<string name="settings_callback">Activar Callback</string>
 	<string name="settings_callback2">Se nenhuma rede de dados adequada estiver disponível</string>
 	<string name="settings_callthru">Activar Callthru</string>
@@ -204,7 +191,7 @@
 	<string name="card_title_in_progress">Chamada em curso</string>
 	<string name="card_title_incoming_call">Chamada</string>
 	<string name="card_title_call_ended">A chamada terminou</string>
-	<string name="card_title_on_hold">On espera</string>
+	<string name="card_title_on_hold">Em espera</string>
 
 	<string name="unknown">Desconhecido</string>
 
