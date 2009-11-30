@@ -13,5 +13,5 @@
   <string name="menu_speaker">Altoparlante</string>
   <string name="unknown">Sconosciuto</string>
   <string name="slide_hint_down_to_end_call">Scorrere verso il basso per terminare la chiamata.</string>
-  <string name="slide_hint_up_to_answer">Scorrere verso l'alto per rispondere.</string>
+  <string name="slide_hint_up_to_answer">Scorrere verso l\'alto per rispondere.</string>
 </resources>
