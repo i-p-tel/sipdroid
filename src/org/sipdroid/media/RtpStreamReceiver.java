@@ -30,6 +30,7 @@ import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
+import org.sipdroid.pjlib.Codec;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -51,7 +52,8 @@ public class RtpStreamReceiver extends Thread {
 	public static boolean DEBUG = true;
 
 	/** Size of the read buffer */
-	public static final int BUFFER_SIZE = 1024;
+	public static final int BUFFER_SIZE = 33;
+	public static final int PCM_BUFFER_SIZE = 4960;
 
 	/** Maximum blocking time, spent waiting for reading new bytes [milliseconds] */
 	public static final int SO_TIMEOUT = 200;
@@ -231,14 +233,14 @@ public class RtpStreamReceiver extends Thread {
 		int oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
 		restoreVolume();
 		track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
-				BUFFER_SIZE*2*2, AudioTrack.MODE_STREAM);
+				PCM_BUFFER_SIZE, AudioTrack.MODE_STREAM);
 		track.setStereoVolume(AudioTrack.getMaxVolume()*
 				org.sipdroid.sipua.ui.Settings.getEarGain()
 				,AudioTrack.getMaxVolume()*
 				org.sipdroid.sipua.ui.Settings.getEarGain());
-		short lin[] = new short[BUFFER_SIZE];
-		short lin2[] = new short[BUFFER_SIZE];
-		int user, server, lserver, luser, cnt, todo, headroom, len, timeout = 1, seq = 0, cnt2 = 0, m = 1,
+		short lin[] = new short[160];
+		short lin2[] = new short[160];
+		int user, server, lserver, luser, cnt, todo, headroom, len = 0, timeout = 1, seq = 0, cnt2 = 0, m = 1,
 			expseq, getseq, vm = 1, gap, gseq;
 		boolean islate;
 		user = 0;
@@ -267,10 +269,10 @@ public class RtpStreamReceiver extends Thread {
 				rtp_socket.receive(rtp_packet);
 				if (timeout != 0) {
 					track.pause();
-					user += track.write(lin,0,BUFFER_SIZE);
-					user += track.write(lin,0,BUFFER_SIZE);
+					user += track.write(lin,0,1024);
+					user += track.write(lin,0,1024);
 					track.play();
-					cnt += 2*BUFFER_SIZE;
+					cnt += 2048;
 				}
 				timeout = 0;
 			} catch (IOException e) {
@@ -287,8 +289,7 @@ public class RtpStreamReceiver extends Thread {
 					 continue;
 				 }
 				 
-				 len = rtp_packet.getPayloadLength();		 
-				 G711.alaw2linear(buffer, lin, len);
+				 len = Codec.decode(buffer, lin, len);
 				 
 	 			 if (speakermode == AudioManager.MODE_NORMAL)
 	 				 calc(lin,0,len);
