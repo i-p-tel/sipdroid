@@ -21,8 +21,16 @@
 
 package org.sipdroid.sipua.ui;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
+import org.sipdroid.pjlib.Codec;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -36,6 +44,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CallLog.Calls;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -70,10 +79,55 @@ public class Sipdroid extends Activity {
 
 	private static AlertDialog m_AlertDlg;
 	AutoCompleteTextView sip_uri_box;
+
+	private boolean pjlib_initialized = false;
+	private String final_so_path = "/data/data/org.sipdroid.sipua/pjlib_linker_jni.so";
+	private String linker_library_lock_file = "/cache/pjlib_linker_lock";
+	private boolean lib_exists, lock_file_exists;
 	
 	@Override
 	public void onStart() {
 		super.onStart();
+		
+		lock_file_exists = (new File(linker_library_lock_file).exists());
+		if (lock_file_exists) { pjlib_initialized = true;}
+		
+		if (!pjlib_initialized) {
+			if (!lib_exists) {
+				Log.e("sipdroid", "extracting library: " + final_so_path);
+				try {
+					ZipFile zip = new ZipFile("/data/app/org.sipdroid.sipua.apk");
+					ZipEntry zipen = zip.getEntry("assets/pjlib_linker_jni.so");
+					InputStream is = zip.getInputStream(zipen);
+					OutputStream os = new FileOutputStream(final_so_path);
+					byte[] buf = new byte[8092];
+					int n;
+					while ((n = is.read(buf)) > 0) os.write(buf, 0, n);
+					os.flush();
+					os.close();
+					is.close();
+				} catch (Exception ex) {
+					Log.e("sipdroid", "failed to extract library: " + ex);
+				}
+			}
+			
+			lib_exists = (new File(final_so_path).exists());
+			
+			if (!lib_exists) { 
+				Log.e("sipdroid", "cannot find pj library");
+				return;
+			}
+			
+			Log.e("sipdroid", "loading pjlib linker library...");
+			try {
+				System.load(final_so_path);
+			} catch (Exception ex) {
+				Log.e("sipdroid", "System.load failed: " + ex);
+			}
+
+			Codec.open("gsm");
+			pjlib_initialized = true;
+		}
 		
 		if (!Receiver.engine(this).isRegistered())
 			Receiver.engine(this).register();

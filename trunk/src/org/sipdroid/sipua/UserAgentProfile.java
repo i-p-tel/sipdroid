@@ -149,9 +149,9 @@ public class UserAgentProfile extends Configure {
 	/** Audio port */
 	public int audio_port = 21000;
 	/** Audio avp */
-	public int audio_avp = 8;
+	public int audio_avp = 3;
 	/** Audio codec */
-	public String audio_codec = "PCMA"; //AMR
+	public String audio_codec = "GSM"; //AMR
 	/** Audio sample rate */
 	public int audio_sample_rate = 8000;
 	/** Audio sample size */

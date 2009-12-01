@@ -33,7 +33,7 @@ public class JAudioLauncher implements MediaLauncher
    Log log=null;
 
    /** Payload type */
-   int payload_type=8;
+   int payload_type=3;
    /** Sample rate [bytes] */
    int sample_rate=8000;
    /** Sample size [bytes] */

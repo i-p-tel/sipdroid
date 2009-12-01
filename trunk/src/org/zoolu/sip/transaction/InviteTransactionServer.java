@@ -27,6 +27,7 @@ import org.zoolu.sip.provider.*;
 import org.zoolu.sip.message.*;
 import org.zoolu.tools.Timer;
 import org.zoolu.tools.LogLevel;
+import org.zoolu.sip.header.ContactHeader;
 
 /**
  * INVITE server transaction as defined in RFC 3261 (Section 17.2.1). <BR>
@@ -138,6 +139,9 @@ public class InviteTransactionServer extends TransactionServer {
 			changeStatus(STATE_WAITING);
 			sip_provider.addSipProviderListener(new TransactionIdentifier(
 					SipMethods.INVITE), this);
+			sip_provider.addSipProviderListener(new TransactionIdentifier(
+			        SipMethods.OPTIONS), this);
+
 		}
 	}
 
@@ -215,6 +219,15 @@ public class InviteTransactionServer extends TransactionServer {
 					return;
 				}
 			}
+			
+			if (req_method.equals(SipMethods.OPTIONS)) {
+				Message ok200 = MessageFactory.createResponse(msg, 200, SipResponses.reasonOf(200), null);
+				ok200.removeServerHeader();
+				ok200.addContactHeader(new ContactHeader(ok200.getToHeader().getNameAddress()), false);
+				sip_provider.sendMessage(ok200, connection_id);
+				return;
+			}
+			
 			// ack received
 			if (req_method.equals(SipMethods.ACK) && statusIs(STATE_COMPLETED)) {
 				retransmission_to.halt();

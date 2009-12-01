@@ -74,6 +74,14 @@ public abstract class BaseSipMethods {
 	public static boolean isOption(String str) {
 		return same(str, OPTION);
 	}
+	
+	/** String "OPTION" */
+	public static final String OPTIONS = "OPTIONS";
+	
+	/** Whether str is OPTIONS */
+	public static boolean isOptions(String str) {
+		return same(str, OPTIONS);
+	}
 
 	/** String "REGISTER" */
 	public static final String REGISTER = "REGISTER";

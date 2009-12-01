@@ -32,6 +32,7 @@ import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
+import org.sipdroid.pjlib.Codec;
 
 import android.content.Context;
 import android.media.AudioFormat;
@@ -199,7 +200,7 @@ public class RtpStreamSender extends Thread {
 		byte[] buffer = new byte[frame_size + 12];
 		RtpPacket rtp_packet = new RtpPacket(buffer, 0);
 		rtp_packet.setPayloadType(p_type);
-		int seqn = 0;
+		int seqn = 0, payload_len = 0;
 		long time = 0;
 		long byte_rate = frame_rate * frame_size;
 		long frame_time = (frame_size * 1000) / byte_rate;
@@ -256,11 +257,11 @@ public class RtpStreamSender extends Thread {
 					if (!Sipdroid.release) e.printStackTrace();
 				 }
 			 } else
-				 G711.linear2alaw(lin, ring%(frame_size*11), buffer, num);
+				 payload_len = Codec.encode(lin, ring%(frame_size*11), buffer, num);
  			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
  			 rtp_packet.setTimestamp(time);
- 			 rtp_packet.setPayloadLength(num);
+ 			 rtp_packet.setPayloadLength(payload_len);
  			 try {
  				 rtp_socket.send(rtp_packet);
  				 if (m == 2)
