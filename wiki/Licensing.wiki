@@ -25,9 +25,9 @@ and for implementation of GSM compression only:
 
   * Benny Prijono <benny@prijono.org> and Teluu Inc. (http://www.teluu.com)
 
-These organisations are made of individual authors contributing to the software that would all have to be dealt with. Every author finding lines of his code in a product would be in position to accuse the violator for infringing his copyrighted work.
+These organisations are made up of individual authors contributing to the software that would all have to be dealt with. Every author finding lines of his code in a product would be in position to accuse the violator for infringing his copyrighted work.
 
-So it is quite impossible to obtain a commercial license. Sipdroid is committed to open source. Being such it benefits each day and is driven by the community.
+So it is quite impossible to obtain a commercial license. Sipdroid is committed to open source. Being such it benefits every day, and it is driven by the community.
 
 == Implications for products based on Sipdroid ==
 
