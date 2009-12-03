@@ -41,6 +41,8 @@
 \nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
 \nCopyright (C) 2006 The Android Open Source Project (http://android.com)
 \nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\nCopyright (C) 2003-2008 Benny Prijono (benny@prijono.org)
+\nCopyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
 \n
 \nAcest program este gratuit; se poate redistribui sau/şi modifica în termenii specificaţi de GNU General Public Licence, asa cum este publicată de Free Software Foundation; fie versiunea 3 a licenţei, fie (la optiunea ta) orice alta versiune ulterioară. 
 \n
@@ -77,7 +79,8 @@
 
 <string name="settings_options">Opţiuni Apelare</string>
 <string name="settings_wlan">Foloseste WLAN</string>
-<string name="settings_3g">Foloseste 3G/EDGE</string>
+<string name="settings_3g">Foloseste 3G</string>
+<string name="settings_edge">Foloseste EDGE</string>
 <string name="settings_check">Verifică dacă operatorul de telefonie mobilă permite VoIP</string>
 <string name="settings_pref">Tip apelare preferat</string>
     <string-array name="pref_display_values">
@@ -96,16 +99,8 @@
 <string name="settings_MWI2">Subscrie pentru aşteptare mesaje SIP</string>
 
 <string name="settings_advanced_options">Opţiuni avansate</string>
-<string name="settings_minedge">Bare de semnal pentru conexiunile EDGE</string>
 <string name="settings_policy_never">Politica de repaus schimbată pentru a ţine Wifi pornit.</string>
 <string name="settings_policy_default">Resetare politica de repaus Wifi la initial.</string>
-    <string-array name="bars">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
 <string name="settings_search">Caută &amp; Modifică</string>
 <string name="settings_excludepat">Şablon Excludere</string>
 <string name="settings_sipringtone">Ton de apel SIP</string>

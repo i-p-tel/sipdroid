@@ -75,7 +75,7 @@ import org.zoolu.net.IpAddress;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
-		private static int cellAsu = -1,docked = -1;
+		private static int docked = -1;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
@@ -458,7 +458,7 @@ import org.zoolu.net.IpAddress;
         	WifiInfo wi = wm.getConnectionInfo();
 
         	if (wi != null)
-        		if (!Sipdroid.release) Log.i("SipUA:","isFast() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())+" "+cellAsu);
+        		if (!Sipdroid.release) Log.i("SipUA:","isFast() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState()));
         	if (wi != null && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
         			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
         		on_wlan = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wlan",false);
@@ -471,12 +471,12 @@ import org.zoolu.net.IpAddress;
 		static boolean isFast2() {
         	TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
-        	if (Sipdroid.market || !PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("3g",false))
+        	if (Sipdroid.market)
         		return false;
         	if (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS)
-        		return true;
+        		return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("3g",false);
         	if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
-       			return cellAsu >= org.sipdroid.sipua.ui.Settings.getMinEdge();
+       			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("edge",false);
         	return false;
 		}
 		
@@ -501,17 +501,6 @@ import org.zoolu.net.IpAddress;
 	    		if ((pstn_state.equals("OFFHOOK") && call_state == UserAgent.UA_STATE_INCALL) ||
 		    			(pstn_state.equals("IDLE") && call_state == UserAgent.UA_STATE_HOLD))
 		    			engine(context).togglehold();
-	        } else
-	        if (intentAction.equals(ACTION_SIGNAL_STRENGTH_CHANGED)) {
-	        	cellAsu = intent.getIntExtra("asu", intent.getIntExtra("GsmSignalStrength", -1));
-	        	if (cellAsu == 99) cellAsu = 0;
-	        	else if (cellAsu >= 16) cellAsu = 4;
-	        	else if (cellAsu >= 8) cellAsu = 3;
-	        	else if (cellAsu >= 4) cellAsu = 2;
-	        	else if (cellAsu > 0) cellAsu = 1;
-	        	if (!Sipdroid.release) Log.i("SipUA:","cellAsu "+cellAsu);
-	        	if (cellAsu >= org.sipdroid.sipua.ui.Settings.getMinEdge() &&
-	        			!engine(context).isRegistered()) engine(context).register();
 	        } else
 	        if (intentAction.equals(ACTION_DOCK_EVENT)) {
 	        	docked = intent.getIntExtra(EXTRA_DOCK_STATE, -1);

@@ -42,12 +42,23 @@
 				android:key="3g"
 				android:title="@string/settings_3g"
 				android:summary="@string/settings_check" />
+			<CheckBoxPreference
+				android:key="edge"
+				android:title="@string/settings_edge"
+				android:summary="@string/settings_check" />
 			<ListPreference
 				android:key="pref"
 				android:title="@string/settings_pref"
 				android:entries="@array/pref_display_values"
 				android:entryValues="@array/pref_values"
 				android:dialogTitle="@string/settings_pref" />
+			<ListPreference
+				android:key="compression"
+				android:title="@string/settings_compression"
+				android:entries="@array/compression_display_values"
+				android:entryValues="@array/compression_values"
+				android:defaultValue="edge"
+				android:dialogTitle="@string/settings_compression" />
 			<CheckBoxPreference
 				android:key="auto_on"
 				android:title="@string/settings_auto_on"
@@ -62,13 +73,6 @@
 				android:summary="@string/settings_MWI2" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_advanced_options">
-			<ListPreference
-				android:key="minedge"
-				android:title="@string/settings_minedge"
-				android:entries="@array/bars"
-				android:entryValues="@array/bars"
-				android:defaultValue="4"
-				android:dialogTitle="@string/settings_minedge" />
 			<EditTextPreference
 				android:key="search"
 				android:title="@string/settings_search"

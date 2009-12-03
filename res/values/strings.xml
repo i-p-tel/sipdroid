@@ -42,6 +42,8 @@
 \nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
 \nCopyright (C) 2006 The Android Open Source Project (http://android.com)
 \nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\nCopyright (C) 2003-2008 Benny Prijono (benny@prijono.org)
+\nCopyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
 \n
 \nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 \n
@@ -119,7 +121,8 @@
 
 <string name="settings_options">Call Options</string>
 <string name="settings_wlan">Use WLAN</string>
-<string name="settings_3g">Use 3G/EDGE</string>
+<string name="settings_3g">Use 3G</string>
+<string name="settings_edge">Use EDGE</string>
 <string name="settings_check">Check with your mobile operator if he allows VoIP</string>
 <string name="settings_pref">Preferred Call Type</string>
     <string-array name="pref_display_values">
@@ -130,6 +133,15 @@
         <item>SIP</item>
         <item>PSTN</item>
     </string-array>
+<string name="settings_compression">Voice Compression</string>
+    <string-array name="compression_display_values">
+        <item>Only over EDGE</item>
+        <item>Always active</item>
+    </string-array>
+    <string-array name="compression_values">
+        <item>edge</item>
+        <item>always</item>
+    </string-array>
 <string name="settings_auto_on">Auto-Answer in use</string>
 <string name="settings_auto_on2">Short vibrating alert when screen is on</string>
 <string name="settings_auto_ondemand">Auto-Answer on demand</string>
@@ -138,16 +150,8 @@
 <string name="settings_MWI2">Subscribe to SIP message waiting</string>
 
 <string name="settings_advanced_options">Advanced Options</string>
-<string name="settings_minedge">Signal Bars for EDGE Calls</string>
 <string name="settings_policy_never">Changed sleep policy to keep Wifi on.</string>
 <string name="settings_policy_default">Reset Wifi sleep policy to default.</string>
-    <string-array name="bars">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
 <string name="settings_search">Search &amp; Replace</string>
 <string name="settings_excludepat">Exclude Pattern</string>
 <string name="settings_sipringtone">SIP Ringtone</string>

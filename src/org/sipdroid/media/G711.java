@@ -311,11 +311,14 @@ public class G711 {
 	};
 
 	public static void init() {
- 		int i;
-		for (i = 0; i < 256; i++)
-			a2s[i] = (short)_a2s[i];
-		for (i = 0; i < 65536; i++)
-			s2a[i] = (byte)_s2a[i >> 4];
+	}
+	
+	static {
+	 		int i;
+			for (i = 0; i < 256; i++)
+				a2s[i] = (short)_a2s[i];
+			for (i = 0; i < 65536; i++)
+				s2a[i] = (byte)_s2a[i >> 4];
 	}
 
 	public static void alaw2linear(byte alaw[],short lin[],int frames) {

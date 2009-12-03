@@ -118,7 +118,7 @@ public class RtpStreamSender extends Thread {
 		this.p_type = payload_type;
 		this.frame_rate = frame_rate;
 		this.frame_size = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("server","").equals("pbxes.org")?
-				1024:frame_size; //15
+				(payload_type == 3?960:1024):frame_size; //15
 		this.do_sync = do_sync;
 		try {
 			rtp_socket = new RtpSocket(src_socket, InetAddress
@@ -200,7 +200,7 @@ public class RtpStreamSender extends Thread {
 		byte[] buffer = new byte[frame_size + 12];
 		RtpPacket rtp_packet = new RtpPacket(buffer, 0);
 		rtp_packet.setPayloadType(p_type);
-		int seqn = 0, payload_len = 0;
+		int seqn = 0;
 		long time = 0;
 		long byte_rate = frame_rate * frame_size;
 		long frame_time = (frame_size * 1000) / byte_rate;
@@ -218,7 +218,6 @@ public class RtpStreamSender extends Thread {
 				AudioRecord.getMinBufferSize(8000, 
 						AudioFormat.CHANNEL_CONFIGURATION_MONO, 
 						AudioFormat.ENCODING_PCM_16BIT)*3/2);
-		record.startRecording();
 		short[] lin = new short[frame_size*11];
 		int num,ring = 0;
 		random = new Random();
@@ -228,6 +227,15 @@ public class RtpStreamSender extends Thread {
 		} catch (IOException e2) {
 			if (!Sipdroid.release) e2.printStackTrace();
 		}
+		switch (p_type) {
+		case 3:
+			Codec.init();
+			break;
+		case 8:
+			G711.init();
+			break;
+		}
+		record.startRecording();
 		while (running) {
 			 if (muted || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 				record.stop();
@@ -250,18 +258,32 @@ public class RtpStreamSender extends Thread {
 			 }
 			 if (Receiver.call_state != UserAgent.UA_STATE_INCALL && alerting != null) {
 				 try {
-					if (alerting.available() < frame_size)
+					if (alerting.available() < num)
 						alerting.reset();
-					alerting.read(buffer,12,frame_size);
+					alerting.read(buffer,12,num);
 				 } catch (IOException e) {
 					if (!Sipdroid.release) e.printStackTrace();
 				 }
-			 } else
-				 payload_len = Codec.encode(lin, ring%(frame_size*11), buffer, num);
+				 switch (p_type) {
+				 case 3:
+					 G711.alaw2linear(buffer, lin, num);
+					 num = Codec.encode(lin, 0, buffer, num);
+					 break;
+				 }
+			 } else {
+				 switch (p_type) {
+				 case 3:
+					 num = Codec.encode(lin, ring%(frame_size*11), buffer, num);
+					 break;
+				 case 8:
+					 G711.linear2alaw(lin, ring%(frame_size*11), buffer, num);
+					 break;
+				 }
+			 }
  			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
  			 rtp_packet.setTimestamp(time);
- 			 rtp_packet.setPayloadLength(payload_len);
+ 			 rtp_packet.setPayloadLength(num);
  			 try {
  				 rtp_socket.send(rtp_packet);
  				 if (m == 2)
@@ -274,7 +296,7 @@ public class RtpStreamSender extends Thread {
  				 m = 2;
  			 else
  				 m = 1;
- 			 time += num;
+ 			 time += frame_size;
 		}
 		record.stop();
 		

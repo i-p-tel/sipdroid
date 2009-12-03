@@ -49,7 +49,6 @@ public class RegisterService extends Service {
 			 IntentFilter intentfilter = new IntentFilter();
 			 intentfilter.addAction(Receiver.ACTION_DATA_STATE_CHANGED);
 			 intentfilter.addAction(Receiver.ACTION_PHONE_STATE_CHANGED);
-			 intentfilter.addAction(Receiver.ACTION_SIGNAL_STRENGTH_CHANGED);
 			 intentfilter.addAction(Receiver.ACTION_DOCK_EVENT);
 	         registerReceiver(m_receiver = new Receiver(), intentfilter);      
         }

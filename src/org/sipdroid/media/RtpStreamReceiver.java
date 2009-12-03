@@ -51,9 +51,11 @@ public class RtpStreamReceiver extends Thread {
 	/** Whether working in debug mode. */
 	public static boolean DEBUG = true;
 
+	/** Payload type */
+	int p_type;
+
 	/** Size of the read buffer */
-	public static final int BUFFER_SIZE = 33;
-	public static final int PCM_BUFFER_SIZE = 4960;
+	public static final int BUFFER_SIZE = 1024;
 
 	/** Maximum blocking time, spent waiting for reading new bytes [milliseconds] */
 	public static final int SO_TIMEOUT = 200;
@@ -75,8 +77,9 @@ public class RtpStreamReceiver extends Thread {
 	 * @param socket
 	 *            the local receiver SipdroidSocket
 	 */
-	public RtpStreamReceiver(SipdroidSocket socket) {
+	public RtpStreamReceiver(SipdroidSocket socket, int payload_type) {
 		init(socket);
+		p_type = payload_type;
 	}
 
 	/** Inits the RtpStreamReceiver */
@@ -215,6 +218,8 @@ public class RtpStreamReceiver extends Thread {
 		}
 
 		byte[] buffer = new byte[BUFFER_SIZE+12];
+		byte[] buffer_gsm = new byte[33+12];
+		int i;
 		rtp_packet = new RtpPacket(buffer, 0);
 
 		if (DEBUG)
@@ -233,13 +238,13 @@ public class RtpStreamReceiver extends Thread {
 		int oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
 		restoreVolume();
 		track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
-				PCM_BUFFER_SIZE, AudioTrack.MODE_STREAM);
+				BUFFER_SIZE*2*2, AudioTrack.MODE_STREAM);
 		track.setStereoVolume(AudioTrack.getMaxVolume()*
 				org.sipdroid.sipua.ui.Settings.getEarGain()
 				,AudioTrack.getMaxVolume()*
 				org.sipdroid.sipua.ui.Settings.getEarGain());
-		short lin[] = new short[160];
-		short lin2[] = new short[160];
+		short lin[] = new short[BUFFER_SIZE];
+		short lin2[] = new short[BUFFER_SIZE];
 		int user, server, lserver, luser, cnt, todo, headroom, len = 0, timeout = 1, seq = 0, cnt2 = 0, m = 1,
 			expseq, getseq, vm = 1, gap, gseq;
 		boolean islate;
@@ -247,6 +252,14 @@ public class RtpStreamReceiver extends Thread {
 		lserver = 0;
 		luser = -8000;
 		cnt = 0;
+		switch (p_type) {
+		case 3:
+			Codec.init();
+			break;
+		case 8:
+			G711.init();
+			break;
+		}
 		track.play();
 		System.gc();
 		empty();
@@ -269,10 +282,10 @@ public class RtpStreamReceiver extends Thread {
 				rtp_socket.receive(rtp_packet);
 				if (timeout != 0) {
 					track.pause();
-					user += track.write(lin,0,1024);
-					user += track.write(lin,0,1024);
+					user += track.write(lin,0,BUFFER_SIZE);
+					user += track.write(lin,0,BUFFER_SIZE);
 					track.play();
-					cnt += 2048;
+					cnt += 2*BUFFER_SIZE;
 				}
 				timeout = 0;
 			} catch (IOException e) {
@@ -289,15 +302,37 @@ public class RtpStreamReceiver extends Thread {
 					 continue;
 				 }
 				 
-				 len = Codec.decode(buffer, lin, len);
-				 
-	 			 if (speakermode == AudioManager.MODE_NORMAL)
-	 				 calc(lin,0,len);
-
 				 server = track.getPlaybackHeadPosition();
 				 headroom = user-server;
 				 
-				 if (headroom < 250) { 
+				 if (headroom > 1500)
+					 cnt += len;
+				 else
+					 cnt = 0;
+				 
+				 if (lserver == server)
+					 cnt2++;
+				 else
+					 cnt2 = 0;
+
+				 if (cnt <= 500 || cnt2 >= 2 || headroom - 875 < len) {
+					 switch (rtp_packet.getPayloadType()) {
+					 case 8:
+						 len = rtp_packet.getPayloadLength();
+						 G711.alaw2linear(buffer, lin, len);
+						 break;
+					 case 3:
+						 for (i = 12; i < 45; i++)
+							 buffer_gsm[i] = buffer[i];
+						 len = Codec.decode(buffer_gsm, lin, 0);
+						 break;
+					 }
+					 
+		 			 if (speakermode == AudioManager.MODE_NORMAL)
+		 				 calc(lin,0,len);
+				 }
+				 
+	 			 if (headroom < 250) { 
 					todo = 875 - headroom;
 					println("insert "+todo);
 					islate = true;
@@ -308,16 +343,6 @@ public class RtpStreamReceiver extends Thread {
 				 } else
 					 islate = false;
 
-				 if (headroom > 1500)
-					 cnt += len;
-				 else
-					 cnt = 0;
-				 
-				 if (lserver == server)
-					 cnt2++;
-				 else
-					 cnt2 = 0;
-				 
 				 if (cnt > 500 && cnt2 < 2) {
 					 todo = headroom - 875;
 					 println("cut "+todo);

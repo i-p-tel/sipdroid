@@ -42,6 +42,8 @@
 \nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
 \nCopyright (C) 2006 The Android Open Source Project (http://android.com)
 \nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\nCopyright (C) 2003-2008 Benny Prijono (benny@prijono.org)
+\nCopyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
 \n
 \nDieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder (nach Ihrer Option) jeder späteren Version.
 \n
@@ -72,15 +74,20 @@
         <item>TCP (längerer Standby mit 3G)</item>
     </string-array>
 
-
 <string name="settings_options">Anrufeinstellungen</string>
 <string name="settings_wlan">WLAN verwenden</string>
-<string name="settings_3g">3G/EDGE verwenden</string>
+<string name="settings_3g">3G verwenden</string>
+<string name="settings_edge">EDGE verwenden</string>
 <string name="settings_check">Prüfen Sie, ob Ihr Mobilfunkanbieter VoIP-Nutzung erlaubt</string>
 <string name="settings_pref">Bevorzugte Anrufart</string>
     <string-array name="pref_display_values">
         <item>Sipdroid, wenn verfügbar</item>
         <item>Telefon</item>
+    </string-array>
+<string name="settings_compression">Sprachkompression</string>
+    <string-array name="compression_display_values">
+        <item>Nur über EDGE</item>
+        <item>Immer aktiv</item>
     </string-array>
 <string name="settings_auto_on">Rufannahme im Betrieb</string>
 <string name="settings_auto_on2">Bei eingeschaltetem Bildschirm mit kurzem Vibrationsalarm</string>
@@ -90,7 +97,6 @@
 <string name="settings_MWI2">Eingang neuer Nachrichten anzeigen</string>
 
 <string name="settings_advanced_options">Erweiterte Einstellungen</string>
-<string name="settings_minedge">Signalstärke für EDGE-Anrufe</string>
 <string name="settings_policy_never">Systemeinstellung geändert: WLAN bleibt bei Standy in Betrieb</string>
 <string name="settings_policy_default">Systemeinstellung wiederhergestellt: WLAN geht bei Standby außer Betrieb</string>
 <string name="settings_search">Suchen &amp; Ersetzen</string>
