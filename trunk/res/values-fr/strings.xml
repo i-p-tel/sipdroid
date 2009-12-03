@@ -16,6 +16,8 @@
 		\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
 		\nCopyright (C) 2006 Le projet Open Source Android (http://android.com)
 		\nCopyright (C) 2005 Luca Veltri - University de Parme - Italie (http://mjsip.org)
+		\nCopyright (C) 2003-2008 Benny Prijono (benny@prijono.org)
+		\nCopyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
 		\n
 		\nCe programme est un logiciel libre; vous pouvez le redistribuer et/ou le modifier selon les termes de la Licence Publique Générale GNU (GPL) comme publiée par la Free Software Foundation; ou en version 3 de la	licence, ou (à votre guise) n\'importe quelle autre version.
 		\n
@@ -53,7 +55,8 @@
 
 	<string name="settings_options">Options d\'appel</string>
 	<string name="settings_wlan">Utiliser le WLAN</string>
-	<string name="settings_3g">Utiliser la 3G/EDGE</string>
+	<string name="settings_3g">Utiliser la 3G</string>
+	<string name="settings_edge">Utiliser la EDGE</string>
 	<string name="settings_check">Vérifier auprès de votre opérateur mobile si il permet la VoIP</string>
 	<string name="settings_pref">Type d\'appel préféré</string>
 	<string-array name="pref_display_values">
@@ -72,16 +75,8 @@
 	<string name="settings_MWI2">S\'abonner à l\'attente de messages SIP</string>
 
 	<string name="settings_advanced_options">Options Avancées</string>
-	<string name="settings_minedge">Barres de signal pour les appels EDGE</string>
 	<string name="settings_policy_never">Politique de mise en veille changée pour maintenir le Wifi allumé.</string>
 	<string name="settings_policy_default">Retour aux paramètres par défaut de la politique de mise en veille du Wifi.</string>
-	<string-array name="bars">
-		<item>0</item>
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>
-		<item>4</item>
-	</string-array>
 	<string name="settings_search">Chercher &amp; Remplacer</string>
 	<string name="settings_excludepat">Exclure des motifs</string>
 	<string name="settings_sipringtone">Sonnerie SIP</string>

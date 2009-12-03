@@ -48,7 +48,10 @@ import org.zoolu.tools.Log;
 import org.zoolu.tools.LogLevel;
 import org.zoolu.tools.Parser;
 
+import android.content.Context;
 import android.media.MediaPlayer;
+import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 
 /**
  * Simple SIP user agent (UA). It includes audio/video applications.
@@ -87,7 +90,7 @@ public class UserAgent extends CallListenerAdapter {
 
 	int call_state = UA_STATE_IDLE;
 	String remote_media_address;
-	int remote_video_port,local_video_port;
+	int remote_video_port,local_video_port,payload_type;
 
 	// *************************** Basic methods ***************************
 
@@ -182,8 +185,16 @@ public class UserAgent extends CallListenerAdapter {
 		//audio
 		if (user_profile.audio || !user_profile.video)
 		{
+			if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("compression","edge").equals("edge")) {
+				TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
+				if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
+					payload_type = 3;
+				else
+					payload_type = user_profile.audio_avp;
+			} else
+				payload_type = 3;
 			addMediaDescriptor("audio", user_profile.audio_port,
-					user_profile.audio_avp, user_profile.audio_codec,
+					payload_type, payload_type == 3?"GSM":user_profile.audio_codec,
 					user_profile.audio_sample_rate);
 		}
 		
@@ -297,7 +308,6 @@ public class UserAgent extends CallListenerAdapter {
 		
 		hangup();
 		
-		initSessionDescriptor();
 		call = new ExtendedCall(sip_provider, user_profile.from_url,
 				user_profile.contact_url, user_profile.username,
 				user_profile.realm, user_profile.passwd, this);
@@ -410,7 +420,7 @@ public class UserAgent extends CallListenerAdapter {
 						remote_media_address, remote_audio_port, dir, audio_in,
 						audio_out, user_profile.audio_sample_rate,
 						user_profile.audio_sample_size,
-						user_profile.audio_frame_size, log);
+						user_profile.audio_frame_size, log, payload_type);
 			}
 			audio_app.startMedia();
 		}
@@ -458,7 +468,8 @@ public class UserAgent extends CallListenerAdapter {
 		}
 		
 		changeStatus(UA_STATE_INCOMING_CALL,caller.toString());
-		
+
+		initSessionDescriptor();
 		if (sdp != null) { 
 			// Create the new SDP
 			SessionDescriptor remote_sdp = new SessionDescriptor(sdp);

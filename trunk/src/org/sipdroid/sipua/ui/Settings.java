@@ -35,14 +35,6 @@ import android.widget.Toast;
 
 	public class Settings extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
-		public static int getMinEdge() {
-			try {
-				return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("minedge", "4"));
-			} catch (NumberFormatException i) {
-				return 4;
-			}			
-		}
-		
 		public static float getEarGain() {
 			try {
 				return Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25"));
@@ -111,17 +103,18 @@ import android.widget.Toast;
  	        			key.equals("server") ||
  	        			key.equals("port") ||
  	        			key.equals("protocol") ||
- 	        			key.equals("minedge") ||
+ 	        			key.equals("edge") ||
  	        			key.equals("pos") ||
  	        			key.equals("posurl") ||
  	        			key.equals("callerid") ||
-					key.equals("MWI_enabled")) {
+ 	        			key.equals("auto_ondemand") ||
+ 	        			key.equals("MWI_enabled")) {
  	        		if (key.equals("wlan") || key.equals("3g"))
  	        			updateSleep();
  		        	Receiver.engine(this).halt();
 		    		Receiver.engine(this).StartEngine();
-		    		updateSummaries();        
 	 	        }
+	    		updateSummaries();        
         }
 
 		void updateSleep() {
@@ -157,7 +150,6 @@ import android.widget.Toast;
         	getPreferenceScreen().findPreference("protocol").setSummary(getPreferenceScreen().getSharedPreferences().getString("protocol",
         		getPreferenceScreen().getSharedPreferences().getString("server", "").equals("pbxes.org")?"tcp":"udp").toUpperCase());
         	getPreferenceScreen().findPreference("search").setSummary(getPreferenceScreen().getSharedPreferences().getString("search", "")); 
-        	getPreferenceScreen().findPreference("minedge").setSummary("Signal >= "+getPreferenceScreen().getSharedPreferences().getString("minedge", "4")); 
         	getPreferenceScreen().findPreference("excludepat").setSummary(getPreferenceScreen().getSharedPreferences().getString("excludepat", "")); 
         	getPreferenceScreen().findPreference("posurl").setSummary(getPreferenceScreen().getSharedPreferences().getString("posurl", "")); 
         	getPreferenceScreen().findPreference("callthru2").setSummary(getPreferenceScreen().getSharedPreferences().getString("callthru2", "")); 
@@ -168,10 +160,10 @@ import android.widget.Toast;
           		getPreferenceScreen().findPreference("pref").setSummary(getResources().getStringArray(R.array.pref_display_values)[1]);
         		getPreferenceScreen().findPreference("par").setEnabled(false);
           	}
-        	if (getPreferenceScreen().getSharedPreferences().getBoolean("3g", false))
-        		getPreferenceScreen().findPreference("minedge").setEnabled(true);
+        	if (getPreferenceScreen().getSharedPreferences().getString("compression", "edge").equals("edge"))
+        		getPreferenceScreen().findPreference("compression").setSummary(getResources().getStringArray(R.array.compression_display_values)[0]);
         	else
-        		getPreferenceScreen().findPreference("minedge").setEnabled(false);
+          		getPreferenceScreen().findPreference("compression").setSummary(getResources().getStringArray(R.array.compression_display_values)[1]);
         	if (getPreferenceScreen().getSharedPreferences().getBoolean("callthru", false))
         		getPreferenceScreen().findPreference("callthru2").setEnabled(true);
         	else

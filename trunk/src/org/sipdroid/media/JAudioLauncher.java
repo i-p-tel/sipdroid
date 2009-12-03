@@ -19,7 +19,6 @@
  */
 package org.sipdroid.media;
 
-
 import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.sip.provider.SipStack;
@@ -32,8 +31,6 @@ public class JAudioLauncher implements MediaLauncher
    /** Event logger. */
    Log log=null;
 
-   /** Payload type */
-   int payload_type=3;
    /** Sample rate [bytes] */
    int sample_rate=8000;
    /** Sample size [bytes] */
@@ -72,24 +69,24 @@ public class JAudioLauncher implements MediaLauncher
    }
 
    /** Costructs the audio launcher */
-   public JAudioLauncher(int local_port, String remote_addr, int remote_port, int direction, String audiofile_in, String audiofile_out, int sample_rate, int sample_size, int frame_size, Log logger)
+   public JAudioLauncher(int local_port, String remote_addr, int remote_port, int direction, String audiofile_in, String audiofile_out, int sample_rate, int sample_size, int frame_size, Log logger, int payload_type)
    {  log=logger;
       frame_rate=sample_rate/frame_size;
       try
       {  socket=new SipdroidSocket(local_port);
          dir=direction;
          // sender
-          if (dir>=0)
+         if (dir>=0)
          {  printLog("new audio sender to "+remote_addr+":"+remote_port,LogLevel.MEDIUM);
             //audio_input=new AudioInput();
-             sender=new RtpStreamSender(true,payload_type,frame_rate,frame_size,socket,remote_addr,remote_port);
+            sender=new RtpStreamSender(true,payload_type,frame_rate,frame_size,socket,remote_addr,remote_port);
             sender.setSyncAdj(2);
          }
          
          // receiver
-          if (dir<=0)
+         if (dir<=0)
          {  printLog("new audio receiver on "+local_port,LogLevel.MEDIUM);
-            receiver=new RtpStreamReceiver(socket);
+            receiver=new RtpStreamReceiver(socket,payload_type);
          }
       }
       catch (Exception e) {  printException(e,LogLevel.HIGH);  }
