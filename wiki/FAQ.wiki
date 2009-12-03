@@ -34,6 +34,8 @@ Sipdroid uses G.711 A-law to transmit voice which needs about 80 kBit/s in each 
 
 A video call needs approximately twice as much.
 
+Over EDGE or when optionally enabled for all calls Sipdroid uses GSM codec to compress to about 30 kBit/s in each direction resulting in a total of 0.5 MB per minute.
+
 === What are the system requirements? ===
 
 To install Sipdroid you need version 1.5 "Cupcake" of Android.
