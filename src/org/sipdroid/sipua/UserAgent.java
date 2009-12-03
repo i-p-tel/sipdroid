@@ -187,7 +187,7 @@ public class UserAgent extends CallListenerAdapter {
 		{
 			if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("compression","edge").equals("edge")) {
 				TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-				if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
+				if (!Receiver.on_wlan && tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
 					payload_type = 3;
 				else
 					payload_type = user_profile.audio_avp;

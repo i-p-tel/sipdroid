@@ -292,7 +292,7 @@ public class RtpStreamSender extends Thread {
  			 }
  			 if (improve && RtpStreamReceiver.good != 0 &&
  					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01 &&
- 					 tm.getNetworkType() != TelephonyManager.NETWORK_TYPE_EDGE)        	
+ 					 (Receiver.on_wlan || tm.getNetworkType() != TelephonyManager.NETWORK_TYPE_EDGE))        	
  				 m = 2;
  			 else
  				 m = 1;
