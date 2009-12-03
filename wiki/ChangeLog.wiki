@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.2.1
+    * Bugfix to 1.2
+
   * 1.2
     * Voice Compression over EDGE
     * Fix issue 109
