@@ -88,6 +88,12 @@
     <string-array name="compression_display_values">
         <item>Nur über EDGE</item>
         <item>Immer aktiv</item>
+        <item>Nie</item>
+    </string-array>
+    <string-array name="compression_values">
+        <item>edge</item>
+        <item>always</item>
+        <item>never</item>
     </string-array>
 <string name="settings_auto_on">Rufannahme im Betrieb</string>
 <string name="settings_auto_on2">Bei eingeschaltetem Bildschirm mit kurzem Vibrationsalarm</string>

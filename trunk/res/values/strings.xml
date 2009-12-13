@@ -137,10 +137,12 @@
     <string-array name="compression_display_values">
         <item>Only over EDGE</item>
         <item>Always active</item>
+        <item>Never</item>
     </string-array>
     <string-array name="compression_values">
         <item>edge</item>
         <item>always</item>
+        <item>never</item>
     </string-array>
 <string name="settings_auto_on">Auto-Answer in use</string>
 <string name="settings_auto_on2">Short vibrating alert when screen is on</string>
