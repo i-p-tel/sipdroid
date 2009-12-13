@@ -139,10 +139,12 @@
     <string-array name="compression_display_values">
         <item>Seulement en EDGE</item>
         <item>Toujours active</item>
+        <item>Jamais</item>
     </string-array>
     <string-array name="compression_values">
         <item>edge</item>
         <item>always</item>
+        <item>never</item>
     </string-array>
 
 	<string name="settings_auto_on">Rép. Auto en service</string>

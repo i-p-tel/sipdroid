@@ -162,6 +162,8 @@ import android.widget.Toast;
           	}
         	if (getPreferenceScreen().getSharedPreferences().getString("compression", "edge").equals("edge"))
         		getPreferenceScreen().findPreference("compression").setSummary(getResources().getStringArray(R.array.compression_display_values)[0]);
+        	else if (getPreferenceScreen().getSharedPreferences().getString("compression", "edge").equals("never"))
+        		getPreferenceScreen().findPreference("compression").setSummary(getResources().getStringArray(R.array.compression_display_values)[2]);
         	else
           		getPreferenceScreen().findPreference("compression").setSummary(getResources().getStringArray(R.array.compression_display_values)[1]);
         	if (getPreferenceScreen().getSharedPreferences().getBoolean("callthru", false))

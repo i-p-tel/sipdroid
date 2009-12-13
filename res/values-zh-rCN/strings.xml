@@ -135,10 +135,12 @@
     <string-array name="compression_display_values">
         <item>仅当使用EDGE时</item>
         <item>总是使用</item>
+        <item>从不使用</item>
     </string-array>
     <string-array name="compression_values">
         <item>edge</item>
         <item>always</item>
+        <item>never</item>
     </string-array>
 <string name="settings_auto_on">开启自动应答</string>
 <string name="settings_auto_on2">仅用于非锁定状态下，振动提醒</string>
