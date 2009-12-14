@@ -152,6 +152,9 @@ public class UserAgentProfile extends Configure {
 	public int audio_avp = 8;
 	/** Audio codec */
 	public String audio_codec = "PCMA"; //AMR
+
+	/** Supported codecs (priority order) */
+	public int[] codecs = {3, 0, 8}; //change multi codecs
 	/** Audio sample rate */
 	public int audio_sample_rate = 8000;
 	/** Audio sample size */
