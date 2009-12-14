@@ -135,13 +135,17 @@ public class RtpStreamReceiver extends Thread {
 	}
 	
 	void setStreamVolume(final int stream,final int vol,final int flags) {
+		if (stream == AudioManager.STREAM_MUSIC) volume = vol;
         (new Thread() {
 			public void run() {
 				am.setStreamVolume(stream, vol, flags);
+				if (stream == AudioManager.STREAM_MUSIC) volume = -1;
 			}
         }).start();  
 		
 	}
+	
+	int volume;
 	
 	void restoreVolume() {
 		setStreamVolume(AudioManager.STREAM_MUSIC,
@@ -153,7 +157,7 @@ public class RtpStreamReceiver extends Thread {
 	
 	void saveVolume() {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-		edit.putInt("volume"+speakermode,am.getStreamVolume(AudioManager.STREAM_MUSIC));
+		edit.putInt("volume"+speakermode,volume != -1?volume:am.getStreamVolume(AudioManager.STREAM_MUSIC));
 		edit.commit();
 	}
 	
@@ -189,6 +193,7 @@ public class RtpStreamReceiver extends Thread {
 	}
 
 	public static float good, late, lost, loss;
+	public static int timeout;
 	
 	void empty() {
 		try {
@@ -245,8 +250,9 @@ public class RtpStreamReceiver extends Thread {
 				org.sipdroid.sipua.ui.Settings.getEarGain());
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
-		int user, server, lserver, luser, cnt, todo, headroom, len = 0, timeout = 1, seq = 0, cnt2 = 0, m = 1,
+		int user, server, lserver, luser, cnt, todo, headroom, len = 0, seq = 0, cnt2 = 0, m = 1,
 			expseq, getseq, vm = 1, gap, gseq;
+		timeout = 1;
 		boolean islate;
 		user = 0;
 		lserver = 0;
@@ -257,15 +263,13 @@ public class RtpStreamReceiver extends Thread {
 			Codec.init();
 			break;
 		case 0:
-			G711.init();
-			break;
 		case 8:
 			G711.init();
 			break;
 		}
+		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_MUSIC,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 		track.play();
 		System.gc();
-		empty();
 		while (running) {
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 				track.pause();
@@ -277,21 +281,25 @@ public class RtpStreamReceiver extends Thread {
 				}
 				track.play();
 				System.gc();
-				empty();
 				timeout = 1;
 				seq = 0;
 			}
 			try {
 				rtp_socket.receive(rtp_packet);
 				if (timeout != 0) {
+					tg.stopTone();
 					track.pause();
-					user += track.write(lin,0,BUFFER_SIZE);
-					user += track.write(lin,0,BUFFER_SIZE);
+					user += track.write(lin2,0,BUFFER_SIZE);
+					user += track.write(lin2,0,BUFFER_SIZE);
 					track.play();
 					cnt += 2*BUFFER_SIZE;
+					empty();
 				}
 				timeout = 0;
 			} catch (IOException e) {
+				if (timeout == 0) {
+					tg.startTone(ToneGenerator.TONE_SUP_RINGTONE);
+				}
 				rtp_socket.getDatagramSocket().disconnect();
 				if (++timeout > 22) {
 					Receiver.engine(Receiver.mContext).rejectcall();
@@ -343,12 +351,9 @@ public class RtpStreamReceiver extends Thread {
 					todo = 875 - headroom;
 					println("insert "+todo);
 					islate = true;
-					if (todo <= len)
-						user += track.write(lin,0,todo);
-					else
-						user += track.write(lin2,0,todo);
+					user += track.write(lin2,0,todo);
 				 } else
-					 islate = false;
+					islate = false;
 
 				 if (cnt > 500 && cnt2 < 2) {
 					 todo = headroom - 875;
@@ -387,6 +392,7 @@ public class RtpStreamReceiver extends Thread {
 				 
 				 if (user >= luser + 8000 && Receiver.call_state == UserAgent.UA_STATE_INCALL) {
 					 if (am.getMode() != speakermode) {
+						 saveVolume();
 						 am.setMode(speakermode);
 						 switch (speakermode) {
 						 case AudioManager.MODE_IN_CALL:
@@ -402,7 +408,6 @@ public class RtpStreamReceiver extends Thread {
 								track.setStereoVolume(AudioTrack.getMaxVolume(),AudioTrack.getMaxVolume());
 								break;
 						 }
-						 saveVolume();
 						 restoreVolume();
 					 }
 					 luser = user;
@@ -411,12 +416,14 @@ public class RtpStreamReceiver extends Thread {
 			}
 		}
 		track.stop();
-		if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE"))
-			am.setMode(AudioManager.MODE_NORMAL);
 		saveVolume();
 		setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
+		if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE"))
+			am.setMode(AudioManager.MODE_NORMAL);
+		setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		restoreSettings();
-		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
+		tg.stopTone();
+		tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {
 			sleep(500);

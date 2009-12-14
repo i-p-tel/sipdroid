@@ -57,7 +57,6 @@ import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.sipua.*;
 import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.Connection;
-import org.zoolu.net.IpAddress;
 
 	public class Receiver extends BroadcastReceiver {
 
@@ -66,6 +65,8 @@ import org.zoolu.net.IpAddress;
 		final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
 		final static String ACTION_DOCK_EVENT = "android.intent.action.DOCK_EVENT";
 		final static String EXTRA_DOCK_STATE = "android.intent.extra.DOCK_STATE";
+		final static String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
+		final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
 		
 		public final static int REGISTER_NOTIFICATION = 1;
 		public final static int CALL_NOTIFICATION = 2;
@@ -387,6 +388,8 @@ import org.zoolu.net.IpAddress;
 			}).start();   
 		}
 		
+		static boolean was_playing;
+		
 		static void broadcastCallStateChanged(String state,String number) {
 			if (state == null) {
 				state = laststate;
@@ -398,6 +401,16 @@ import org.zoolu.net.IpAddress;
 				intent.putExtra("incoming_number", number);
 			intent.putExtra(mContext.getString(R.string.app_name), true);
 			mContext.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
+ 			if (laststate != state) {
+				if (state.equals("IDLE")) {
+					if (was_playing)
+						mContext.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
+				} else {
+					AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+					if (was_playing = am.isMusicActive())
+						mContext.sendBroadcast(new Intent(PAUSE_ACTION));
+				}
+			}
 			laststate = state;
 			lastnumber = number;
 		}
@@ -490,7 +503,6 @@ import org.zoolu.net.IpAddress;
 	        	engine(context).register();
 	        } else
 	        if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
-	        	IpAddress.setLocalIpAddress();
 	        	engine(context).register();
 	        } else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&

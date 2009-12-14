@@ -174,41 +174,6 @@ public class UserAgent extends CallListenerAdapter {
 		return local_session;
 	}
 
-	/** Inits the local SDP (no media spec) */
-	public void initSessionDescriptor() {
-		SessionDescriptor sdp = new SessionDescriptor(
-				user_profile.from_url,
-				sip_provider.getViaAddress());
-		
-		local_session = sdp.toString();
-		
-		//We will have at least one media line, and it will be 
-		//audio
-		if (user_profile.audio || !user_profile.video)
-		{
-			
-			if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("compression","edge").equals("edge")) {
-				TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-				if (!Receiver.on_wlan && tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
-					payload_type = 3;
-				else
-					payload_type = user_profile.audio_avp;
-			} else if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("compression","edge").equals("never")) {
-				payload_type = user_profile.audio_avp;
-			} else
-				payload_type = 3;
-			addMediaDescriptor("audio", user_profile.audio_port,
-					payload_type, payload_type == 3?"GSM":user_profile.audio_codec,
-					user_profile.audio_sample_rate);
-		}
-		
-		if (user_profile.video)
-		{
-			addMediaDescriptor("video", user_profile.video_port,
-					user_profile.video_avp, "h263-1998", 90000);
-		}
-	}
-	
 	//change start (multi codecs)
 	/** Inits the local SDP (no media spec) */
 	public void initSessionDescriptor(int[] audio_codecs) {

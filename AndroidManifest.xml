@@ -25,8 +25,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="1.2.1 beta"
-    android:versionCode="39">
+    android:versionName="1.2.2 beta"
+    android:versionCode="40">
 	<uses-sdk android:minSdkVersion="3" />
     <application android:icon="@drawable/icon64" android:label="@string/app_name">
         <activity android:name=".ui.Sipdroid" android:label="@string/app_name" android:launchMode="singleInstance"
@@ -42,13 +42,7 @@
                 <action android:name="android.intent.action.SENDTO" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="sms" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.DIAL" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tel" />
+                <data android:scheme="smsto" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.SIP" android:label="@string/sip_name">
@@ -56,14 +50,9 @@
                 <action android:name="android.intent.action.SENDTO" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="sms" />
+                <data android:scheme="smsto" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.DIAL" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tel" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".ui.AutoAnswer" android:label="@string/app_name"/>
         <activity android:name=".ui.SIPUri" android:label="@string/app_name">

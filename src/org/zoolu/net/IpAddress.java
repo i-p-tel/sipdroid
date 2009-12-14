@@ -120,7 +120,6 @@ public class IpAddress {
 	
 	/** Sets the local IP address into the variable <i>localIpAddress</i> */
 	public static void setLocalIpAddress() {
-		/*
 		localIpAddress = "127.0.0.1";
 
 		try {
@@ -138,6 +137,5 @@ public class IpAddress {
 		} catch (SocketException ex) {
 			// do nothing
 		}
-		*/
 	}
 }

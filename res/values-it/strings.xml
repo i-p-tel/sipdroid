@@ -2,12 +2,12 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	
-<string name="about">Sipdroid è un client SIP open-source for Android
+<string name="about">Sipdroid un client SIP open-source for Android
 \n
 \nSee http://sipdroid.org per maggiori informazioni
 \n
 \nVersione ${VERSION}
-\nIl software � stato rilasciato per testing.
+\nIl software stato rilasciato per testing.
 \n
 \nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
 \nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
@@ -16,7 +16,7 @@
 \nCopyright (C) 2003-2008 Benny Prijono (benny@prijono.org)
 \nCopyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
 \n
-\nQuesto � un software gratuito; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+\nQuesto un software gratuito; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 \n
 \nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details (http://www.gnu.org/licenses).</string>
   <string name="app_name">Sipdroid</string>
@@ -39,7 +39,7 @@
   <string name="settings_password">Password</string>
   <string name="settings_server">Server</string>
   <string name="settings_domain">Dominio</string>
-  <string name="settings_domain2">Lasciare vuoto se � uguale al server</string>
+  <string name="settings_domain2">Lasciare vuoto se ï¿½ uguale al server</string>
   <string name="settings_port">Porta</string>
 	<string-array name="port_display_values">
 		<item>53</item>
@@ -118,7 +118,7 @@
     </string-array>
 <string name="settings_auto_on">Risposta automatica attiva</string>
 
-<string name="settings_auto_on2">Breve avviso con vibrazione, quando lo schermo � acceso</string>
+<string name="settings_auto_on2">Breve avviso con vibrazione, quando lo schermo ï¿½ acceso</string>
 <string name="settings_auto_ondemand">Risposta automatica a richiesta</string>
 <string name="settings_auto_ondemand2">Visualizza uno switch nella status bar</string>
 <string name="settings_MWI">Controllo per messaggi vocali</string>
@@ -137,7 +137,7 @@
     <string-array name="eargain_display_values">
         <item>Basso (no echo)</item>
         <item>Medio</item>
-        <item>Alto (pu� causare echo al client remoto)</item>
+        <item>Alto (puï¿½ causare echo al client remoto)</item>
         <item>Altissimo</item>
     </string-array>
     <string-array name="eargain_values">
@@ -151,13 +151,13 @@
 <string name="settings_par">Chiamate simultanee in uscita</string>
 <string name="settings_par2">Componi tutti i numeri di telefono di una persona contemporaneamente</string>
 <string name="settings_improve">Meglioramento audio</string>
-<string name="settings_improve2">Richiede un'account a pagamento, versione del software pi� recente (nella scheda Dati Personali)</string>
+<string name="settings_improve2">Richiede un'account a pagamento, versione del software piï¿½ recente (nella scheda Dati Personali)</string>
 <string name="settings_posurl">URL per Posizione/CallBack</string>
 <string name="settings_pos">Aggiorna posizione</string>
-<string name="settings_pos2">Pu� essere annunciato ai contatti PBXes (richiede account premium)</string>
+<string name="settings_pos2">Puï¿½ essere annunciato ai contatti PBXes (richiede account premium)</string>
 <string name="settings_pos3">Aggiornamento posizione</string>
 <string name="settings_callback">Trigger CallBack</string>
-<string name="settings_callback2">Se il collegamento dati adeguato non � disponibile</string>
+<string name="settings_callback2">Se il collegamento dati adeguato non ï¿½ disponibile</string>
 <string name="settings_callthru">Trigger Callthru</string>
 <string name="settings_callthru2">Prefisso per Callthru</string>
   

@@ -20,20 +20,26 @@
 
 package org.sipdroid.sipua.ui;
 
+import org.sipdroid.pjlib.Codec;
 import org.sipdroid.sipua.R;
 import org.zoolu.sip.provider.SipStack;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.text.InputType;
+import android.widget.EditText;
 import android.widget.Toast;
 
-	public class Settings extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+	public class Settings extends PreferenceActivity implements OnSharedPreferenceChangeListener, OnClickListener {
 
 		public static float getEarGain() {
 			try {
@@ -69,6 +75,14 @@ import android.widget.Toast;
 				edit.commit();
 				getPreferenceScreen().findPreference("3g").setEnabled(false);
 			}
+			Codec.init();
+			if (!Codec.loaded) {
+				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
+
+				edit.putString("compression", "never");
+				edit.commit();
+				getPreferenceScreen().findPreference("compression").setEnabled(false);
+			}
 			getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 			updateSummaries();
 		}
@@ -80,7 +94,20 @@ import android.widget.Toast;
 			getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 		}
 		
+		EditText transferText;
+		
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {	    
+        		if (sharedPreferences.getString("port","").equals("0")) {
+        			transferText = new InstantAutoCompleteTextView(this,null);
+        			transferText.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        			new AlertDialog.Builder(this)
+        			.setTitle(Receiver.mContext.getString(R.string.settings_port))
+        			.setView(transferText)
+        			.setPositiveButton(android.R.string.ok, this)
+        			.show();
+        			return;
+        		} else
 	        	if (key.equals("server")) {
 	        		Editor edit = sharedPreferences.edit();
  	        		edit.putString("dns", "");
@@ -177,5 +204,12 @@ import android.widget.Toast;
         		getPreferenceScreen().findPreference("pos").setEnabled(false);
         		getPreferenceScreen().findPreference("callback").setEnabled(false);
            	}
-       }
+        }
+
+        @Override
+		public void onClick(DialogInterface arg0, int arg1) {
+    		Editor edit = getPreferenceScreen().getSharedPreferences().edit();
+     		edit.putString("port", transferText.getText().toString());
+    		edit.commit();
+		}
 	}

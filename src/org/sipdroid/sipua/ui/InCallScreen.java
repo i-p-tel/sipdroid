@@ -262,7 +262,9 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     			break;
     		case MSG_TICK:
     			if (RtpStreamReceiver.good != 0) {
-    				if (RtpStreamSender.m == 2)
+    				if (RtpStreamReceiver.timeout != 0)
+    					mStats.setText("no data");
+    				else if (RtpStreamSender.m == 2)
 	    				mStats.setText(Math.round(RtpStreamReceiver.loss/RtpStreamReceiver.good*100)+"% loss, "+
 	    						Math.round(RtpStreamReceiver.lost/RtpStreamReceiver.good*100)+"% lost, "+
 	    						Math.round(RtpStreamReceiver.late/RtpStreamReceiver.good*100)+"% late");
@@ -387,11 +389,13 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			menu.findItem(MUTE_MENU_ITEM).setVisible(true);
 			menu.findItem(SPEAKER_MENU_ITEM).setVisible(true);
 			menu.findItem(VIDEO_MENU_ITEM).setVisible(Receiver.engine(this).getRemoteVideo() != 0);
+			menu.findItem(TRANSFER_MENU_ITEM).setVisible(true);
 		} else {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(false);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(false);
 			menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
 			menu.findItem(SPEAKER_MENU_ITEM).setVisible(false);
+			menu.findItem(TRANSFER_MENU_ITEM).setVisible(false);
 		}
 		
 		return result;

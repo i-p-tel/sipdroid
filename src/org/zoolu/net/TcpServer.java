@@ -103,6 +103,10 @@ public class TcpServer extends Thread {
 		this.is_running = true;
 	}
 
+	public int getPort() {
+		return server_socket.getLocalPort();
+	}
+	
 	/** Whether the service is running */
 	public boolean isRunning() {
 		return is_running;

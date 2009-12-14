@@ -87,6 +87,7 @@
 		<item>16999</item>
 		<item>26999</item>
 		<item>36999</item>
+		<item>custom</item>
 	</string-array>
 	<string-array name="port_values">
 		<item>53</item>
@@ -107,6 +108,7 @@
 		<item>16999</item>
 		<item>26999</item>
 		<item>36999</item>
+		<item>0</item>
 	</string-array>
 
 <string name="settings_protocol">Protocol</string>
@@ -136,7 +138,7 @@
 <string name="settings_compression">Voice Compression</string>
     <string-array name="compression_display_values">
         <item>Only over EDGE</item>
-        <item>Always active</item>
+        <item>Always try</item>
         <item>Never</item>
     </string-array>
     <string-array name="compression_values">

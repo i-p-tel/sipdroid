@@ -32,10 +32,13 @@ public class Codec {
     public static void init() {
     }
     
+    public static boolean loaded;
+    
 	static {
 		try {
 	        System.loadLibrary("pjlib_linker_jni");
 	        open("gsm");
+	        loaded = true;
 		} catch (Throwable e) {
 			if (!Sipdroid.release) e.printStackTrace();
 		}
