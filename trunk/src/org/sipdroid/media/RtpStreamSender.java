@@ -202,11 +202,10 @@ public class RtpStreamSender extends Thread {
 		rtp_packet.setPayloadType(p_type);
 		int seqn = 0;
 		long time = 0;
-		long byte_rate = frame_rate * frame_size;
-		long frame_time = (frame_size * 1000) / byte_rate;
 		double p = 0;
 		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
 		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("improve",false);
+		boolean useGSM = !PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("compression","edge").equals("never");
 		running = true;
 		m = 1;
 
@@ -232,8 +231,6 @@ public class RtpStreamSender extends Thread {
 			Codec.init();
 			break;
 		case 0:
-			G711.init();
-			break;
 		case 8:
 			G711.init();
 			break;
@@ -272,6 +269,10 @@ public class RtpStreamSender extends Thread {
 					 G711.alaw2linear(buffer, lin, num);
 					 num = Codec.encode(lin, 0, buffer, num);
 					 break;
+				 case 0:
+					 G711.alaw2linear(buffer, lin, num);
+					 G711.linear2ulaw(lin, 0, buffer, num);
+					 break;
 				 }
 			 } else {
 				 switch (p_type) {
@@ -296,13 +297,20 @@ public class RtpStreamSender extends Thread {
  					 rtp_socket.send(rtp_packet);
  			 } catch (IOException e) {
  			 }
+			 time += frame_size;
  			 if (improve && RtpStreamReceiver.good != 0 &&
  					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01 &&
  					 (Receiver.on_wlan || tm.getNetworkType() != TelephonyManager.NETWORK_TYPE_EDGE))        	
  				 m = 2;
  			 else
  				 m = 1;
- 			 time += frame_size;
+ 			 if (useGSM && p_type == 8 && !Receiver.on_wlan && tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE) {
+ 				 rtp_packet.setPayloadType(p_type = 3);
+ 				 if (frame_size == 1024) {
+ 					 frame_size = 960;
+ 					 ring = 0;
+ 				 }
+ 			 }
 		}
 		record.stop();
 		

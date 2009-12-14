@@ -148,13 +148,9 @@ public class UserAgentProfile extends Configure {
 
 	/** Audio port */
 	public int audio_port = 21000;
-	/** Audio avp */
-	public int audio_avp = 8;
-	/** Audio codec */
-	public String audio_codec = "PCMA"; //AMR
 
 	/** Supported codecs (priority order) */
-	public int[] codecs = {3, 0, 8}; //change multi codecs
+	public int[] codecs = {3, 8, 0}; //change multi codecs
 	/** Audio sample rate */
 	public int audio_sample_rate = 8000;
 	/** Audio sample size */
@@ -356,14 +352,6 @@ public class UserAgentProfile extends Configure {
 
 		if (attribute.equals("audio_port")) {
 			audio_port = par.getInt();
-			return;
-		}
-		if (attribute.equals("audio_avp")) {
-			audio_avp = par.getInt();
-			return;
-		}
-		if (attribute.equals("audio_codec")) {
-			audio_codec = par.getString();
 			return;
 		}
 		if (attribute.equals("audio_sample_rate")) {

@@ -68,8 +68,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 			PowerManager pm = (PowerManager) getUIContext().getSystemService(Context.POWER_SERVICE);
 			if (wl == null) wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.SipdroidEngine");
 
-			String opt_via_addr = IpAddress.localIpAddress;
-			
 			user_profile = new UserAgentProfile(null);
 			user_profile.username = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("username",""); // modified
 			user_profile.passwd = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("password","");
@@ -77,19 +75,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("server","");
 			} else {
 				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("domain","");
-			}
-			user_profile.from_url = user_profile.username
-				+ "@"
-				+ user_profile.realm;
-			user_profile.contact_url = user_profile.username
-				+ "@"
-				+ opt_via_addr;
-			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid","").length() == 0) {
-				user_profile.callerid = user_profile.from_url;
-			} else {
-				user_profile.callerid = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid","")
-					+ "@"
-					+ user_profile.realm;
 			}
 
 			SipStack.init(null);
@@ -106,7 +91,23 @@ public class SipdroidEngine implements RegisterAgentListener {
 			SipStack.ua_info = version;
 			SipStack.server_info = version;
 				
-			sip_provider = new SipProvider(opt_via_addr, 0);
+			IpAddress.setLocalIpAddress();
+			sip_provider = new SipProvider(IpAddress.localIpAddress, 0);
+			user_profile.contact_url = user_profile.username
+				+ "@"
+				+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"");
+			
+			user_profile.from_url = user_profile.username
+				+ "@"
+				+ user_profile.realm;
+			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid","").length() == 0) {
+				user_profile.callerid = user_profile.from_url;
+			} else {
+				user_profile.callerid = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid","")
+					+ "@"
+					+ user_profile.realm;
+			}
+
 			CheckEngine();
 			
 			ua = new UserAgent(sip_provider, user_profile);
@@ -172,6 +173,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public void register() {	
 		if (user_profile == null || user_profile.username.equals("") ||
 				user_profile.realm.equals("")) return;
+		IpAddress.setLocalIpAddress();
+		user_profile.contact_url = user_profile.username
+			+ "@"
+			+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"");
 		if (!Receiver.isFast()) {
 			unregister();
 		} else {

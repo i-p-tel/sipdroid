@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -180,7 +181,7 @@ public abstract class BaseMessage {
 		return new DialogIdentifier(call_id, local_tag, remote_tag);
 	}
 
-	/** Gets the inique TransactionIdentifier */
+	/** Gets the unique TransactionIdentifier */
 	public TransactionIdentifier getTransactionId() {
 		String call_id = getCallIdHeader().getCallId();
 		ViaHeader top_via = getViaHeader();
@@ -191,7 +192,7 @@ public abstract class BaseMessage {
 		CSeqHeader cseqh = getCSeqHeader();
 		long seqn = cseqh.getSequenceNumber();
 		String method = cseqh.getMethod();
-		return new TransactionIdentifier(call_id, seqn, method, sent_by, branch);
+		return new TransactionIdentifier(call_id, seqn, method, null /* sent_by modified */, branch);
 	}
 
 	/** Gets the MethodIdentifier */

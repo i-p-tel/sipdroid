@@ -346,6 +346,7 @@ public class SipProvider implements Configurable, TransportListener,
 					udp = new UdpTransport(host_port, this);
 				else
 					udp = new UdpTransport(host_port, host_ipaddr, this);
+				host_port = udp.getPort();
 				printLog("udp is up", LogLevel.MEDIUM);
 			} catch (Exception e) {
 				printException(e, LogLevel.HIGH);
@@ -358,6 +359,7 @@ public class SipProvider implements Configurable, TransportListener,
 					tcp_server = new TcpServer(host_port, this);
 				else
 					tcp_server = new TcpServer(host_port, host_ipaddr, this);
+				host_port = tcp_server.getPort();
 				printLog("tcp is up", LogLevel.MEDIUM);
 			} catch (Exception e) {
 				printException(e, LogLevel.HIGH);

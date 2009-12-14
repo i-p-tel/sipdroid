@@ -37,6 +37,7 @@ import android.preference.PreferenceManager;
 import android.provider.Contacts;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
+import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -132,11 +133,12 @@ public class Caller extends BroadcastReceiver {
 	        			            while (phonesCursor.moveToNext()) 
 	        			            {
 	        			                final int type = phonesCursor.getInt(1);
-	        			                final String n = phonesCursor.getString(0);
+	        			                String n = phonesCursor.getString(0);
 	         			                if (TextUtils.isEmpty(n)) continue;
 	         			                if (type == Phones.TYPE_MOBILE || type == Phones.TYPE_HOME || type == Phones.TYPE_WORK) 
 	         			                {
 	         			                	if (!number.equals("")) number = number + "&";
+	         			                	n = PhoneNumberUtils.stripSeparators(n);
 	         			                	number = number + searchReplaceNumber(search, n);
 	        			                }
 	        			            }

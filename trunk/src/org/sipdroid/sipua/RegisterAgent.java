@@ -37,6 +37,7 @@ import org.zoolu.sip.header.Header;
 import org.zoolu.sip.header.ProxyAuthenticateHeader;
 import org.zoolu.sip.header.ProxyAuthorizationHeader;
 import org.zoolu.sip.header.StatusLine;
+import org.zoolu.sip.header.ViaHeader;
 import org.zoolu.sip.header.WwwAuthenticateHeader;
 import org.zoolu.sip.message.Message;
 import org.zoolu.sip.message.MessageFactory;
@@ -197,7 +198,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 		
 		//Create message re
 		Message req = MessageFactory.createRegisterRequest(sip_provider,
-				target, target, contact);
+				target, target, new NameAddress(user_profile.contact_url));
 		
 		req.setExpiresHeader(new ExpiresHeader(String.valueOf(expire_time)));
 		
@@ -263,6 +264,8 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			}
 		}
 		sd = new SubscriberDialog(sip_provider, "message-summary", "", this);
+		sip_provider.removeSipProviderListener(new TransactionIdentifier(
+				SipMethods.NOTIFY));
 		sip_provider.addSipProviderListener(new TransactionIdentifier(
 				SipMethods.NOTIFY), sd);
 		if (current) {
@@ -271,7 +274,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 		} else {
 			req = MessageFactory.createSubscribeRequest(sip_provider,
 				target.getAddress(), target, target,
-				contact, sd.getEvent(),
+				new NameAddress(user_profile.contact_url), sd.getEvent(),
 				sd.getId(), empty, empty);
 		}
 		req.setExpiresHeader(new ExpiresHeader(SUBSCRIPTION_EXPIRES));
@@ -562,6 +565,10 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			attempts++;
 			Message req = transaction.getRequestMessage();
 			req.setCSeqHeader(req.getCSeqHeader().incSequenceNumber());
+			ViaHeader vh=req.getViaHeader();
+			String newbranch = SipProvider.pickBranch();
+			vh.setBranch(newbranch);	
+			req.addViaHeader(vh);
 
 			if (handleAuthentication(respCode, resp, req)) {
 				TransactionClient t = new TransactionClient(sip_provider, req, this);

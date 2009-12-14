@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
- * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -63,7 +62,7 @@ public class ViaHeader extends ParametricHeader {
 	}
 
 	public ViaHeader(String host, int port) {
-		super(SipHeaders.Via, "SIP/2.0/UDP " + host + (port!=0?":" + port:"")); // modified
+		super(SipHeaders.Via, "SIP/2.0/UDP " + host + ":" + port);
 	}
 
 	/*
@@ -73,7 +72,7 @@ public class ViaHeader extends ParametricHeader {
 
 	public ViaHeader(String proto, String host, int port) {
 		super(SipHeaders.Via, "SIP/2.0/" + proto.toUpperCase() + " " + host
-				+ (port!=0?":" + port:"")); // modified
+				+ ":" + port); // modified
 	}
 
 	/*

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -42,13 +43,15 @@ class UdpTransport implements Transport, UdpProviderListener {
 
 	/** Transport listener */
 	TransportListener listener;
-
+	int port; // modified
+	
 	/** Creates a new UdpTransport */
 	public UdpTransport(int port, TransportListener listener)
 			throws IOException {
 		this.listener = listener;
 		UdpSocket socket = new UdpSocket(port);
 		udp_provider = new UdpProvider(socket, this);
+		this.port = socket.getLocalPort();
 	}
 
 	/** Creates a new UdpTransport */
@@ -57,12 +60,14 @@ class UdpTransport implements Transport, UdpProviderListener {
 		this.listener = listener;
 		UdpSocket socket = new UdpSocket(port, ipaddr);
 		udp_provider = new UdpProvider(socket, this);
+		this.port = socket.getLocalPort();
 	}
 
 	/** Creates a new UdpTransport */
 	public UdpTransport(UdpSocket socket, TransportListener listener) {
 		this.listener = listener;
 		udp_provider = new UdpProvider(socket, this);
+		this.port = socket.getLocalPort();
 	}
 
 	/** Gets protocol type */
@@ -70,6 +75,10 @@ class UdpTransport implements Transport, UdpProviderListener {
 		return PROTO_UDP;
 	}
 
+	public int getPort() {
+		return port;
+	}
+	
 	/** Sends a Message to a destination address and port */
 	public void sendMessage(Message msg, IpAddress dest_ipaddr, int dest_port)
 			throws IOException {
