@@ -68,6 +68,10 @@ public class SdpTools {
 							.getAttributes();
 					Vector<AttributeField> prev_attributes = prev_md
 							.getAttributes();
+					MediaField prev_mf = prev_md.getMedia();
+					Vector<String> new_formats = new Vector<String>(prev_mf.getFormatList());
+					new_formats.retainAll(spec_md.getMedia().getFormatList());
+					
 					if (spec_attributes.size() == 0
 							|| prev_attributes.size() == 0) {
 						new_media.addElement(prev_md);
@@ -92,9 +96,10 @@ public class SdpTools {
 								}
 							}
 						}
+						MediaField new_mf = new MediaField(prev_mf.getMedia(), prev_mf.getPort(), 0,
+								prev_mf.getTransport(), new_formats);
 						if (new_attributes.size() > 0)
-							new_media.addElement(new MediaDescriptor(prev_md
-									.getMedia(), prev_md.getConnection(),
+							new_media.addElement(new MediaDescriptor(new_mf, prev_md.getConnection(),
 									new_attributes));
 					}
 				}

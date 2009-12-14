@@ -231,6 +231,9 @@ public class RtpStreamSender extends Thread {
 		case 3:
 			Codec.init();
 			break;
+		case 0:
+			G711.init();
+			break;
 		case 8:
 			G711.init();
 			break;
@@ -264,7 +267,7 @@ public class RtpStreamSender extends Thread {
 				 } catch (IOException e) {
 					if (!Sipdroid.release) e.printStackTrace();
 				 }
-				 switch (p_type) {
+				 switch (p_type) {// have to add ulaw case?
 				 case 3:
 					 G711.alaw2linear(buffer, lin, num);
 					 num = Codec.encode(lin, 0, buffer, num);
@@ -274,6 +277,9 @@ public class RtpStreamSender extends Thread {
 				 switch (p_type) {
 				 case 3:
 					 num = Codec.encode(lin, ring%(frame_size*11), buffer, num);
+					 break;
+				 case 0:
+					 G711.linear2ulaw(lin, ring%(frame_size*11), buffer, num);
 					 break;
 				 case 8:
 					 G711.linear2alaw(lin, ring%(frame_size*11), buffer, num);

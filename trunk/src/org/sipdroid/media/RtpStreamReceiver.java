@@ -256,6 +256,9 @@ public class RtpStreamReceiver extends Thread {
 		case 3:
 			Codec.init();
 			break;
+		case 0:
+			G711.init();
+			break;
 		case 8:
 			G711.init();
 			break;
@@ -317,6 +320,10 @@ public class RtpStreamReceiver extends Thread {
 
 				 if (cnt <= 500 || cnt2 >= 2 || headroom - 875 < len) {
 					 switch (rtp_packet.getPayloadType()) {
+					 case 0:
+						 len = rtp_packet.getPayloadLength();
+						 G711.ulaw2linear(buffer, lin, len);
+						 break;
 					 case 8:
 						 len = rtp_packet.getPayloadLength();
 						 G711.alaw2linear(buffer, lin, len);
