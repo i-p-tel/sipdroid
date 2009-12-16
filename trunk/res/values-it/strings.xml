@@ -31,7 +31,7 @@
   <string name="auto_enabled">Risposta automatica/Altoparlante</string>
   <string name="auto_disabled">Risposta automatica off</string>
   <string name="hint">Chiamate recenti</string>
-  <string name="empty">Inserire l'indirizzo per la chiamata nel formato nome@dominio.com</string>
+  <string name="empty">Inserire l\'indirizzo per la chiamata nel formato nome@dominio.com</string>
   <string name="notfast">Collegamento dati adeguato non disponibile</string>
   
   <string name="settings_account">Impostazioni account SIP</string>
@@ -132,8 +132,8 @@
 <string name="settings_sipringtone">Suoneria SIP</string>
 <string name="settings_sipringtone2">Imposta la suoneria per le chiamate in arrivo dal SIP</string>
 <string name="settings_sipringtone_dialog">Suonerie</string>
-<string name="settings_eargain">Guadagno dell'altoparlante</string>
-<string name="settings_eargain2">Regolare per alzare il volume o diminuire l'echo al client remoto</string>
+<string name="settings_eargain">Guadagno dell\'altoparlante</string>
+<string name="settings_eargain2">Regolare per alzare il volume o diminuire l\'echo al client remoto</string>
     <string-array name="eargain_display_values">
         <item>Basso (no echo)</item>
         <item>Medio</item>
@@ -151,7 +151,7 @@
 <string name="settings_par">Chiamate simultanee in uscita</string>
 <string name="settings_par2">Componi tutti i numeri di telefono di una persona contemporaneamente</string>
 <string name="settings_improve">Meglioramento audio</string>
-<string name="settings_improve2">Richiede un'account a pagamento, versione del software piï¿½ recente (nella scheda Dati Personali)</string>
+<string name="settings_improve2">Richiede un\'account a pagamento, versione del software piï¿½ recente (nella scheda Dati Personali)</string>
 <string name="settings_posurl">URL per Posizione/CallBack</string>
 <string name="settings_pos">Aggiorna posizione</string>
 <string name="settings_pos2">Puï¿½ essere annunciato ai contatti PBXes (richiede account premium)</string>
