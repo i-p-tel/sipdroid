@@ -77,6 +77,7 @@ import org.sipdroid.sipua.phone.Connection;
 		final static long[] vibratePattern = {0,1000,1000};
 		
 		private static int docked = -1;
+		public static int headset = -1;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
@@ -239,6 +240,12 @@ import org.sipdroid.sipua.phone.Connection;
 			        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			        	notification.setLatestEventInfo(mContext, text, mContext.getString(R.string.app_name),
 			        			PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0));
+			        	if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("notify",false)) {
+				        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+				        	notification.ledARGB = 0xff0000ff; /* blue */
+				        	notification.ledOnMS = 125;
+				        	notification.ledOffMS = 2875;
+			        	}
 	        	} else {
 	        		switch (type) {
 		        	case MWI_NOTIFICATION:
@@ -401,15 +408,16 @@ import org.sipdroid.sipua.phone.Connection;
 				intent.putExtra("incoming_number", number);
 			intent.putExtra(mContext.getString(R.string.app_name), true);
 			mContext.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
- 			if (laststate != state) {
-				if (state.equals("IDLE")) {
-					if (was_playing)
+			if (state.equals("IDLE")) {
+				if (was_playing) {
+					if (pstn_state == null || pstn_state.equals("IDLE"))
 						mContext.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
-				} else {
-					AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-					if (was_playing = am.isMusicActive())
-						mContext.sendBroadcast(new Intent(PAUSE_ACTION));
+					was_playing = false;
 				}
+			} else {
+				AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+				if ((laststate == null || laststate.equals("IDLE")) && (was_playing = am.isMusicActive()))
+					mContext.sendBroadcast(new Intent(PAUSE_ACTION));
 			}
 			laststate = state;
 			lastnumber = number;
@@ -521,6 +529,9 @@ import org.sipdroid.sipua.phone.Connection;
 	    				engine(mContext).speaker(AudioManager.MODE_NORMAL);
 	        		else
 	        			engine(mContext).speaker(AudioManager.MODE_IN_CALL);
+	        } else
+		    if (intentAction.equals(Intent.ACTION_HEADSET_PLUG)) {
+		        	headset = intent.getIntExtra("state", -1);
 	        }
 		}   
 }

@@ -471,7 +471,7 @@ public class SessionDescriptor {
 	 * @return the AttributeField, or null if not found
 	 */
 	public AttributeField getAttribute(String attribute_name) {
-		for (int i = 0; i < media.size(); i++) {
+		for (int i = 0; i < av.size(); i++) {
 			AttributeField af = (AttributeField) av.elementAt(i);
 			if (af.getAttributeName().equals(attribute_name))
 				return af;

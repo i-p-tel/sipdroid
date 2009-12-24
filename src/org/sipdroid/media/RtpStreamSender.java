@@ -249,12 +249,14 @@ public class RtpStreamSender extends Thread {
 			 }
 			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
 
-			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
+			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL || Receiver.headset > 0) {
  				 calc(lin,(ring+delay)%(frame_size*11),num);
- 	 			 if (RtpStreamReceiver.nearend != 0)
-	 				 noise(lin,(ring+delay)%(frame_size*11),num,p);
-	 			 else if (nearend == 0)
-	 				 p = 0.9*p + 0.1*s;
+ 				 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
+	 	 			 if (RtpStreamReceiver.nearend != 0)
+		 				 noise(lin,(ring+delay)%(frame_size*11),num,p);
+		 			 else if (nearend == 0)
+		 				 p = 0.9*p + 0.1*s;
+ 				 }
 			 }
 			 if (Receiver.call_state != UserAgent.UA_STATE_INCALL && alerting != null) {
 				 try {
