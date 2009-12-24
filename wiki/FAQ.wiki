@@ -225,11 +225,11 @@ The username to be entered in Sipdroid consists of account name, a dash ('-') an
 
 === Ambient Light Sensor ===
 
-This [http://www.cyrket.com/package/org.pbxes.light2 tool] is recommended to save battery. It uses the camera to adjust screen brightness.
+This tool is recommended to save battery. It uses the camera to adjust screen brightness.
 
 === Battery Hours ===
 
-Another [http://www.cyrket.com/package/org.pbxes.eta tool] which measures and displays your remaining standby time.
+Another tool which measures and displays your remaining standby time.
 
 === ChompSMS ===
 
@@ -253,4 +253,4 @@ This is very nice to account your bandwidth usage on mobile networks. However, w
 
 == Hint for developer phones ==
 
-One limitation has been noticed on Android developer phones (ADP1). Due to limited memory home screen often takes several seconds to load. Luckily these phones allow root access. Issue the command "echo ro.HOME_APP_ADJ=0 >/data/local.prop" and reboot, to lock home screen in memory.
+One limitation has been noticed on Android developer phones (ADP1). Due to limited memory home screen often takes several seconds to load. Luckily these phones allow root access. Issue the command "echo ro.HOME_APP_ADJ=1 >/data/local.prop" and reboot, to lock home screen in memory.
