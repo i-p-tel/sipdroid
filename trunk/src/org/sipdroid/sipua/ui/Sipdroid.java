@@ -29,6 +29,7 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -160,6 +161,32 @@ public class Sipdroid extends Activity {
 			}
 		});
 		on(this,true);
+		
+		final Context mContext = this;
+		if (PreferenceManager.getDefaultSharedPreferences(this).getString("pref","").equals("PSTN") &&
+				!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("nodefault",false))
+			new AlertDialog.Builder(this)
+				.setMessage(R.string.dialog_default)
+	            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	                		Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+	                		edit.putString("pref","SIP");
+	                		edit.commit();	
+	                    }
+	                })
+	            .setNeutralButton(R.string.no, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	
+	                    }
+	                })
+	            .setNegativeButton(R.string.dontask, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	                		Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+	                		edit.putBoolean("nodefault",true);
+	                		edit.commit();
+	                    }
+	                })
+				.show();
 	}
 
 	public static boolean on(Context context) {

@@ -181,10 +181,8 @@ import android.widget.Toast;
         	getPreferenceScreen().findPreference("posurl").setSummary(getPreferenceScreen().getSharedPreferences().getString("posurl", "")); 
         	getPreferenceScreen().findPreference("callthru2").setSummary(getPreferenceScreen().getSharedPreferences().getString("callthru2", "")); 
         	if (getPreferenceScreen().getSharedPreferences().getString("pref", "").equals("SIP")) {
-        		getPreferenceScreen().findPreference("pref").setSummary(getResources().getStringArray(R.array.pref_display_values)[0]);
         		getPreferenceScreen().findPreference("par").setEnabled(true);
         	} else {
-          		getPreferenceScreen().findPreference("pref").setSummary(getResources().getStringArray(R.array.pref_display_values)[1]);
         		getPreferenceScreen().findPreference("par").setEnabled(false);
           	}
         	if (getPreferenceScreen().getSharedPreferences().getString("compression", "edge").equals("edge"))

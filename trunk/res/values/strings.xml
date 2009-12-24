@@ -126,7 +126,16 @@
 <string name="settings_3g">Use 3G</string>
 <string name="settings_edge">Use EDGE</string>
 <string name="settings_check">Check with your mobile operator if he allows VoIP</string>
+
+<string name="dialog_default">Sipdroid is not currently set as default phone. Would you like to make it as default phone?
+\n
+\nIf you answer \'No\' here, you can still dial over Sipdroid from the system by adding \'+\' behind a number in Dialer, or by selecting \'text to\' in Contacts.</string>
+<string name="yes">Yes</string>
+<string name="no">No</string>
+<string name="dontask">Don't ask me again</string>
+
 <string name="settings_pref">Preferred Call Type</string>
+<string name="settings_pref2">Override by adding \'+\' behind a number in Dialer, or by selecting \'text to\' in Contacts</string>
     <string-array name="pref_display_values">
         <item>Sipdroid, when available</item>
         <item>Phone</item>
@@ -150,8 +159,12 @@
 <string name="settings_auto_on2">Short vibrating alert when screen is on</string>
 <string name="settings_auto_ondemand">Auto-Answer on demand</string>
 <string name="settings_auto_ondemand2">Show toggle switch in status bar</string>
-<string name="settings_MWI">Check for Voicemail</string>
+
+<string name="settings_notifications">Notifications</string>
+<string name="settings_MWI">Voicemail</string>
 <string name="settings_MWI2">Subscribe to SIP message waiting</string>
+<string name="settings_notify">Missed Call</string>
+<string name="settings_notify2">Notify with blue LED</string>
 
 <string name="settings_advanced_options">Advanced Options</string>
 <string name="settings_policy_never">Changed sleep policy to keep Wifi on.</string>

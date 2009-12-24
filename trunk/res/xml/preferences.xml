@@ -51,6 +51,7 @@
 				android:title="@string/settings_pref"
 				android:entries="@array/pref_display_values"
 				android:entryValues="@array/pref_values"
+				android:summary="@string/settings_pref2"
 				android:dialogTitle="@string/settings_pref" />
 			<ListPreference
 				android:key="compression"
@@ -67,10 +68,16 @@
 				android:key="auto_ondemand"
 				android:title="@string/settings_auto_ondemand"
 				android:summary="@string/settings_auto_ondemand2" />
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_notifications">
 			<CheckBoxPreference
 				android:key="MWI_enabled"
 				android:title="@string/settings_MWI"
 				android:summary="@string/settings_MWI2" />
+			<CheckBoxPreference
+				android:key="notify"
+				android:title="@string/settings_notify"
+				android:summary="@string/settings_notify2" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_advanced_options">
 			<EditTextPreference

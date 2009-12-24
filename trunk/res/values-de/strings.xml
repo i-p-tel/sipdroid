@@ -101,7 +101,16 @@
 <string name="settings_3g">3G verwenden</string>
 <string name="settings_edge">EDGE verwenden</string>
 <string name="settings_check">Prüfen Sie, ob Ihr Mobilfunkanbieter VoIP-Nutzung erlaubt</string>
+
+<string name="dialog_default">Sipdroid ist nicht als Telefon voreingestellt. Möchten Sie es als Telefon voreinstellen?
+\n
+\nAuch wenn Sie mit \'Nein\' antworten, können Sie aus dem System über Sipdroid wählen, indem Sie \'+\' hinter eine Nummer im Telefon anhängen oder bei einem Kontakt auf \'Textnachricht an\' klicken.</string>
+<string name="yes">Ja</string>
+<string name="no">Nein</string>
+<string name="dontask">Nicht fragen</string>
+
 <string name="settings_pref">Bevorzugte Anrufart</string>
+<string name="settings_pref2">Ausnahmen durch \'+\' hinter Nummern anhängen oder auf \'Textnachricht an\' klicken</string>
     <string-array name="pref_display_values">
         <item>Sipdroid, wenn verfügbar</item>
         <item>Telefon</item>
@@ -121,8 +130,12 @@
 <string name="settings_auto_on2">Bei eingeschaltetem Bildschirm mit kurzem Vibrationsalarm</string>
 <string name="settings_auto_ondemand">Rufannahme nach Bedarf</string>
 <string name="settings_auto_ondemand2">Option in Statusleiste anzeigen</string>
-<string name="settings_MWI">Anrufbeantworter prüfen</string>
+
+<string name="settings_notifications">Benachrichtigungen</string>
+<string name="settings_MWI">Anrufbeantworter</string>
 <string name="settings_MWI2">Eingang neuer Nachrichten anzeigen</string>
+<string name="settings_notify">Verpasster Anruf</string>
+<string name="settings_notify2">Mit blauer LED anzeigen</string>
 
 <string name="settings_advanced_options">Erweiterte Einstellungen</string>
 <string name="settings_policy_never">Systemeinstellung geändert: WLAN bleibt bei Standy in Betrieb</string>
@@ -141,7 +154,7 @@
         <item>Sehr laut</item>
     </string-array>
 
-<string name="settings_pbxes_options">PBXes Merkmale</string>
+<string name="settings_pbxes_options">PBXes-Funktionen</string>
 <string name="settings_par">Gleichzeitige Anwahl</string>
 <string name="settings_par2">Wählt alle Nummern eines Gesprächspartners gleichzeitig an</string>
 <string name="settings_improve">Bessere Tonqualität</string>
