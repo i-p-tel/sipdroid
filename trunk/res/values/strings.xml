@@ -132,7 +132,7 @@
 \nIf you answer \'No\' here, you can still dial over Sipdroid from the system by adding \'+\' behind a number in Dialer, or by selecting \'text to\' in Contacts.</string>
 <string name="yes">Yes</string>
 <string name="no">No</string>
-<string name="dontask">Don't ask me again</string>
+<string name="dontask">Don\'t ask me again</string>
 
 <string name="settings_pref">Preferred Call Type</string>
 <string name="settings_pref2">Override by adding \'+\' behind a number in Dialer, or by selecting \'text to\' in Contacts</string>
