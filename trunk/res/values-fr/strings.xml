@@ -127,6 +127,14 @@
 	<string name="settings_3g">Utiliser la 3G</string>
 	<string name="settings_edge">Utiliser l\'EDGE</string>
 	<string name="settings_check">Vérifier auprès de votre opérateur mobile si il permet la VoIP</string>
+	
+	<string name="dialog_default">Sipdroid n\'est pas actuellement défini comme téléphone par défaut. Voudriez-vous le définir comme téléphone par défaut ?
+	\n
+	\nSi vous répondez \'Non\' ici, vous pouvez encore composer avec Sipdroid depuis le système en ajoutant \'+\' après un numéro dans le Numéroteur, ou en sélectionnant \'envoyer un SMS\' dans les Contacts.</string>
+	<string name="yes">Oui</string>
+	<string name="no">Non</string>
+	<string name="dontask">Ne pas me redemander</string>
+
 	<string name="settings_pref">Type d\'appel préféré</string>
 		<string-array name="pref_display_values">
 			<item>Sipdroid, si disponible</item>
@@ -153,8 +161,12 @@
 	<string name="settings_auto_on2">Courtes vibrations d\'alerte quand l\'écran est en marche</string>
 	<string name="settings_auto_ondemand">Rép. Auto à la demande</string>
 	<string name="settings_auto_ondemand2">Affiche le bouton dans la barre de statut</string>
+	
+	<string name="settings_notifications">Notifications</string>
 	<string name="settings_MWI">Vérifier les messages vocaux</string>
 	<string name="settings_MWI2">S\'abonner à l\'attente de messages SIP</string>
+	<string name="settings_notify">Appel Manqué</string>
+	<string name="settings_notify2">Notifier à l\'aide de la LED bleue</string>
 
 	<string name="settings_advanced_options">Options Avancées</string>
 	<string name="settings_policy_never">Politique de mise en veille changée pour maintenir le Wifi allumé.</string>
