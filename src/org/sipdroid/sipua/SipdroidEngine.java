@@ -111,7 +111,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			CheckEngine();
 			
 			ua = new UserAgent(sip_provider, user_profile);
-			ra = new RegisterAgent(sip_provider, user_profile.from_url,
+			ra = new RegisterAgent(sip_provider, user_profile.callerid, // modified
 					user_profile.contact_url, user_profile.username,
 					user_profile.realm, user_profile.passwd, this, user_profile);
 			ka = new KeepAliveSip(sip_provider,100000);
