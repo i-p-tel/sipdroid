@@ -593,7 +593,9 @@ public class UserAgent extends CallListenerAdapter {
 		if (Receiver.ringbackPlayer == null || ! Receiver.ringbackPlayer.isPlaying()) {
 			Receiver.ringbackPlayer = MediaPlayer.create(Receiver.mContext, R.raw.ringback);
 			Receiver.ringbackPlayer.setLooping(true);
-			Receiver.ringbackPlayer.start();
+			
+			if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("silent",false))
+				Receiver.ringbackPlayer.start();
 		}
 	}
 
