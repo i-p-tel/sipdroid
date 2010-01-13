@@ -165,6 +165,8 @@
 <string name="settings_MWI2">Subscribe to SIP message waiting</string>
 <string name="settings_notify">Missed Call</string>
 <string name="settings_notify2">Notify with blue LED</string>
+<string name="settings_silent">Mute Dial Sounds</string>
+<string name="settings_silent2">Mute sound on outgoing call</string>
 
 <string name="settings_advanced_options">Advanced Options</string>
 <string name="settings_policy_never">Changed sleep policy to keep Wifi on.</string>
