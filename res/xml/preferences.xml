@@ -78,6 +78,10 @@
 				android:key="notify"
 				android:title="@string/settings_notify"
 				android:summary="@string/settings_notify2" />
+			<CheckBoxPreference
+				android:key="silent"
+				android:title="@string/settings_silent"
+				android:summary="@string/settings_silent2" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_advanced_options">
 			<EditTextPreference
