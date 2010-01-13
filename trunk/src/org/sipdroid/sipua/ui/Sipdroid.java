@@ -102,7 +102,13 @@ public class Sipdroid extends Activity {
 	
 	    @Override
 	    public void bindView(View view, Context context, Cursor cursor) {
-	        ((TextView) view).setText(cursor.getString(1));
+	    	
+	        String phoneNumber = cursor.getString(1);
+	        String cachedName = cursor.getString(2);
+	        if (cachedName != null && cachedName.trim().length() > 0)
+	        	phoneNumber += " <" + cachedName + ">";	  
+	        
+	        ((TextView) view).setText(phoneNumber);
 	    }
 	
 	    @Override
@@ -135,6 +141,7 @@ public class Sipdroid extends Activity {
 	private static final String[] PROJECTION = new String[] {
         Calls._ID,
         Calls.NUMBER,
+        Calls.CACHED_NAME
 	};
 
 	@Override
