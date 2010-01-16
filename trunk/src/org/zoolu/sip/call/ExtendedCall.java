@@ -138,8 +138,8 @@ public class ExtendedCall extends Call implements ExtendedInviteDialogListener {
 			dialog.inviteWithoutOffer(invite);
 	}
 
-	public void info(char c) {
-		((ExtendedInviteDialog) dialog).info(c);
+	public void info(char c, int duration) {
+		((ExtendedInviteDialog) dialog).info(c, duration);
 	}
 	
 	/** Requests a call transfer */

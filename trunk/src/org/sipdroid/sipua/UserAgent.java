@@ -325,10 +325,10 @@ public class UserAgent extends CallListenerAdapter {
 		return useGSM;
 	}
 
-	public void info(char c)
+	public void info(char c, int duration)
 	{
 		if (call != null)
-			call.info(c);
+			call.info(c, duration);
 	}
 	
 	/** Waits for an incoming call (acting as UAS). */
@@ -591,6 +591,7 @@ public class UserAgent extends CallListenerAdapter {
 		}
 		printLog("RINGING", LogLevel.HIGH);
 		if (Receiver.ringbackPlayer == null || ! Receiver.ringbackPlayer.isPlaying()) {
+			Receiver.setAudioModeInCall(true); //added by Matt			
 			Receiver.ringbackPlayer = MediaPlayer.create(Receiver.mContext, R.raw.ringback);
 			Receiver.ringbackPlayer.setLooping(true);
 			
