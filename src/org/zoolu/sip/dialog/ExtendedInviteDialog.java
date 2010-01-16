@@ -114,10 +114,10 @@ public class ExtendedInviteDialog extends org.zoolu.sip.dialog.InviteDialog {
 		refer(refer_to, null);
 	}
 	
-	public void info(char c) // modified
+	public void info(char c, int duration) // modified (again by Matthew Monacelli)
 	{
 		Message req = BaseMessageFactory.createRequest(this, SipMethods.INFO, null);
-		req.setBody("application/dtmf-relay","d="+c);
+		req.setBody("application/dtmf-relay","Signal="+c+"\r\n+Duration="+duration);
 		request(req);
 	}
 

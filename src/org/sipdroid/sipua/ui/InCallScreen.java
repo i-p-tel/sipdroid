@@ -73,6 +73,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	CallCard mCallCard;
 	Phone ccPhone;
 	int oldtimeout;
+	boolean dtmfToneLock = false;
 	
 	void screenOff(boolean off) {
         ContentResolver cr = getContentResolver();
@@ -211,37 +212,44 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		}
 		if (Receiver.ccCall != null) mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
         if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
-	    if (t == null) {
-			mDigits.setText("");
-	        (t = new Thread() {
-				public void run() {
-					int len = 0;
-					ToneGenerator tg = null;
-					
-					running = true;
-					if (Settings.System.getInt(getContentResolver(),
-							Settings.System.DTMF_TONE_WHEN_DIALING, 1) == 1)
-						tg = new ToneGenerator(AudioManager.STREAM_MUSIC, (int)(ToneGenerator.MAX_VOLUME*org.sipdroid.sipua.ui.Settings.getEarGain()));
-					for (;;) {
-						if (!running) {
-							t = null;
-							break;
-						}
-						if (len != mDigits.getText().length()) {
-							if (tg != null) tg.startTone(mToneMap.get(mDigits.getText().charAt(len)));
-							Receiver.engine(Receiver.mContext).info(mDigits.getText().charAt(len++));
-							if (tg != null) tg.stopTone();
-							continue;
-						}
-						mHandler.sendEmptyMessage(MSG_TICK);
-						try {
-							sleep(1000);
-						} catch (InterruptedException e) {
-						}
-					}
-				}
-			}).start();
-	    }
+        if (t == null) {
+        	mDigits.setText("");
+        	(t = new Thread() {
+        		public void run() {
+        			int len = 0;
+        			ToneGenerator tg = null;
+
+        			running = true;
+        			tg = new ToneGenerator(AudioManager.STREAM_MUSIC, (int)(ToneGenerator.MAX_VOLUME));
+        			for (;;) {
+        				if (!running) {
+        					t = null;
+        					break;
+        				}
+        				
+        				while (dtmfToneLock) {} //Make sure last tone is complete and has paused
+        				if (len != mDigits.getText().length()) {
+            				dtmfToneLock = true;
+
+            				if (tg != null) tg.startTone(mToneMap.get(mDigits.getText().charAt(len)), 250); //play DTMF tone inband for 250ms
+        					Receiver.engine(Receiver.mContext).info(mDigits.getText().charAt(len++), 250); // Sends the SIP-INFO application/dtmf-relay message
+            				try {
+            					sleep(500);
+            				} catch (InterruptedException e) {
+            				}
+
+        					dtmfToneLock = false;
+        					continue;
+        				}
+        				mHandler.sendEmptyMessage(MSG_TICK);
+        				try {
+        					sleep(1000);
+        				} catch (InterruptedException e) {
+        				}
+        			}
+        		}
+        	}).start();
+        }
 	}
 	
     Handler mHandler = new Handler() {

@@ -170,7 +170,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 		}		
 	}
 	
-	public void register() {	
+	public void register() {
+		try {
 		if (user_profile == null || user_profile.username.equals("") ||
 				user_profile.realm.equals("")) return;
 		IpAddress.setLocalIpAddress();
@@ -184,6 +185,9 @@ public class SipdroidEngine implements RegisterAgentListener {
 				Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
 				wl.acquire();
 			}
+		}
+		} catch (Exception ex) {
+			
 		}
 	}
 
@@ -286,8 +290,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 		ua.listen();
 	}
 	
-	public void info(char c) {
-		ua.info(c);
+	public void info(char c, int duration) {
+		ua.info(c, duration);
 	}
 	
 	/** Makes a new call */
