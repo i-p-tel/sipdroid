@@ -97,12 +97,12 @@ public class SipdroidEngine implements RegisterAgentListener {
 				+ "@"
 				+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"");
 			
-			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid","").length() == 0) {
+			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("fromuser","").length() == 0) {
 				user_profile.from_url = user_profile.username
 					+ "@"
 					+ user_profile.realm;
 			} else {
-				user_profile.from_url = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid","")
+				user_profile.from_url = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("fromuser","")
 					+ "@"
 					+ user_profile.realm;
 			}

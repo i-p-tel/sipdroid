@@ -139,7 +139,7 @@ import android.widget.Toast;
  	        			key.equals("edge") ||
  	        			key.equals("pos") ||
  	        			key.equals("posurl") ||
- 	        			key.equals("callerid") ||
+ 	        			key.equals("fromuser") ||
  	        			key.equals("auto_ondemand") ||
  	        			key.equals("MWI_enabled")) {
  	        		if (key.equals("wlan") || key.equals("3g"))
@@ -186,10 +186,10 @@ import android.widget.Toast;
         	} else {
         		getPreferenceScreen().findPreference("domain").setSummary(getPreferenceScreen().getSharedPreferences().getString("domain", ""));
         	}
-        	if (getPreferenceScreen().getSharedPreferences().getString("callerid","").length() == 0) {
-        		getPreferenceScreen().findPreference("callerid").setSummary(getString(R.string.settings_callerid2));
+        	if (getPreferenceScreen().getSharedPreferences().getString("fromuser","").length() == 0) {
+        		getPreferenceScreen().findPreference("fromuser").setSummary(getString(R.string.settings_callerid2));
         	} else {
-        		getPreferenceScreen().findPreference("callerid").setSummary(getPreferenceScreen().getSharedPreferences().getString("domain", ""));
+        		getPreferenceScreen().findPreference("fromuser").setSummary(getPreferenceScreen().getSharedPreferences().getString("domain", ""));
         	}
         	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", ""));
         	getPreferenceScreen().findPreference("protocol").setSummary(getPreferenceScreen().getSharedPreferences().getString("protocol",
