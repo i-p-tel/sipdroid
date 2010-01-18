@@ -27,6 +27,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
@@ -45,7 +46,7 @@ public class SipRingtonePreference extends RingtonePreference
     {    	
         super.onPrepareRingtonePickerIntent(ringtonePickerIntent);
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
+        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
         ringtonePickerIntent.putExtras(new Intent( RingtoneManager.ACTION_RINGTONE_PICKER));
     }
 
@@ -53,14 +54,15 @@ public class SipRingtonePreference extends RingtonePreference
     protected void onSaveRingtone(Uri ringtoneUri) 
     {
         Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
-		edit.putString("sipringtone", ringtoneUri != null ? ringtoneUri.toString() : "");				
+		edit.putString("sipringtone", ringtoneUri != null ? ringtoneUri.toString() : "");		
 		edit.commit();        
     }
 
     @Override
     protected Uri onRestoreRingtone() 
     {
-        String uriString = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone", "");
+        String uriString = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone",
+        		Settings.System.DEFAULT_RINGTONE_URI.toString());
         return !TextUtils.isEmpty(uriString) ? Uri.parse(uriString) : null;        
     }    
 }

@@ -62,11 +62,13 @@
 <string name="notfast">No suitable data network available</string>
 
 <string name="settings_account">SIP Account Settings</string>
-<string name="settings_username">Username</string>
+<string name="settings_username">Authorization Username</string>
 <string name="settings_password">Password</string>
 <string name="settings_server">Server</string>
 <string name="settings_domain">Domain</string>
 <string name="settings_domain2">Leave empty if same as server</string>
+<string name="settings_username1">Username</string>
+<string name="settings_callerid2">Leave empty if same as authorization username</string>
 <string name="settings_port">Port</string>
 	<string-array name="port_display_values">
 		<item>53</item>
@@ -137,10 +139,12 @@
 <string name="settings_pref">Preferred Call Type</string>
 <string name="settings_pref2">Override by adding \'+\' behind a number in Dialer, or by selecting \'text to\' in Contacts</string>
     <string-array name="pref_display_values">
+        <item>Sipdroid only</item>
         <item>Sipdroid, when available</item>
         <item>Phone</item>
     </string-array>
     <string-array name="pref_values">
+        <item>SIPONLY</item>
         <item>SIP</item>
         <item>PSTN</item>
     </string-array>
@@ -159,14 +163,16 @@
 <string name="settings_auto_on2">Short vibrating alert when screen is on</string>
 <string name="settings_auto_ondemand">Auto-Answer on demand</string>
 <string name="settings_auto_ondemand2">Show toggle switch in status bar</string>
+<string name="settings_auto_headset">Auto-Answer headset</string>
+<string name="settings_auto_headset2">When wired headset is connected</string>
 
 <string name="settings_notifications">Notifications</string>
 <string name="settings_MWI">Voicemail</string>
 <string name="settings_MWI2">Subscribe to SIP message waiting</string>
 <string name="settings_notify">Missed Call</string>
 <string name="settings_notify2">Notify with blue LED</string>
-<string name="settings_silent">Mute Dial Sounds</string>
-<string name="settings_silent2">Mute sound on outgoing call</string>
+<string name="settings_nodata">No Data</string>
+<string name="settings_nodata2">Indicate missing voice packets by audible tones</string>
 
 <string name="settings_advanced_options">Advanced Options</string>
 <string name="settings_policy_never">Changed sleep policy to keep Wifi on.</string>
@@ -177,7 +183,9 @@
 <string name="settings_sipringtone2">Set ringtone for incoming SIP call</string>
 <string name="settings_sipringtone_dialog">Ringtones</string>
 <string name="settings_eargain">Earpiece Gain</string>
-<string name="settings_eargain2">Adjust to raise volume or to stop echo to remote party</string>
+<string name="settings_micgain">Microphone Gain</string>
+<string name="settings_heargain">Headset Gain</string>
+<string name="settings_hmicgain">Headset Mic</string>
     <string-array name="eargain_display_values">
         <item>Low (no echo)</item>
         <item>Medium</item>
@@ -232,5 +240,4 @@
 
 <string name="ongoing">Current Call</string>
 <string name="onHold">On hold</string>
-<string name="callerid">Caller ID</string>
 </resources>

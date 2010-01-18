@@ -126,12 +126,9 @@
 <string name="settings_check">請確認你的運營商是否允許VoIP電話</string>
 <string name="settings_pref">Sipdroid優先順序</string>
     <string-array name="pref_display_values">
+        <item>Sipdroid</item>
         <item>當可用時使用Sipdroid</item>
         <item>總是使用電話</item>
-    </string-array>
-    <string-array name="pref_values">
-        <item>SIP</item>
-        <item>PSTN</item>
     </string-array>
 <string name="settings_compression">語音壓縮</string>
     <string-array name="compression_display_values">

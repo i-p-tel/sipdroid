@@ -62,11 +62,13 @@
 <string name="notfast">Keine geeignete Datenverbindung verfügbar</string>
 
 <string name="settings_account">Zugangsdaten</string>
-<string name="settings_username">Benutzername</string>
+<string name="settings_username">Authentifizierungsname</string>
 <string name="settings_password">Paßwort</string>
 <string name="settings_server">Server</string>
 <string name="settings_domain">Domäne</string>
-<string name="settings_domain2">Nur eintragen, wenn Domain und Server verschieden sind</string>
+<string name="settings_domain2">Nur eintragen, wenn Domäne und Server verschieden sind</string>
+<string name="settings_username1">Benutzername</string>
+<string name="settings_callerid2">Nur eintragen, wenn Benutzername und Authentifizierungsname verschieden sind</string>
 <string name="settings_port">Port</string>
 	<string-array name="port_display_values">
 		<item>53</item>
@@ -112,6 +114,7 @@
 <string name="settings_pref">Bevorzugte Anrufart</string>
 <string name="settings_pref2">Ausnahmen durch \'+\' hinter Nummern anhängen oder auf \'Textnachricht an\' klicken</string>
     <string-array name="pref_display_values">
+        <item>Sipdroid</item>
         <item>Sipdroid, wenn verfügbar</item>
         <item>Telefon</item>
     </string-array>
@@ -130,12 +133,16 @@
 <string name="settings_auto_on2">Bei eingeschaltetem Bildschirm mit kurzem Vibrationsalarm</string>
 <string name="settings_auto_ondemand">Rufannahme nach Bedarf</string>
 <string name="settings_auto_ondemand2">Option in Statusleiste anzeigen</string>
+<string name="settings_auto_headset">Rufannahme mit Headset</string>
+<string name="settings_auto_headset2">Bei angeschlossenem Headset</string>
 
 <string name="settings_notifications">Benachrichtigungen</string>
 <string name="settings_MWI">Anrufbeantworter</string>
 <string name="settings_MWI2">Eingang neuer Nachrichten anzeigen</string>
 <string name="settings_notify">Verpasster Anruf</string>
 <string name="settings_notify2">Mit blauer LED anzeigen</string>
+<string name="settings_nodata">Unterbrechung</string>
+<string name="settings_nodata2">Fehlende Sprachpakete mit Hinweistönen anzeigen</string>
 
 <string name="settings_advanced_options">Erweiterte Einstellungen</string>
 <string name="settings_policy_never">Systemeinstellung geändert: WLAN bleibt bei Standy in Betrieb</string>
@@ -143,10 +150,12 @@
 <string name="settings_search">Suchen &amp; Ersetzen</string>
 <string name="settings_excludepat">Muster ausschließen</string>
 <string name="settings_sipringtone">SIP Klingelton</string>
-<string name="settings_sipringtone2">Set Klingelton für eingehende SIP Anruf</string>
+<string name="settings_sipringtone2">Klingelton für eingehende SIP-Anrufe</string>
 <string name="settings_sipringtone_dialog">Klingeltöne</string>
 <string name="settings_eargain">Hörerlautstärke</string>
-<string name="settings_eargain2">Kann ein Echo beim Gesprächspartner hervorrufen</string>
+<string name="settings_micgain">Mikrofonlautstärke</string>
+<string name="settings_heargain">Headsetlautstärke</string>
+<string name="settings_hmicgain">Headsetmikrofon</string>
     <string-array name="eargain_display_values">
         <item>Leise (kein Echo)</item>
         <item>Mittel</item>

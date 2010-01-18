@@ -66,7 +66,7 @@ public class SIPUri extends Activity {
 		if (!Sipdroid.release) Log.v("SIPUri", "sip uri: " + target);
 		if (m_AlertDlg != null) 
 			m_AlertDlg.cancel();
-		if (!Receiver.engine(this).call(target)) {
+		if (target.equals("") || !Receiver.engine(this).call(target)) {
 			m_AlertDlg = new AlertDialog.Builder(this)
 			.setMessage(R.string.notfast)
 			.setTitle(R.string.app_name)

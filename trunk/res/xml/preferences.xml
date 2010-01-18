@@ -20,6 +20,11 @@
 				android:title="@string/settings_domain"
 				android:summary="@string/settings_domain2"
 				android:singleLine="true" />
+			<EditTextPreference android:singleLine="true"
+				android:title="@string/settings_username1"
+				android:key="callerid"
+				android:summary="@string/settings_callerid2">
+			</EditTextPreference>
 			<ListPreference
 				android:key="port"
 				android:title="@string/settings_port"
@@ -68,6 +73,10 @@
 				android:key="auto_ondemand"
 				android:title="@string/settings_auto_ondemand"
 				android:summary="@string/settings_auto_ondemand2" />
+			<CheckBoxPreference
+				android:key="auto_headset"
+				android:title="@string/settings_auto_headset"
+				android:summary="@string/settings_auto_headset2" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_notifications">
 			<CheckBoxPreference
@@ -79,9 +88,16 @@
 				android:title="@string/settings_notify"
 				android:summary="@string/settings_notify2" />
 			<CheckBoxPreference
-				android:key="silent"
-				android:title="@string/settings_silent"
-				android:summary="@string/settings_silent2" />
+				android:key="nodata"
+				android:title="@string/settings_nodata"
+				android:summary="@string/settings_nodata2" />
+			<org.sipdroid.sipua.ui.SipRingtonePreference
+				android:key="sipringtone"
+				android:title="@string/settings_sipringtone"
+				android:summary="@string/settings_sipringtone2"
+				android:dialogTitle="@string/settings_sipringtone_dialog"
+				android:persistent="false"
+				android:ringtoneType="ringtone" /> 
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_advanced_options">
 			<EditTextPreference
@@ -92,23 +108,34 @@
 				android:key="excludepat"
 				android:title="@string/settings_excludepat"
 				android:singleLine="true" />
-			<org.sipdroid.sipua.ui.SipRingtonePreference
-				android:key="sipringtone"
-				android:title="@string/settings_sipringtone"
-				android:summary="@string/settings_sipringtone2"
-				android:dialogTitle="@string/settings_sipringtone_dialog"
-				android:persistent="false"
-				android:ringtoneType="ringtone" /> 
 			<ListPreference
 				android:key="eargain"
 				android:title="@string/settings_eargain"
-				android:summary="@string/settings_eargain2"
 				android:entries="@array/eargain_display_values"
 				android:entryValues="@array/eargain_values"
 				android:defaultValue="0.25"
 				android:dialogTitle="@string/settings_eargain" />
-		<EditTextPreference android:singleLine="true" android:title="@string/callerid" android:key="callerid">
-		</EditTextPreference>
+			<ListPreference
+				android:key="micgain"
+				android:title="@string/settings_micgain"
+				android:entries="@array/eargain_display_values"
+				android:entryValues="@array/eargain_values"
+				android:defaultValue="0.25"
+				android:dialogTitle="@string/settings_micgain" />
+			<ListPreference
+				android:key="heargain"
+				android:title="@string/settings_heargain"
+				android:entries="@array/eargain_display_values"
+				android:entryValues="@array/eargain_values"
+				android:defaultValue="0.25"
+				android:dialogTitle="@string/settings_heargain" />
+			<ListPreference
+				android:key="hmicgain"
+				android:title="@string/settings_hmicgain"
+				android:entries="@array/eargain_display_values"
+				android:entryValues="@array/eargain_values"
+				android:defaultValue="1.0"
+				android:dialogTitle="@string/settings_hmicgain" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_pbxes_options">
 			<CheckBoxPreference

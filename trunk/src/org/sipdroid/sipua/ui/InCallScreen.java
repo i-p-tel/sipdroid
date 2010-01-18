@@ -73,7 +73,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	CallCard mCallCard;
 	Phone ccPhone;
 	int oldtimeout;
-	boolean dtmfToneLock = false;
 	
 	void screenOff(boolean off) {
         ContentResolver cr = getContentResolver();
@@ -142,8 +141,10 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_on", false) &&
 					!mKeyguardManager.inKeyguardRestrictedInputMode())
 				mHandler.sendEmptyMessageDelayed(MSG_ANSWER, 1000);
-			else if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_ondemand", false) &&
-					PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_demand", false))
+			else if ((PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_ondemand", false) &&
+					PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_demand", false)) ||
+					(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_headset", false) &&
+							Receiver.headset > 0))
 				mHandler.sendEmptyMessageDelayed(MSG_ANSWER_SPEAKER, 10000);
 			break;
 		case UserAgent.UA_STATE_INCALL:
@@ -212,44 +213,48 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		}
 		if (Receiver.ccCall != null) mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
         if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
-        if (t == null) {
-        	mDigits.setText("");
-        	(t = new Thread() {
-        		public void run() {
-        			int len = 0;
-        			ToneGenerator tg = null;
-
-        			running = true;
-        			tg = new ToneGenerator(AudioManager.STREAM_MUSIC, (int)(ToneGenerator.MAX_VOLUME));
-        			for (;;) {
-        				if (!running) {
-        					t = null;
-        					break;
-        				}
-        				
-        				while (dtmfToneLock) {} //Make sure last tone is complete and has paused
-        				if (len != mDigits.getText().length()) {
-            				dtmfToneLock = true;
-
-            				if (tg != null) tg.startTone(mToneMap.get(mDigits.getText().charAt(len)), 250); //play DTMF tone inband for 250ms
-        					Receiver.engine(Receiver.mContext).info(mDigits.getText().charAt(len++), 250); // Sends the SIP-INFO application/dtmf-relay message
-            				try {
-            					sleep(500);
-            				} catch (InterruptedException e) {
-            				}
-
-        					dtmfToneLock = false;
-        					continue;
-        				}
-        				mHandler.sendEmptyMessage(MSG_TICK);
-        				try {
-        					sleep(1000);
-        				} catch (InterruptedException e) {
-        				}
-        			}
-        		}
-        	}).start();
-        }
+	    if (t == null) {
+			mDigits.setText("");
+	        (t = new Thread() {
+				public void run() {
+					int len = 0;
+					long time;
+					ToneGenerator tg = null;
+					
+					running = true;
+					if (Settings.System.getInt(getContentResolver(),
+							Settings.System.DTMF_TONE_WHEN_DIALING, 1) == 1)
+						tg = new ToneGenerator(AudioManager.STREAM_MUSIC, (int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
+					for (;;) {
+						if (!running) {
+							t = null;
+							break;
+						}
+						if (len != mDigits.getText().length()) {
+							time = SystemClock.elapsedRealtime();
+							if (tg != null) tg.startTone(mToneMap.get(mDigits.getText().charAt(len)));
+							Receiver.engine(Receiver.mContext).info(mDigits.getText().charAt(len++),250);
+							time = 250-(SystemClock.elapsedRealtime()-time);
+							try {
+								if (time > 0) sleep(time);
+							} catch (InterruptedException e) {
+							}
+							if (tg != null) tg.stopTone();
+							try {
+								if (running) sleep(250);
+							} catch (InterruptedException e) {
+							}
+							continue;
+						}
+						mHandler.sendEmptyMessage(MSG_TICK);
+						try {
+							sleep(1000);
+						} catch (InterruptedException e) {
+						}
+					}
+				}
+			}).start();
+	    }
 	}
 	
     Handler mHandler = new Handler() {
@@ -373,7 +378,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 
     void appendDigit(final char c) {
         mDigits.getText().append(c);
-        t.interrupt();
     }
 
     @Override
@@ -395,7 +399,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		if (Receiver.call_state == UserAgent.UA_STATE_INCALL || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(true);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(true);
-			menu.findItem(SPEAKER_MENU_ITEM).setVisible(true);
+			menu.findItem(SPEAKER_MENU_ITEM).setVisible(Receiver.headset <= 0);
 			menu.findItem(VIDEO_MENU_ITEM).setVisible(Receiver.engine(this).getRemoteVideo() != 0);
 			menu.findItem(TRANSFER_MENU_ITEM).setVisible(true);
 		} else {
@@ -429,11 +433,11 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	public void answer() {
         (new Thread() {
 			public void run() {
+				Receiver.stopRingtone();
         		Receiver.engine(mContext).answercall();
 			}
 		}).start();   
 		if (Receiver.ccCall != null) {
-			Receiver.stopRingtone();
 			Receiver.ccCall.setState(Call.State.ACTIVE);
 			Receiver.ccCall.base = SystemClock.elapsedRealtime();
 			mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);

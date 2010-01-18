@@ -41,7 +41,7 @@
  License para mais detalhes (http://www.gnu.org/licenses).</string>
 
 	<string name="reg">Registando...</string>
-	<string name="regok">Registado</string>
+	<string name="regok">Registrado</string>
 	<string name="regfailed">Registo falhou</string>
 
 	<string name="voicemail">Mensagem(s) em espera</string>
@@ -99,12 +99,9 @@
 	<string name="settings_check">Consulte o seu operador móvel, se ele permite VoIP</string>
 	<string name="settings_pref">Tipo de chamada</string>
 	<string-array name="pref_display_values">
+		<item>Sipdroid</item>
 		<item>Sipdroid, quando disponível</item>
 		<item>Telefone</item>
-	</string-array>
-	<string-array name="pref_values">
-		<item>SIP</item>
-		<item>PSTN</item>
 	</string-array>
 	<string name="settings_auto_on">Atender automático em uso</string>
 	<string name="settings_auto_on2">Alerta vibratório curto quando o ecrã está ligado</string>

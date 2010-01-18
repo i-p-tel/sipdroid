@@ -20,10 +20,15 @@
 
 package org.sipdroid.sipua.ui;
 
+import org.sipdroid.media.RtpStreamReceiver;
+
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 
 public class RegisterService extends Service {
 	Receiver m_receiver;
@@ -45,12 +50,19 @@ public class RegisterService extends Service {
     @Override
     public void onCreate() {
     	super.onCreate();
+    	if (Receiver.mContext == null) Receiver.mContext = this;
         if (m_receiver == null) {
 			 IntentFilter intentfilter = new IntentFilter();
+			 intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 			 intentfilter.addAction(Receiver.ACTION_DATA_STATE_CHANGED);
 			 intentfilter.addAction(Receiver.ACTION_PHONE_STATE_CHANGED);
 			 intentfilter.addAction(Receiver.ACTION_DOCK_EVENT);
 			 intentfilter.addAction(Intent.ACTION_HEADSET_PLUG);
+			 intentfilter.addAction(Intent.ACTION_USER_PRESENT);
+			 intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
+			 intentfilter.addAction(Intent.ACTION_SCREEN_ON);
+			 intentfilter.addAction(Receiver.ACTION_DEVICE_IDLE);
+			 intentfilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
 	         registerReceiver(m_receiver = new Receiver(), intentfilter);      
         }
         if (m_caller == null) {
@@ -59,7 +71,10 @@ public class RegisterService extends Service {
 			 intentfilter.setPriority(-1);
 	         registerReceiver(m_caller = new Caller(), intentfilter);      
         }
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("wifi_locked", false))
+        	Receiver.lock_wifi(true);
         Receiver.engine(this).isRegistered();
+        RtpStreamReceiver.restoreSettings();
     }
     
     @Override

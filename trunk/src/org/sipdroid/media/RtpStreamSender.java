@@ -31,6 +31,7 @@ import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.Receiver;
+import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.sipdroid.pjlib.Codec;
 
@@ -177,6 +178,43 @@ public class RtpStreamSender extends Thread {
 		smin = sm*r + smin*(1-r);
 	}
 
+	void calc1(short[] lin,int off,int len) {
+		int i,j;
+		
+		for (i = 0; i < len; i++) {
+			j = lin[i+off];
+			lin[i+off] = (short)(j>>1);
+		}
+	}
+
+	void calc5(short[] lin,int off,int len) {
+		int i,j;
+		
+		for (i = 0; i < len; i++) {
+			j = lin[i+off];
+			if (j > 16350)
+				lin[i+off] = 16350<<1;
+			else if (j < -16350)
+				lin[i+off] = -16350<<1;
+			else
+				lin[i+off] = (short)(j<<1);
+		}
+	}
+
+	void calc10(short[] lin,int off,int len) {
+		int i,j;
+		
+		for (i = 0; i < len; i++) {
+			j = lin[i+off];
+			if (j > 8150)
+				lin[i+off] = 8150<<2;
+			else if (j < -8150)
+				lin[i+off] = -8150<<2;
+			else
+				lin[i+off] = (short)(j<<2);
+		}
+	}
+
 	void noise(short[] lin,int off,int len,double power) {
 		int i,r = (int)(power*2);
 		short ran;
@@ -206,6 +244,7 @@ public class RtpStreamSender extends Thread {
 		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
 		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("improve",false);
 		boolean useGSM = !PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("compression","edge").equals("never");
+		int micgain = (int)(Settings.getMicGain()*10);
 		running = true;
 		m = 1;
 
@@ -249,15 +288,23 @@ public class RtpStreamSender extends Thread {
 			 }
 			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
 
-			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL || Receiver.headset > 0) {
+			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
  				 calc(lin,(ring+delay)%(frame_size*11),num);
- 				 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
-	 	 			 if (RtpStreamReceiver.nearend != 0)
-		 				 noise(lin,(ring+delay)%(frame_size*11),num,p);
-		 			 else if (nearend == 0)
-		 				 p = 0.9*p + 0.1*s;
- 				 }
-			 }
+ 	 			 if (RtpStreamReceiver.nearend != 0)
+	 				 noise(lin,(ring+delay)%(frame_size*11),num,p);
+	 			 else if (nearend == 0)
+	 				 p = 0.9*p + 0.1*s;
+ 			 } else switch (micgain) {
+ 			 case 1:
+ 				 calc1(lin,(ring+delay)%(frame_size*11),num);
+ 				 break;
+ 			 case 5:
+ 				 calc5(lin,(ring+delay)%(frame_size*11),num);
+ 				 break;
+ 			 case 10:
+ 				 calc10(lin,(ring+delay)%(frame_size*11),num);
+ 				 break;
+ 			 }
 			 if (Receiver.call_state != UserAgent.UA_STATE_INCALL && alerting != null) {
 				 try {
 					if (alerting.available() < num)

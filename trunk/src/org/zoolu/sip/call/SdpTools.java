@@ -102,6 +102,12 @@ public class SdpTools {
 						if (new_attributes.size() > 0)
 							new_media.addElement(new MediaDescriptor(new_mf, prev_md.getConnection(),
 									new_attributes));
+				        else {
+			                if(new_mf.getMedia().startsWith("audio") && new_formats.size() > 0) {
+			                        new_media.addElement(new MediaDescriptor(new_mf, prev_md.getConnection(),
+			                                new_attributes)); // new_attributes is empty but this is ok here.
+			                }
+				        }
 					}
 				}
 			}

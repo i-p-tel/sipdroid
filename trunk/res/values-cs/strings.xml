@@ -79,6 +79,7 @@
 <string name="settings_check">Ověřte si u vašeho operátora, jestli má povolené VoIP.</string>
 <string name="settings_pref">Preferovaný typ volání</string>
     <string-array name="pref_display_values">
+        <item>Sipdroid</item>
         <item>Sipdroid, pokud je k dispozici</item>
         <item>Telefon</item>
     </string-array>

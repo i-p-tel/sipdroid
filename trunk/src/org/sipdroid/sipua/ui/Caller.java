@@ -49,18 +49,26 @@ public class Caller extends BroadcastReceiver {
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
 	        String number = getResultData();
+	        Boolean force = false;
 	        
 	        if (intentAction.equals(Intent.ACTION_NEW_OUTGOING_CALL) && number != null)
 	        {
         		if (!Sipdroid.release) Log.i("SipUA:","outgoing call");
-    			boolean sip_type = PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("SIP");
+    			boolean sip_type = !PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("PSTN");
     	        
 				if (number.endsWith("+")) 
     			{
     				sip_type = !sip_type;
     				number = number.substring(0,number.length()-1);
+    				force = true;
     			}
-				if (sip_type && SystemClock.elapsedRealtime() > noexclude + 10000) {
+				if (SystemClock.elapsedRealtime() < noexclude + 10000) {
+					noexclude = 0;
+					force = true;
+				}
+				if (PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("SIPONLY"))
+					force = true;
+				if (sip_type && !force) {
 	    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString("excludepat", ""); 
 	   				boolean bExNums = false;
 					boolean bExTypes = false;
@@ -88,7 +96,6 @@ public class Caller extends BroadcastReceiver {
 					if (bExTypes || bExNums)
 						sip_type = false;
 				}
-				noexclude = 0;
 
     			if (!sip_type || !Sipdroid.on(context))
     			{
@@ -152,6 +159,13 @@ public class Caller extends BroadcastReceiver {
 	    						(callthru_prefix = PreferenceManager.getDefaultSharedPreferences(context).getString("callthru2","")).length() > 0) {
 	    					callthru_number = (callthru_prefix+","+callthru_number+"#").replaceAll(",", ",p");
 	    					setResultData(callthru_number);
+	    				} else if (force) {
+	    					setResultData(null);
+	    			        intent = new Intent(Intent.ACTION_CALL,
+	    			                Uri.fromParts("sip", "", null));
+	    			        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    			        Caller.noexclude = SystemClock.elapsedRealtime();
+	    			        context.startActivity(intent);					
 	    				}
 	        		}
 	            }
