@@ -74,10 +74,6 @@ import android.widget.Toast;
 				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("MWI_enabled");
 				cb.setChecked(true);
 			}
-			if (!getPreferenceScreen().getSharedPreferences().contains("headgain")) {
-				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("headgain");
-				cb.setChecked(true);
-			}
 			if (Sipdroid.market) {
 				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
 
