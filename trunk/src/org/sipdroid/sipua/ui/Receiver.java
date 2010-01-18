@@ -47,6 +47,7 @@ import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
@@ -93,6 +94,7 @@ import org.sipdroid.sipua.phone.Connection;
 		public static int call_state;
 		
 		public static String pstn_state;
+		public static long pstn_time;
 		public static String MWI_account;
 		private static String laststate,lastnumber;	
 		
@@ -431,14 +433,16 @@ import org.sipdroid.sipua.phone.Connection;
 		static PowerManager.WakeLock pwl;
 		
 		static void lock(boolean lock) {
-			if (lock) {
-				if (pwl == null) {
-					PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-					pwl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.Receiver");
-				}
-				pwl.acquire();
-			} else if (pwl != null && pwl.isHeld())
-				pwl.release();
+			if (Build.MODEL.equals("Nexus One")) {
+				if (lock) {
+					if (pwl == null) {
+						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+						pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "Sipdroid.Receiver");
+					}
+					pwl.acquire();
+				} else if (pwl != null && pwl.isHeld())
+					pwl.release();
+			}
 		}
 
 		public static void url(final String opt) {
@@ -585,6 +589,7 @@ import org.sipdroid.sipua.phone.Connection;
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
 	    		pstn_state = intent.getStringExtra("state");
+	    		pstn_time = SystemClock.elapsedRealtime();
 	    		if (pstn_state.equals("IDLE") && call_state != UserAgent.UA_STATE_IDLE)
 	    			broadcastCallStateChanged(null,null);
 	    		if ((pstn_state.equals("OFFHOOK") && call_state == UserAgent.UA_STATE_INCALL) ||

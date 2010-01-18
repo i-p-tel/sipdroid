@@ -507,10 +507,12 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_ENDCALL) {
+		if (keyCode == KeyEvent.KEYCODE_ENDCALL && (Receiver.pstn_state == null ||
+				(Receiver.pstn_state.equals("IDLE") && (SystemClock.elapsedRealtime()-Receiver.pstn_time) > 3000))) {
     		reject();      
             return true;			
 		}
+		Receiver.pstn_time = 0;
 		return false;
 	}
 	
