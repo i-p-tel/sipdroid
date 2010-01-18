@@ -33,16 +33,22 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.NetworkInfo.DetailedState;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.WifiLock;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.Vibrator;
@@ -59,7 +65,7 @@ import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.Connection;
 
 	public class Receiver extends BroadcastReceiver {
-		
+
 		final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
 		final static String ACTION_SIGNAL_STRENGTH_CHANGED = "android.intent.action.SIG_STR";
 		final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
@@ -67,6 +73,7 @@ import org.sipdroid.sipua.phone.Connection;
 		final static String EXTRA_DOCK_STATE = "android.intent.extra.DOCK_STATE";
 		final static String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
 		final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
+		final static String ACTION_DEVICE_IDLE = "com.android.server.WifiManager.action.DEVICE_IDLE";
 		
 		public final static int REGISTER_NOTIFICATION = 1;
 		public final static int CALL_NOTIFICATION = 2;
@@ -76,8 +83,7 @@ import org.sipdroid.sipua.phone.Connection;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
-		private static int docked = -1;
-		public static int headset = -1;
+		public static int docked = -1,headset = -1;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
@@ -103,7 +109,7 @@ import org.sipdroid.sipua.phone.Connection;
 			return mSipdroidEngine;
 		}
 		
-		static Ringtone oRingtone;
+		public static Ringtone oRingtone;
 		static PowerManager.WakeLock wl;
 				
 		public static void stopRingtone() {
@@ -129,6 +135,8 @@ import org.sipdroid.sipua.phone.Connection;
 				switch(call_state)
 				{
 				case UserAgent.UA_STATE_INCOMING_CALL:
+					lock(true);
+					enable_wifi(true);
 					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
 					String text = caller.toString();
 					if (text.indexOf("<sip:") >= 0 && text.indexOf("@") >= 0)
@@ -157,26 +165,25 @@ import org.sipdroid.sipua.phone.Connection;
 								(rm == AudioManager.RINGER_MODE_NORMAL && vs == AudioManager.VIBRATE_SETTING_ON)))
 							v.vibrate(vibratePattern,1);
 						if (am.getStreamVolume(AudioManager.STREAM_RING) > 0) {				 
-							String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone", "");
-							Uri oUriSipRingtone = null;
-							if(!TextUtils.isEmpty(sUriSipRingtone))
-								oUriSipRingtone = Uri.parse(sUriSipRingtone);
-							else
-								oUriSipRingtone = Settings.System.DEFAULT_RINGTONE_URI;						
-							oRingtone = RingtoneManager.getRingtone(mContext, oUriSipRingtone);
-							oRingtone.play();						
+							String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone",
+									Settings.System.DEFAULT_RINGTONE_URI.toString());
+							if(!TextUtils.isEmpty(sUriSipRingtone)) {
+								oRingtone = RingtoneManager.getRingtone(mContext, Uri.parse(sUriSipRingtone));
+								oRingtone.play();	
+							}
 						}
 					}
 					moveTop();
 					if (wl == null) {
 						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 						wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
-								PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "Sipdroid");
+								PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.onState");
 					}
 					wl.acquire();
 		        	Checkin.checkin(true);
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
+					lock(true);
 					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
 					engine(mContext).register();
@@ -191,6 +198,7 @@ import org.sipdroid.sipua.phone.Connection;
 		        	Checkin.checkin(true);
 					break;
 				case UserAgent.UA_STATE_IDLE:
+					lock(false);
 					broadcastCallStateChanged("IDLE", null);
 					onText(CALL_NOTIFICATION, null, 0,0);
 					ccCall.setState(Call.State.DISCONNECTED);
@@ -215,8 +223,6 @@ import org.sipdroid.sipua.phone.Connection;
 					if (wl != null && wl.isHeld())
 						wl.release();
 			        mContext.startActivity(createIntent(InCallScreen.class));
-		       		if (docked > 0)
-	    				engine(mContext).speaker(AudioManager.MODE_NORMAL);
 					break;
 				case UserAgent.UA_STATE_HOLD:
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_on_hold), android.R.drawable.stat_sys_phone_call_on_hold,ccCall.base);
@@ -227,6 +233,7 @@ import org.sipdroid.sipua.phone.Connection;
 				pos(true);
 				if (ringbackPlayer != null && ringbackPlayer.isPlaying()) {
 					ringbackPlayer.stop();
+					RtpStreamReceiver.restoreMode();
 				}
 			}
 		}
@@ -328,7 +335,7 @@ import org.sipdroid.sipua.phone.Connection;
 		static LocationManager lm;
 		static AlarmManager am;
 		static PendingIntent gps_sender,net_sender;
-		static boolean gps_enabled,net_enabled;
+		static boolean net_enabled;
 		
 		static final int GPS_UPDATES = 4000*1000;
 		static final int NET_UPDATES = 600*1000;
@@ -338,15 +345,17 @@ import org.sipdroid.sipua.phone.Connection;
 			if (am == null) am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
 			pos_gps(false);
 			if (enable) {
-				pos_net(false);
 				if (call_state == UserAgent.UA_STATE_IDLE && Sipdroid.on(mContext) &&
 						PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) &&
 						PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","").length() > 0) {
 					Location last = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-					if (last == null || System.currentTimeMillis() - last.getTime() > GPS_UPDATES)
+					if (last == null || System.currentTimeMillis() - last.getTime() > GPS_UPDATES) {
 						pos_gps(true);
+						pos_net(false);
+					}
 					pos_net(true);
-				}
+				} else
+					pos_net(false);
 			}
 		}
 
@@ -371,13 +380,67 @@ import org.sipdroid.sipua.phone.Connection;
 		        net_sender = PendingIntent.getBroadcast(mContext,
 		                0, loopintent, 0);
 			}
-			if (enable) {
-				lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, NET_UPDATES, 3000, net_sender);
-			} else {
-				lm.removeUpdates(net_sender);
+			if (net_enabled != enable) {
+				if (enable) {
+					lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, NET_UPDATES, 3000, net_sender);
+				} else {
+					lm.removeUpdates(net_sender);
+				}
+				net_enabled = enable;
 			}
 		}
 		
+		static void enable_wifi(boolean enable) {
+			if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) ||
+					PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","").length() == 0)
+				return;
+        	if (enable != PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wifi_disabled", false))
+        		return;
+        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+    		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+    		
+    		edit.putBoolean("wifi_disabled",!enable);
+    		edit.commit();
+    		lock_wifi(enable);
+    		wm.setWifiEnabled(enable);
+		}
+		
+		static WifiLock wil;
+		
+		static void lock_wifi(boolean lock) {
+     		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+    		
+    		edit.putBoolean("wifi_locked",lock);
+    		edit.commit();
+			if (lock && wil == null) {
+		       	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+				wil = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, "Sipdroid");
+				wil.acquire();
+			} else if (!lock && wil != null) {
+				wil.release();
+				wil = null;
+			}
+		}
+		
+	    Handler mHandler = new Handler() {
+	    	public void handleMessage(Message msg) {
+	    		lock_wifi(false);
+	    	}
+	    };
+	    
+		static PowerManager.WakeLock pwl;
+		
+		static void lock(boolean lock) {
+			if (lock) {
+				if (pwl == null) {
+					PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+					pwl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.Receiver");
+				}
+				pwl.acquire();
+			} else if (pwl != null && pwl.isHeld())
+				pwl.release();
+		}
+
 		public static void url(final String opt) {
 	        (new Thread() {
 				public void run() {
@@ -472,7 +535,7 @@ import org.sipdroid.sipua.phone.Connection;
 			mContext.startActivity(createIntent(Activity2.class)); 
 		}
 
-		public static boolean on_wlan;
+		public static boolean on_wlan,was_fast;
 		
 		public static boolean isFast() {
         	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
@@ -484,11 +547,11 @@ import org.sipdroid.sipua.phone.Connection;
 	        	if (wi.getIpAddress() != 0 && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
 	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
 	        		on_wlan = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wlan",false);
-	        		return on_wlan;
+	        		return was_fast = on_wlan;
 	        	}
         	}
         	on_wlan = false;
-         	return isFast2();
+         	return was_fast = isFast2();
 		}
 		
 		static boolean isFast2() {
@@ -512,9 +575,13 @@ import org.sipdroid.sipua.phone.Connection;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
 	        	engine(context).register();
 	        } else
-	        if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
+	        if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 	        	engine(context).register();
-	        } else
+			} else
+	        if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
+	        	if (was_fast != isFast())
+	        		engine(context).register();
+			} else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
 	    		pstn_state = intent.getStringExtra("state");
@@ -533,7 +600,32 @@ import org.sipdroid.sipua.phone.Connection;
 	        			engine(mContext).speaker(AudioManager.MODE_IN_CALL);
 	        } else
 		    if (intentAction.equals(Intent.ACTION_HEADSET_PLUG)) {
-		        	headset = intent.getIntExtra("state", -1);
+		        headset = intent.getIntExtra("state", -1);
+		        if (call_state == UserAgent.UA_STATE_INCALL && headset > 0)
+        			engine(mContext).speaker(AudioManager.MODE_IN_CALL);
+	        } else
+	        if (intentAction.equals(Intent.ACTION_SCREEN_ON)) {
+	        	mHandler.removeMessages(0);
+	        	lock_wifi(true);
+	        } else
+	        if (intentAction.equals(Intent.ACTION_USER_PRESENT)) {
+	        	enable_wifi(true);
+	        } else
+	        if (intentAction.equals(Intent.ACTION_SCREEN_OFF)) {
+	        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+	        	WifiInfo wi = wm.getConnectionInfo();
+	        	if (wm.getWifiState() != WifiManager.WIFI_STATE_ENABLED || wi == null || wi.getSupplicantState() != SupplicantState.COMPLETED
+	        			|| wi.getIpAddress() == 0)
+	        		mHandler.sendEmptyMessageDelayed(0, 120*1000);
+	        } else
+	        if (intentAction.equals(ACTION_DEVICE_IDLE)) {
+	        	lock_wifi(false);
+	        } else
+	        if (intentAction.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)) {
+	        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+	        	WifiInfo wi = wm.getConnectionInfo();
+	        	if (wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED && wi != null && wi.getSupplicantState() == SupplicantState.DORMANT)
+	        		enable_wifi(false);
 	        }
 		}   
 }

@@ -124,12 +124,9 @@
 <string name="settings_check">请确认你的运营商是否允许VoIP电话</string>
 <string name="settings_pref">Sipdroid优先级</string>
     <string-array name="pref_display_values">
+        <item>Sipdroid</item>
         <item>当可用时使用Sipdroid</item>
         <item>总是使用电话</item>
-    </string-array>
-    <string-array name="pref_values">
-        <item>SIP</item>
-        <item>PSTN</item>
     </string-array>
 <string name="settings_compression">语音压缩</string>
     <string-array name="compression_display_values">

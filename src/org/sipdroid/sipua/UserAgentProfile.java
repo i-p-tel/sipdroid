@@ -55,8 +55,6 @@ public class UserAgentProfile extends Configure {
 	/** User's passwd. */
 	public String passwd = null;
 	
-	/** User's callerid. */
-	public String callerid = null;
 	/**
 	 * Path for the 'ua.jar' lib, used to retrive various UA media (gif, wav,
 	 * etc.) By default, it is used the "lib/ua.jar" folder

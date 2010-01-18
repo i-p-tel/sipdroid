@@ -97,13 +97,12 @@ public class SipdroidEngine implements RegisterAgentListener {
 				+ "@"
 				+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"");
 			
-			user_profile.from_url = user_profile.username
-				+ "@"
-				+ user_profile.realm;
 			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid","").length() == 0) {
-				user_profile.callerid = user_profile.from_url;
+				user_profile.from_url = user_profile.username
+					+ "@"
+					+ user_profile.realm;
 			} else {
-				user_profile.callerid = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid","")
+				user_profile.from_url = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("callerid","")
 					+ "@"
 					+ user_profile.realm;
 			}
@@ -111,7 +110,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			CheckEngine();
 			
 			ua = new UserAgent(sip_provider, user_profile);
-			ra = new RegisterAgent(sip_provider, user_profile.callerid, // modified
+			ra = new RegisterAgent(sip_provider, user_profile.from_url, // modified
 					user_profile.contact_url, user_profile.username,
 					user_profile.realm, user_profile.passwd, this, user_profile);
 			ka = new KeepAliveSip(sip_provider,100000);

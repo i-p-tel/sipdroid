@@ -814,6 +814,7 @@ public class InviteDialog extends Dialog implements TransactionClientListener,
 		if (tc.getTransactionMethod().equals(SipMethods.INVITE)) {
 			if (!verifyStatus(statusIs(D_INVITING) || statusIs(D_ReINVITING)))
 				return;
+			cancel(); //modified
 			changeStatus(D_CLOSE);
 			listener.onDlgTimeout(this);
 			listener.onDlgClose(this);

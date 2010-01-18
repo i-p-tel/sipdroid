@@ -43,12 +43,18 @@ import android.widget.Toast;
 
 		public static float getEarGain() {
 			try {
-				return Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("eargain", "0.25"));
+				return Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Receiver.headset > 0?"heargain":"eargain", "0.25"));
 			} catch (NumberFormatException i) {
 				return (float)0.25;
 			}			
 		}
 
+		public static float getMicGain() {
+			if (Receiver.headset > 0)
+				return Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("hmicgain", "1.0"));
+			return Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("micgain", "0.25"));
+		}
+		
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
@@ -66,6 +72,10 @@ import android.widget.Toast;
 			}
 			if (!getPreferenceScreen().getSharedPreferences().contains("MWI_enabled")) {
 				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("MWI_enabled");
+				cb.setChecked(true);
+			}
+			if (!getPreferenceScreen().getSharedPreferences().contains("headgain")) {
+				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("headgain");
 				cb.setChecked(true);
 			}
 			if (Sipdroid.market) {
@@ -164,14 +174,26 @@ import android.widget.Toast;
 				android.provider.Settings.System.putInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, set);
 		}
 	
-        public void updateSummaries() {
-        	getPreferenceScreen().findPreference("callerid").setSummary(getPreferenceScreen().getSharedPreferences().getString("callerid",""));
+		void fill(String pref,String def,int val,int disp) {
+			int i;
+			
+        	for (i = 0; i < getResources().getStringArray(val).length; i++)
+            	if (getPreferenceScreen().getSharedPreferences().getString(pref, def).equals(getResources().getStringArray(val)[i]))
+            		getPreferenceScreen().findPreference(pref).setSummary(getResources().getStringArray(disp)[i]);
+        }
+
+		public void updateSummaries() {
         	getPreferenceScreen().findPreference("username").setSummary(getPreferenceScreen().getSharedPreferences().getString("username", "")); 
         	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
         	if (getPreferenceScreen().getSharedPreferences().getString("domain","").length() == 0) {
         		getPreferenceScreen().findPreference("domain").setSummary(getString(R.string.settings_domain2));
         	} else {
         		getPreferenceScreen().findPreference("domain").setSummary(getPreferenceScreen().getSharedPreferences().getString("domain", ""));
+        	}
+        	if (getPreferenceScreen().getSharedPreferences().getString("callerid","").length() == 0) {
+        		getPreferenceScreen().findPreference("callerid").setSummary(getString(R.string.settings_callerid2));
+        	} else {
+        		getPreferenceScreen().findPreference("callerid").setSummary(getPreferenceScreen().getSharedPreferences().getString("domain", ""));
         	}
         	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", ""));
         	getPreferenceScreen().findPreference("protocol").setSummary(getPreferenceScreen().getSharedPreferences().getString("protocol",
@@ -180,17 +202,16 @@ import android.widget.Toast;
         	getPreferenceScreen().findPreference("excludepat").setSummary(getPreferenceScreen().getSharedPreferences().getString("excludepat", "")); 
         	getPreferenceScreen().findPreference("posurl").setSummary(getPreferenceScreen().getSharedPreferences().getString("posurl", "")); 
         	getPreferenceScreen().findPreference("callthru2").setSummary(getPreferenceScreen().getSharedPreferences().getString("callthru2", "")); 
-        	if (getPreferenceScreen().getSharedPreferences().getString("pref", "").equals("SIP")) {
+        	if (!getPreferenceScreen().getSharedPreferences().getString("pref", "").equals("PSTN")) {
         		getPreferenceScreen().findPreference("par").setEnabled(true);
         	} else {
         		getPreferenceScreen().findPreference("par").setEnabled(false);
           	}
-        	if (getPreferenceScreen().getSharedPreferences().getString("compression", "edge").equals("edge"))
-        		getPreferenceScreen().findPreference("compression").setSummary(getResources().getStringArray(R.array.compression_display_values)[0]);
-        	else if (getPreferenceScreen().getSharedPreferences().getString("compression", "edge").equals("never"))
-        		getPreferenceScreen().findPreference("compression").setSummary(getResources().getStringArray(R.array.compression_display_values)[2]);
-        	else
-          		getPreferenceScreen().findPreference("compression").setSummary(getResources().getStringArray(R.array.compression_display_values)[1]);
+        	fill("compression","edge",R.array.compression_values,R.array.compression_display_values);
+        	fill("eargain","0.25",R.array.eargain_values,R.array.eargain_display_values);
+        	fill("micgain","0.25",R.array.eargain_values,R.array.eargain_display_values);
+        	fill("heargain","0.25",R.array.eargain_values,R.array.eargain_display_values);
+        	fill("hmicgain","1.0",R.array.eargain_values,R.array.eargain_display_values);
         	if (getPreferenceScreen().getSharedPreferences().getBoolean("callthru", false))
         		getPreferenceScreen().findPreference("callthru2").setEnabled(true);
         	else

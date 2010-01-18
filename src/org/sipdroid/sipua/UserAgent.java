@@ -27,6 +27,7 @@ import java.util.Vector;
 
 import org.sipdroid.media.JAudioLauncher;
 import org.sipdroid.media.MediaLauncher;
+import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.net.IpAddress;
@@ -50,6 +51,8 @@ import org.zoolu.tools.LogLevel;
 import org.zoolu.tools.Parser;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
@@ -276,7 +279,7 @@ public class UserAgent extends CallListenerAdapter {
 		
 		if (!send_anonymous)
 		{
-			from_url = user_profile.callerid;
+			from_url = user_profile.from_url;
 		}
 		else
 		{
@@ -591,12 +594,14 @@ public class UserAgent extends CallListenerAdapter {
 		}
 		printLog("RINGING", LogLevel.HIGH);
 		if (Receiver.ringbackPlayer == null || ! Receiver.ringbackPlayer.isPlaying()) {
-			Receiver.setAudioModeInCall(true); //added by Matt			
 			Receiver.ringbackPlayer = MediaPlayer.create(Receiver.mContext, R.raw.ringback);
 			Receiver.ringbackPlayer.setLooping(true);
-			
-			if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("silent",false))
-				Receiver.ringbackPlayer.start();
+			Receiver.ringbackPlayer.setVolume(AudioTrack.getMaxVolume()*
+					org.sipdroid.sipua.ui.Settings.getEarGain()
+					,AudioTrack.getMaxVolume()*
+					org.sipdroid.sipua.ui.Settings.getEarGain());
+			RtpStreamReceiver.setMode(Receiver.docked > 0?AudioManager.MODE_NORMAL:AudioManager.MODE_IN_CALL);
+			Receiver.ringbackPlayer.start();
 		}
 	}
 

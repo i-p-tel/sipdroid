@@ -36,7 +36,7 @@ public class PSTN extends Activity {
 			if (!number.equals("")) {
 		        Intent intent = new Intent(Intent.ACTION_CALL,
 		                Uri.fromParts("tel", Uri.decode(number)+
-		                		(PreferenceManager.getDefaultSharedPreferences(this).getString("pref","").equals("SIP")?"+":""), null));
+		                		(!PreferenceManager.getDefaultSharedPreferences(this).getString("pref","").equals("PSTN")?"+":""), null));
 		        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		        startActivity(intent);
 			}

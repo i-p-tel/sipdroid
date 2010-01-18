@@ -137,12 +137,9 @@
 
 	<string name="settings_pref">Type d\'appel préféré</string>
 		<string-array name="pref_display_values">
+			<item>Sipdroid</item>
 			<item>Sipdroid, si disponible</item>
 			<item>Téléphone</item>
-		</string-array>
-		<string-array name="pref_values">
-			<item>SIP</item>
-			<item>PSTN</item>
 		</string-array>
 
 	<string name="settings_compression">Compression de la Voix</string>

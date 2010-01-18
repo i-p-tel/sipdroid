@@ -84,12 +84,9 @@
 <string name="settings_check">Verifică dacă operatorul de telefonie mobilă permite VoIP</string>
 <string name="settings_pref">Tip apelare preferat</string>
     <string-array name="pref_display_values">
+		<item>Sipdroid</item>
         <item>Sipdroid, când e disponibil</item>
         <item>Apelează</item>
-    </string-array>
-    <string-array name="pref_values">
-        <item>SIP</item>
-        <item>PSTN</item>
     </string-array>
 <string name="settings_auto_on">Foloseşte Auto-Answer</string>
 <string name="settings_auto_on2">Vibrează scurt când ecranul este pornit</string>

@@ -39,6 +39,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.ToneGenerator;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 
@@ -101,8 +102,10 @@ public class RtpStreamReceiver extends Thread {
 	public int speaker(int mode) {
 		int old = speakermode;
 		
+		if (Receiver.headset > 0 && mode == AudioManager.MODE_NORMAL)
+			return old;
 		saveVolume();
-		speakermode = mode;
+		setMode(speakermode = mode);
 		restoreVolume();
 		return old;
 	}
@@ -134,20 +137,33 @@ public class RtpStreamReceiver extends Thread {
 		smin = sm*r + smin*(1-r);
 	}
 	
-	void setStreamVolume(final int stream,final int vol,final int flags) {
-		if (stream == AudioManager.STREAM_MUSIC) volume = vol;
+	static void setStreamVolume(final int stream,final int vol,final int flags) {
         (new Thread() {
 			public void run() {
+				AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 				am.setStreamVolume(stream, vol, flags);
-				if (stream == AudioManager.STREAM_MUSIC) volume = -1;
+				if (stream == AudioManager.STREAM_MUSIC) restored = true;
 			}
-        }).start();  
-		
+        }).start();
 	}
 	
-	int volume;
+	static boolean restored;
 	
 	void restoreVolume() {
+		switch (am.getMode()) {
+		case AudioManager.MODE_IN_CALL:
+				setStreamVolume(AudioManager.STREAM_RING,(int)(
+						am.getStreamMaxVolume(AudioManager.STREAM_RING)*
+						org.sipdroid.sipua.ui.Settings.getEarGain()), 0);
+				track.setStereoVolume(AudioTrack.getMaxVolume()*
+						org.sipdroid.sipua.ui.Settings.getEarGain()
+						,AudioTrack.getMaxVolume()*
+						org.sipdroid.sipua.ui.Settings.getEarGain());
+				break;
+		case AudioManager.MODE_NORMAL:
+				track.setStereoVolume(AudioTrack.getMaxVolume(),AudioTrack.getMaxVolume());
+				break;
+		}
 		setStreamVolume(AudioManager.STREAM_MUSIC,
 				PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("volume"+speakermode, 
 				am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)*
@@ -156,9 +172,11 @@ public class RtpStreamReceiver extends Thread {
 	}
 	
 	void saveVolume() {
-		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-		edit.putInt("volume"+speakermode,volume != -1?volume:am.getStreamVolume(AudioManager.STREAM_MUSIC));
-		edit.commit();
+		if (restored) {
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+			edit.putInt("volume"+speakermode,am.getStreamVolume(AudioManager.STREAM_MUSIC));
+			edit.commit();
+		}
 	}
 	
 	void saveSettings() {
@@ -179,17 +197,46 @@ public class RtpStreamReceiver extends Thread {
 		}
 	}
 	
-	void restoreSettings() {
-		int oldvibrate = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldvibrate",0);
-		int oldvibrate2 = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldvibrate2",0);
-		int oldpolicy = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldpolicy",0);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
-		Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
-		setStreamVolume(AudioManager.STREAM_RING, PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0), 0);
+	public static void setMode(int mode) {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-		edit.putBoolean("oldvalid", false);
+		edit.putBoolean("setmode", mode != AudioManager.MODE_NORMAL);
 		edit.commit();
+		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
+		am.setMode(mode);
+	}
+	
+	public static void restoreMode() {
+		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("setmode",true)) {
+			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE"))
+				setMode(AudioManager.MODE_NORMAL);
+			else {
+				Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+				edit.putBoolean("setmode", false);
+				edit.commit();
+			}
+		}
+	}
+
+	public static void restoreSettings() {
+		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("oldvalid",true)) {
+			AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
+	        ContentResolver cr = Receiver.mContext.getContentResolver();
+			int oldvibrate = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldvibrate",0);
+			int oldvibrate2 = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldvibrate2",0);
+			int oldpolicy = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldpolicy",0);
+			am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
+			am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
+			Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
+			setStreamVolume(AudioManager.STREAM_RING, PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0), 0);
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+			edit.putBoolean("oldvalid", false);
+			edit.commit();
+			PowerManager pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
+			PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+					PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.RtpStreamReceiver");
+			wl.acquire(1000);
+		}
+		restoreMode();
 	}
 
 	public static float good, late, lost, loss;
@@ -216,6 +263,8 @@ public class RtpStreamReceiver extends Thread {
 	
 	/** Runs it in a new Thread. */
 	public void run() {
+		boolean nodata = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("nodata",false);
+		
 		if (rtp_socket == null) {
 			if (DEBUG)
 				println("ERROR: RTP socket is null");
@@ -231,7 +280,8 @@ public class RtpStreamReceiver extends Thread {
 			println("Reading blocks of max " + buffer.length + " bytes");
 
 		running = true;
-		speakermode = AudioManager.MODE_IN_CALL;
+		speakermode = Receiver.docked > 0?AudioManager.MODE_NORMAL:AudioManager.MODE_IN_CALL;
+		restored = false;
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 		am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
@@ -241,13 +291,8 @@ public class RtpStreamReceiver extends Thread {
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,AudioManager.VIBRATE_SETTING_OFF);
 		int oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-		restoreVolume();
 		track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
 				BUFFER_SIZE*2*2, AudioTrack.MODE_STREAM);
-		track.setStereoVolume(AudioTrack.getMaxVolume()*
-				org.sipdroid.sipua.ui.Settings.getEarGain()
-				,AudioTrack.getMaxVolume()*
-				org.sipdroid.sipua.ui.Settings.getEarGain());
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
 		int user, server, lserver, luser, cnt, todo, headroom, len = 0, seq = 0, cnt2 = 0, m = 1,
@@ -269,9 +314,16 @@ public class RtpStreamReceiver extends Thread {
 		}
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_MUSIC,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 		track.play();
-		System.gc();
+		if (Receiver.headset > 0 && Receiver.oRingtone != null) {
+			ToneGenerator tg2 = new ToneGenerator(AudioManager.STREAM_RING,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
+			tg2.startTone(ToneGenerator.TONE_SUP_RINGTONE);
+			System.gc();
+			tg2.stopTone();
+		} else
+			System.gc();
 		while (running) {
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
+				tg.stopTone();
 				track.pause();
 				while (running && Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 					try {
@@ -297,7 +349,7 @@ public class RtpStreamReceiver extends Thread {
 				}
 				timeout = 0;
 			} catch (IOException e) {
-				if (timeout == 0) {
+				if (timeout == 0 && nodata) {
 					tg.startTone(ToneGenerator.TONE_SUP_RINGTONE);
 				}
 				rtp_socket.getDatagramSocket().disconnect();
@@ -391,23 +443,9 @@ public class RtpStreamReceiver extends Thread {
 				 seq = gseq;
 				 
 				 if (user >= luser + 8000 && Receiver.call_state == UserAgent.UA_STATE_INCALL) {
-					 if (am.getMode() != speakermode) {
+					 if (luser == -8000 || am.getMode() != speakermode) {
 						 saveVolume();
-						 am.setMode(speakermode);
-						 switch (speakermode) {
-						 case AudioManager.MODE_IN_CALL:
-								setStreamVolume(AudioManager.STREAM_RING,(int)(
-										am.getStreamMaxVolume(AudioManager.STREAM_RING)*
-										org.sipdroid.sipua.ui.Settings.getEarGain()), 0);
-								track.setStereoVolume(AudioTrack.getMaxVolume()*
-										org.sipdroid.sipua.ui.Settings.getEarGain()
-										,AudioTrack.getMaxVolume()*
-										org.sipdroid.sipua.ui.Settings.getEarGain());
-								break;
-						 case AudioManager.MODE_NORMAL:
-								track.setStereoVolume(AudioTrack.getMaxVolume(),AudioTrack.getMaxVolume());
-								break;
-						 }
+						 setMode(speakermode);
 						 restoreVolume();
 					 }
 					 luser = user;
@@ -418,10 +456,8 @@ public class RtpStreamReceiver extends Thread {
 		track.stop();
 		saveVolume();
 		setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
-		if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE"))
-			am.setMode(AudioManager.MODE_NORMAL);
-		setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		restoreSettings();
+		setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		tg.stopTone();
 		tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);

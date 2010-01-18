@@ -116,12 +116,9 @@
 <string name="settings_pref">Предпочитаемый тип вызова</string>
 <string name="settings_pref2">Можно всегда позвонить через Sipdroid добавив «+» перед номером телефона или выбрав «Отправить сообщение» в Контактах.</string>
     <string-array name="pref_display_values">
+        <item>Sipdroid</item>
         <item>Sipdroid, когда возможно</item>
         <item>Телефон</item>
-    </string-array>
-    <string-array name="pref_values">
-        <item>SIP</item>
-        <item>PSTN</item>
     </string-array>
 <string name="settings_compression">Сжатие</string>
     <string-array name="compression_display_values">
