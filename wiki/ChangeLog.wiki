@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.3.3
+    * Better on Nexus One (issue 268)
+
   * 1.3.2
     * Make optional username a clean new parameter, no migration from caller id (fixes issue 281)
 
