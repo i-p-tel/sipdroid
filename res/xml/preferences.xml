@@ -22,7 +22,7 @@
 				android:singleLine="true" />
 			<EditTextPreference android:singleLine="true"
 				android:title="@string/settings_username1"
-				android:key="callerid"
+				android:key="fromuser"
 				android:summary="@string/settings_callerid2">
 			</EditTextPreference>
 			<ListPreference
