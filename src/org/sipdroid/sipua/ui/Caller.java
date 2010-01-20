@@ -44,6 +44,8 @@ import android.util.Log;
 public class Caller extends BroadcastReceiver {
 
 		static long noexclude;
+		String last_number;
+		long last_time;
 		
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -56,6 +58,12 @@ public class Caller extends BroadcastReceiver {
         		if (!Sipdroid.release) Log.i("SipUA:","outgoing call");
     			boolean sip_type = !PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("PSTN");
     	        
+    	        if (last_number != null && last_number.equals(number) && (SystemClock.elapsedRealtime()-last_time) < 3000) {
+    	        	setResultData(null);
+    	        	return;
+    	        }
+    	        last_time = SystemClock.elapsedRealtime();
+    	        last_number = number;
 				if (number.endsWith("+")) 
     			{
     				sip_type = !sip_type;
