@@ -4,7 +4,7 @@
 === Beta-Versions ===
 
   * 1.3.5
-    * Longer standby times under Donut
+    * Longer standby times under Donut (and higher)
 
   * 1.3.4
     * Fix issue 284
