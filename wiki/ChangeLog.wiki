@@ -3,6 +3,10 @@
 
 === Beta-Versions ===
 
+  * 1.3.4
+    * Longer standby times under Donut
+    * Fix issue 284
+
   * 1.3.3
     * Better on Nexus One (issue 268)
 
