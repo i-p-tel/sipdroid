@@ -189,7 +189,7 @@ import android.widget.Toast;
         	if (getPreferenceScreen().getSharedPreferences().getString("fromuser","").length() == 0) {
         		getPreferenceScreen().findPreference("fromuser").setSummary(getString(R.string.settings_callerid2));
         	} else {
-        		getPreferenceScreen().findPreference("fromuser").setSummary(getPreferenceScreen().getSharedPreferences().getString("domain", ""));
+        		getPreferenceScreen().findPreference("fromuser").setSummary(getPreferenceScreen().getSharedPreferences().getString("fromuser", ""));
         	}
         	getPreferenceScreen().findPreference("port").setSummary(getPreferenceScreen().getSharedPreferences().getString("port", ""));
         	getPreferenceScreen().findPreference("protocol").setSummary(getPreferenceScreen().getSharedPreferences().getString("protocol",
