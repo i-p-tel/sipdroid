@@ -84,7 +84,7 @@ import org.sipdroid.sipua.phone.Connection;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
-		public static int docked = -1,headset = -1,screen = -1;
+		public static int docked = -1,headset = -1;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
@@ -107,8 +107,7 @@ import org.sipdroid.sipua.phone.Connection;
 				mSipdroidEngine.StartEngine();
 			} else
 				mSipdroidEngine.CheckEngine();
-        	if (!RegisterService.started || screen > 0)
-        		context.startService(new Intent(context,RegisterService.class));
+        	context.startService(new Intent(context,RegisterService.class));
 			return mSipdroidEngine;
 		}
 		
@@ -613,14 +612,11 @@ import org.sipdroid.sipua.phone.Connection;
 	        if (intentAction.equals(Intent.ACTION_SCREEN_ON)) {
 	        	mHandler.removeMessages(0);
 	        	lock_wifi(true);
-	        	screen = 1;
-	           	context.startService(new Intent(context,RegisterService.class));
 	        } else
 	        if (intentAction.equals(Intent.ACTION_USER_PRESENT)) {
 	        	enable_wifi(true);
 	        } else
 	        if (intentAction.equals(Intent.ACTION_SCREEN_OFF)) {
-	        	screen = 0;
 	        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 	        	WifiInfo wi = wm.getConnectionInfo();
 	        	if (wm.getWifiState() != WifiManager.WIFI_STATE_ENABLED || wi == null || wi.getSupplicantState() != SupplicantState.COMPLETED
