@@ -126,7 +126,7 @@ public class TcpServer extends Thread {
 	public void run() {
 		Exception error = null;
 		try {
-			server_socket.setSoTimeout(socket_timeout);
+//			server_socket.setSoTimeout(socket_timeout); modified
 			long expire = 0;
 			if (alive_time > 0)
 				expire = System.currentTimeMillis() + alive_time;

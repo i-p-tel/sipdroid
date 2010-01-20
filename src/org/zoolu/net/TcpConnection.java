@@ -154,7 +154,7 @@ public class TcpConnection extends Thread {
 		try {
 			if (error != null)
 				throw error;
-			socket.setSoTimeout(socket_timeout);
+//			socket.setSoTimeout(socket_timeout); modified
 			// loop
 			while (!stop) {
 				int len = 0;

@@ -174,7 +174,7 @@ public class UdpProvider extends Thread {
 		if (alive_time > 0)
 			expire = System.currentTimeMillis() + alive_time;
 		try {
-			socket.setSoTimeout(socket_timeout);
+//			socket.setSoTimeout(socket_timeout); modified
 			// loop
 			while (!stop) {
 				try {

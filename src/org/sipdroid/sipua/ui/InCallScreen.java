@@ -215,13 +215,13 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
         if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
 	    if (t == null) {
 			mDigits.setText("");
+			running = true;
 	        (t = new Thread() {
 				public void run() {
 					int len = 0;
 					long time;
 					ToneGenerator tg = null;
-					
-					running = true;
+	
 					if (Settings.System.getInt(getContentResolver(),
 							Settings.System.DTMF_TONE_WHEN_DIALING, 1) == 1)
 						tg = new ToneGenerator(AudioManager.STREAM_MUSIC, (int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));

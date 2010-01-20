@@ -33,7 +33,6 @@ import android.preference.PreferenceManager;
 public class RegisterService extends Service {
 	Receiver m_receiver;
 	Caller m_caller;
-	public static boolean started;
 	
     public void onDestroy() {
 		super.onDestroy();
@@ -46,7 +45,6 @@ public class RegisterService extends Service {
 			m_caller = null;
 		}
 		Receiver.alarm(0, OneShotAlarm2.class);
-		started = false;
 	}
     
     @Override
@@ -77,7 +75,6 @@ public class RegisterService extends Service {
         	Receiver.lock_wifi(true);
         Receiver.engine(this).isRegistered();
         RtpStreamReceiver.restoreSettings();
-        started = true;
     }
     
     @Override

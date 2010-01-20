@@ -34,8 +34,7 @@ public class OneShotAlarm2 extends BroadcastReceiver {
         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("wlan",false) ||
         		PreferenceManager.getDefaultSharedPreferences(context).getBoolean("3g",false) ||
         		PreferenceManager.getDefaultSharedPreferences(context).getBoolean("edge",false)) {
-        	if (Receiver.screen > 0)
-        		context.startService(new Intent(context,RegisterService.class));
+        	context.startService(new Intent(context,RegisterService.class));
         } else
         	context.stopService(new Intent(context,RegisterService.class));
     }
