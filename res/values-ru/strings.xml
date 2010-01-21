@@ -67,6 +67,8 @@
 <string name="settings_server">Сервер</string>
 <string name="settings_domain">Домен</string>
 <string name="settings_domain2">Оставьте пустым, если совпадает с сервером</string>
+<string name="settings_username1">Имя</string>
+<string name="settings_callerid2">Оставьте пустым, если совпадает с именем пользователя</string>
 <string name="settings_port">Порт</string>
 	<string-array name="port_display_values">
 		<item>53</item>
@@ -135,12 +137,16 @@
 <string name="settings_auto_on2">Короткое предупреждение вибрацией, когда экран включён</string>
 <string name="settings_auto_ondemand">Авто-ответ по запросу</string>
 <string name="settings_auto_ondemand2">Показывать переключатель в строке состояния</string>
+<string name="settings_auto_headset">Авто-ответ по гарнитуре</string>
+<string name="settings_auto_headset2">Когда беспроводная гарнитура подключена</string>
 
 <string name="settings_notifications">Уведомления</string>
 <string name="settings_MWI">Голосовая почта</string>
 <string name="settings_MWI2">Подписка на оставленные сообщения в SIP</string>
 <string name="settings_notify">Пропущенный вызов</string>
 <string name="settings_notify2">Мигать синим светодиодом</string>
+<string name="settings_nodata">Обрыв данных</string>
+<string name="settings_nodata2">При пропущенных пакетах подавать звуковой сигнал</string>
 
 <string name="settings_advanced_options">Дополнительно</string>
 <string name="settings_policy_never">Другая политика сна, чтобы держать Wi-Fi включённым.</string>
@@ -150,13 +156,15 @@
 <string name="settings_sipringtone">Мелодия SIP-звонка</string>
 <string name="settings_sipringtone2">Выбор мелодии для входящего SIP-вызова</string>
 <string name="settings_sipringtone_dialog">Мелодии звонка</string>
-<string name="settings_eargain">Усиление звука</string>
-<string name="settings_eargain2">Регулировка громкости или подавление эха у собеседника</string>
+<string name="settings_eargain">Громкость динамика</string>
+<string name="settings_micgain">Громкость микрофона</string>
+<string name="settings_heargain">Громкость гарнитуры</string>
+<string name="settings_hmicgain">Микрофон гарнитуры</string>
     <string-array name="eargain_display_values">
-        <item>Слабое (без эха)</item>
-        <item>Среднее</item>
-        <item>Сильное (возможно эхо)</item>
-        <item>Самое сильное</item>
+        <item>Слабая (без эха)</item>
+        <item>Средняя</item>
+        <item>Сильная (возможно эхо)</item>
+        <item>Самая сильная</item>
     </string-array>
     <string-array name="eargain_values">
         <item>0.1</item>
@@ -206,5 +214,4 @@
 
 <string name="ongoing">Текущий вызов</string>
 <string name="onHold">Удерживается</string>
-<string name="callerid">ID звонящего</string>
 </resources>
