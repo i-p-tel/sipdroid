@@ -22,7 +22,7 @@
     * Fix issues 118, 151, 194, 256, 257, 258, 266, 268, 275
 
   * 1.2.4
-    * Urgent bugfix
+    * Bugfix
 
   * 1.2.3
     * Fix issues 231, 236, 245, 249
@@ -45,7 +45,7 @@
     * Attempt to work better on Droid
 
   * 1.1.6
-    * Another urgent bugfix to 1.1.4 (sorry for the frequent updates lately)
+    * Another bugfix to 1.1.4 (sorry for the frequent updates lately)
     * Automatic switch to speaker phone in car/desk dock (untested)
 
   * 1.1.5
