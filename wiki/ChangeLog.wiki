@@ -34,7 +34,7 @@
     * Bugfix to 1.2
 
   * 1.2
-    * Voice Compression over EDGE
+    * Voice Compression over EDGE (issue 49)
     * Fix issue 109
 
   * 1.1.8
