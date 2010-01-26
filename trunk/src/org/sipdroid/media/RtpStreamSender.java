@@ -245,6 +245,10 @@ public class RtpStreamSender extends Thread {
 		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("improve",false);
 		boolean useGSM = !PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("compression","edge").equals("never");
 		int micgain = (int)(Settings.getMicGain()*10);
+		long frame_period = 1000 / frame_rate;
+		long last_tx_time = 0;
+		long next_tx_delay;
+		long now;
 		running = true;
 		m = 1;
 
@@ -286,7 +290,19 @@ public class RtpStreamSender extends Thread {
 				}
 				record.startRecording();
 			 }
+			 now = System.currentTimeMillis();
+			 next_tx_delay = frame_period - (now - last_tx_time);
+			 last_tx_time = now;
+			 if (next_tx_delay > 0) {
+				 try {
+					 sleep(next_tx_delay);
+				 } catch (InterruptedException e1) {
+				 }
+				 last_tx_time += next_tx_delay;
+			 }
 			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
+			 if (num <= 0)
+				 continue;
 
 			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
  				 calc(lin,(ring+delay)%(frame_size*11),num);
