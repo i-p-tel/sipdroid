@@ -61,9 +61,10 @@ import android.widget.Toast;
 
 			addPreferencesFromResource(R.xml.preferences);
 			if (getPreferenceScreen().getSharedPreferences().getString("server","").equals("")) {
+				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("wlan");
+				cb.setChecked(true);
 				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
 				
-				edit.putBoolean("wlan", true);
 				edit.putString("port", ""+SipStack.default_port);
 				edit.putString("server", "pbxes.org");
 				edit.putString("pref", "SIP");				
@@ -75,11 +76,12 @@ import android.widget.Toast;
 				cb.setChecked(true);
 			}
 			if (Sipdroid.market) {
-				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
-
-				edit.putBoolean("3g", false);
-				edit.commit();
+				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("3g");
+				cb.setChecked(false);
+				CheckBoxPreference cb2 = (CheckBoxPreference) getPreferenceScreen().findPreference("edge");
+				cb2.setChecked(false);
 				getPreferenceScreen().findPreference("3g").setEnabled(false);
+				getPreferenceScreen().findPreference("edge").setEnabled(false);
 			}
 			Codec.init();
 			if (!Codec.loaded) {
@@ -130,6 +132,7 @@ import android.widget.Toast;
 	        	} else
  	        	if (key.equals("wlan") ||
  	        			key.equals("3g") ||
+ 	        			key.equals("edge") ||
  	        			key.equals("username") ||
  	        			key.equals("password") ||
  	        			key.equals("domain") ||
@@ -142,11 +145,11 @@ import android.widget.Toast;
  	        			key.equals("fromuser") ||
  	        			key.equals("auto_ondemand") ||
  	        			key.equals("MWI_enabled")) {
- 	        		if (key.equals("wlan") || key.equals("3g"))
- 	        			updateSleep();
  		        	Receiver.engine(this).halt();
 		    		Receiver.engine(this).StartEngine();
 	 	        }
+        		if (key.equals("wlan") || key.equals("3g") || key.equals("edge") || key.equals("ownwifi"))
+        			updateSleep();
 	    		updateSummaries();        
         }
 
@@ -156,12 +159,13 @@ import android.widget.Toast;
 			int set = get;
 			boolean wlan = getPreferenceScreen().getSharedPreferences().getBoolean("wlan", false);
 			boolean g3 = getPreferenceScreen().getSharedPreferences().getBoolean("3g", false);
+			boolean ownwifi = getPreferenceScreen().getSharedPreferences().getBoolean("ownwifi", false);
 			
-			if (g3) {
+			if (g3 && !ownwifi) {
 				set = android.provider.Settings.System.WIFI_SLEEP_POLICY_DEFAULT;
 				if (set != get)
 					Toast.makeText(this, R.string.settings_policy_default, Toast.LENGTH_LONG).show();
-			} else if (wlan) {
+			} else if (wlan || ownwifi) {
 				set = android.provider.Settings.System.WIFI_SLEEP_POLICY_NEVER;
 				if (set != get)
 					Toast.makeText(this, R.string.settings_policy_never, Toast.LENGTH_LONG).show();

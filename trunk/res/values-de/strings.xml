@@ -162,6 +162,8 @@
         <item>Laut (evtl. Echo beim Gesprächspartner)</item>
         <item>Sehr laut</item>
     </string-array>
+<string name="settings_ownwifi">Wi-Fi an/abschalten</string>
+<string name="settings_ownwifi2">Spart Batterie</string>
 
 <string name="settings_pbxes_options">PBXes-Funktionen</string>
 <string name="settings_par">Gleichzeitige Anwahl</string>
