@@ -174,7 +174,6 @@ Possible issues when registering directly to other SIP servers are:
 
  * Battery drain on 3G/EDGE,
  * Unreliable incoming calls,
- * Poor voice in send direction,
  * One way voice, or
  * No connection at all
 
