@@ -136,6 +136,10 @@
 				android:entryValues="@array/eargain_values"
 				android:defaultValue="1.0"
 				android:dialogTitle="@string/settings_hmicgain" />
+			<CheckBoxPreference
+				android:key="ownwifi"
+				android:title="@string/settings_ownwifi"
+				android:summary="@string/settings_ownwifi2" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_pbxes_options">
 			<CheckBoxPreference

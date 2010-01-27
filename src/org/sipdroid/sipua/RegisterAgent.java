@@ -568,6 +568,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			ViaHeader vh=req.getViaHeader();
 			String newbranch = SipProvider.pickBranch();
 			vh.setBranch(newbranch);	
+			req.removeViaHeader();
 			req.addViaHeader(vh);
 
 			if (handleAuthentication(respCode, resp, req)) {

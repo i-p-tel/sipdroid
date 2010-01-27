@@ -290,15 +290,17 @@ public class RtpStreamSender extends Thread {
 				}
 				record.startRecording();
 			 }
-			 now = System.currentTimeMillis();
-			 next_tx_delay = frame_period - (now - last_tx_time);
-			 last_tx_time = now;
-			 if (next_tx_delay > 0) {
-				 try {
-					 sleep(next_tx_delay);
-				 } catch (InterruptedException e1) {
+			 if (frame_size == 160) {
+				 now = System.currentTimeMillis();
+				 next_tx_delay = frame_period - (now - last_tx_time);
+				 last_tx_time = now;
+				 if (next_tx_delay > 0) {
+					 try {
+						 sleep(next_tx_delay);
+					 } catch (InterruptedException e1) {
+					 }
+					 last_tx_time += next_tx_delay-1;
 				 }
-				 last_tx_time += next_tx_delay;
 			 }
 			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
 			 if (num <= 0)
@@ -377,7 +379,14 @@ public class RtpStreamSender extends Thread {
  				 }
  			 }
 		}
+		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
+		while (am.getMode() == AudioManager.MODE_IN_CALL)
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+			}
 		record.stop();
+		record.release();
 		
 		rtp_socket.close();
 		rtp_socket = null;

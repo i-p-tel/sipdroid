@@ -51,9 +51,6 @@ import org.zoolu.tools.LogLevel;
 import org.zoolu.tools.Parser;
 
 import android.content.Context;
-import android.media.AudioManager;
-import android.media.AudioTrack;
-import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 
@@ -99,14 +96,13 @@ public class UserAgent extends CallListenerAdapter {
 	// *************************** Basic methods ***************************
 
 	/** Changes the call state */
-	protected void changeStatus(int state,String caller) {
+	protected synchronized void changeStatus(int state,String caller) {
 		call_state = state;
 		Receiver.onState(state, caller);
 	}
 	
 	protected void changeStatus(int state) {
-		call_state = state;
-		Receiver.onState(state, null);
+		changeStatus(state, null);
 	}
 
 	/** Checks the call state */
@@ -377,10 +373,10 @@ public class UserAgent extends CallListenerAdapter {
 			return false;
 		}
 		
+		changeStatus(UA_STATE_INCALL); // modified
+
 		call.accept(local_session);
 				
-		changeStatus(UA_STATE_INCALL);
-		
 		return true;
 	}
 
@@ -593,16 +589,7 @@ public class UserAgent extends CallListenerAdapter {
 			return;
 		}
 		printLog("RINGING", LogLevel.HIGH);
-		if (Receiver.ringbackPlayer == null || ! Receiver.ringbackPlayer.isPlaying()) {
-			Receiver.ringbackPlayer = MediaPlayer.create(Receiver.mContext, R.raw.ringback);
-			Receiver.ringbackPlayer.setLooping(true);
-			Receiver.ringbackPlayer.setVolume(AudioTrack.getMaxVolume()*
-					org.sipdroid.sipua.ui.Settings.getEarGain()
-					,AudioTrack.getMaxVolume()*
-					org.sipdroid.sipua.ui.Settings.getEarGain());
-			RtpStreamReceiver.setMode(Receiver.docked > 0?AudioManager.MODE_NORMAL:AudioManager.MODE_IN_CALL);
-			Receiver.ringbackPlayer.start();
-		}
+		RtpStreamReceiver.ringback(true);
 	}
 
 	/** Callback function called when arriving a 2xx (call accepted) */
@@ -655,7 +642,7 @@ public class UserAgent extends CallListenerAdapter {
 		
 		printLog("CONFIRMED/CALL", LogLevel.HIGH);
 
-		changeStatus(UA_STATE_INCALL);
+//		changeStatus(UA_STATE_INCALL); modified
 		
 		if (user_profile.hangup_time > 0)
 		{

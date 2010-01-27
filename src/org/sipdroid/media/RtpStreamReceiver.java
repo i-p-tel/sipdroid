@@ -110,6 +110,21 @@ public class RtpStreamReceiver extends Thread {
 		return old;
 	}
 
+	static ToneGenerator ringbackPlayer;
+
+	public static synchronized void ringback(boolean ringback) {
+		if (ringback && ringbackPlayer == null) {
+			setMode(Receiver.docked > 0?AudioManager.MODE_NORMAL:AudioManager.MODE_IN_CALL);
+			ringbackPlayer = new ToneGenerator(AudioManager.STREAM_MUSIC,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
+			ringbackPlayer.startTone(ToneGenerator.TONE_SUP_RINGTONE);
+		} else if (!ringback && ringbackPlayer != null) {
+			ringbackPlayer.stopTone();
+			ringbackPlayer.release();
+			ringbackPlayer = null;
+			restoreMode();
+		}
+	}
+	
 	double smin = 200,s;
 	public static int nearend;
 	
@@ -314,13 +329,7 @@ public class RtpStreamReceiver extends Thread {
 		}
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_MUSIC,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 		track.play();
-		if (Receiver.headset > 0 && Receiver.oRingtone != null) {
-			ToneGenerator tg2 = new ToneGenerator(AudioManager.STREAM_RING,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
-			tg2.startTone(ToneGenerator.TONE_SUP_RINGTONE);
-			System.gc();
-			tg2.stopTone();
-		} else
-			System.gc();
+		System.gc();
 		while (running) {
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 				tg.stopTone();
@@ -454,11 +463,13 @@ public class RtpStreamReceiver extends Thread {
 			}
 		}
 		track.stop();
+		track.release();
+		tg.stopTone();
+		tg.release();
 		saveVolume();
 		setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		restoreSettings();
 		setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
-		tg.stopTone();
 		tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {
@@ -466,6 +477,7 @@ public class RtpStreamReceiver extends Thread {
 		} catch (InterruptedException e) {
 		}
 		tg.stopTone();
+		tg.release();
 		
 		rtp_socket.close();
 		rtp_socket = null;

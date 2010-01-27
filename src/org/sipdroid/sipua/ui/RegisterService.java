@@ -26,9 +26,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 
 public class RegisterService extends Service {
 	Receiver m_receiver;
@@ -61,8 +59,6 @@ public class RegisterService extends Service {
 			 intentfilter.addAction(Intent.ACTION_USER_PRESENT);
 			 intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
 			 intentfilter.addAction(Intent.ACTION_SCREEN_ON);
-			 intentfilter.addAction(Receiver.ACTION_DEVICE_IDLE);
-			 intentfilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
 	         registerReceiver(m_receiver = new Receiver(), intentfilter);      
         }
         if (m_caller == null) {
@@ -71,8 +67,6 @@ public class RegisterService extends Service {
 			 intentfilter.setPriority(-1);
 	         registerReceiver(m_caller = new Caller(), intentfilter);      
         }
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("wifi_locked", false))
-        	Receiver.lock_wifi(true);
         Receiver.engine(this).isRegistered();
         RtpStreamReceiver.restoreSettings();
     }

@@ -175,8 +175,8 @@
 <string name="settings_nodata2">Indicate missing voice packets by audible tones</string>
 
 <string name="settings_advanced_options">Advanced Options</string>
-<string name="settings_policy_never">Changed sleep policy to keep Wifi on.</string>
-<string name="settings_policy_default">Reset Wifi sleep policy to default.</string>
+<string name="settings_policy_never">Changed system sleep policy to keep Wi-Fi on.</string>
+<string name="settings_policy_default">Reset Wi-Fi sleep policy to default.</string>
 <string name="settings_search">Search &amp; Replace</string>
 <string name="settings_excludepat">Exclude Pattern</string>
 <string name="settings_sipringtone">SIP Ringtone</string>
@@ -198,6 +198,8 @@
         <item>0.5</item>
         <item>1.0</item>
     </string-array>
+<string name="settings_ownwifi">Control Wi-Fi Power</string>
+<string name="settings_ownwifi2">Saves battery</string>
 
 <string name="settings_pbxes_options">PBXes Features</string>
 <string name="settings_par">Simultaneous Outbound</string>
