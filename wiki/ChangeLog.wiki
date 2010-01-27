@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.3.6
+    * Fix issues 69, 290
+
   * 1.3.5
     * Longer standby times under Donut (and higher)
 
