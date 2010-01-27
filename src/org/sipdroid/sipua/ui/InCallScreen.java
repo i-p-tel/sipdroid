@@ -252,7 +252,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 						} catch (InterruptedException e) {
 						}
 					}
-					tg.release();
+					if (tg != null) tg.release();
 				}
 			}).start();
 	    }
