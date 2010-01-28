@@ -299,7 +299,7 @@ public class RtpStreamSender extends Thread {
 						 sleep(next_tx_delay);
 					 } catch (InterruptedException e1) {
 					 }
-					 last_tx_time += next_tx_delay-1;
+					 last_tx_time += next_tx_delay-sync_adj;
 				 }
 			 }
 			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
