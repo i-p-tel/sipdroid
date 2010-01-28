@@ -168,8 +168,8 @@
 	<string name="settings_silent2">Rend muet sur un appel entrant</string>
 
 	<string name="settings_advanced_options">Options Avancées</string>
-	<string name="settings_policy_never">Politique de mise en veille changée pour maintenir le Wifi allumé.</string>
-	<string name="settings_policy_default">Retour aux paramètres par défaut de la politique de mise en veille du Wifi.</string>
+	<string name="settings_policy_never">Politique de mise en veille du sysyème changée pour maintenir le Wi-Fi allumé.</string>
+	<string name="settings_policy_default">Retour aux paramètres par défaut de la politique de mise en veille du Wi-Fi.</string>
 	<string name="settings_search">Chercher &amp; Remplacer</string>
 	<string name="settings_excludepat">Exclure des motifs</string>
 	<string name="settings_sipringtone">Sonnerie SIP</string>
@@ -189,6 +189,8 @@
 			<item>0.5</item>
 			<item>1.0</item>
 		</string-array>
+	<string name="settings_ownwifi">Contrôler l\'alimentation du Wi-Fi</string>
+	<string name="settings_ownwifi2">Economise les batteries</string>
 
 	<string name="settings_pbxes_options">Caractéristiques PBXes</string>
 	<string name="settings_par">Appels simultanés</string>
