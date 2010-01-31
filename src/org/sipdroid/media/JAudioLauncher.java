@@ -61,6 +61,9 @@ public class JAudioLauncher implements MediaLauncher
    RtpStreamSender sender=null;
    RtpStreamReceiver receiver=null;
    
+   //change DTMF
+   boolean useDTMF = false;  // zero means not use outband DTMF
+   
    /** Costructs the audio launcher */
    public JAudioLauncher(RtpStreamSender rtp_sender, RtpStreamReceiver rtp_receiver, Log logger)
    {  log=logger;
@@ -69,9 +72,10 @@ public class JAudioLauncher implements MediaLauncher
    }
 
    /** Costructs the audio launcher */
-   public JAudioLauncher(int local_port, String remote_addr, int remote_port, int direction, String audiofile_in, String audiofile_out, int sample_rate, int sample_size, int frame_size, Log logger, int payload_type)
+   public JAudioLauncher(int local_port, String remote_addr, int remote_port, int direction, String audiofile_in, String audiofile_out, int sample_rate, int sample_size, int frame_size, Log logger, int payload_type, int dtmf_pt)
    {  log=logger;
       frame_rate=sample_rate/frame_size;
+      useDTMF = (dtmf_pt != 0);
       try
       {  socket=new SipdroidSocket(local_port);
          dir=direction;
@@ -81,6 +85,7 @@ public class JAudioLauncher implements MediaLauncher
             //audio_input=new AudioInput();
             sender=new RtpStreamSender(true,payload_type,frame_rate,frame_size,socket,remote_addr,remote_port);
             sender.setSyncAdj(2);
+            sender.setDTMFpayloadType(dtmf_pt);
          }
          
          // receiver
@@ -137,6 +142,14 @@ public class JAudioLauncher implements MediaLauncher
 	   return 0;
    }
 
+   //change DTMF
+	/** Send outband DTMF packets **/
+  public boolean sendDTMF(char c){
+	    if (! useDTMF) return false;
+	    sender.sendDTMF(c);
+	    return true;
+  }
+  
    // ****************************** Logs *****************************
 
    /** Adds a new string to the default Log */

@@ -24,6 +24,7 @@ package org.sipdroid.media;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.sipdroid.net.RtpPacket;
@@ -79,7 +80,31 @@ public class RtpStreamSender extends Thread {
 	/** Whether it is running */
 	boolean running = false;
 	boolean muted = false;
-
+	
+	//DTMF change
+	char dtmf = 0; 
+	int dtmf_payload_type = 101;
+	
+	private static HashMap<Character, Byte> rtpEventMap = new HashMap<Character,Byte>(){{
+		put('0',(byte)0);
+		put('1',(byte)1);
+		put('2',(byte)2);
+		put('3',(byte)3);
+		put('4',(byte)4);
+		put('5',(byte)5);
+		put('6',(byte)6);
+		put('7',(byte)7);
+		put('8',(byte)8);
+		put('9',(byte)9);
+		put('*',(byte)10);
+		put('#',(byte)11);
+		put('A',(byte)12);
+		put('B',(byte)13);
+		put('C',(byte)14);
+		put('D',(byte)15);
+	}};
+	//DTMF change 
+	
 	/**
 	 * Constructs a RtpStreamSender.
 	 * 
@@ -251,7 +276,8 @@ public class RtpStreamSender extends Thread {
 		long now;
 		running = true;
 		m = 1;
-
+		int dtframesize = 4;
+		
 		if (DEBUG)
 			println("Reading blocks of " + buffer.length + " bytes");
 
@@ -290,6 +316,52 @@ public class RtpStreamSender extends Thread {
 				}
 				record.startRecording();
 			 }
+			 //DTMF change start
+			 if (dtmf!=0) {
+	 			 record.stop();
+	 			 byte[] dtmfbuf = new byte[dtframesize + 12];
+				 RtpPacket dt_packet = new RtpPacket(dtmfbuf, 0);
+				 dt_packet.setPayloadType(dtmf_payload_type);
+ 				 dt_packet.setPayloadLength(dtframesize);
+				 dt_packet.setSscr(rtp_packet.getSscr());
+				 long dttime = time;
+				 int duration;
+				 
+	 			 for (int i = 0; i < 6; i++) { 
+ 	 				 time += 160;
+ 	 				 duration = (int)(time - dttime);
+	 				 dt_packet.setSequenceNumber(seqn++);
+	 				 dt_packet.setTimestamp(dttime);
+	 				 dtmfbuf[12] = rtpEventMap.get(dtmf);
+	 				 dtmfbuf[13] = (byte)0x0a;
+	 				 dtmfbuf[14] = (byte)(duration >> 8);
+	 				 dtmfbuf[15] = (byte)duration;
+	 				 try {
+						rtp_socket.send(dt_packet);
+						sleep(20);
+	 				 } catch (IOException e1) {
+	 				 } catch (InterruptedException e1) {
+	 				 }
+	 			 }
+	 			 for (int i = 0; i < 3; i++) {
+	 				 duration = (int)(time - dttime);
+	 				 dt_packet.setSequenceNumber(seqn);
+	 				 dt_packet.setTimestamp(dttime);
+	 				 dtmfbuf[12] = rtpEventMap.get(dtmf);
+	 				 dtmfbuf[13] = (byte)0x8a;
+	 				 dtmfbuf[14] = (byte)(duration >> 8);
+	 				 dtmfbuf[15] = (byte)duration;
+	 				 try {
+						rtp_socket.send(dt_packet);
+	 				 } catch (IOException e1) {
+	 				 }	 			 
+	 			 }
+	 			 time += 160; seqn++;
+				dtmf=0;
+				record.startRecording();
+			 }
+			 //DTMF change end
+
 			 if (frame_size == 160) {
 				 now = System.currentTimeMillis();
 				 next_tx_delay = frame_period - (now - last_tx_time);
@@ -400,4 +472,15 @@ public class RtpStreamSender extends Thread {
 		if (!Sipdroid.release) System.out.println("RtpStreamSender: " + str);
 	}
 
+	//DTMF change
+	/** Set RTP payload type of outband DTMF packets. **/  
+	public void setDTMFpayloadType(int payload_type){
+		dtmf_payload_type = payload_type; 
+	}
+	
+	/** Send outband DTMF packets */
+	public void sendDTMF(char c) {
+		dtmf = c; // will be set to 0 after sending tones
+	}
+	//DTMF change
 }

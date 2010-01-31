@@ -280,7 +280,7 @@ public class RtpPacket {
 		long n = 0;
 		for (; begin < end; begin++) {
 			n <<= 8;
-			n += data[begin];
+			n += data[begin] & 0xFF;
 		}
 		return n;
 	}
