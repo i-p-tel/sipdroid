@@ -215,11 +215,10 @@ public class UserAgent extends CallListenerAdapter {
 		local_session = sdp.toString();
 	}
 	
-	protected static HashMap<Integer,String> codecs = new HashMap<Integer,String>(){{
+	protected static HashMap<Integer,String> avp_map = new HashMap<Integer,String>(){{
 		put(0,"PCMU");
 		put(3,"GSM");
 		put(8,"PCMA");
-		put(103,"h263-1998");
 	}};
 	
 	/** Adds a media to the SDP */
@@ -230,7 +229,7 @@ public class UserAgent extends CallListenerAdapter {
 		Vector<AttributeField> afvec = new Vector<AttributeField>();
 		for (int i=0; i<avps.length ; i++) {
 			int avp = avps[i];
-			String codec = codecs.get(avp);
+			String codec = avp_map.get(avp);
 			if (codec!=null) {
 				avpvec.add(String.valueOf(avp));
 				afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", avp, codec, rate)));
@@ -485,8 +484,8 @@ public class UserAgent extends CallListenerAdapter {
 
 	private void createOffer(boolean useGSM) {
 		Vector<Integer> avpvec = new Vector<Integer>();
-		for (int i=0;i<user_profile.codecs.length;i++){
-			int avp = user_profile.codecs[i];
+		for (int i=0;i<user_profile.audio_codecs.length;i++){
+			int avp = user_profile.audio_codecs[i];
 			if (avp == 3 && !useGSM) continue;
 			avpvec.add(avp);
 		}
@@ -498,13 +497,12 @@ public class UserAgent extends CallListenerAdapter {
 	}
 
 	private void createAnswer(SessionDescriptor remote_sdp, boolean useGSM) {
-		Vector<String> remote_formats = remote_sdp.getMediaDescriptor("audio").getMedia().getFormatList();
-				
+		MediaDescriptor remote_md = remote_sdp.getMediaDescriptor("audio");
 		int avp = -1;
-		for (int i=0;i<user_profile.codecs.length;i++) {
-			avp = user_profile.codecs[i];
+		for (int i=0;i<user_profile.audio_codecs.length;i++) {
+			avp = user_profile.audio_codecs[i];
 			if (avp == 3 && !useGSM) continue;
-			if (remote_formats.contains(String.valueOf(avp))) break;
+			if ((remote_md.hasCodec(avp_map.get(avp))!=null)) break;
 		}
 		initSessionDescriptor(new int[]{avp});
 		sessionProduct(remote_sdp);
@@ -512,14 +510,15 @@ public class UserAgent extends CallListenerAdapter {
 
 	private void sessionProduct(SessionDescriptor remote_sdp) {
 		SessionDescriptor local_sdp = new SessionDescriptor(local_session);
-		SessionDescriptor new_sdp = new SessionDescriptor(remote_sdp
-				.getOrigin(), remote_sdp.getSessionName(), local_sdp
+		SessionDescriptor new_sdp = new SessionDescriptor(local_sdp
+				.getOrigin(), local_sdp.getSessionName(), local_sdp
 				.getConnection(), local_sdp.getTime());
 		new_sdp.addMediaDescriptors(local_sdp.getMediaDescriptors());
 		new_sdp = SdpTools.sdpMediaProduct(new_sdp, remote_sdp
 				.getMediaDescriptors());
 		//new_sdp = SdpTools.sdpAttirbuteSelection(new_sdp, "rtpmap"); ////change multi codecs
 		local_session = new_sdp.toString();
+		if (call!=null) call.setLocalSessionDescriptor(local_session);
 	}
 
 	// ********************** Call callback functions **********************
