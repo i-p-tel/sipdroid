@@ -30,4 +30,5 @@ public interface MediaLauncher {
 	public boolean muteMedia();
 	public int speakerMedia(int mode);
 
+	public boolean sendDTMF(char c);
 }

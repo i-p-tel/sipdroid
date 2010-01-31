@@ -230,7 +230,12 @@ public class UserAgent extends CallListenerAdapter {
 		for (int i=0; i<avps.length ; i++) {
 			int avp = avps[i];
 			String codec = avp_map.get(avp);
-			if (codec!=null) {
+			if (avp==user_profile.dtmf_avp && user_profile.dtmf_avp != 0){
+				avpvec.add(String.valueOf(avp));
+				afvec.add(new AttributeField("rtpmap", String.format("%d telephone-event/%d", avp, rate)));
+				afvec.add(new AttributeField("fmtp", String.format("%d 0-15", avp)));
+			}
+			else if (codec!=null) {
 				avpvec.add(String.valueOf(avp));
 				afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", avp, codec, rate)));
 			}
@@ -325,7 +330,9 @@ public class UserAgent extends CallListenerAdapter {
 
 	public void info(char c, int duration)
 	{
-		if (call != null)
+		boolean use2833 = audio_app.sendDTMF(c); // send out-band DTMF (rfc2833) if supported
+
+		if (!use2833 && call != null)
 			call.info(c, duration);
 	}
 	
@@ -402,12 +409,15 @@ public class UserAgent extends CallListenerAdapter {
 				.getLocalSessionDescriptor());
 		int local_audio_port = 0;
 		local_video_port = 0;
+		int dtmf_pt = 0;
 		for (Enumeration<MediaDescriptor> e = local_sdp.getMediaDescriptors()
 				.elements(); e.hasMoreElements();) {
 			MediaField media = e.nextElement().getMedia();
 			if (media.getMedia().equals("audio")) { //change start multi codec
 				local_audio_port = media.getPort();
 				avp = Integer.valueOf(media.getFormatList().firstElement());
+				if (media.getFormatList().contains(String.valueOf(user_profile.dtmf_avp)))
+					dtmf_pt = user_profile.dtmf_avp;
 			} //change end
 			if (media.getMedia().equals("video"))
 				local_video_port = media.getPort();
@@ -456,7 +466,7 @@ public class UserAgent extends CallListenerAdapter {
 						remote_media_address, remote_audio_port, dir, audio_in,
 						audio_out, user_profile.audio_sample_rate,
 						user_profile.audio_sample_size,
-						user_profile.audio_frame_size, log, avp);
+						user_profile.audio_frame_size, log, avp, dtmf_pt);
 			}
 			audio_app.startMedia();
 		}
@@ -489,6 +499,7 @@ public class UserAgent extends CallListenerAdapter {
 			if (avp == 3 && !useGSM) continue;
 			avpvec.add(avp);
 		}
+		avpvec.add(user_profile.dtmf_avp);
 		int[] avps = new int[avpvec.size()];
 		for (int i=0;i<avps.length;i++){
 			avps[i] = avpvec.elementAt(i);
@@ -502,9 +513,10 @@ public class UserAgent extends CallListenerAdapter {
 		for (int i=0;i<user_profile.audio_codecs.length;i++) {
 			avp = user_profile.audio_codecs[i];
 			if (avp == 3 && !useGSM) continue;
-			if ((remote_md.hasCodec(avp_map.get(avp))!=null)) break;
+			if (avp == user_profile.dtmf_avp) continue;
+			if (remote_md.hasCodec(avp_map.get(avp))!=null) break;
 		}
-		initSessionDescriptor(new int[]{avp});
+		initSessionDescriptor(new int[]{avp, user_profile.dtmf_avp}); 
 		sessionProduct(remote_sdp);
 	}
 
