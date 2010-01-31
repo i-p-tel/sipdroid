@@ -269,6 +269,26 @@ public class MediaDescriptor {
 	}
 
 	/**
+	 * Returns whether a particular codec is included in the media descriptor.
+	 * 
+	 * @param codec
+	 *            the codec name (e.g. "GSM", "PCMA/8000")
+	 * @return a String of the matched codec (e.g. "GSM/8000"), 
+	 *         or null when the codec is not included.
+	 */	
+	public String hasCodec(String codec) {
+		String match = null;
+		for (int i = 0; i < av.size(); i++) {
+			AttributeField a = (AttributeField) av.elementAt(i);
+			if (a.getAttributeName().equalsIgnoreCase("rtpmap")) {
+				String av = a.getAttributeValue();  
+				if (av.toLowerCase().startsWith(codec.toLowerCase())) match = av; 
+			}
+		}
+		return match;
+	}
+	
+	/**
 	 * Gets a String rapresentation of the MediaDescriptor.
 	 * 
 	 * @return the string representation
