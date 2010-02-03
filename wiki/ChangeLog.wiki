@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.3.8
+    * Fix issues 84, 305
+
   * 1.3.7
     * Fix force close in 1.3.6
 
