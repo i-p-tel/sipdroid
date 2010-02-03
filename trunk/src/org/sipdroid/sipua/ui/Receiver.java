@@ -209,6 +209,7 @@ import org.sipdroid.sipua.phone.Connection;
 					engine(mContext).listen();
 					break;
 				case UserAgent.UA_STATE_INCALL:
+					lock(true);
 					broadcastCallStateChanged("OFFHOOK", null);
 					if (ccCall.base == 0) {
 						ccCall.base = SystemClock.elapsedRealtime();
@@ -221,6 +222,7 @@ import org.sipdroid.sipua.phone.Connection;
 			        mContext.startActivity(createIntent(InCallScreen.class));
 					break;
 				case UserAgent.UA_STATE_HOLD:
+					lock(false);
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_on_hold), android.R.drawable.stat_sys_phone_call_on_hold,ccCall.base);
 					ccCall.setState(Call.State.HOLDING);
 			        mContext.startActivity(createIntent(InCallScreen.class));
@@ -507,7 +509,8 @@ import org.sipdroid.sipua.phone.Connection;
 			mContext.startActivity(createIntent(Activity2.class)); 
 		}
 
-		public static boolean on_wlan,was_fast;
+		public static boolean on_wlan;
+		static boolean is_fast;
 		
 		public static boolean isFast() {
         	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
@@ -519,11 +522,11 @@ import org.sipdroid.sipua.phone.Connection;
 	        	if (wi.getIpAddress() != 0 && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
 	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
 	        		on_wlan = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wlan",false);
-	        		return was_fast = on_wlan;
+	        		return is_fast = on_wlan;
 	        	}
         	}
         	on_wlan = false;
-         	return was_fast = isFast2();
+         	return is_fast = isFast2();
 		}
 		
 		static boolean isFast2() {
@@ -545,14 +548,15 @@ import org.sipdroid.sipua.phone.Connection;
         	if (!Sipdroid.release) Log.i("SipUA:",intentAction);
         	if (mContext == null) mContext = context;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
-	        	engine(context).thread_register();
+	        	engine(context).register();
 	        } else
 	        if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-	        	engine(context).thread_register();
+	        	engine(context).register();
 			} else
 	        if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
+	        	boolean was_fast = is_fast;
 	        	if (was_fast != isFast())
-	        		engine(context).thread_register();
+	        		engine(context).register();
 			} else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {

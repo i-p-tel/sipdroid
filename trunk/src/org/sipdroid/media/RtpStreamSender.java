@@ -307,6 +307,8 @@ public class RtpStreamSender extends Thread {
 		record.startRecording();
 		while (running) {
 			 if (muted || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
+				if (Receiver.call_state == UserAgent.UA_STATE_HOLD)
+					RtpStreamReceiver.restoreMode();
 				record.stop();
 				while (running && (muted || Receiver.call_state == UserAgent.UA_STATE_HOLD)) {
 					try {

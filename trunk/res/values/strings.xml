@@ -67,7 +67,7 @@
 <string name="settings_server">Server</string>
 <string name="settings_domain">Domain</string>
 <string name="settings_domain2">Leave empty if same as server</string>
-<string name="settings_username1">Username</string>
+<string name="settings_username1">Username/Caller ID</string>
 <string name="settings_callerid2">Leave empty if same as authorization username</string>
 <string name="settings_port">Port</string>
 	<string-array name="port_display_values">

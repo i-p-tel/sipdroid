@@ -93,6 +93,12 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	}
 	
 	@Override
+	public void onStop() {
+		super.onStop();
+		mHandler.removeMessages(MSG_BACK);
+	}
+	
+	@Override
 	public void onPause() {
 		super.onPause();
     	if (!Sipdroid.release) Log.i("SipUA:","on pause");
