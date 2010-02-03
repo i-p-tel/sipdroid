@@ -115,7 +115,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 					user_profile.realm, user_profile.passwd, this, user_profile);
 			ka = new KeepAliveSip(sip_provider,100000);
 
-			thread_register();
+			register();
 			listen();
 		} catch (Exception E) {
 		}
@@ -123,15 +123,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 		return true;
 	}
 	
-	public void thread_register()
-	{
-        (new Thread() {
-			public void run() {
-				register();
-			}
-		}).start();   
-	}
-
 	void setOutboundProxy() {
 		try {
 			sip_provider.setOutboundProxy(new SocketAddress(
@@ -167,7 +158,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			ra.CurrentState = RegisterAgent.UNREGISTERED;
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION, null, 0, 0);
 		}
-		thread_register();
+		register();
 	}
 	
 	public void unregister() {

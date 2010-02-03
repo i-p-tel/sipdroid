@@ -37,7 +37,9 @@ import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
+import android.media.AudioRecord;
 import android.media.AudioTrack;
+import android.media.MediaRecorder;
 import android.media.ToneGenerator;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
@@ -222,9 +224,15 @@ public class RtpStreamReceiver extends Thread {
 	
 	public static void restoreMode() {
 		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("setmode",true)) {
-			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE"))
+			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE")) {
+				AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
+						AudioRecord.getMinBufferSize(8000, 
+								AudioFormat.CHANNEL_CONFIGURATION_MONO, 
+								AudioFormat.ENCODING_PCM_16BIT)*3/2);
+				record.startRecording();
 				setMode(AudioManager.MODE_NORMAL);
-			else {
+				record.stop();
+			} else {
 				Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
 				edit.putBoolean("setmode", false);
 				edit.commit();
@@ -329,6 +337,7 @@ public class RtpStreamReceiver extends Thread {
 		}
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_MUSIC,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 		track.play();
+		empty();
 		System.gc();
 		while (running) {
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
@@ -344,6 +353,7 @@ public class RtpStreamReceiver extends Thread {
 				System.gc();
 				timeout = 1;
 				seq = 0;
+				luser = -8000;
 			}
 			try {
 				rtp_socket.receive(rtp_packet);
