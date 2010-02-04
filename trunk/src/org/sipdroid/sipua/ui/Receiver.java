@@ -403,7 +403,7 @@ import org.sipdroid.sipua.phone.Connection;
 		static PowerManager.WakeLock pwl;
 		
 		static void lock(boolean lock) {
-			if (true || Build.MODEL.equals("Nexus One")) {
+			if (Build.MODEL.equals("Nexus One")) {
 				if (lock) {
 					if (pwl == null) {
 						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
