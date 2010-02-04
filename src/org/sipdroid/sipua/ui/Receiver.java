@@ -403,14 +403,13 @@ import org.sipdroid.sipua.phone.Connection;
 		static PowerManager.WakeLock pwl;
 		
 		static void lock(boolean lock) {
-			if (Build.MODEL.equals("Nexus One")) {
+			if (true || Build.MODEL.equals("Nexus One")) {
 				if (lock) {
 					if (pwl == null) {
 						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 						pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "Sipdroid.Receiver");
 					}
-					if (!pwl.isHeld())
-						pwl.acquire();
+					pwl.acquire();
 				} else if (pwl != null && pwl.isHeld())
 					pwl.release();
 			}

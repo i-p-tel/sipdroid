@@ -225,13 +225,17 @@ public class RtpStreamReceiver extends Thread {
 	public static void restoreMode() {
 		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("setmode",true)) {
 			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE")) {
-				AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
+				AudioRecord record = null;
+				if (RtpStreamSender.m == 0) {
+					record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
 						AudioRecord.getMinBufferSize(8000, 
 								AudioFormat.CHANNEL_CONFIGURATION_MONO, 
 								AudioFormat.ENCODING_PCM_16BIT)*3/2);
-				record.startRecording();
+					record.startRecording();
+				}
 				setMode(AudioManager.MODE_NORMAL);
-				record.stop();
+				if (record != null)
+					record.stop();
 			} else {
 				Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
 				edit.putBoolean("setmode", false);
