@@ -461,6 +461,7 @@ public class RtpStreamSender extends Thread {
 			}
 		record.stop();
 		record.release();
+		m = 0;
 		
 		rtp_socket.close();
 		rtp_socket = null;
