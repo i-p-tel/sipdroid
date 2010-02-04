@@ -409,7 +409,8 @@ import org.sipdroid.sipua.phone.Connection;
 						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 						pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "Sipdroid.Receiver");
 					}
-					pwl.acquire();
+					if (!pwl.isHeld())
+						pwl.acquire();
 				} else if (pwl != null && pwl.isHeld())
 					pwl.release();
 			}
