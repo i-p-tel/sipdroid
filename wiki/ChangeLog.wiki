@@ -4,10 +4,10 @@
 === Beta-Versions ===
 
   * 1.3.10
-    * Fix issues 306, 308
+    * Fix issue 306
 
   * 1.3.8
-    * Fix issues 84, 305
+    * Fix issue 84, issue 305
 
   * 1.3.7
     * Fix force close in 1.3.6
