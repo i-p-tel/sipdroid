@@ -516,6 +516,7 @@ public class UserAgent extends CallListenerAdapter {
 			if (avp == user_profile.dtmf_avp) continue;
 			if (remote_md.hasCodec(avp_map.get(avp))!=null) break;
 		}
+		if (avp==-1) avp = user_profile.audio_codecs[0]; // no codec was selected 
 		initSessionDescriptor(new int[]{avp, user_profile.dtmf_avp}); 
 		sessionProduct(remote_sdp);
 	}

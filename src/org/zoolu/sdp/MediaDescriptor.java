@@ -278,15 +278,16 @@ public class MediaDescriptor {
 	 *         or null when the codec is not included.
 	 */	
 	public String hasCodec(String codec) {
-		String match = null;
 		for (int i = 0; i < av.size(); i++) {
 			AttributeField a = (AttributeField) av.elementAt(i);
 			if (a.getAttributeName().equalsIgnoreCase("rtpmap")) {
-				String av = a.getAttributeValue();  
-				if (av.toLowerCase().startsWith(codec.toLowerCase())) match = av; 
+				String[] ar = a.getAttributeValue().split(" +", 2);
+				if (ar.length==2 && ar[1].toLowerCase().startsWith(codec.toLowerCase())) {
+					return ar[1];
+				}
 			}
 		}
-		return match;
+		return null;
 	}
 	
 	/**
