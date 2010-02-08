@@ -591,7 +591,7 @@ public class UserAgent extends CallListenerAdapter {
 
 	/**
 	 * Callback function that may be overloaded (extended). Called when arriving
-	 * a 180 Ringing
+	 * a 180 Ringing or a 183 Session progress with SDP 
 	 */
 	public void onCallRinging(Call call, Message resp) {
 		printLog("onCallRinging()", LogLevel.LOW);
@@ -600,8 +600,20 @@ public class UserAgent extends CallListenerAdapter {
 			printLog("NOT the current call", LogLevel.LOW);
 			return;
 		}
-		printLog("RINGING", LogLevel.HIGH);
-		RtpStreamReceiver.ringback(true);
+		
+		String remote_sdp = call.getRemoteSessionDescriptor();
+		if (remote_sdp==null || remote_sdp.length()==0) {
+			printLog("RINGING", LogLevel.HIGH);
+			RtpStreamReceiver.ringback(true);
+		}
+		else {
+			printLog("RINGING(with SDP)", LogLevel.HIGH);
+			if (! user_profile.no_offer) { 
+				// Update the local SDP along with offer/answer 
+				sessionProduct(new SessionDescriptor(remote_sdp));
+				launchMediaApplication();
+			}
+		}
 	}
 
 	/** Callback function called when arriving a 2xx (call accepted) */
