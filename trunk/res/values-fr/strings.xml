@@ -63,7 +63,7 @@
 	<string name="notfast">Aucun réseau de données convenable de disponible</string>
 
 	<string name="settings_account">Réglages du compte SIP</string>
-	<string name="settings_username">Nom d\'utilisateur</string>
+	<string name="settings_username">Nom d\'utilisateur/ID de l\'appelant</string>
 	<string name="settings_password">Mot de passe</string>
 	<string name="settings_server">Serveur</string>
 	<string name="settings_domain">Domaine</string>
