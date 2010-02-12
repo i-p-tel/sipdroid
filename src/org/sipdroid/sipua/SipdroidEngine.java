@@ -176,7 +176,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 		IpAddress.setLocalIpAddress();
 		user_profile.contact_url = user_profile.username
 			+ "@"
-			+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"");
+			+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"")
+			+ ";transport=" + sip_provider.getDefaultTransport();			
 		if (!Receiver.isFast()) {
 			unregister();
 		} else {
