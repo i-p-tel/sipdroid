@@ -122,7 +122,10 @@
         <item>udp</item>
         <item>tcp</item>
     </string-array>
-
+<string name="settings_stun">Use STUN Server</string>
+<string name="settings_stun_server">STUN Server name</string>
+<string name="settings_stun_server_port">STUN Server port</string>
+ 
 <string name="settings_options">Call Options</string>
 <string name="settings_wlan">Use WLAN</string>
 <string name="settings_3g">Use 3G</string>

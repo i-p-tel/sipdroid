@@ -37,6 +37,17 @@
 				android:entries="@array/protocol_display_values"
 				android:entryValues="@array/protocol_values"
 				android:dialogTitle="@string/settings_protocol" />
+			<CheckBoxPreference
+				android:key="stun"
+				android:title="@string/settings_stun"/>
+			<EditTextPreference
+				android:key="stun_server"
+				android:title="@string/settings_stun_server"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="stun_server_port"
+				android:title="@string/settings_stun_server_port"
+				android:singleLine="true" />												
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_options">
 			<CheckBoxPreference

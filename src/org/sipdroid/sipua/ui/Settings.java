@@ -71,6 +71,19 @@ import android.widget.Toast;
 				edit.commit();
 	        	Receiver.engine(this).updateDNS();
 			}
+			if (!getPreferenceScreen().getSharedPreferences().contains("stun")) {
+				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("stun");
+				cb.setChecked(false);
+			}			
+			if (getPreferenceScreen().getSharedPreferences().getString("stun_server","").equals("")) {
+				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
+				
+				edit.putString("stun_server", "stun.ekiga.net");
+				edit.putString("stun_server_port", "3478");				
+				edit.commit();
+				Receiver.engine(this).updateDNS();
+			}			
+
 			if (!getPreferenceScreen().getSharedPreferences().contains("MWI_enabled")) {
 				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("MWI_enabled");
 				cb.setChecked(true);
@@ -138,6 +151,9 @@ import android.widget.Toast;
  	        			key.equals("domain") ||
  	        			key.equals("server") ||
  	        			key.equals("port") ||
+ 	        			key.equals("stun") ||
+ 	        			key.equals("stun_server") ||
+ 	        			key.equals("stun_server_port") ||
  	        			key.equals("protocol") ||
  	        			key.equals("edge") ||
  	        			key.equals("pos") ||
@@ -184,7 +200,11 @@ import android.widget.Toast;
 
 		public void updateSummaries() {
         	getPreferenceScreen().findPreference("username").setSummary(getPreferenceScreen().getSharedPreferences().getString("username", "")); 
-        	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", "")); 
+        	getPreferenceScreen().findPreference("server").setSummary(getPreferenceScreen().getSharedPreferences().getString("server", ""));
+
+        	getPreferenceScreen().findPreference("stun_server").setSummary(getPreferenceScreen().getSharedPreferences().getString("stun_server", ""));
+        	getPreferenceScreen().findPreference("stun_server_port").setSummary(getPreferenceScreen().getSharedPreferences().getString("stun_server_port", ""));
+        	
         	if (getPreferenceScreen().getSharedPreferences().getString("domain","").length() == 0) {
         		getPreferenceScreen().findPreference("domain").setSummary(getString(R.string.settings_domain2));
         	} else {
@@ -212,6 +232,13 @@ import android.widget.Toast;
         	fill("micgain","0.25",R.array.eargain_values,R.array.eargain_display_values);
         	fill("heargain","0.25",R.array.eargain_values,R.array.eargain_display_values);
         	fill("hmicgain","1.0",R.array.eargain_values,R.array.eargain_display_values);
+        	if (getPreferenceScreen().getSharedPreferences().getBoolean("stun", false)) {
+        		getPreferenceScreen().findPreference("stun_server").setEnabled(true);
+        		getPreferenceScreen().findPreference("stun_server_port").setEnabled(true);
+        	} else {
+        		getPreferenceScreen().findPreference("stun_server").setEnabled(false);
+        		getPreferenceScreen().findPreference("stun_server_port").setEnabled(false);       	
+        	}
         	if (getPreferenceScreen().getSharedPreferences().getBoolean("callthru", false))
         		getPreferenceScreen().findPreference("callthru2").setEnabled(true);
         	else
