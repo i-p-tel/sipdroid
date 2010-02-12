@@ -24,10 +24,18 @@
 
 package org.zoolu.net;
 
+import java.net.BindException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+
+import org.sipdroid.sipua.ui.Receiver;
+
+import android.preference.PreferenceManager;
+import android.content.Context;
+
+import com.jstun.demo.DiscoveryTest;
 
 /**
  * IpAddress is an IP address.
@@ -39,10 +47,16 @@ public class IpAddress {
 
 	/** The InetAddress */
 	InetAddress inet_address;
+	
+	public static boolean stun;
 
 	/** Local IP address */
 	public static String localIpAddress = "127.0.0.1";
 	
+	public static Context getUIContext() {
+		return Receiver.mContext;
+	}
+		
 	// ********************* Protected *********************
 
 	/** Creates an IpAddress */
@@ -129,9 +143,30 @@ public class IpAddress {
 				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
 					InetAddress inetAddress = enumIpAddr.nextElement();
 
-					if (!inetAddress.isLoopbackAddress()) {
-						localIpAddress = inetAddress.getHostAddress().toString();
-					}
+					if (!inetAddress.isLoopbackAddress()) { 
+						if (!PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean("stun",false)) {
+							localIpAddress = inetAddress.getHostAddress().toString();
+							stun = false;
+						} else {
+							try {
+								String StunServer = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("stun_server","");
+								int StunServerPort = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("stun_server_port",""));
+
+								DiscoveryTest StunDiscover = new DiscoveryTest(inetAddress, StunServer, StunServerPort);
+
+								// call out to stun server 
+								StunDiscover.test();
+								//System.out.println("Public ip is:" + StunDiscover.di.getPublicIP().getHostAddress());
+								localIpAddress = StunDiscover.di.getPublicIP().getHostAddress();
+								stun = true;
+							} catch (BindException be) {
+								System.out.println(inetAddress.toString() + ": " + be.getMessage());
+							} catch (Exception e) {
+								System.out.println(e.getMessage());
+								e.printStackTrace();
+							} 
+						}
+					}					
 				}
 			}
 		} catch (SocketException ex) {
