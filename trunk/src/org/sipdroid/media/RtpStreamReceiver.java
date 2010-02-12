@@ -123,7 +123,7 @@ public class RtpStreamReceiver extends Thread {
 			ringbackPlayer.stopTone();
 			ringbackPlayer.release();
 			ringbackPlayer = null;
-			restoreMode();
+			if (Receiver.call_state == UserAgent.UA_STATE_IDLE) restoreMode();
 		}
 	}
 	
@@ -223,14 +223,14 @@ public class RtpStreamReceiver extends Thread {
 	}
 	
 	public static void restoreMode() {
-		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("setmode",true)) {
+		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("setmode",false)) {
 			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE")) {
 				AudioRecord record = null;
 				if (RtpStreamSender.m == 0) {
 					record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
 						AudioRecord.getMinBufferSize(8000, 
 								AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-								AudioFormat.ENCODING_PCM_16BIT)*3/2);
+								AudioFormat.ENCODING_PCM_16BIT));
 					record.startRecording();
 				}
 				setMode(AudioManager.MODE_NORMAL);
@@ -245,7 +245,7 @@ public class RtpStreamReceiver extends Thread {
 	}
 
 	public static void restoreSettings() {
-		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("oldvalid",true)) {
+		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("oldvalid",false)) {
 			AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 	        ContentResolver cr = Receiver.mContext.getContentResolver();
 			int oldvibrate = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldvibrate",0);
@@ -254,7 +254,7 @@ public class RtpStreamReceiver extends Thread {
 			am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
 			am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 			Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
-			setStreamVolume(AudioManager.STREAM_RING, PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0), 0);
+			am.setStreamVolume(AudioManager.STREAM_RING, PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0), 0);
 			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
 			edit.putBoolean("oldvalid", false);
 			edit.commit();
@@ -465,7 +465,9 @@ public class RtpStreamReceiver extends Thread {
 				 m = 1;
 				 seq = gseq;
 				 
-				 if (user >= luser + 8000 && Receiver.call_state == UserAgent.UA_STATE_INCALL) {
+				 if (user >= luser + 8000 && (
+						 Receiver.call_state == UserAgent.UA_STATE_INCALL ||
+						 Receiver.call_state == UserAgent.UA_STATE_OUTGOING_CALL)) {
 					 if (luser == -8000 || am.getMode() != speakermode) {
 						 saveVolume();
 						 setMode(speakermode);
@@ -481,9 +483,9 @@ public class RtpStreamReceiver extends Thread {
 		tg.stopTone();
 		tg.release();
 		saveVolume();
-		setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
+		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		restoreSettings();
-		setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
+		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {

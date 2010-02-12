@@ -290,7 +290,7 @@ public class Call implements InviteDialogListener {
 		}
 		if (sdp != null && sdp.length() != 0)
 			remote_sdp = sdp;
-		if (code == 180 || code == 183)
+		if (code == 180 || code == 183) // modified
 			if (listener != null)
 				listener.onCallRinging(this, msg);
 	}

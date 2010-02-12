@@ -219,6 +219,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		}
 		if (Receiver.ccCall != null) mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
         if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
+		mHandler.sendEmptyMessage(MSG_TICK);
 	    if (t == null) {
 			mDigits.setText("");
 			running = true;
@@ -403,7 +404,9 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean result = super.onPrepareOptionsMenu(menu);
 
-		if (Receiver.call_state == UserAgent.UA_STATE_INCALL || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
+		if (Receiver.mSipdroidEngine != null &&
+				Receiver.mSipdroidEngine.ua != null &&
+				Receiver.mSipdroidEngine.ua.audio_app != null) {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(true);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(true);
 			menu.findItem(SPEAKER_MENU_ITEM).setVisible(Receiver.headset <= 0);
