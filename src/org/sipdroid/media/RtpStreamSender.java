@@ -285,7 +285,7 @@ public class RtpStreamSender extends Thread {
 		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
 				AudioRecord.getMinBufferSize(8000, 
 						AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-						AudioFormat.ENCODING_PCM_16BIT)*3/2);
+						AudioFormat.ENCODING_PCM_16BIT));
 		short[] lin = new short[frame_size*11];
 		int num,ring = 0;
 		random = new Random();
@@ -376,28 +376,29 @@ public class RtpStreamSender extends Thread {
 					 last_tx_time += next_tx_delay-sync_adj;
 				 }
 			 }
-			 num = record.read(lin,(ring+delay)%(frame_size*11),frame_size);
+			 num = record.read(lin,(ring+delay*frame_size)%(frame_size*11),frame_size);
 			 if (num <= 0)
 				 continue;
 
 			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
- 				 calc(lin,(ring+delay)%(frame_size*11),num);
+ 				 calc(lin,(ring+delay*frame_size)%(frame_size*11),num);
  	 			 if (RtpStreamReceiver.nearend != 0)
-	 				 noise(lin,(ring+delay)%(frame_size*11),num,p);
+	 				 noise(lin,(ring+delay*frame_size)%(frame_size*11),num,p);
 	 			 else if (nearend == 0)
 	 				 p = 0.9*p + 0.1*s;
  			 } else switch (micgain) {
  			 case 1:
- 				 calc1(lin,(ring+delay)%(frame_size*11),num);
+ 				 calc1(lin,(ring+delay*frame_size)%(frame_size*11),num);
  				 break;
  			 case 5:
- 				 calc5(lin,(ring+delay)%(frame_size*11),num);
+ 				 calc5(lin,(ring+delay*frame_size)%(frame_size*11),num);
  				 break;
  			 case 10:
- 				 calc10(lin,(ring+delay)%(frame_size*11),num);
+ 				 calc10(lin,(ring+delay*frame_size)%(frame_size*11),num);
  				 break;
  			 }
-			 if (Receiver.call_state != UserAgent.UA_STATE_INCALL && alerting != null) {
+			 if (Receiver.call_state != UserAgent.UA_STATE_INCALL &&
+					 Receiver.call_state != UserAgent.UA_STATE_OUTGOING_CALL && alerting != null) {
 				 try {
 					if (alerting.available() < num)
 						alerting.reset();

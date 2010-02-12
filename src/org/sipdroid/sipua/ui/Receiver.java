@@ -30,7 +30,9 @@ import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
@@ -397,6 +399,11 @@ import org.sipdroid.sipua.phone.Connection;
     		
     		edit.putBoolean("wifi_disabled",!enable);
     		edit.commit();
+    		if (enable) {
+                Intent intent = new Intent(WifiManager.WIFI_STATE_CHANGED_ACTION);
+                intent.putExtra(WifiManager.EXTRA_NEW_STATE, wm.getWifiState());
+                mContext.sendBroadcast(intent);
+    		}
     		wm.setWifiEnabled(enable);
 		}
 			    

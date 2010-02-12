@@ -49,7 +49,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public static final int INITIALIZED = 0x2;
 
 	/** User Agent */
-	private UserAgent ua;
+	public UserAgent ua;
 
 	/** Register Agent */
 	private RegisterAgent ra;
@@ -95,7 +95,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 			sip_provider = new SipProvider(IpAddress.localIpAddress, 0);
 			user_profile.contact_url = user_profile.username
 				+ "@"
-				+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"");
+				+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"")
+				+ ";transport=" + sip_provider.getDefaultTransport();
 			
 			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("fromuser","").length() == 0) {
 				user_profile.from_url = user_profile.username

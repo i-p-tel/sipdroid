@@ -78,7 +78,7 @@ public class UserAgent extends CallListenerAdapter {
 	protected ExtendedCall call_transfer;
 
 	/** Audio application */
-	protected MediaLauncher audio_app = null;
+	public MediaLauncher audio_app = null;
 
 	/** Local sdp */
 	protected String local_session = null;
@@ -296,9 +296,9 @@ public class UserAgent extends CallListenerAdapter {
 		// in case of incomplete url (e.g. only 'user' is present), try to
 		// complete it
 		if (target_url.indexOf("@") < 0) {
-			if (user_profile.realm.equals("pbxes.org"))
-				target_url = "&" + target_url;
 			target_url = target_url + "@" + realm; // modified
+			if (target_url.contains("&"))
+				target_url = "&" + target_url;
 		}
 		
 		target_url = sip_provider.completeNameAddress(target_url).toString();
@@ -330,7 +330,7 @@ public class UserAgent extends CallListenerAdapter {
 
 	public void info(char c, int duration)
 	{
-		boolean use2833 = audio_app.sendDTMF(c); // send out-band DTMF (rfc2833) if supported
+		boolean use2833 = audio_app != null && audio_app.sendDTMF(c); // send out-band DTMF (rfc2833) if supported
 
 		if (!use2833 && call != null)
 			call.info(c, duration);
@@ -609,6 +609,7 @@ public class UserAgent extends CallListenerAdapter {
 		else {
 			printLog("RINGING(with SDP)", LogLevel.HIGH);
 			if (! user_profile.no_offer) { 
+				RtpStreamReceiver.ringback(false);
 				// Update the local SDP along with offer/answer 
 				sessionProduct(new SessionDescriptor(remote_sdp));
 				launchMediaApplication();

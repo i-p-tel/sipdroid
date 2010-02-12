@@ -479,7 +479,7 @@ public class VideoCamera extends CallScreen implements
             }
         	
             speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
-            RtpStreamSender.delay = 10*1024;
+            RtpStreamSender.delay = 10;
         }
     }
 
