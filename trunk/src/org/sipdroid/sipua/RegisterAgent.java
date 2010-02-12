@@ -229,7 +229,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			printLog("Unregistering contact " + contact, LogLevel.HIGH);
 		}
 		
-		TransactionClient t = new TransactionClient(sip_provider, req, this);
+		TransactionClient t = new TransactionClient(sip_provider, req, this, 30000);
 		t.request();
 		
 		return true;
@@ -572,7 +572,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			req.addViaHeader(vh);
 
 			if (handleAuthentication(respCode, resp, req)) {
-				TransactionClient t = new TransactionClient(sip_provider, req, this);
+				TransactionClient t = new TransactionClient(sip_provider, req, this, 30000);
 			
 				t.request();
 				return true;

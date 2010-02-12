@@ -71,17 +71,12 @@ import android.widget.Toast;
 				edit.commit();
 	        	Receiver.engine(this).updateDNS();
 			}
-			if (!getPreferenceScreen().getSharedPreferences().contains("stun")) {
-				CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference("stun");
-				cb.setChecked(false);
-			}			
 			if (getPreferenceScreen().getSharedPreferences().getString("stun_server","").equals("")) {
 				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
 				
 				edit.putString("stun_server", "stun.ekiga.net");
 				edit.putString("stun_server_port", "3478");				
 				edit.commit();
-				Receiver.engine(this).updateDNS();
 			}			
 
 			if (!getPreferenceScreen().getSharedPreferences().contains("MWI_enabled")) {

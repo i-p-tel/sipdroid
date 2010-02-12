@@ -296,9 +296,9 @@ public class UserAgent extends CallListenerAdapter {
 		// in case of incomplete url (e.g. only 'user' is present), try to
 		// complete it
 		if (target_url.indexOf("@") < 0) {
-			target_url = target_url + "@" + realm; // modified
-			if (target_url.contains("&"))
+			if (user_profile.realm.equals("pbxes.org"))		
 				target_url = "&" + target_url;
+			target_url = target_url + "@" + realm; // modified
 		}
 		
 		target_url = sip_provider.completeNameAddress(target_url).toString();

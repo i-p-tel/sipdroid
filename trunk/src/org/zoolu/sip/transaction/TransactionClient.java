@@ -66,6 +66,14 @@ public class TransactionClient extends Transaction {
 		init(listener, request.getTransactionId());
 	}
 
+	public TransactionClient(SipProvider sip_provider, Message req,
+			TransactionClientListener listener, int timeout) {
+		super(sip_provider);
+		request = new Message(req);
+		init(listener, request.getTransactionId());
+		transaction_to = new Timer(timeout, "Transaction", this);
+	}
+
 	/** Initializes timeouts and listener. */
 	void init(TransactionClientListener listener,
 			TransactionIdentifier transaction_id) {

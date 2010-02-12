@@ -48,8 +48,6 @@ public class IpAddress {
 	/** The InetAddress */
 	InetAddress inet_address;
 	
-	public static boolean stun;
-
 	/** Local IP address */
 	public static String localIpAddress = "127.0.0.1";
 	
@@ -146,7 +144,6 @@ public class IpAddress {
 					if (!inetAddress.isLoopbackAddress()) { 
 						if (!PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean("stun",false)) {
 							localIpAddress = inetAddress.getHostAddress().toString();
-							stun = false;
 						} else {
 							try {
 								String StunServer = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("stun_server","");
@@ -158,7 +155,6 @@ public class IpAddress {
 								StunDiscover.test();
 								//System.out.println("Public ip is:" + StunDiscover.di.getPublicIP().getHostAddress());
 								localIpAddress = StunDiscover.di.getPublicIP().getHostAddress();
-								stun = true;
 							} catch (BindException be) {
 								System.out.println(inetAddress.toString() + ": " + be.getMessage());
 							} catch (Exception e) {

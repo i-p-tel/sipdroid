@@ -81,7 +81,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 			SipStack.debug_level = 0;
 //			SipStack.log_path = "/data/data/org.sipdroid.sipua";
 			SipStack.max_retransmission_timeout = 4000;
-			SipStack.transaction_timeout = 30000;
 			SipStack.default_transport_protocols = new String[1];
 			SipStack.default_transport_protocols[0] = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("protocol",
 					user_profile.realm.equals("pbxes.org")?"tcp":"udp");
