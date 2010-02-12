@@ -101,6 +101,9 @@
         <item>udp</item>
         <item>tcp</item>
     </string-array>
+<string name="settings_stun">STUN-сервер</string>
+<string name="settings_stun_server">Имя STUN-сервера</string>
+<string name="settings_stun_server_port">Порт STUN-сервера</string>
 
 <string name="settings_options">Вызов</string>
 <string name="settings_wlan">Использовать WLAN</string>
@@ -172,6 +175,8 @@
         <item>0.5</item>
         <item>1.0</item>
     </string-array>
+<string name="settings_ownwifi">Питание Wi-Fi</string>
+<string name="settings_ownwifi2">Экономит батариею</string>
 
 <string name="settings_pbxes_options">Возможности PBX</string>
 <string name="settings_par">Одновременный дозвон</string>
