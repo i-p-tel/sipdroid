@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
- * Copyright (C) 2009 The Sipdroid Open Source Project
- *
- * This file is part of Sipdroid (http://www.sipdroid.org)
- *
- * Sipdroid is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This source code is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this source code; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+	<!--
+		* Copyright (C) 2009 The Sipdroid Open Source Project * * This file is
+		part of Sipdroid (http://www.sipdroid.org) * * Sipdroid is free
+		software; you can redistribute it and/or modify * it under the terms
+		of the GNU General Public License as published by * the Free Software
+		Foundation; either version 3 of the License, or * (at your option) any
+		later version. * * This source code is distributed in the hope that it
+		will be useful, * but WITHOUT ANY WARRANTY; without even the implied
+		warranty of * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+		the * GNU General Public License for more details. * * You should have
+		received a copy of the GNU General Public License * along with this
+		source code; if not, write to the Free Software * Foundation, Inc., 59
+		Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-/////////////////////////////////////////////////////////////////////
-// these are the main messages of Sipdroid
-// for modifying them additional terms according to section 7, GPL apply
-// see ADDITIONAL_TERMS.txt
-/////////////////////////////////////////////////////////////////////
--->
+		/////////////////////////////////////////////////////////////////////
+		// these are the main messages of Sipdroid // for modifying them
+		additional terms according to section 7, GPL apply // see
+		ADDITIONAL_TERMS.txt
+		/////////////////////////////////////////////////////////////////////
+	-->
 
 <resources>
 
@@ -38,16 +33,30 @@
 		\nVersion ${VERSION}
 		\nLe logiciel a été sorti pour des tests.
 		\n
-		\nCopyright (C) 2009 Le projet Open Source Sipdroid (http://sipdroid.org)
-		\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
-		\nCopyright (C) 2006 Le projet Open Source Android (http://android.com)
-		\nCopyright (C) 2005 Luca Veltri - University de Parme - Italie (http://mjsip.org)
-		\nCopyright (C) 2003-2008 Benny Prijono (benny@prijono.org)
-		\nCopyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
+		\nCopyright (C) 2009 Le projet Open Source Sipdroid
+		(http://sipdroid.org)
+		\nCopyright (C) 2008 Hughes Systique Corporation,
+		USA (http://hsc.com)
+		\nCopyright (C) 2006 Le projet Open Source Android
+		(http://android.com)
+		\nCopyright (C) 2005 Luca Veltri - University de
+		Parme - Italie (http://mjsip.org)
+		\nCopyright (C) 2003-2008 Benny
+		Prijono (benny@prijono.org)
+		\nCopyright (C) 2008-2009 Teluu Inc.
+		(http://www.teluu.com)
 		\n
-		\nCe programme est un logiciel libre; vous pouvez le redistribuer et/ou le modifier selon les termes de la Licence Publique Générale GNU (GPL) comme publiée par la Free Software Foundation; ou en version 3 de la	licence, ou (à votre guise) n\'importe quelle autre version.
+		\nCe programme est un logiciel libre; vous
+		pouvez le redistribuer et/ou le modifier selon les termes de la
+		Licence Publique Générale GNU (GPL) comme publiée par la Free Software
+		Foundation; ou en version 3 de la licence, ou (à votre guise)
+		n\'importe quelle autre version.
 		\n
-		\nCe programme est distribué dans l\'espoir qu\'il sera utile, mais SANS AUCUNE GARANTIE ; sans même la garantie implicite de COMMERCIALISATION ou D\'ADAPTATION A UN USAGE PARTICULIER. Consulter la GNU General Public License pour plus de détails (http://www.gnu.org/licenses).
+		\nCe programme est distribué dans
+		l\'espoir qu\'il sera utile, mais SANS AUCUNE GARANTIE ; sans même la
+		garantie implicite de COMMERCIALISATION ou D\'ADAPTATION A UN USAGE
+		PARTICULIER. Consulter la GNU General Public License pour plus de
+		détails (http://www.gnu.org/licenses).
 	</string>
 
 	<string name="reg">Enregistrement...</string>
@@ -59,8 +68,10 @@
 	<string name="auto_enabled">Réponse Auto/Haut-parleur</string>
 	<string name="auto_disabled">Réponse Auto coupée</string>
 	<string name="hint">Adresse du correspondant</string>
-	<string name="empty">Veuillez entrer une adresse pour le correspondant à appeller telle que nom@domaine.com</string>
-	<string name="notfast">Aucun réseau de données convenable de disponible</string>
+	<string name="empty">Veuillez entrer une adresse pour le correspondant à
+		appeller telle que nom@domaine.com</string>
+	<string name="notfast">Aucun réseau de données convenable de disponible
+	</string>
 
 	<string name="settings_account">Réglages du compte SIP</string>
 	<string name="settings_username">Nom d\'utilisateur/ID de l\'appelant</string>
@@ -69,93 +80,104 @@
 	<string name="settings_domain">Domaine</string>
 	<string name="settings_domain2">Laisser vide si identique au serveur</string>
 	<string name="settings_port">Port</string>
-		<string-array name="port_display_values">
-			<item>53</item>
-			<item>69</item>
-			<item>80</item>
-			<item>135</item>
-			<item>161</item>
-			<item>443</item>
-			<item>500</item>
-			<item>1433</item>
-			<item>1701</item>
-			<item>1812</item>
-			<item>3389</item>
-			<item>4500</item>
-			<item>5060 (standard)</item>
-			<item>5061</item>
-			<item>5900</item>
-			<item>16999</item>
-			<item>26999</item>
-			<item>36999</item>
-			<item>personnalisé</item>
-		</string-array>
-		<string-array name="port_values">
-			<item>53</item>
-			<item>69</item>
-			<item>80</item>
-			<item>135</item>
-			<item>161</item>
-			<item>443</item>
-			<item>500</item>
-			<item>1433</item>
-			<item>1701</item>
-			<item>1812</item>
-			<item>3389</item>
-			<item>4500</item>
-			<item>5060</item>
-			<item>5061</item>
-			<item>5900</item>
-			<item>16999</item>
-			<item>26999</item>
-			<item>36999</item>
-			<item>0</item>
-		</string-array>
+	<string-array name="port_display_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060 (standard)</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>personnalisé</item>
+	</string-array>
+	<string-array name="port_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>0</item>
+	</string-array>
 
 	<string name="settings_protocol">Protocole</string>
-		<string-array name="protocol_display_values">
-			<item>UDP (autonomie plus courte en 3G)</item>
-			<item>TCP (autonomie plus longue en 3G)</item>
-		</string-array>
-		<string-array name="protocol_values">
-			<item>udp</item>
-			<item>tcp</item>
-		</string-array>
+	<string-array name="protocol_display_values">
+		<item>UDP (autonomie plus courte en 3G)</item>
+		<item>TCP (autonomie plus longue en 3G)</item>
+	</string-array>
+	<string-array name="protocol_values">
+		<item>udp</item>
+		<item>tcp</item>
+	</string-array>
+
+	<string name="settings_stun">Utiliser un serveur STUN</string>
+	<string name="settings_stun_server">Nom du serveur STUN</string>
+	<string name="settings_stun_server_port">Port du serveur STUN</string>
 
 	<string name="settings_options">Options d\'appel</string>
 	<string name="settings_wlan">Utiliser le WLAN</string>
 	<string name="settings_3g">Utiliser la 3G</string>
 	<string name="settings_edge">Utiliser l\'EDGE</string>
-	<string name="settings_check">Vérifier auprès de votre opérateur mobile si il permet la VoIP</string>
+	<string name="settings_check">Vérifier auprès de votre opérateur mobile si il
+		permet la VoIP</string>
 
-	<string name="dialog_default">Sipdroid n\'est pas actuellement défini comme téléphone par défaut. Voudriez-vous le définir comme téléphone par défaut ?
-	\n
-	\nSi vous répondez \'Non\' ici, vous pouvez encore composer avec Sipdroid depuis le système en ajoutant \'+\' après un numéro dans le Numéroteur, ou en sélectionnant \'envoyer un SMS\' dans les Contacts.</string>
+	<string name="dialog_default">Sipdroid n\'est pas actuellement défini comme
+		téléphone par défaut. Voudriez-vous le définir comme téléphone par
+		défaut ?
+		\n
+		\nSi vous répondez \'Non\' ici, vous pouvez encore composer avec Sipdroid
+		depuis le système en ajoutant \'+\' après un numéro dans le
+		Numéroteur, ou en sélectionnant \'envoyer un SMS\' dans les Contacts.
+	</string>
 	<string name="yes">Oui</string>
 	<string name="no">Non</string>
 	<string name="dontask">Ne pas me redemander</string>
 
 	<string name="settings_pref">Type d\'appel préféré</string>
-		<string-array name="pref_display_values">
-			<item>Sipdroid</item>
-			<item>Sipdroid, si disponible</item>
-			<item>Téléphone</item>
-		</string-array>
+	<string-array name="pref_display_values">
+		<item>Sipdroid</item>
+		<item>Sipdroid, si disponible</item>
+		<item>Téléphone</item>
+	</string-array>
 
 	<string name="settings_compression">Compression de la Voix</string>
-    <string-array name="compression_display_values">
-        <item>Seulement en EDGE</item>
-        <item>Toujours active</item>
-        <item>Jamais</item>
-    </string-array>
-    <string-array name="compression_values">
-        <item>edge</item>
-        <item>always</item>
-        <item>never</item>
-    </string-array>
+	<string-array name="compression_display_values">
+		<item>Seulement en EDGE</item>
+		<item>Toujours active</item>
+		<item>Jamais</item>
+	</string-array>
+	<string-array name="compression_values">
+		<item>edge</item>
+		<item>always</item>
+		<item>never</item>
+	</string-array>
 
 	<string name="settings_auto_on">Rép. Auto en service</string>
-	<string name="settings_auto_on2">Courtes vibrations d\'alerte quand l\'écran est en marche</string>
+	<string name="settings_auto_on2">Courtes vibrations d\'alerte quand l\'écran est en
+		marche</string>
 	<string name="settings_auto_ondemand">Rép. Auto à la demande</string>
 	<string name="settings_auto_ondemand2">Affiche le bouton dans la barre de statut</string>
 
@@ -168,41 +190,49 @@
 	<string name="settings_silent2">Rend muet sur un appel entrant</string>
 
 	<string name="settings_advanced_options">Options Avancées</string>
-	<string name="settings_policy_never">Politique de mise en veille du sysyème changée pour maintenir le Wi-Fi allumé.</string>
-	<string name="settings_policy_default">Retour aux paramètres par défaut de la politique de mise en veille du Wi-Fi.</string>
+	<string name="settings_policy_never">Politique de mise en veille du sysyème changée pour
+		maintenir le Wi-Fi allumé.</string>
+	<string name="settings_policy_default">Retour aux paramètres par défaut de la politique de
+		mise en veille du Wi-Fi.</string>
 	<string name="settings_search">Chercher &amp; Remplacer</string>
 	<string name="settings_excludepat">Exclure des motifs</string>
 	<string name="settings_sipringtone">Sonnerie SIP</string>
-	<string name="settings_sipringtone2">Définir la sonnerie pour un appel SIP entrant</string>
+	<string name="settings_sipringtone2">Définir la sonnerie pour un appel SIP entrant
+	</string>
 	<string name="settings_sipringtone_dialog">Sonneries</string>
 	<string name="settings_eargain">Gain des écouteurs</string>
-	<string name="settings_eargain2">Adjustement du volume ou pour limiter l\'écho avec le correspondant</string>
-		<string-array name="eargain_display_values">
-			<item>Bas (aucun écho)</item>
-			<item>Moyen</item>
-			<item>Elevé (peut provoquer un écho avec le correspondant)</item>
-			<item>Trés élevé</item>
-		</string-array>
-		<string-array name="eargain_values">
-			<item>0.1</item>
-			<item>0.25</item>
-			<item>0.5</item>
-			<item>1.0</item>
-		</string-array>
+	<string name="settings_eargain2">Adjustement du volume ou pour limiter l\'écho avec
+		le correspondant</string>
+	<string-array name="eargain_display_values">
+		<item>Bas (aucun écho)</item>
+		<item>Moyen</item>
+		<item>Elevé (peut provoquer un écho avec le correspondant)</item>
+		<item>Trés élevé</item>
+	</string-array>
+	<string-array name="eargain_values">
+		<item>0.1</item>
+		<item>0.25</item>
+		<item>0.5</item>
+		<item>1.0</item>
+	</string-array>
 	<string name="settings_ownwifi">Contrôler l\'alimentation du Wi-Fi</string>
 	<string name="settings_ownwifi2">Economise les batteries</string>
 
 	<string name="settings_pbxes_options">Caractéristiques PBXes</string>
 	<string name="settings_par">Appels simultanés</string>
-	<string name="settings_par2">Compose les numéros de téléphone de chacun en paralèlle</string>
+	<string name="settings_par2">Compose les numéros de téléphone de chacun en
+		paralèlle</string>
 	<string name="settings_improve">Améliorations audio</string>
-	<string name="settings_improve2">Nécessite un compte payant, la dernière version du logiciel (cf. "Personal Data")</string>
+	<string name="settings_improve2">Nécessite un compte payant, la dernière version du
+		logiciel (cf. "Personal Data")</string>
 	<string name="settings_posurl">URL de l\'adresse/Callback</string>
 	<string name="settings_pos">Mettre à jour l\'adresse</string>
-	<string name="settings_pos2">Peut être indiqués aux contacts PBXes (Nécessite un compte premium)</string>
+	<string name="settings_pos2">Peut être indiqués aux contacts PBXes (Nécessite un
+		compte premium)</string>
 	<string name="settings_pos3">MAJ de l\'adresse</string>
 	<string name="settings_callback">Déclencher un Callback</string>
-	<string name="settings_callback2">Si aucun réseau de données convenable de disponible</string>
+	<string name="settings_callback2">Si aucun réseau de données convenable de disponible
+	</string>
 	<string name="settings_callthru">Déclencher un Callthru</string>
 	<string name="settings_callthru2">Préfixe pour le Callthru</string>
 
@@ -228,7 +258,8 @@
 
 	<string name="unknown">Inconnu</string>
 
-	<string name="slide_hint_down_to_end_call">Faîtes glisser vers le bas pour terminer l\'appel.</string>
+	<string name="slide_hint_down_to_end_call">Faîtes glisser vers le bas pour terminer l\'appel.
+	</string>
 	<string name="slide_hint_up_to_answer">Faîtes glisser vers le haut pour répondre.</string>
 
 	<string name="ongoing">Appel en cours</string>
