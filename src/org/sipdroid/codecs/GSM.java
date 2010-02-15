@@ -31,6 +31,15 @@ class GSM extends CodecBase implements Codec {
 		CODEC_DESCRIPTION = "13kbit";
 		CODEC_NUMBER = 3;
 		CODEC_DEFAULT_SETTING = "edge";
+		/* up convert original compression parameter for this codec */
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
+		String pref = sp.getString("compression", null);
+		if (pref != null) {
+			SharedPreferences.Editor e = sp.edit();
+			e.remove("compression");
+			e.putString(CODEC_NAME, pref);
+			e.commit();
+		}
 		super.update();
 	}
 
@@ -41,15 +50,6 @@ class GSM extends CodecBase implements Codec {
 	}
 
 	void load() {
-		/* up convert original compression parameter for this codec */
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
-		String pref = sp.getString("compression", null);
-		if (pref != null) {
-			SharedPreferences.Editor e = sp.edit();
-			e.remove("compression");
-			e.putString(CODEC_NAME, pref);
-			e.commit();
-		}
 		if(org.sipdroid.pjlib.Codec.loaded)
 			super.load();
 	}
