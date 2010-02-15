@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.3.13
+    * Fix issue 49, issue 232, issue 251, issue 319
+
   * 1.3.12
     * Add STUN
 
