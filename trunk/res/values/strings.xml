@@ -236,6 +236,7 @@
 <string name="card_title_in_progress">Call in progress</string>
 <string name="card_title_incoming_call">Incoming call</string>
 <string name="card_title_call_ended">Call ended</string>
+<string name="card_title_ended_no_codec">ERROR: Codecs Incompatible</string>
 <string name="card_title_on_hold">On hold</string>
 
 <string name="unknown">Unknown</string>
@@ -245,4 +246,10 @@
 
 <string name="ongoing">Current Call</string>
 <string name="onHold">On hold</string>
+<string name="codecs">Audio Codecs</string>
+<string name="codecs_summary">Select Audio Codecs to be available for voice calls</string>
+<string name="codecs_move">Move this codec</string>
+<string name="codecs_move_up">Move up one place</string>
+<string name="codecs_move_down">Move down one place</string>
+<string name="cancel">Cancel</string>
 </resources>

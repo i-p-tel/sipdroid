@@ -19,6 +19,7 @@
  */
 package org.sipdroid.media;
 
+import org.sipdroid.codecs.Codecs;
 import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.sip.provider.SipStack;
@@ -72,7 +73,7 @@ public class JAudioLauncher implements MediaLauncher
    }
 
    /** Costructs the audio launcher */
-   public JAudioLauncher(int local_port, String remote_addr, int remote_port, int direction, String audiofile_in, String audiofile_out, int sample_rate, int sample_size, int frame_size, Log logger, int payload_type, int dtmf_pt)
+   public JAudioLauncher(int local_port, String remote_addr, int remote_port, int direction, String audiofile_in, String audiofile_out, int sample_rate, int sample_size, int frame_size, Log logger, Codecs.Map payload_type, int dtmf_pt)
    {  log=logger;
       frame_rate=sample_rate/frame_size;
       useDTMF = (dtmf_pt != 0);

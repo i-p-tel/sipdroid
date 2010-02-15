@@ -107,9 +107,13 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     		Receiver.moveTop();
     		break;
     	case UserAgent.UA_STATE_IDLE:
+		int delay = 2000;
     		if (Receiver.ccCall != null)
     			mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
-			mHandler.sendEmptyMessageDelayed(MSG_BACK, 2000);
+		if (Receiver.call_end_reason != -1)
+			// longer delay to see error message
+			delay = 5000;
+		mHandler.sendEmptyMessageDelayed(MSG_BACK, delay);
     		break;
     	}
 		if (socket != null) {
@@ -209,7 +213,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		    screenOff(true);
 			break;
 		case UserAgent.UA_STATE_IDLE:
-			if (!mHandler.hasMessages(MSG_BACK))
+			if (!mHandler.hasMessages(MSG_BACK)
+			    && Receiver.call_end_reason == -1)
 				moveBack();
 			break;
 		}
@@ -282,6 +287,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     			moveBack();
     			break;
     		case MSG_TICK:
+			mCodec.setText(RtpStreamReceiver.getCodec());
     			if (RtpStreamReceiver.good != 0) {
     				if (RtpStreamReceiver.timeout != 0)
     					mStats.setText("no data");
@@ -304,6 +310,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	SlidingDrawer mDialerDrawer;
 	SlidingCardManager mSlidingCardManager;
 	TextView mStats;
+	TextView mCodec;
 	
     public void initInCallScreen() {
         mInCallPanel = (ViewGroup) findViewById(R.id.inCallPanel);
@@ -324,6 +331,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	    mMainFrame.addView(wanv, lp);
 
 	    mStats = (TextView) findViewById(R.id.stats);
+	    mCodec = (TextView) findViewById(R.id.codec);
         mDialerDrawer = (SlidingDrawer) findViewById(R.id.dialer_container);
         mCallCard.displayOnHoldCallStatus(ccPhone,null);
         mCallCard.displayOngoingCallStatus(ccPhone,null);

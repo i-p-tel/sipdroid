@@ -75,6 +75,10 @@
         <activity android:name=".ui.Settings" android:label="@string/app_name"
         	android:excludeFromRecents="true" android:taskAffinity="">
         </activity>
+        <activity
+	   android:name="org.sipdroid.codecs.Codecs$CodecSettings"
+	   android:label="@string/app_name" >
+        </activity>
         <activity android:name=".ui.VideoCamera" android:label="@string/menu_video"
 	        android:excludeFromRecents="true" android:taskAffinity=""
 			android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"

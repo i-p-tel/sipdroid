@@ -30,7 +30,7 @@ import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
-import org.sipdroid.pjlib.Codec;
+import org.sipdroid.codecs.Codecs;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -55,7 +55,9 @@ public class RtpStreamReceiver extends Thread {
 	public static boolean DEBUG = true;
 
 	/** Payload type */
-	int p_type;
+	Codecs.Map p_type;
+
+	static String codec = "NONE";
 
 	/** Size of the read buffer */
 	public static final int BUFFER_SIZE = 1024;
@@ -80,9 +82,10 @@ public class RtpStreamReceiver extends Thread {
 	 * @param socket
 	 *            the local receiver SipdroidSocket
 	 */
-	public RtpStreamReceiver(SipdroidSocket socket, int payload_type) {
+	public RtpStreamReceiver(SipdroidSocket socket, Codecs.Map payload_type) {
 		init(socket);
 		p_type = payload_type;
+		codec = p_type.codec.getTitle();
 	}
 
 	/** Inits the RtpStreamReceiver */
@@ -299,7 +302,6 @@ public class RtpStreamReceiver extends Thread {
 		}
 
 		byte[] buffer = new byte[BUFFER_SIZE+12];
-		byte[] buffer_gsm = new byte[33+12];
 		int i;
 		rtp_packet = new RtpPacket(buffer, 0);
 
@@ -330,15 +332,7 @@ public class RtpStreamReceiver extends Thread {
 		lserver = 0;
 		luser = -8000;
 		cnt = 0;
-		switch (p_type) {
-		case 3:
-			Codec.init();
-			break;
-		case 0:
-		case 8:
-			G711.init();
-			break;
-		}
+		p_type.codec.init();
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_MUSIC,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 		track.play();
 		empty();
@@ -387,7 +381,6 @@ public class RtpStreamReceiver extends Thread {
 					 m++;
 					 continue;
 				 }
-				 
 				 server = track.getPlaybackHeadPosition();
 				 headroom = user-server;
 				 
@@ -402,21 +395,7 @@ public class RtpStreamReceiver extends Thread {
 					 cnt2 = 0;
 
 				 if (cnt <= 500 || cnt2 >= 2 || headroom - 875 < len) {
-					 switch (rtp_packet.getPayloadType()) {
-					 case 0:
-						 len = rtp_packet.getPayloadLength();
-						 G711.ulaw2linear(buffer, lin, len);
-						 break;
-					 case 8:
-						 len = rtp_packet.getPayloadLength();
-						 G711.alaw2linear(buffer, lin, len);
-						 break;
-					 case 3:
-						 for (i = 12; i < 45; i++)
-							 buffer_gsm[i] = buffer[i];
-						 len = Codec.decode(buffer_gsm, lin, 0);
-						 break;
-					 }
+					 len = p_type.codec.decode(buffer, lin, rtp_packet.getPayloadLength());
 					 
 		 			 if (speakermode == AudioManager.MODE_NORMAL)
 		 				 calc(lin,0,len);
@@ -494,9 +473,11 @@ public class RtpStreamReceiver extends Thread {
 		}
 		tg.stopTone();
 		tg.release();
-		
+
+		p_type.codec.close();
 		rtp_socket.close();
 		rtp_socket = null;
+		codec = "NONE";
 
 		if (DEBUG)
 			println("rtp receiver terminated");
@@ -514,5 +495,9 @@ public class RtpStreamReceiver extends Thread {
 
 	public static int byte2int(byte b1, byte b2) {
 		return (((b1 + 0x100) % 0x100) << 8) + (b2 + 0x100) % 0x100;
+	}
+
+	public static String getCodec() {
+		return codec;
 	}
 }

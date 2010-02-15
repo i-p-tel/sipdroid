@@ -146,8 +146,6 @@ public class UserAgentProfile extends Configure {
 
 	/** Audio port */
 	public int audio_port = 21000;
-
-	/** Supported audio codecs (priority order) */
 	public int[] audio_codecs = {3, 8, 0};
 	public int dtmf_avp = 101; // zero means no use of outband DTMF
 	/** Audio sample rate */
