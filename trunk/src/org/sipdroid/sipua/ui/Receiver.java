@@ -33,6 +33,7 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
@@ -396,7 +397,8 @@ import org.sipdroid.sipua.phone.Connection;
 			if (enable && !PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wifi_disabled", false))
         		return;
         	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-			if (!enable && !wm.isWifiEnabled())
+	        ContentResolver cr = Receiver.mContext.getContentResolver();
+			if (!enable && Settings.Secure.getInt(cr, Settings.Secure.WIFI_ON,0) == 0)
 				return;
     		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
     		

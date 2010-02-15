@@ -19,9 +19,6 @@
  */
 package org.sipdroid.codecs;
 
-import java.lang.String;
-import java.util.Map;
-
 import org.sipdroid.sipua.ui.Sipdroid;
 
 class Speex extends CodecBase implements Codec {
@@ -40,8 +37,8 @@ class Speex extends CodecBase implements Codec {
 		CODEC_USER_NAME = "speex";
 		CODEC_DESCRIPTION = "11kbit";
 		CODEC_NUMBER = 97;
-
-		load();
+		CODEC_DEFAULT_SETTING = "edge";
+		super.update();
 	}
 
 	void load() {
@@ -60,6 +57,8 @@ class Speex extends CodecBase implements Codec {
 	public native void close();
 
 	public void init() {
-		open(DEFAULT_COMPRESSION);
+		load();
+		if (isLoaded())
+			open(DEFAULT_COMPRESSION);
 	}
 }

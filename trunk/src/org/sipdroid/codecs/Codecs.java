@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2010 The Sipdroid Open Source Project
+ * 
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ * 
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package org.sipdroid.codecs;
 
 import java.util.HashMap;
@@ -77,8 +97,6 @@ public class Codecs {
 		}
 	}
 
-	private static boolean initialised = false;
-
 	public static Codec get(int key) {
 		return codecsNumbers.get(key);
 	}
@@ -89,7 +107,6 @@ public class Codecs {
 
 	private static void addPreferences(PreferenceScreen ps) {
 		Context cx = ps.getContext();
-		SharedPreferences sp = ps.getSharedPreferences();
 		Resources r = cx.getResources();
 		ps.setOrderingAsAdded(true);
 
@@ -99,10 +116,16 @@ public class Codecs {
 			l.setEntryValues(r.getStringArray(R.array.compression_values));
 			l.setKey(c.name());
 			l.setPersistent(true);
+			c.init();
 			if (c.isLoaded()) {
 				l.setEnabled(true);
 				c.setListPreference(l);
 			} else {
+				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
+				SharedPreferences.Editor e = sp.edit();
+
+				e.putString(c.name(), "never");
+				e.commit();
 				l.setValue("never");
 				l.setEnabled(false);
 			}
