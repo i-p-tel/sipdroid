@@ -26,6 +26,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class Codecs {
     	private static final Vector<Codec> codecs = new Vector<Codec>() {{
+			add(new Speex());
 			add(new GSM());
 			add(new alaw());
 			add(new ulaw());
