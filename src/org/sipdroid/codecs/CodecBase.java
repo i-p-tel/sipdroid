@@ -38,10 +38,14 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 	private boolean edgeOnly = false;
 	private String value;
 
-	void load() {
+	void update() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
 		value = sp.getString(CODEC_NAME, CODEC_DEFAULT_SETTING);
-		updateFlags(value);
+		updateFlags(value);		
+	}
+	
+	void load() {
+		update();
 		loaded = true;
 	}
 
@@ -50,15 +54,15 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 	}
     
 	public void enable(boolean e) {
-		enabled = e && loaded;
+		enabled = e;
 	}
 
 	public boolean isEnabled() {
-		return loaded && enabled;
+		return enabled;
 	}
 
 	public boolean edgeOnly() {
-		return loaded && enabled && edgeOnly;
+		return enabled && edgeOnly;
 	}
 
 	public String name() {

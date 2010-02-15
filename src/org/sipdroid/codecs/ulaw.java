@@ -19,10 +19,7 @@
  */
 package org.sipdroid.codecs;
 
-import java.util.Map;
-
 import org.sipdroid.media.G711;
-import org.sipdroid.sipua.ui.Sipdroid;
 
 class ulaw extends CodecBase implements Codec {
 	ulaw() {

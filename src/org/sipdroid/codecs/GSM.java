@@ -19,8 +19,6 @@
  */
 package org.sipdroid.codecs;
 
-import java.util.Map;
-
 import org.sipdroid.sipua.ui.Receiver;
 
 import android.content.SharedPreferences;
@@ -33,12 +31,13 @@ class GSM extends CodecBase implements Codec {
 		CODEC_DESCRIPTION = "13kbit";
 		CODEC_NUMBER = 3;
 		CODEC_DEFAULT_SETTING = "edge";
-
-		load();
+		super.update();
 	}
 
 	public void init() {
-		org.sipdroid.pjlib.Codec.init();
+		load();
+		if (isLoaded())
+			org.sipdroid.pjlib.Codec.init();
 	}
 
 	void load() {
@@ -56,10 +55,10 @@ class GSM extends CodecBase implements Codec {
 	}
     
 	public int decode(byte encoded[], short lin[], int frames) {
-		byte[] buf = new byte[33];
+		byte[] buf = new byte[33+12];
 		int i;
 
-		for (i = 12; i < 15; i++)
+		for (i = 12; i < 45; i++)
 			buf[i] = encoded[i];
 		return org.sipdroid.pjlib.Codec.decode(buf, lin, 0);
 	}

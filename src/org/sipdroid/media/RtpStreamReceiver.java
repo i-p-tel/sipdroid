@@ -37,9 +37,7 @@ import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
-import android.media.AudioRecord;
 import android.media.AudioTrack;
-import android.media.MediaRecorder;
 import android.media.ToneGenerator;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
@@ -57,7 +55,7 @@ public class RtpStreamReceiver extends Thread {
 	/** Payload type */
 	Codecs.Map p_type;
 
-	static String codec = "NONE";
+	static String codec = "";
 
 	/** Size of the read buffer */
 	public static final int BUFFER_SIZE = 1024;
@@ -228,17 +226,7 @@ public class RtpStreamReceiver extends Thread {
 	public static void restoreMode() {
 		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("setmode",false)) {
 			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE")) {
-				AudioRecord record = null;
-				if (RtpStreamSender.m == 0) {
-					record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
-						AudioRecord.getMinBufferSize(8000, 
-								AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-								AudioFormat.ENCODING_PCM_16BIT));
-					record.startRecording();
-				}
 				setMode(AudioManager.MODE_NORMAL);
-				if (record != null)
-					record.stop();
 			} else {
 				Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
 				edit.putBoolean("setmode", false);
@@ -302,7 +290,6 @@ public class RtpStreamReceiver extends Thread {
 		}
 
 		byte[] buffer = new byte[BUFFER_SIZE+12];
-		int i;
 		rtp_packet = new RtpPacket(buffer, 0);
 
 		if (DEBUG)
@@ -477,7 +464,7 @@ public class RtpStreamReceiver extends Thread {
 		p_type.codec.close();
 		rtp_socket.close();
 		rtp_socket = null;
-		codec = "NONE";
+		codec = "";
 
 		if (DEBUG)
 			println("rtp receiver terminated");

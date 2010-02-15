@@ -37,7 +37,7 @@ LOCAL_SRC_FILES := speex_jni.cpp \
 		$(SPEEX)/libspeex/window.c \
 		$(SPEEX)/libspeex/high_lsp_tables.c
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(SPEEX)/include
-LOCAL_CFLAGS = -DFIXED_POINT -DEXPORT="" -UHAVE_CONFIG_H
+LOCAL_C_INCLUDES += 
+LOCAL_CFLAGS = -DFIXED_POINT -DEXPORT="" -UHAVE_CONFIG_H -I$(LOCAL_PATH)/$(SPEEX)/include
 
 include $(BUILD_SHARED_LIBRARY)

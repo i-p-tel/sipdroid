@@ -213,8 +213,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		    screenOff(true);
 			break;
 		case UserAgent.UA_STATE_IDLE:
-			if (!mHandler.hasMessages(MSG_BACK)
-			    && Receiver.call_end_reason == -1)
+			if (!mHandler.hasMessages(MSG_BACK))
 				moveBack();
 			break;
 		}
