@@ -47,6 +47,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.sipdroid.sipua.*;
+import org.sipdroid.sipua.ui.Receiver;
 
 /**
  * "Call card" UI element: the in-call screen contains a tiled layout of call
@@ -624,10 +625,12 @@ public class CallCard extends FrameLayout
 
 
     private String getCallFailedString(Call call) {
-        int resID;
+	int resID = R.string.card_title_call_ended;
 
-             resID = R.string.card_title_call_ended;
-         return getContext().getString(resID);
+	if (Receiver.call_end_reason != -1)
+	    resID = Receiver.call_end_reason;
+
+	return getContext().getString(resID);
     }
 
     private void showCallConnecting() {

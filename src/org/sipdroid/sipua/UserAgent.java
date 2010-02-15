@@ -22,9 +22,10 @@
 package org.sipdroid.sipua;
 
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Vector;
 
+import org.sipdroid.codecs.Codec;
+import org.sipdroid.codecs.Codecs;
 import org.sipdroid.media.JAudioLauncher;
 import org.sipdroid.media.MediaLauncher;
 import org.sipdroid.media.RtpStreamReceiver;
@@ -51,8 +52,6 @@ import org.zoolu.tools.LogLevel;
 import org.zoolu.tools.Parser;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
-import android.telephony.TelephonyManager;
 
 /**
  * Simple SIP user agent (UA). It includes audio/video applications.
@@ -91,7 +90,7 @@ public class UserAgent extends CallListenerAdapter {
 
 	int call_state = UA_STATE_IDLE;
 	String remote_media_address;
-	int remote_video_port,local_video_port,payload_type;
+	int remote_video_port,local_video_port;
 
 	// *************************** Basic methods ***************************
 
@@ -175,7 +174,7 @@ public class UserAgent extends CallListenerAdapter {
 
 	//change start (multi codecs)
 	/** Inits the local SDP (no media spec) */
-	public void initSessionDescriptor(int[] audio_codecs) {
+	public void initSessionDescriptor(Codecs.Map c) {
 		SessionDescriptor sdp = new SessionDescriptor(
 				user_profile.from_url,
 				sip_provider.getViaAddress());
@@ -186,7 +185,7 @@ public class UserAgent extends CallListenerAdapter {
 		//audio
 		if (user_profile.audio || !user_profile.video)
 		{
-			addMediaDescriptor("audio", user_profile.audio_port, audio_codecs, user_profile.audio_sample_rate);
+			addMediaDescriptor("audio", user_profile.audio_port, c, user_profile.audio_sample_rate);
 		}
 		
 		if (user_profile.video)
@@ -197,9 +196,9 @@ public class UserAgent extends CallListenerAdapter {
 	}
 	//change end
 	
-	/** Adds a media to the SDP */
-	public void addMediaDescriptor(String media, int port, int avp,
-			String codec, int rate) {
+	/** Adds a single media to the SDP */
+	private void addMediaDescriptor(String media, int port, int avp,
+					String codec, int rate) {
 		SessionDescriptor sdp = new SessionDescriptor(local_session);
 		
 		String attr_param = String.valueOf(avp);
@@ -215,31 +214,29 @@ public class UserAgent extends CallListenerAdapter {
 		local_session = sdp.toString();
 	}
 	
-	protected static HashMap<Integer,String> avp_map = new HashMap<Integer,String>(){{
-		put(0,"PCMU");
-		put(3,"GSM");
-		put(8,"PCMA");
-	}};
-	
-	/** Adds a media to the SDP */
-	public void addMediaDescriptor(String media, int port, int[] avps, int rate) {
+	/** Adds a set of media to the SDP */
+	private void addMediaDescriptor(String media, int port, Codecs.Map c,
+					int rate) {
 		SessionDescriptor sdp = new SessionDescriptor(local_session);
 	
 		Vector<String> avpvec = new Vector<String>();
 		Vector<AttributeField> afvec = new Vector<AttributeField>();
-		for (int i=0; i<avps.length ; i++) {
-			int avp = avps[i];
-			String codec = avp_map.get(avp);
-			if (avp==user_profile.dtmf_avp && user_profile.dtmf_avp != 0){
-				avpvec.add(String.valueOf(avp));
-				afvec.add(new AttributeField("rtpmap", String.format("%d telephone-event/%d", avp, rate)));
-				afvec.add(new AttributeField("fmtp", String.format("%d 0-15", avp)));
+		if (c == null) {
+			// offer all known codecs
+			for (int i : Codecs.getCodecs()) {
+				Codec codec = Codecs.get(i);
+				avpvec.add(String.valueOf(i));
+				afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", i, codec.name(), rate)));
 			}
-			else if (codec!=null) {
-				avpvec.add(String.valueOf(avp));
-				afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", avp, codec, rate)));
-			}
+		} else {
+			avpvec.add(String.valueOf(c.number));
+			afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", c.number, c.codec.name(), rate)));
 		}
+		if (user_profile.dtmf_avp != 0){
+			afvec.add(new AttributeField("rtpmap", String.format("%d telephone-event/%d", user_profile.dtmf_avp, rate)));
+			afvec.add(new AttributeField("fmtp", String.format("%d 0-15", user_profile.dtmf_avp)));
+		}
+				
 		//String attr_param = String.valueOf(avp);
 		
 		sdp.addMedia(new MediaField(media, port, 0, "RTP/AVP", avpvec), afvec);
@@ -287,7 +284,7 @@ public class UserAgent extends CallListenerAdapter {
 		}
 
 		//change start multi codecs
-		createOffer(useAudioCompression());
+		createOffer();
 		//change end
 		call = new ExtendedCall(sip_provider, from_url,
 				user_profile.contact_url, user_profile.username,
@@ -313,19 +310,6 @@ public class UserAgent extends CallListenerAdapter {
 		}
 		
 		return true;
-	}
-
-	private boolean useAudioCompression() {
-		boolean useGSM = false;
-		String compression = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("compression","edge");
-		if (compression.equals("always")) {
-			useGSM = true;
-		} else if (compression.equals("edge")) {
-			TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-			if (!Receiver.on_wlan && tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
-				useGSM = true;
-		}
-		return useGSM;
 	}
 
 	public void info(char c, int duration)
@@ -403,26 +387,23 @@ public class UserAgent extends CallListenerAdapter {
 					LogLevel.HIGH);
 			return;
 		}
-		int avp = payload_type; //local_sdp must be set properly
+		Codecs.Map c;
 		// parse local sdp
 		SessionDescriptor local_sdp = new SessionDescriptor(call
 				.getLocalSessionDescriptor());
 		int local_audio_port = 0;
 		local_video_port = 0;
 		int dtmf_pt = 0;
-		for (Enumeration<MediaDescriptor> e = local_sdp.getMediaDescriptors()
-				.elements(); e.hasMoreElements();) {
-			MediaField media = e.nextElement().getMedia();
-			if (media.getMedia().equals("audio")) { //change start multi codec
-				local_audio_port = media.getPort();
-				avp = Integer.valueOf(media.getFormatList().firstElement());
-				if (media.getFormatList().contains(String.valueOf(user_profile.dtmf_avp)))
-					dtmf_pt = user_profile.dtmf_avp;
-			} //change end
-			if (media.getMedia().equals("video"))
-				local_video_port = media.getPort();
+		c = Codecs.getCodec(local_sdp);
+		MediaDescriptor m = local_sdp.getMediaDescriptor("video");
+		if ( m != null)
+			local_video_port = m.getMedia().getPort();
+		m = local_sdp.getMediaDescriptor("audio");
+		if (m != null) {
+			local_audio_port = m.getMedia().getPort();
+			if (m.getMedia().getFormatList().contains(String.valueOf(user_profile.dtmf_avp)))
+				dtmf_pt = user_profile.dtmf_avp;
 		}
-
 		// parse remote sdp
 		SessionDescriptor remote_sdp = new SessionDescriptor(call
 				.getRemoteSessionDescriptor());
@@ -466,7 +447,7 @@ public class UserAgent extends CallListenerAdapter {
 						remote_media_address, remote_audio_port, dir, audio_in,
 						audio_out, user_profile.audio_sample_rate,
 						user_profile.audio_sample_size,
-						user_profile.audio_frame_size, log, avp, dtmf_pt);
+						user_profile.audio_frame_size, log, c, dtmf_pt);
 			}
 			audio_app.startMedia();
 		}
@@ -492,32 +473,16 @@ public class UserAgent extends CallListenerAdapter {
 		return 0;
 	}
 
-	private void createOffer(boolean useGSM) {
-		Vector<Integer> avpvec = new Vector<Integer>();
-		for (int i=0;i<user_profile.audio_codecs.length;i++){
-			int avp = user_profile.audio_codecs[i];
-			if (avp == 3 && !useGSM) continue;
-			avpvec.add(avp);
-		}
-		avpvec.add(user_profile.dtmf_avp);
-		int[] avps = new int[avpvec.size()];
-		for (int i=0;i<avps.length;i++){
-			avps[i] = avpvec.elementAt(i);
-		}
-		initSessionDescriptor(avps);
+	private void createOffer() {
+		initSessionDescriptor(null);
 	}
 
-	private void createAnswer(SessionDescriptor remote_sdp, boolean useGSM) {
-		MediaDescriptor remote_md = remote_sdp.getMediaDescriptor("audio");
-		int avp = -1;
-		for (int i=0;i<user_profile.audio_codecs.length;i++) {
-			avp = user_profile.audio_codecs[i];
-			if (avp == 3 && !useGSM) continue;
-			if (avp == user_profile.dtmf_avp) continue;
-			if (remote_md.hasCodec(avp_map.get(avp))!=null) break;
-		}
-		if (avp==-1) avp = user_profile.audio_codecs[0]; // no codec was selected 
-		initSessionDescriptor(new int[]{avp, user_profile.dtmf_avp}); 
+	private void createAnswer(SessionDescriptor remote_sdp) {
+
+		Codecs.Map c = Codecs.getCodec(remote_sdp);
+		if (c == null)
+			throw new RuntimeException("Failed to get CODEC: AVAILABLE : " + remote_sdp);
+		initSessionDescriptor(c);
 		sessionProduct(remote_sdp);
 	}
 
@@ -557,13 +522,19 @@ public class UserAgent extends CallListenerAdapter {
 		
 		changeStatus(UA_STATE_INCOMING_CALL,caller.toString());
 
-		boolean useGSM = useAudioCompression();
 		if (sdp == null) {
-			createOffer(useGSM);
+			createOffer();
 		}
 		else { 
 			SessionDescriptor remote_sdp = new SessionDescriptor(sdp);
-			createAnswer(remote_sdp, useGSM);
+			try {
+				createAnswer(remote_sdp);
+			} catch (Exception e) {
+				// only known exception is no codec
+				Receiver.call_end_reason = R.string.card_title_ended_no_codec;
+				changeStatus(UA_STATE_IDLE);
+				return;
+			}
 		}
 		call.ring(local_session);		
 		launchMediaApplication();
@@ -638,7 +609,7 @@ public class UserAgent extends CallListenerAdapter {
 		SessionDescriptor remote_sdp = new SessionDescriptor(sdp);
 		if (user_profile.no_offer) {
 			// answer with the local sdp
-			createAnswer(remote_sdp, useAudioCompression());
+			createAnswer(remote_sdp);
 			call.ackWithAnswer(local_session);
 		} else {
 			// Update the local SDP along with offer/answer 
@@ -707,6 +678,10 @@ public class UserAgent extends CallListenerAdapter {
 			return;
 		}
 		printLog("REFUSED (" + reason + ")", LogLevel.HIGH);
+		if (reason.equalsIgnoreCase("not acceptable here")) {
+			// bummer we have to string compare, this is sdp 488
+			Receiver.call_end_reason = R.string.card_title_ended_no_codec;
+		}
 		changeStatus(UA_STATE_IDLE);
 		
 		if (call == call_transfer) 

@@ -20,7 +20,6 @@
 
 package org.sipdroid.sipua.ui;
 
-import org.sipdroid.pjlib.Codec;
 import org.sipdroid.sipua.R;
 import org.zoolu.sip.provider.SipStack;
 
@@ -90,14 +89,6 @@ import android.widget.Toast;
 				cb2.setChecked(false);
 				getPreferenceScreen().findPreference("3g").setEnabled(false);
 				getPreferenceScreen().findPreference("edge").setEnabled(false);
-			}
-			Codec.init();
-			if (!Codec.loaded) {
-				Editor edit = getPreferenceScreen().getSharedPreferences().edit();
-
-				edit.putString("compression", "never");
-				edit.commit();
-				getPreferenceScreen().findPreference("compression").setEnabled(false);
 			}
 			getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 			updateSummaries();
@@ -222,7 +213,6 @@ import android.widget.Toast;
         	} else {
         		getPreferenceScreen().findPreference("par").setEnabled(false);
           	}
-        	fill("compression","edge",R.array.compression_values,R.array.compression_display_values);
         	fill("eargain","0.25",R.array.eargain_values,R.array.eargain_display_values);
         	fill("micgain","0.25",R.array.eargain_values,R.array.eargain_display_values);
         	fill("heargain","0.25",R.array.eargain_values,R.array.eargain_display_values);

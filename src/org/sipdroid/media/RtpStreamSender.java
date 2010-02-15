@@ -34,7 +34,7 @@ import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
-import org.sipdroid.pjlib.Codec;
+import org.sipdroid.codecs.Codecs;
 
 import android.content.Context;
 import android.media.AudioFormat;
@@ -56,7 +56,7 @@ public class RtpStreamSender extends Thread {
 	RtpSocket rtp_socket = null;
 
 	/** Payload type */
-	int p_type;
+	Codecs.Map p_type;
 
 	/** Number of frame per second */
 	long frame_rate;
@@ -129,22 +129,23 @@ public class RtpStreamSender extends Thread {
 	 * @param dest_port
 	 *            the destination port
 	 */
-	public RtpStreamSender(boolean do_sync,
-			int payload_type, long frame_rate, int frame_size,
-			SipdroidSocket src_socket, String dest_addr, int dest_port) {
+	public RtpStreamSender(boolean do_sync, Codecs.Map payload_type,
+			       long frame_rate, int frame_size,
+			       SipdroidSocket src_socket, String dest_addr,
+			       int dest_port) {
 		init(do_sync, payload_type, frame_rate, frame_size,
 				src_socket, dest_addr, dest_port);
 	}
 
 	/** Inits the RtpStreamSender */
-	private void init(boolean do_sync,
-			int payload_type, long frame_rate, int frame_size,
-			SipdroidSocket src_socket, String dest_addr,
-			int dest_port) {
+	private void init(boolean do_sync, Codecs.Map payload_type,
+			  long frame_rate, int frame_size,
+			  SipdroidSocket src_socket, String dest_addr,
+			  int dest_port) {
 		this.p_type = payload_type;
 		this.frame_rate = frame_rate;
 		this.frame_size = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("server","").equals("pbxes.org")?
-				(payload_type == 3?960:1024):frame_size; //15
+		    (payload_type.codec.number() == 3?960:1024):frame_size; //15
 		this.do_sync = do_sync;
 		try {
 			rtp_socket = new RtpSocket(src_socket, InetAddress
@@ -262,13 +263,12 @@ public class RtpStreamSender extends Thread {
 			return;
 		byte[] buffer = new byte[frame_size + 12];
 		RtpPacket rtp_packet = new RtpPacket(buffer, 0);
-		rtp_packet.setPayloadType(p_type);
+		rtp_packet.setPayloadType(p_type.number);
 		int seqn = 0;
 		long time = 0;
 		double p = 0;
 		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
 		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("improve",false);
-		boolean useGSM = !PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("compression","edge").equals("never");
 		int micgain = (int)(Settings.getMicGain()*10);
 		long frame_period = 1000 / frame_rate;
 		long last_tx_time = 0;
@@ -295,15 +295,7 @@ public class RtpStreamSender extends Thread {
 		} catch (IOException e2) {
 			if (!Sipdroid.release) e2.printStackTrace();
 		}
-		switch (p_type) {
-		case 3:
-			Codec.init();
-			break;
-		case 0:
-		case 8:
-			G711.init();
-			break;
-		}
+		p_type.codec.init();
 		record.startRecording();
 		while (running) {
 			 if (muted || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
@@ -406,28 +398,12 @@ public class RtpStreamSender extends Thread {
 				 } catch (IOException e) {
 					if (!Sipdroid.release) e.printStackTrace();
 				 }
-				 switch (p_type) {// have to add ulaw case?
-				 case 3:
-					 G711.alaw2linear(buffer, lin, num);
-					 num = Codec.encode(lin, 0, buffer, num);
-					 break;
-				 case 0:
-					 G711.alaw2linear(buffer, lin, num);
-					 G711.linear2ulaw(lin, 0, buffer, num);
-					 break;
+				 if (p_type.codec.number() != 8) {
+					  G711.alaw2linear(buffer, lin, num);
+					  num = p_type.codec.encode(lin, 0, buffer, num);
 				 }
 			 } else {
-				 switch (p_type) {
-				 case 3:
-					 num = Codec.encode(lin, ring%(frame_size*11), buffer, num);
-					 break;
-				 case 0:
-					 G711.linear2ulaw(lin, ring%(frame_size*11), buffer, num);
-					 break;
-				 case 8:
-					 G711.linear2alaw(lin, ring%(frame_size*11), buffer, num);
-					 break;
-				 }
+				 num = p_type.codec.encode(lin, ring%(frame_size*11), buffer, num);
 			 }
  			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
@@ -446,13 +422,6 @@ public class RtpStreamSender extends Thread {
  				 m = 2;
  			 else
  				 m = 1;
- 			 if (useGSM && p_type == 8 && !Receiver.on_wlan && tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE) {
- 				 rtp_packet.setPayloadType(p_type = 3);
- 				 if (frame_size == 1024) {
- 					 frame_size = 960;
- 					 ring = 0;
- 				 }
- 			 }
 		}
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 		while (am.getMode() == AudioManager.MODE_IN_CALL)
@@ -464,6 +433,7 @@ public class RtpStreamSender extends Thread {
 		record.release();
 		m = 0;
 		
+		p_type.codec.close();
 		rtp_socket.close();
 		rtp_socket = null;
 
@@ -476,7 +446,6 @@ public class RtpStreamSender extends Thread {
 		if (!Sipdroid.release) System.out.println("RtpStreamSender: " + str);
 	}
 
-	//DTMF change
 	/** Set RTP payload type of outband DTMF packets. **/  
 	public void setDTMFpayloadType(int payload_type){
 		dtmf_payload_type = payload_type; 

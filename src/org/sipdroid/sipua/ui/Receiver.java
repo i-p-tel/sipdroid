@@ -90,6 +90,7 @@ import org.sipdroid.sipua.phone.Connection;
 		public static Call ccCall;
 		public static Connection ccConn;
 		public static int call_state;
+		public static int call_end_reason = -1;
 		
 		public static String pstn_state;
 		public static long pstn_time;
@@ -128,6 +129,8 @@ import org.sipdroid.sipua.phone.Connection;
 		        ccConn.setCall(ccCall);
 			}
 			if (call_state != state) {
+				if (state != UserAgent.UA_STATE_IDLE)
+					call_end_reason = -1;
 				call_state = state;
 				android.os.Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 				switch(call_state)

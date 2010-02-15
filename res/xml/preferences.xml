@@ -58,13 +58,6 @@
 				android:entryValues="@array/pref_values"
 				android:summary="@string/settings_pref2"
 				android:dialogTitle="@string/settings_pref" />
-			<ListPreference
-				android:key="compression"
-				android:title="@string/settings_compression"
-				android:entries="@array/compression_display_values"
-				android:entryValues="@array/compression_values"
-				android:defaultValue="edge"
-				android:dialogTitle="@string/settings_compression" />
 			<CheckBoxPreference
 				android:key="auto_on"
 				android:title="@string/settings_auto_on"
@@ -184,4 +177,13 @@
 				android:hint="Accessno.,PIN#"
 				android:singleLine="true" />
 	</PreferenceScreen> 
+	<PreferenceScreen
+		android:key="codecs"
+		android:title="@string/codecs" >
+        	<intent
+                	android:action="android.intent.action.MAIN"
+	                android:targetPackage="org.sipdroid.sipua"
+	                android:targetClass="org.sipdroid.codecs.Codecs$CodecSettings" />
+
+	</PreferenceScreen>
 </PreferenceScreen>

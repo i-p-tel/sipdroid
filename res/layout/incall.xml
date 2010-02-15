@@ -98,6 +98,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     />
+               <TextView
+                    android:id="@+id/codec"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
             </LinearLayout>
 
         </RelativeLayout>  <!-- End of inCallPanel -->
