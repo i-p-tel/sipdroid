@@ -146,9 +146,9 @@ public class RtpStreamSender extends Thread {
 		this.frame_rate = frame_rate;
 		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("server","").equals("pbxes.org") ||
 				payload_type.codec.number() == 97)
-			this.frame_size = frame_size;
+			this.frame_size = (payload_type.codec.number() != 0 && payload_type.codec.number() != 8)?960:1024;
 		else
-			this.frame_size = payload_type.codec.number() != 0 && payload_type.codec.number() != 8?960:1024;
+			this.frame_size = frame_size;
 		this.do_sync = do_sync;
 		try {
 			rtp_socket = new RtpSocket(src_socket, InetAddress

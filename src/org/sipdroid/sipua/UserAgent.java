@@ -233,6 +233,7 @@ public class UserAgent extends CallListenerAdapter {
 			afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", c.number, c.codec.name(), rate)));
 		}
 		if (user_profile.dtmf_avp != 0){
+			avpvec.add(String.valueOf(user_profile.dtmf_avp));
 			afvec.add(new AttributeField("rtpmap", String.format("%d telephone-event/%d", user_profile.dtmf_avp, rate)));
 			afvec.add(new AttributeField("fmtp", String.format("%d 0-15", user_profile.dtmf_avp)));
 		}
@@ -366,7 +367,8 @@ public class UserAgent extends CallListenerAdapter {
 		changeStatus(UA_STATE_INCALL); // modified
 
 		call.accept(local_session);
-				
+		launchMediaApplication();
+		
 		return true;
 	}
 
@@ -537,7 +539,7 @@ public class UserAgent extends CallListenerAdapter {
 			}
 		}
 		call.ring(local_session);		
-		launchMediaApplication();
+		//launchMediaApplication();
 	}
 
 	/**
