@@ -217,4 +217,10 @@
 
 <string name="ongoing">Текущий вызов</string>
 <string name="onHold">Удерживается</string>
+<string name="codecs">Аудиокодеки</string>
+<string name="codecs_summary">Выбор аудиокодекос доступных для звонков</string>
+<string name="codecs_move">Сдвинуть этот кодек</string>
+<string name="codecs_move_up">Вверх</string>
+<string name="codecs_move_down">Вниз</string>
+<string name="cancel">Отмена</string>
 </resources>
