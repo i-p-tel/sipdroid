@@ -367,7 +367,6 @@ public class UserAgent extends CallListenerAdapter {
 		changeStatus(UA_STATE_INCALL); // modified
 
 		call.accept(local_session);
-		launchMediaApplication();
 		
 		return true;
 	}
@@ -539,7 +538,7 @@ public class UserAgent extends CallListenerAdapter {
 			}
 		}
 		call.ring(local_session);		
-		//launchMediaApplication();
+		launchMediaApplication();
 	}
 
 	/**
