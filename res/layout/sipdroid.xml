@@ -1,34 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-android:id="@+id/top_lvl_layout"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:background="#736f6e"
-xmlns:android="http://schemas.android.com/apk/res/android"
->
 
-<TextView android:id="@+id/txt_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#ffffff" android:typeface="serif" android:layout_x="12px" android:layout_y="8px" android:textSize="24px" android:text='@string/app_name'></TextView>
-<org.sipdroid.sipua.ui.InstantAutoCompleteTextView
-android:id="@+id/txt_callee"
-android:layout_width="302px"
-android:text=""
-android:layout_x="9px"
-android:layout_height="wrap_content"
-android:singleLine="true"
-android:layout_y="40px"
-android:hint="@string/hint"
-android:inputType="textEmailAddress"
-android:imeOptions="actionSend|flagNoExtractUi"></org.sipdroid.sipua.ui.InstantAutoCompleteTextView>
-<AbsoluteLayout
-android:id="@+id/top_box_layout"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:background="#000000"
-xmlns:android="http://schemas.android.com/apk/res/android" android:layout_y="90px"/>
-<AbsoluteLayout
-android:id="@+id/top_box2_layout"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:background="#595454"
-xmlns:android="http://schemas.android.com/apk/res/android" android:layout_y="94px"/>
-</AbsoluteLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#736f6e">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:background="#504D4C"
+		android:padding="10dip">
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#ffffff"
+			android:typeface="serif"
+			android:textStyle="bold|italic"
+			android:shadowDx="1"
+			android:shadowDy="1"
+			android:shadowRadius="1"
+			android:shadowColor="#aaaaaa"
+			android:textSize="28dip"
+			android:paddingBottom="5dip"
+			android:text="@string/app_name"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="2dip"
+			android:background="#dddddd"/>
+
+		<TextView
+			android:id="@+id/account_string"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#cccccc"
+			android:textSize="12dip"
+			android:paddingTop="5dip"
+			android:visibility="gone"
+			android:text="\?\?\?"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="5dip">
+
+		<org.sipdroid.sipua.ui.InstantAutoCompleteTextView
+			android:id="@+id/txt_callee"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:singleLine="true"
+			android:hint="@string/hint"
+			android:inputType="textEmailAddress"
+			android:imeOptions="actionSend|flagNoExtractUi"/>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_weight="0"
+				android:gravity="left"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+
+				<Button
+					android:id="@+id/contacts_button"
+					android:layout_gravity="left"
+					android:drawableLeft="@android:drawable/ic_menu_add"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_weight="1"
+				android:gravity="right"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+
+				<Button
+					android:id="@+id/call_button"
+					android:drawableLeft="@android:drawable/ic_menu_call"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+			</LinearLayout>
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>
