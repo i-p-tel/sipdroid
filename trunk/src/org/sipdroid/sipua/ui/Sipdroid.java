@@ -31,12 +31,14 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CallLog.Calls;
+import android.provider.Contacts.People;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,9 +48,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.Filterable;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -168,7 +174,24 @@ public class Sipdroid extends Activity {
 			}
 		});
 		on(this,true);
-		
+
+		Button callButton = (Button) findViewById(R.id.call_button);
+		callButton.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				call_menu();
+			}
+		});
+
+		Button contactsButton = (Button) findViewById(R.id.contacts_button);
+		contactsButton.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				Intent myIntent = new Intent(Intent.ACTION_VIEW, People.CONTENT_URI);
+				startActivity(myIntent);
+			}
+		});
+
+		setAccountString();
+
 		final Context mContext = this;
 		if (PreferenceManager.getDefaultSharedPreferences(this).getString("pref","").equals("PSTN") &&
 				!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("nodefault",false))
@@ -196,23 +219,35 @@ public class Sipdroid extends Activity {
 				.show();
 	}
 
+	protected void setAccountString() {
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		TextView accountTextView = (TextView) findViewById(R.id.account_string);
+		if (! settings.getString("username", "").equals("") && ! settings.getString("server", "").equals("")) {
+			accountTextView.setText(Settings.getProfileNameString(settings));
+			accountTextView.setVisibility(View.VISIBLE);
+		} else {
+			accountTextView.setVisibility(View.INVISIBLE);
+		}
+	}
+
 	public static boolean on(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("on",false);
 	}
-	
+
 	public static void on(Context context,boolean on) {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		edit.putBoolean("on",on);
 		edit.commit();
         if (on) Receiver.engine(context).isRegistered();
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		if (Receiver.call_state != UserAgent.UA_STATE_IDLE) Receiver.moveTop();
+		setAccountString();
 	}
-		
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
@@ -221,8 +256,8 @@ public class Sipdroid extends Activity {
 		m.setIcon(android.R.drawable.ic_menu_info_details);
 		m = menu.add(0, EXIT_MENU_ITEM, 0, R.string.menu_exit);
 		m.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-		m = menu.add(0, CALL_MENU_ITEM, 0, R.string.menu_call);
-		m.setIcon(android.R.drawable.ic_menu_call);
+//		m = menu.add(0, CALL_MENU_ITEM, 0, R.string.menu_call);
+//		m.setIcon(android.R.drawable.ic_menu_call);
 		m = menu.add(0, CONFIGURE_MENU_ITEM, 0, R.string.menu_settings);
 		m.setIcon(android.R.drawable.ic_menu_preferences);
 						
