@@ -48,13 +48,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.Filterable;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -226,7 +223,7 @@ public class Sipdroid extends Activity {
 			accountTextView.setText(Settings.getProfileNameString(settings));
 			accountTextView.setVisibility(View.VISIBLE);
 		} else {
-			accountTextView.setVisibility(View.INVISIBLE);
+			accountTextView.setVisibility(View.GONE);
 		}
 	}
 
