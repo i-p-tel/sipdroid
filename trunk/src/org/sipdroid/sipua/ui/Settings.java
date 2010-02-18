@@ -63,9 +63,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private int profileToDelete;
 
 	// IDs of the menu items
-	private static final int MENU_EXPORT = 0;
-	private static final int MENU_IMPORT = 1;
-	private static final int MENU_DELETE = 2;
+	private static final int MENU_IMPORT = 0;
+	private static final int MENU_DELETE = 1;
 
 	// Name of the keys in the Preferences XML file
 	public static final String PREF_USERNAME = "username";
@@ -220,10 +219,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Create menu items
-        menu.add(0, MENU_EXPORT, 0, getString(R.string.settings_profile_menu_export)).setIcon(android.R.drawable.ic_menu_save);
-        // Show only if there are already some profiles
-        if (getProfileList() != null) {
+    	// Get the content of the directory
+    	profileFiles = getProfileList();
+
+    	// Create menu items - show only if there are already some profiles
+        if (profileFiles != null && profileFiles.length > 0) {
 	        menu.add(0, MENU_IMPORT, 0, getString(R.string.settings_profile_menu_import)).setIcon(android.R.drawable.ic_menu_upload);
         	menu.add(0, MENU_DELETE, 0, getString(R.string.settings_profile_menu_delete)).setIcon(android.R.drawable.ic_menu_delete);
         }
@@ -235,40 +235,10 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     	context = this;
 
     	switch (item.getItemId()) {
-            case MENU_EXPORT:
-                // Save changes
-                settings.edit().commit();
-                // Check if the profile file already exists
-                profileFiles = getProfileList();
-                if (profileFiles != null) {
-                	boolean profileExists = false;
-                	String currentProfileName = getProfileNameString();
-                	for (int i=0; i<profileFiles.length; i++) {
-                		if (profileFiles[i].equals(currentProfileName)) {
-                			profileExists = true;
-                			break;
-                		}
-                	}
-                	if (profileExists) {
-                		new AlertDialog.Builder(context)
-                		.setIcon(android.R.drawable.ic_dialog_alert)
-                		.setTitle(getString(R.string.settings_profile_dialog_export_title))
-                		.setMessage(getString(R.string.settings_profile_dialog_export_text, getProfileNameString()))
-                		.setPositiveButton(android.R.string.ok, exportOkButtonClick)
-                		.setNegativeButton(android.R.string.cancel, null)
-                		.show();
-                	} else {
-                		exportSettings();
-                	}
-                } else {
-                	exportSettings();
-                }
-                return true;
-
             case MENU_IMPORT:
             	// Get the content of the directory
             	profileFiles = getProfileList();
-            	if (profileFiles != null) {
+            	if (profileFiles != null && profileFiles.length > 0) {
 	            	// Show dialog with the files
 	    			new AlertDialog.Builder(this)
 	    			.setTitle(getString(R.string.settings_profile_dialog_profiles_title))
@@ -325,12 +295,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     	return s.getString(PREF_USERNAME, DEFAULT_USERNAME) + "@" + provider;
     }
 
-	private OnClickListener exportOkButtonClick = new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int whichButton) {
-			exportSettings();
-		}
-	};
-
     private void exportSettings() {
         try {
         	// Create the directory for the profiles
@@ -341,7 +305,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
         } catch (Exception e) {
             Toast.makeText(this, getString(R.string.settings_profile_export_error), Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(this, getString(R.string.settings_profile_export_confirmation), Toast.LENGTH_SHORT).show();
     }
 
 	private OnClickListener profileOnClick = new DialogInterface.OnClickListener() {
@@ -397,6 +360,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	@Override
 	public void onDestroy()	{
 		super.onDestroy();
+		exportSettings();
 		settings.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
