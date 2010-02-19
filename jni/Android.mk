@@ -41,3 +41,52 @@ LOCAL_C_INCLUDES +=
 LOCAL_CFLAGS = -DFIXED_POINT -DEXPORT="" -UHAVE_CONFIG_H -I$(LOCAL_PATH)/$(SPEEX)/include
 
 include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+BV16     := bx16_fixedp
+LOCAL_MODULE    := bv16_jni
+LOCAL_SRC_FILES := bv16_jni.cpp \
+	$(BV16)/bvcommon/a2lsp.c \
+	$(BV16)/bvcommon/allpole.c \
+	$(BV16)/bvcommon/allzero.c  \
+	$(BV16)/bvcommon/autocor.c \
+	$(BV16)/bvcommon/basop32.c \
+	$(BV16)/bvcommon/cmtables.c \
+	$(BV16)/bvcommon/levdur.c \
+	$(BV16)/bvcommon/lsp2a.c \
+	$(BV16)/bvcommon/mathtables.c \
+	$(BV16)/bvcommon/mathutil.c \
+	$(BV16)/bvcommon/memutil.c \
+	$(BV16)/bvcommon/ptdec.c \
+	$(BV16)/bvcommon/stblzlsp.c \
+	$(BV16)/bvcommon/utility.c \
+	$(BV16)/bvcommon/vqdecode.c \
+	$(BV16)/bv16/bitpack.c \
+	$(BV16)/bv16/bv.c \
+	$(BV16)/bv16/coarptch.c \
+	$(BV16)/bv16/decoder.c \
+	$(BV16)/bv16/encoder.c \
+	$(BV16)/bv16/excdec.c \
+	$(BV16)/bv16/excquan.c \
+	$(BV16)/bv16/fineptch.c \
+	$(BV16)/bv16/g192.c \
+	$(BV16)/bv16/gaindec.c \
+	$(BV16)/bv16/gainquan.c \
+	$(BV16)/bv16/levelest.c \
+	$(BV16)/bv16/lspdec.c \
+	$(BV16)/bv16/lspquan.c \
+	$(BV16)/bv16/plc.c \
+	$(BV16)/bv16/postfilt.c \
+	$(BV16)/bv16/preproc.c \
+	$(BV16)/bv16/ptquan.c \
+	$(BV16)/bv16/tables.c 
+
+#LOCAL_ARM_MODE := arm
+LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(BV16)/bvcommon $(LOCAL_PATH)/$(BV16)/bv16 $(LOCAL_PATH)/$(BV16)
+LOCAL_CFLAGS = -O3 -marm -march=armv6 -mtune=arm1136j-s -DWMOPS=0 -DG192BITSTREAM=0
+#LOCAL_CFLAGS = -O3 -DWMOPS=0 -DG192BITSTREAM=0
+
+include $(BUILD_SHARED_LIBRARY)
+
