@@ -50,6 +50,7 @@ public class Codecs {
 			add(new GSM());
 			add(new alaw());
 			add(new ulaw());
+			add(new BV16());
 		}};
 	private static final HashMap<Integer, Codec> codecsNumbers;
 	private static final HashMap<String, Codec> codecsNames;
