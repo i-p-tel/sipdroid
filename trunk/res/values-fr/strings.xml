@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!--
-		* Copyright (C) 2009 The Sipdroid Open Source Project * * This file is
-		part of Sipdroid (http://www.sipdroid.org) * * Sipdroid is free
-		software; you can redistribute it and/or modify * it under the terms
-		of the GNU General Public License as published by * the Free Software
-		Foundation; either version 3 of the License, or * (at your option) any
-		later version. * * This source code is distributed in the hope that it
-		will be useful, * but WITHOUT ANY WARRANTY; without even the implied
-		warranty of * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
-		the * GNU General Public License for more details. * * You should have
-		received a copy of the GNU General Public License * along with this
-		source code; if not, write to the Free Software * Foundation, Inc., 59
-		Temple Place, Suite 330, Boston, MA 02111-1307 USA
+<!--
+	* Copyright (C) 2009 The Sipdroid Open Source Project
+	*
+	* This file is part of Sipdroid (http://www.sipdroid.org)
+	*
+	* Sipdroid is free software; you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published by
+	* the Free Software Foundation; either version 3 of the License, or
+	* (at your option) any later version.
+	*
+	* This source code is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	* GNU General Public License for more details.
+	*
+	* You should have received a copy of the GNU General Public License
+	* along with this source code; if not, write to the Free Software
+	* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-		/////////////////////////////////////////////////////////////////////
-		// these are the main messages of Sipdroid // for modifying them
-		additional terms according to section 7, GPL apply // see
-		ADDITIONAL_TERMS.txt
-		/////////////////////////////////////////////////////////////////////
-	-->
+	/////////////////////////////////////////////////////////////////////
+	// these are the main messages of Sipdroid // for modifying them
+	additional terms according to section 7, GPL apply // see
+	ADDITIONAL_TERMS.txt
+	/////////////////////////////////////////////////////////////////////
+-->
 
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
 	<string name="app_name">Sipdroid</string>
 	<string name="pstn_name">Téléphone</string>
@@ -232,6 +237,19 @@
 	<string name="settings_callthru">Déclencher un Callthru</string>
 	<string name="settings_callthru2">Préfixe pour le Callthru</string>
 
+	<string name="settings_title">Paramètres Sipdroid</string>
+
+	<string name="settings_profile_title">Paramètres Sipdroid (<xliff:g id="profile">%s</xliff:g>)</string>
+	<string name="settings_profile_menu_import">Importer</string>
+	<string name="settings_profile_menu_delete">Effacer</string>
+	<string name="settings_profile_dialog_profiles_title">Profiles</string>
+	<string name="settings_profile_dialog_delete_title">Effacer le profile</string>
+	<string name="settings_profile_dialog_delete_text">"Voulez vous réellement effacer le profile <xliff:g id="profile">%s</xliff:g> ?"</string>
+	<string name="settings_profile_export_error">Ne peut exporter les paramètres !</string>
+	<string name="settings_profile_import_error">Ne peut importer les paramètres!</string>
+	<string name="settings_profile_delete_error">Ne peut effacer ce profile!</string>
+	<string name="settings_profile_delete_confirmation">Le profile a été effacé.</string>
+
 	<string name="menu_settings">Paramètres</string>
 	<string name="menu_exit">Quitter</string>
 	<string name="menu_about">A propos de</string>
@@ -250,15 +268,20 @@
 	<string name="card_title_in_progress">Appel en cours</string>
 	<string name="card_title_incoming_call">Appel entrant</string>
 	<string name="card_title_call_ended">Appel terminé</string>
+	<string name="card_title_ended_no_codec">ERREUR: Codecs incompatibles</string>
 	<string name="card_title_on_hold">En attente</string>
 
 	<string name="unknown">Inconnu</string>
 
-	<string name="slide_hint_down_to_end_call">Faîtes glisser vers le bas pour terminer l\'appel.
-	</string>
+	<string name="slide_hint_down_to_end_call">Faîtes glisser vers le bas pour terminer l\'appel.</string>
 	<string name="slide_hint_up_to_answer">Faîtes glisser vers le haut pour répondre.</string>
 
 	<string name="ongoing">Appel en cours</string>
 	<string name="onHold">En attente</string>
-	<string name="callerid">ID du correspondant</string>
+	
+	<string name="codecs_summary">Selectionner les Codecs Audio pour être disponible pour les appels vocaux</string>
+	<string name="codecs_move">Déplacer ce codec</string>
+	<string name="codecs_move_up">Monter d\'une place</string>
+	<string name="codecs_move_down">Descendre d\'une place</string>
+	<string name="cancel">Annuler</string>
 </resources>
