@@ -51,6 +51,8 @@
 <string name="regok">Registrován</string>
 <string name="regfailed">Registrace selhala</string>
 
+<string name="voicemail">Čekající zprávy</string>
+
 <string name="auto_enabled">Auto-odpověď/hlasitý poslech</string>
 <string name="auto_disabled">Auto-odpověď vypnuta</string>
 <string name="hint">Adresa volaného</string>
@@ -63,28 +65,58 @@
 <string name="settings_server">Server</string>
 <string name="settings_domain">Doména</string>
 <string name="settings_domain2">Nechat prázdné, pokud je stejné jako server</string>
+<string name="settings_username1">Jméno/ID volajícího</string>
+<string name="settings_callerid2">Ponechte prázdné, pokud je stejné s uživatelským jménem.</string>
 <string name="settings_port">Port</string>
 <string name="settings_protocol">Protokol</string>
     <string-array name="protocol_display_values">
         <item>UDP (méně v pohotovosti na 3G)</item>
         <item>TCP (více v pohotovosti na 3G)</item>
     </string-array>
-
+<string name="settings_stun">Použít STUN server</string>
+<string name="settings_stun_server">Jméno STUN serveru</string>
+<string name="settings_stun_server_port">Port STUN serveru</string>
+ 
 <string name="settings_options">Možnosti volání</string>
 <string name="settings_wlan">Použít WLAN</string>
 <string name="settings_3g">Použít 3G</string>
 <string name="settings_edge">Použít EDGE</string>
 <string name="settings_check">Ověřte si u vašeho operátora, jestli má povolené VoIP.</string>
+
+<string name="dialog_default">Sipdroid je nyní není nastavený jako výchozí telefon. Chcete ho nastavit jako výchozí telefon?
+\n
+\nPokud zde odpovíte \'Ne\', můžete stále volat přes Sipdroid přidáním znaku \'+\' za číslo volaného.</string>
+<string name="yes">Ano</string>
+<string name="no">Ne</string>
+<string name="dontask">Neptat se znovu</string>
+
 <string name="settings_pref">Preferovaný typ volání</string>
+<string name="settings_pref2">Možno předpsat pomocí znaku \'+\' za číslem volaného.</string>
     <string-array name="pref_display_values">
-        <item>Sipdroid</item>
+        <item>Pouze Sipdroid</item>
         <item>Sipdroid, pokud je k dispozici</item>
         <item>Telefon</item>
+    </string-array>
+<string name="settings_compression">Komprese hlasu</string>
+    <string-array name="compression_display_values">
+        <item>Pouze přes EDGE</item>
+        <item>Vždy zkusit</item>
+        <item>Nikdy</item>
     </string-array>
 <string name="settings_auto_on">Auto-odpověď je aktivní</string>
 <string name="settings_auto_on2">Krátké vibrační upozornění, když je obrazovka zapnuta</string>
 <string name="settings_auto_ondemand">Auto-odpověď na vyžádání</string>
 <string name="settings_auto_ondemand2">Zobrazit přepínač ve stavovém řádku</string>
+<string name="settings_auto_headset">Auto-odpověď sluchátka</string>
+<string name="settings_auto_headset2">Pokud je připojeno drátové sluchátko</string>
+
+<string name="settings_notifications">Oznámení</string>
+<string name="settings_MWI">Hlasová schránka</string>
+<string name="settings_MWI2">Zpráva při čekání na přihlášení k SIP</string>
+<string name="settings_notify">Zmeškaný hovor</string>
+<string name="settings_notify2">Upozornit modrou LED</string>
+<string name="settings_nodata">Žádná data</string>
+<string name="settings_nodata2">Upozornit na ztracené hlasové pakety zvukovým tónem</string>
 
 <string name="settings_advanced_options">Pokročilé možnosti</string>
 <string name="settings_policy_never">Změnit politiku uspání na Wifi stále zapnuto.</string>
@@ -95,13 +127,17 @@
 <string name="settings_sipringtone2">Nastavit vyzváněcí tón pro SIP hovory</string>
 <string name="settings_sipringtone_dialog">Vyzvánění</string>
 <string name="settings_eargain">Zesílení sluchátka</string>
-<string name="settings_eargain2">Přizpůsobit hlasitost nebo potlačit ozvěny u volaného</string>
+<string name="settings_micgain">Zesílení mikrofonu</string>
+<string name="settings_heargain">Zesílení headsetu</string>
+<string name="settings_hmicgain">Zesílení mikrofonu headsetu</string>
     <string-array name="eargain_display_values">
         <item>Nizké (bez ozvěny)</item>
         <item>Střední</item>
         <item>Vysoké (může způsobit ozvěnu u volaného)</item>
         <item>Nejvyšší</item>
     </string-array>
+<string name="settings_ownwifi">Řídit výkon Wi-Fi</string>
+<string name="settings_ownwifi2">Šetří baterie</string>
 
 <string name="settings_pbxes_options">PBXes funkce</string>
 <string name="settings_par">Simultánní odchozí volání</string>
@@ -117,6 +153,19 @@
 <string name="settings_callthru">Spoušť přesměrování</string>
 <string name="settings_callthru2">Prefix pro přesměrování</string>
 
+<string name="settings_title">Nastavení Sipdroidu</string>
+
+<string name="settings_profile_title">Nastavení Sipdroidu (<xliff:g id="profile">%s</xliff:g>)</string>
+<string name="settings_profile_menu_import">Importovat</string>
+<string name="settings_profile_menu_delete">Smazat</string>
+<string name="settings_profile_dialog_profiles_title">Profily</string>
+<string name="settings_profile_dialog_delete_title">Smazat profil</string>
+<string name="settings_profile_dialog_delete_text">Opravdu chcete snazat profil <xliff:g id="profile">%s</xliff:g>?</string>
+<string name="settings_profile_export_error">Chyba při exportu nastavení!</string>
+<string name="settings_profile_import_error">Chyba při importu nastavení!</string>
+<string name="settings_profile_delete_error">Tento profil nelze smazat!</string>
+<string name="settings_profile_delete_confirmation">Profil byl smazán.</string>
+
 <string name="menu_settings">Nastavení</string>
 <string name="menu_exit">Ukončit</string>
 <string name="menu_about">O programu</string>
@@ -125,13 +174,17 @@
 <string name="menu_call">Vytočit</string>
 <string name="menu_mute">Ztlumit</string>
 <string name="menu_hold">Přidržet</string>
+<string name="menu_transfer">Přenos</string>
 <string name="menu_speaker">Nahlas</string>
 <string name="menu_endCall">Ukončit</string>
+
+<string name="transfer_title">Přenost hovoru</string>
 
 <string name="card_title_dialing">Vytáčení</string>
 <string name="card_title_in_progress">Hovor</string>
 <string name="card_title_incoming_call">Příchozí volání</string>
 <string name="card_title_call_ended">Hovor ukončen</string>
+<string name="card_title_ended_no_codec">CHYBA: Nekompatibilní kodek</string>
 <string name="card_title_on_hold">Přidržení</string>
 
 <string name="unknown">Neznámý</string>
@@ -141,4 +194,10 @@
 
 <string name="ongoing">Probíhající hovor</string>
 <string name="onHold">Přidržení</string>
+<string name="codecs">Audio kodeky</string>
+<string name="codecs_summary">Vyberte audio kodek, který bude dostupný pro volání</string>
+<string name="codecs_move">Přesunout tento kodek</string>
+<string name="codecs_move_up">Přesunout o jedno místo nahoru</string>
+<string name="codecs_move_down">Přesunout o jedno místo dolu</string>
+<string name="cancel">Zrušit</string>
 </resources>
