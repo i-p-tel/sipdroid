@@ -244,7 +244,7 @@
 	<string name="settings_profile_menu_delete">Effacer</string>
 	<string name="settings_profile_dialog_profiles_title">Profiles</string>
 	<string name="settings_profile_dialog_delete_title">Effacer le profile</string>
-	<string name="settings_profile_dialog_delete_text">"Voulez vous réellement effacer le profile <xliff:g id="profile">%s</xliff:g> ?"</string>
+	<string name="settings_profile_dialog_delete_text">Voulez vous réellement effacer le profile <xliff:g id="profile">%s</xliff:g> ?</string>
 	<string name="settings_profile_export_error">Ne peut exporter les paramètres !</string>
 	<string name="settings_profile_import_error">Ne peut importer les paramètres!</string>
 	<string name="settings_profile_delete_error">Ne peut effacer ce profile!</string>
@@ -283,5 +283,4 @@
 	<string name="codecs_move">Déplacer ce codec</string>
 	<string name="codecs_move_up">Monter d\'une place</string>
 	<string name="codecs_move_down">Descendre d\'une place</string>
-	<string name="cancel">Annuler</string>
 </resources>
