@@ -27,6 +27,7 @@ import java.net.UnknownHostException;
 import org.sipdroid.net.KeepAliveSip;
 import org.sipdroid.sipua.ui.LoopAlarm;
 import org.sipdroid.sipua.ui.Receiver;
+import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.net.IpAddress;
 import org.zoolu.net.SocketAddress;
@@ -69,12 +70,12 @@ public class SipdroidEngine implements RegisterAgentListener {
 			if (wl == null) wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.SipdroidEngine");
 
 			user_profile = new UserAgentProfile(null);
-			user_profile.username = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("username",""); // modified
-			user_profile.passwd = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("password","");
-			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("domain","").length() == 0) {
-				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("server","");
+			user_profile.username = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_USERNAME, Settings.DEFAULT_USERNAME); // modified
+			user_profile.passwd = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_PASSWORD, Settings.DEFAULT_PASSWORD);
+			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_DOMAIN, Settings.DEFAULT_DOMAIN).length() == 0) {
+				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_SERVER, Settings.DEFAULT_SERVER);
 			} else {
-				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("domain","");
+				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_DOMAIN, Settings.DEFAULT_DOMAIN);
 			}
 
 			SipStack.init(null);
@@ -82,9 +83,9 @@ public class SipdroidEngine implements RegisterAgentListener {
 //			SipStack.log_path = "/data/data/org.sipdroid.sipua";
 			SipStack.max_retransmission_timeout = 4000;
 			SipStack.default_transport_protocols = new String[1];
-			SipStack.default_transport_protocols[0] = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("protocol",
+			SipStack.default_transport_protocols[0] = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_PROTOCOL,
 					user_profile.realm.equals("pbxes.org")?"tcp":"udp");
-			SipStack.default_port = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("port",""+SipStack.default_port));
+			SipStack.default_port = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_PORT, Settings.DEFAULT_PORT));
 			
 			String version = "Sipdroid/" + Sipdroid.getVersion() + "/" + Build.MODEL;
 			SipStack.ua_info = version;
@@ -97,12 +98,12 @@ public class SipdroidEngine implements RegisterAgentListener {
 				+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"")
 				+ ";transport=" + sip_provider.getDefaultTransport();
 			
-			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("fromuser","").length() == 0) {
+			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_FROMUSER, Settings.DEFAULT_FROMUSER).length() == 0) {
 				user_profile.from_url = user_profile.username
 					+ "@"
 					+ user_profile.realm;
 			} else {
-				user_profile.from_url = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("fromuser","")
+				user_profile.from_url = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_FROMUSER, Settings.DEFAULT_FROMUSER)
 					+ "@"
 					+ user_profile.realm;
 			}
@@ -126,7 +127,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	void setOutboundProxy() {
 		try {
 			sip_provider.setOutboundProxy(new SocketAddress(
-					IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("dns","")),
+					IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_DNS, Settings.DEFAULT_DNS)),
 					SipStack.default_port));
 		} catch (UnknownHostException e) {
 		}
@@ -269,7 +270,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public void updateDNS() {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(getUIContext()).edit();
 		try {
-			edit.putString("dns", IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("server","")).toString());
+			edit.putString(Settings.PREF_DNS, IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_SERVER, "")).toString());
 		} catch (UnknownHostException e1) {
 			return;
 		}
@@ -299,8 +300,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 		ua.printLog("UAC: CALLING " + target_url);
 		
 		if (!isRegistered() || !Receiver.isFast()) {
-			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean("callback",false) &&
-					PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("posurl","").length() > 0) {
+			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_CALLBACK, Settings.DEFAULT_CALLBACK) &&
+					PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_POSURL, Settings.DEFAULT_POSURL).length() > 0) {
 				Receiver.url("n="+Uri.decode(target_url));
 				return true;
 			}

@@ -31,6 +31,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 import org.sipdroid.sipua.ui.Receiver;
+import org.sipdroid.sipua.ui.Settings;
 
 import android.preference.PreferenceManager;
 import android.content.Context;
@@ -142,12 +143,12 @@ public class IpAddress {
 					InetAddress inetAddress = enumIpAddr.nextElement();
 
 					if (!inetAddress.isLoopbackAddress()) { 
-						if (!PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean("stun",false)) {
+						if (!PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_STUN, Settings.DEFAULT_STUN)) {
 							localIpAddress = inetAddress.getHostAddress().toString();
 						} else {
 							try {
-								String StunServer = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("stun_server","");
-								int StunServerPort = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString("stun_server_port",""));
+								String StunServer = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_STUN_SERVER, Settings.DEFAULT_STUN_SERVER);
+								int StunServerPort = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_STUN_SERVER_PORT, Settings.DEFAULT_STUN_SERVER_PORT));
 
 								DiscoveryTest StunDiscover = new DiscoveryTest(inetAddress, StunServer, StunServerPort);
 

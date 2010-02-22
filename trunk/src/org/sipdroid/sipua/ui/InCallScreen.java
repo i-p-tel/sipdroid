@@ -148,17 +148,17 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     	if (!Sipdroid.release) Log.i("SipUA:","on resume");
 		switch (Receiver.call_state) {
 		case UserAgent.UA_STATE_INCOMING_CALL:
-			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_on", false) &&
+			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON) &&
 					!mKeyguardManager.inKeyguardRestrictedInputMode())
 				mHandler.sendEmptyMessageDelayed(MSG_ANSWER, 1000);
-			else if ((PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_ondemand", false) &&
-					PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_demand", false)) ||
-					(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_headset", false) &&
+			else if ((PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON_DEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON_DEMAND) &&
+					PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_DEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_DEMAND)) ||
+					(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_HEADSET, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_HEADSET) &&
 							Receiver.headset > 0))
 				mHandler.sendEmptyMessageDelayed(MSG_ANSWER_SPEAKER, 10000);
 			break;
 		case UserAgent.UA_STATE_INCALL:
-			if (socket == null && Receiver.engine(mContext).getLocalVideo() != 0 && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString("server","").equals("pbxes.org"))
+			if (socket == null && Receiver.engine(mContext).getLocalVideo() != 0 && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER))
 		        (new Thread() {
 					public void run() {
 						RtpSocket rtp_socket;

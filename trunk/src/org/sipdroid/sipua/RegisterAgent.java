@@ -24,6 +24,7 @@ package org.sipdroid.sipua;
 import java.util.Vector;
 
 import org.sipdroid.sipua.ui.Receiver;
+import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.authentication.DigestAuthentication;
@@ -289,7 +290,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 		if (alreadySubscribed)
 			return;
 		Message req = getSubscribeMessage(false);
-		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("MWI_enabled",true))
+		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(Settings.PREF_MWI_ENABLED, Settings.DEFAULT_MWI_ENABLED))
 			return;
 		sd.subscribe(req);
 	}
@@ -373,7 +374,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			NameAddress notifier, NameAddress contact, String state,
 			String content_type, String body, Message msg)
 	{
-		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("MWI_enabled",true))
+		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(Settings.PREF_MWI_ENABLED, Settings.DEFAULT_MWI_ENABLED))
 			return;
 		Parser p = new Parser(body);
 		final char[] propertysep = { ':', '\r', '\n' };

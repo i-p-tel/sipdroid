@@ -20,6 +20,7 @@
 package org.sipdroid.codecs;
 
 import org.sipdroid.sipua.ui.Receiver;
+import org.sipdroid.sipua.ui.Settings;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -33,7 +34,7 @@ class GSM extends CodecBase implements Codec {
 		CODEC_DEFAULT_SETTING = "edge";
 		/* up convert original compression parameter for this codec */
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
-		String pref = sp.getString("compression", null);
+		String pref = sp.getString(Settings.PREF_COMPRESSION, Settings.DEFAULT_COMPRESSION);
 		if (pref != null) {
 			SharedPreferences.Editor e = sp.edit();
 			e.remove("compression");

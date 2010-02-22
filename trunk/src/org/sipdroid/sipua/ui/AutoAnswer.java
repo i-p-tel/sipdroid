@@ -31,7 +31,7 @@ public class AutoAnswer extends Activity {
 	AudioManager am;
 
 	boolean getMode() {
-		return PreferenceManager.getDefaultSharedPreferences(this).getBoolean("auto_demand", false);
+		return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_AUTO_DEMAND, Settings.DEFAULT_AUTO_DEMAND);
 	}
 	
 	void restoreVolume() {
@@ -61,7 +61,7 @@ public class AutoAnswer extends Activity {
 		
 		am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		saveVolume();
-		edit.putBoolean("auto_demand", !getMode());
+		edit.putBoolean(Settings.PREF_AUTO_DEMAND, !getMode());
 		edit.commit();
 		restoreVolume();
 		Receiver.updateAutoAnswer();

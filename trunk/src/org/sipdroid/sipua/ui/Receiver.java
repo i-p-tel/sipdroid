@@ -158,7 +158,7 @@ import org.sipdroid.sipua.phone.Connection;
 					int rm = am.getRingerMode();
 					int vs = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
 			        KeyguardManager mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
-					if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_on", false) &&
+					if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON) &&
 							!mKeyguardManager.inKeyguardRestrictedInputMode())
 						v.vibrate(vibratePattern,1);
 					else {
@@ -167,7 +167,7 @@ import org.sipdroid.sipua.phone.Connection;
 								(rm == AudioManager.RINGER_MODE_NORMAL && vs == AudioManager.VIBRATE_SETTING_ON)))
 							v.vibrate(vibratePattern,1);
 						if (am.getStreamVolume(AudioManager.STREAM_RING) > 0) {				 
-							String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString("sipringtone",
+							String sUriSipRingtone = PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_SIPRINGTONE,
 									Settings.System.DEFAULT_RINGTONE_URI.toString());
 							if(!TextUtils.isEmpty(sUriSipRingtone)) {
 								oRingtone = RingtoneManager.getRingtone(mContext, Uri.parse(sUriSipRingtone));
@@ -248,7 +248,7 @@ import org.sipdroid.sipua.phone.Connection;
 			        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			        	notification.setLatestEventInfo(mContext, text, mContext.getString(R.string.app_name),
 			        			PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0));
-			        	if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("notify",false)) {
+			        	if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_NOTIFY, org.sipdroid.sipua.ui.Settings.DEFAULT_NOTIFY)) {
 				        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
 				        	notification.ledARGB = 0xff0000ff; /* blue */
 				        	notification.ledOnMS = 125;
@@ -286,7 +286,7 @@ import org.sipdroid.sipua.phone.Connection;
 			        contentView.setImageViewResource(R.id.icon, notification.icon);
 					if (base != 0) {
 						contentView.setChronometer(R.id.text1, base, text+" (%s)", true);
-					} else if (type == REGISTER_NOTIFICATION && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false))
+					} else if (type == REGISTER_NOTIFICATION && PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS))
 						contentView.setTextViewText(R.id.text1, text+"/"+mContext.getString(R.string.settings_pos3));
 					else
 						contentView.setTextViewText(R.id.text1, text);
@@ -301,9 +301,9 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		static void updateAutoAnswer() {
-			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_ondemand", false) &&
+			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON_DEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON_DEMAND) &&
 				Sipdroid.on(mContext)) {
-				if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("auto_demand", false))
+				if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_DEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_DEMAND))
 					updateAutoAnswer(1);
 				else
 					updateAutoAnswer(0);
@@ -347,8 +347,8 @@ import org.sipdroid.sipua.phone.Connection;
 			pos_gps(false);
 			if (enable) {
 				if (call_state == UserAgent.UA_STATE_IDLE && Sipdroid.on(mContext) &&
-						PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pos",false) &&
-						PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","").length() > 0) {
+						PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS) &&
+						PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL).length() > 0) {
 					Location last = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 					if (last == null || System.currentTimeMillis() - last.getTime() > GPS_UPDATES) {
 						pos_gps(true);
@@ -392,9 +392,9 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		static void enable_wifi(boolean enable) {
-			if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("ownwifi",false))
+			if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_OWNWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_OWNWIFI))
 				return;
-			if (enable && !PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wifi_disabled", false))
+			if (enable && !PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WIFI_DISABLED, org.sipdroid.sipua.ui.Settings.DEFAULT_WIFI_DISABLED))
         		return;
         	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 	        ContentResolver cr = Receiver.mContext.getContentResolver();
@@ -402,7 +402,7 @@ import org.sipdroid.sipua.phone.Connection;
 				return;
     		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
     		
-    		edit.putBoolean("wifi_disabled",!enable);
+    		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_WIFI_DISABLED,!enable);
     		edit.commit();
     		if (enable) {
                 Intent intent = new Intent(WifiManager.WIFI_STATE_CHANGED_ACTION);
@@ -432,7 +432,7 @@ import org.sipdroid.sipua.phone.Connection;
 	        (new Thread() {
 				public void run() {
 					try {
-				        URL url = new URL(PreferenceManager.getDefaultSharedPreferences(mContext).getString("posurl","")+
+				        URL url = new URL(PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL)+
 				        		"?"+opt);
 				        BufferedReader in;
 						in = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -534,7 +534,7 @@ import org.sipdroid.sipua.phone.Connection;
         				+" "+wi.getIpAddress());
 	        	if (wi.getIpAddress() != 0 && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
 	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
-	        		on_wlan = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("wlan",false);
+	        		on_wlan = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN, org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
 	        		return is_fast = on_wlan;
 	        	}
         	}
@@ -548,9 +548,9 @@ import org.sipdroid.sipua.phone.Connection;
         	if (Sipdroid.market)
         		return false;
         	if (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS)
-        		return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("3g",false);
+        		return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_3G, org.sipdroid.sipua.ui.Settings.DEFAULT_3G);
         	if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
-       			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("edge",false);
+       			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_EDGE, org.sipdroid.sipua.ui.Settings.DEFAULT_EDGE);
         	return false;
 		}
 		

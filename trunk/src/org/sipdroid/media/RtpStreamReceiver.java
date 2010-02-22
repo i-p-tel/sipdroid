@@ -198,56 +198,56 @@ public class RtpStreamReceiver extends Thread {
 	}
 	
 	void saveSettings() {
-		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("oldvalid",false)) {
+		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_OLDVALID, org.sipdroid.sipua.ui.Settings.DEFAULT_OLDVALID)) {
 			int oldvibrate = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
 			int oldvibrate2 = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
-			if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).contains("oldvibrate2"))
+			if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).contains(org.sipdroid.sipua.ui.Settings.PREF_OLDVIBRATE2))
 				oldvibrate2 = AudioManager.VIBRATE_SETTING_ON;
 			int oldpolicy = android.provider.Settings.System.getInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, 
 					Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
 			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-			edit.putInt("oldvibrate", oldvibrate);
-			edit.putInt("oldvibrate2", oldvibrate2);
-			edit.putInt("oldpolicy", oldpolicy);
-			edit.putInt("oldring",am.getStreamVolume(AudioManager.STREAM_RING));
-			edit.putBoolean("oldvalid", true);
+			edit.putInt(org.sipdroid.sipua.ui.Settings.PREF_OLDVIBRATE, oldvibrate);
+			edit.putInt(org.sipdroid.sipua.ui.Settings.PREF_OLDVIBRATE2, oldvibrate2);
+			edit.putInt(org.sipdroid.sipua.ui.Settings.PREF_OLDPOLICY, oldpolicy);
+			edit.putInt(org.sipdroid.sipua.ui.Settings.PREF_OLDRING, am.getStreamVolume(AudioManager.STREAM_RING));
+			edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_OLDVALID, true);
 			edit.commit();
 		}
 	}
 	
 	public static void setMode(int mode) {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-		edit.putBoolean("setmode", mode != AudioManager.MODE_NORMAL);
+		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, mode != AudioManager.MODE_NORMAL);
 		edit.commit();
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 		am.setMode(mode);
 	}
 	
 	public static void restoreMode() {
-		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("setmode",false)) {
+		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, org.sipdroid.sipua.ui.Settings.DEFAULT_SETMODE)) {
 			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE")) {
 				setMode(AudioManager.MODE_NORMAL);
 			} else {
 				Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-				edit.putBoolean("setmode", false);
+				edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, false);
 				edit.commit();
 			}
 		}
 	}
 
 	public static void restoreSettings() {
-		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("oldvalid",false)) {
+		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_OLDVALID, org.sipdroid.sipua.ui.Settings.DEFAULT_OLDVALID)) {
 			AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 	        ContentResolver cr = Receiver.mContext.getContentResolver();
-			int oldvibrate = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldvibrate",0);
-			int oldvibrate2 = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldvibrate2",0);
-			int oldpolicy = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldpolicy",0);
+			int oldvibrate = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt(org.sipdroid.sipua.ui.Settings.PREF_OLDVIBRATE, org.sipdroid.sipua.ui.Settings.DEFAULT_OLDVIBRATE);
+			int oldvibrate2 = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt(org.sipdroid.sipua.ui.Settings.PREF_OLDVIBRATE2, org.sipdroid.sipua.ui.Settings.DEFAULT_OLDVIBRATE2);
+			int oldpolicy = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt(org.sipdroid.sipua.ui.Settings.PREF_OLDPOLICY, org.sipdroid.sipua.ui.Settings.DEFAULT_OLDPOLICY);
 			am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
 			am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 			Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
 			am.setStreamVolume(AudioManager.STREAM_RING, PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0), 0);
 			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-			edit.putBoolean("oldvalid", false);
+			edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_OLDVALID, false);
 			edit.commit();
 			PowerManager pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
 			PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
@@ -281,7 +281,7 @@ public class RtpStreamReceiver extends Thread {
 	
 	/** Runs it in a new Thread. */
 	public void run() {
-		boolean nodata = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("nodata",false);
+		boolean nodata = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_NODATA, org.sipdroid.sipua.ui.Settings.DEFAULT_NODATA);
 		
 		if (rtp_socket == null) {
 			if (DEBUG)
