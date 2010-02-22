@@ -114,7 +114,7 @@
 <string name="settings_MWI">Hlasová schránka</string>
 <string name="settings_MWI2">Zpráva při čekání na přihlášení k SIP</string>
 <string name="settings_notify">Zmeškaný hovor</string>
-<string name="settings_notify2">Upozornit modrou LED</string>
+<string name="settings_notify2">Upozornění modrou LED</string>
 <string name="settings_nodata">Žádná data</string>
 <string name="settings_nodata2">Upozornit na ztracené hlasové pakety zvukovým tónem</string>
 
@@ -197,7 +197,7 @@
 <string name="codecs">Audio kodeky</string>
 <string name="codecs_summary">Vyberte audio kodek, který bude dostupný pro volání</string>
 <string name="codecs_move">Přesunout tento kodek</string>
-<string name="codecs_move_up">Přesunout o jedno místo nahoru</string>
-<string name="codecs_move_down">Přesunout o jedno místo dolu</string>
+<string name="codecs_move_up">Přesunout nahoru</string>
+<string name="codecs_move_down">Přesunout dolu</string>
 <string name="cancel">Zrušit</string>
 </resources>
