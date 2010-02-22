@@ -214,7 +214,6 @@ public class Codecs {
 
 		private static final int MENU_UP = 0;
 		private static final int MENU_DOWN = 1;
-		private static final int MENU_CANCEL = 2;
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -238,14 +237,10 @@ public class Codecs {
 				 R.string.codecs_move_up);
 			menu.add(Menu.NONE, MENU_DOWN, 0,
 				 R.string.codecs_move_down);
-			menu.add(Menu.NONE, MENU_CANCEL, 0, R.string.cancel);
 		}
 
 		@Override
 		public boolean onContextItemSelected(MenuItem item) {
-
-			if (item.getItemId() == MENU_CANCEL)
-				return super.onContextItemSelected(item);
 
 			int posn = (int)((AdapterContextMenuInfo)item.getMenuInfo()).position;
 			Codec c = codecs.elementAt(posn);

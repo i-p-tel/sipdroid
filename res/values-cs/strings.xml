@@ -196,8 +196,7 @@
 <string name="onHold">Přidržení</string>
 <string name="codecs">Audio kodeky</string>
 <string name="codecs_summary">Vyberte audio kodek, který bude dostupný pro volání</string>
-<string name="codecs_move">Přesunout tento kodek</string>
+<string name="codecs_move">Přesunout kodek</string>
 <string name="codecs_move_up">Přesunout nahoru</string>
 <string name="codecs_move_down">Přesunout dolu</string>
-<string name="cancel">Zrušit</string>
 </resources>
