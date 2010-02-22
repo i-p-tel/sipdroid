@@ -31,9 +31,9 @@ public class OneShotAlarm2 extends BroadcastReceiver {
     @Override
 	public void onReceive(Context context, Intent intent) {
     	if (!Sipdroid.release) Log.i("SipUA:","alarm2");
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("wlan",false) ||
-        		PreferenceManager.getDefaultSharedPreferences(context).getBoolean("3g",false) ||
-        		PreferenceManager.getDefaultSharedPreferences(context).getBoolean("edge",false)) {
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_WLAN, Settings.DEFAULT_WLAN) ||
+        		PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_3G, Settings.DEFAULT_3G) ||
+        		PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_EDGE, Settings.DEFAULT_EDGE)) {
         	context.startService(new Intent(context,RegisterService.class));
         } else
         	context.stopService(new Intent(context,RegisterService.class));

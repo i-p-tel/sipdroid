@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.ui.Receiver;
+import org.sipdroid.sipua.ui.Settings;
 import org.zoolu.sdp.SessionDescriptor;
 import org.zoolu.sdp.AttributeField;
 
@@ -66,14 +67,14 @@ public class Codecs {
 		}
 
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
-		String prefs = sp.getString("codecs", null);
+		String prefs = sp.getString(Settings.PREF_CODECS, Settings.DEFAULT_CODECS);
 		if (prefs == null) {
 			String v = "";
 			SharedPreferences.Editor e = sp.edit();
 
 			for (Codec c : codecs)
 				v = v + c.number() + " ";
-			e.putString("codecs", v);
+			e.putString(Settings.PREF_CODECS, v);
 			e.commit();
 		} else {
 			String[] vals = prefs.split(" ");
@@ -268,7 +269,7 @@ public class Codecs {
 
 			for (Codec d : codecs)
 				v = v + d.number() + " ";
-			e.putString("codecs", v);
+			e.putString(Settings.PREF_CODECS, v);
 			e.commit();
 			ps.removeAll();
 			addPreferences(ps);

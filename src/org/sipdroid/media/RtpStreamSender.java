@@ -144,7 +144,7 @@ public class RtpStreamSender extends Thread {
 			  int dest_port) {
 		this.p_type = payload_type;
 		this.frame_rate = frame_rate;
-		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("server","").equals("pbxes.org") &&
+		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_SERVER, Settings.DEFAULT_SERVER).equals("pbxes.org") &&
 				payload_type.codec.number() != 97)
 			this.frame_size = (payload_type.codec.number() != 0 && payload_type.codec.number() != 8)?960:1024;
 		else
@@ -271,7 +271,7 @@ public class RtpStreamSender extends Thread {
 		long time = 0;
 		double p = 0;
 		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean("improve",false);
+		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(Settings.PREF_IMPROVE, Settings.DEFAULT_IMPROVE);
 		int micgain = (int)(Settings.getMicGain()*10);
 		long frame_period = 1000 / frame_rate;
 		long last_tx_time = 0;

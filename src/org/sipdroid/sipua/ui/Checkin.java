@@ -31,7 +31,7 @@ public class Checkin {
 						if (line == null) break;
 						lines = line.split(" ");
 						if (lines.length == 2) {
-							if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString("dns","").equals(lines[0])) {
+							if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_DNS, Settings.DEFAULT_DNS).equals(lines[0])) {
 								if (in_call) {
 									hold = SystemClock.elapsedRealtime();
 									Receiver.engine(Receiver.mContext).rejectcall();

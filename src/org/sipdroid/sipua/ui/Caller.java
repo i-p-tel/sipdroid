@@ -56,7 +56,7 @@ public class Caller extends BroadcastReceiver {
 	        if (intentAction.equals(Intent.ACTION_NEW_OUTGOING_CALL) && number != null)
 	        {
         		if (!Sipdroid.release) Log.i("SipUA:","outgoing call");
-    			boolean sip_type = !PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("PSTN");
+    			boolean sip_type = !PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals("PSTN");
     	        
     	        if (last_number != null && last_number.equals(number) && (SystemClock.elapsedRealtime()-last_time) < 3000) {
     	        	setResultData(null);
@@ -74,10 +74,10 @@ public class Caller extends BroadcastReceiver {
 					noexclude = 0;
 					force = true;
 				}
-				if (PreferenceManager.getDefaultSharedPreferences(context).getString("pref","").equals("SIPONLY"))
+				if (PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals("SIPONLY"))
 					force = true;
 				if (sip_type && !force) {
-	    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString("excludepat", ""); 
+	    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_EXCLUDEPAT, Settings.DEFAULT_EXCLUDEPAT); 
 	   				boolean bExNums = false;
 					boolean bExTypes = false;
 					if (sExPat.length() > 0) 
@@ -115,21 +115,21 @@ public class Caller extends BroadcastReceiver {
 	        		    	// Migrate the "prefix" option. TODO Remove this code in a future release.
 	        		    	SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 	        		    	if (sp.contains("prefix")) {
-	        		    	    String prefix = sp.getString("prefix", "");
+	        		    	    String prefix = sp.getString(Settings.PREF_PREFIX, Settings.DEFAULT_PREFIX);
 	        		    	    Editor editor = sp.edit();
 	        		    	    if (!prefix.trim().equals("")) {
-	        		    		editor.putString("search", "(.*)," + prefix + "\\1");
+	        		    		editor.putString(Settings.PREF_SEARCH, "(.*)," + prefix + "\\1");
 	        		    	    }
-	        		    	    editor.remove("prefix");
+	        		    	    editor.remove(Settings.PREF_PREFIX);
 	        		    	    editor.commit();
 	        		    	}
 	        		    	
 	        		    	// Search & replace.
-	    				String search = sp.getString("search", "");
+	    				String search = sp.getString(Settings.PREF_SEARCH, Settings.DEFAULT_SEARCH);
 	    				String callthru_number = number = searchReplaceNumber(search, number);
 	    				String callthru_prefix;
 	    				
-						if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("par",false)) 
+						if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_PAR, Settings.DEFAULT_PAR)) 
 	    				{
 	    					String orig = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");	
 	     					if (orig.lastIndexOf("/phones") >= 0) 
@@ -163,8 +163,8 @@ public class Caller extends BroadcastReceiver {
 	    				}
 	    				if (Receiver.engine(context).call(number))
 	    					setResultData(null);
-	    				else if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("callthru",false) &&
-	    						(callthru_prefix = PreferenceManager.getDefaultSharedPreferences(context).getString("callthru2","")).length() > 0) {
+	    				else if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_CALLTHRU, Settings.DEFAULT_CALLTHRU) &&
+	    						(callthru_prefix = PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_CALLTHRU2, Settings.DEFAULT_CALLTHRU2)).length() > 0) {
 	    					callthru_number = (callthru_prefix+","+callthru_number+"#").replaceAll(",", ",p");
 	    					setResultData(callthru_number);
 	    				} else if (force) {
