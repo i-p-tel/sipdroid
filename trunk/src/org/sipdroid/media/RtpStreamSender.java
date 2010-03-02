@@ -144,7 +144,7 @@ public class RtpStreamSender extends Thread {
 			  int dest_port) {
 		this.p_type = payload_type;
 		this.frame_rate = frame_rate;
-		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_SERVER, Settings.DEFAULT_SERVER).equals("pbxes.org") &&
+		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_SERVER, "").equals(Settings.DEFAULT_SERVER) &&
 				payload_type.codec.number() != 97)
 			this.frame_size = (payload_type.codec.number() != 0 && payload_type.codec.number() != 8)?960:1024;
 		else

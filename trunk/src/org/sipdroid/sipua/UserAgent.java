@@ -30,6 +30,7 @@ import org.sipdroid.media.JAudioLauncher;
 import org.sipdroid.media.MediaLauncher;
 import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.sipua.ui.Receiver;
+import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.net.IpAddress;
 import org.zoolu.sdp.AttributeField;
@@ -294,7 +295,7 @@ public class UserAgent extends CallListenerAdapter {
 		// in case of incomplete url (e.g. only 'user' is present), try to
 		// complete it
 		if (target_url.indexOf("@") < 0) {
-			if (user_profile.realm.equals("pbxes.org"))		
+			if (user_profile.realm.equals(Settings.DEFAULT_SERVER))
 				target_url = "&" + target_url;
 			target_url = target_url + "@" + realm; // modified
 		}

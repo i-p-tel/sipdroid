@@ -190,14 +190,14 @@ public class Sipdroid extends Activity {
 		setAccountString();
 
 		final Context mContext = this;
-		if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals("PSTN") &&
+		if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) &&
 				!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_NODEFAULT, Settings.DEFAULT_NODEFAULT))
 			new AlertDialog.Builder(this)
 				.setMessage(R.string.dialog_default)
 	            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 	                    public void onClick(DialogInterface dialog, int whichButton) {
 	                		Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
-	                		edit.putString(Settings.PREF_PREF, "SIP");
+	                		edit.putString(Settings.PREF_PREF, Settings.VAL_PREF_SIP);
 	                		edit.commit();	
 	                    }
 	                })
@@ -219,7 +219,7 @@ public class Sipdroid extends Activity {
 	protected void setAccountString() {
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		TextView accountTextView = (TextView) findViewById(R.id.account_string);
-		if (! settings.getString(Settings.PREF_USERNAME, Settings.DEFAULT_USERNAME).equals("") && ! settings.getString(Settings.PREF_SERVER, Settings.DEFAULT_SERVER).equals("")) {
+		if (! settings.getString(Settings.PREF_USERNAME, Settings.DEFAULT_USERNAME).equals("") && ! settings.getString(Settings.PREF_SERVER, "").equals("")) {
 			accountTextView.setText(Settings.getProfileNameString(settings));
 			accountTextView.setVisibility(View.VISIBLE);
 		} else {
