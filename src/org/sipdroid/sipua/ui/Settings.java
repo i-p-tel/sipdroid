@@ -28,9 +28,11 @@ import org.sipdroid.sipua.R;
 import org.zoolu.sip.provider.SipStack;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
@@ -66,6 +68,10 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private static final int MENU_IMPORT = 0;
 	private static final int MENU_DELETE = 1;
 
+	// All possible values of the PREF_PREF preference (see bellow) 
+	public static final String VAL_PREF_PSTN = "PSTN";
+	public static final String VAL_PREF_SIP = "SIP";
+
 	/*-
 	 * ****************************************
 	 * **** HOW TO USE SHARED PREFERENCES *****
@@ -95,7 +101,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_EDGE = "edge";
 	public static final String PREF_PREF = "pref";
 	public static final String PREF_AUTO_ON = "auto_on";
-	public static final String PREF_AUTO_ON_DEMAND = "auto_on_demand";
+	public static final String PREF_AUTO_ONDEMAND = "auto_on_demand";
 	public static final String PREF_AUTO_HEADSET = "auto_headset";
 	public static final String PREF_MWI_ENABLED = "MWI_enabled";
 	public static final String PREF_NOTIFY = "notify";
@@ -132,9 +138,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final boolean	DEFAULT_WLAN = true;
 	public static final boolean	DEFAULT_3G = false;
 	public static final boolean	DEFAULT_EDGE = false;
-	public static final String	DEFAULT_PREF = "SIP";
+	public static final String	DEFAULT_PREF = VAL_PREF_SIP;
 	public static final boolean	DEFAULT_AUTO_ON = false;
-	public static final boolean	DEFAULT_AUTO_ON_DEMAND = false;
+	public static final boolean	DEFAULT_AUTO_ONDEMAND = false;
 	public static final boolean	DEFAULT_AUTO_HEADSET = false;
 	public static final boolean	DEFAULT_MWI_ENABLED = true;
 	public static final boolean	DEFAULT_NOTIFY = false;
@@ -191,7 +197,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String	DEFAULT_COMPRESSION = null;
 	//public static final String	DEFAULT_RINGTONEx = "";
 	//public static final String	DEFAULT_VOLUMEx = "";
-
 
 	public static float getEarGain() {
 		try {
@@ -362,14 +367,20 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 				copyFile(new File(profilePath + profileFiles[whichItem]), new File(sharedPrefsPath + sharedPrefsFile + ".xml"));
             } catch (Exception e) {
                 Toast.makeText(context, getString(R.string.settings_profile_import_error), Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            setDefaultValues();
-    		setSettingsTitle();
+           	setDefaultValues();
+           	setSettingsTitle();
 
-            // Restart the engine
-        	Receiver.engine(context).halt();
-    		Receiver.engine(context).StartEngine();
+           	// Restart the engine
+       		Receiver.engine(context).halt();
+   			Receiver.engine(context).StartEngine();
+
+   			// Exit the settings to get all values updated
+   			finish();
+
+   			Toast.makeText(context, getString(R.string.settings_profile_import_confirmation), Toast.LENGTH_LONG).show();
 		}
 	};
 
@@ -427,16 +438,16 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			.show();
 			return;
 		} else if (key.equals(PREF_SERVER)) {
-        		Editor edit = sharedPreferences.edit();
-        		edit.putString(PREF_DNS, DEFAULT_DNS);
-        		edit.commit();
-	        	Receiver.engine(this).updateDNS();
-	        	Checkin.checkin(false);
-        		edit.putString(PREF_PROTOCOL, sharedPreferences.getString(PREF_SERVER, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp");
-        		edit.commit();
+    		Editor edit = sharedPreferences.edit();
+    		edit.putString(PREF_DNS, DEFAULT_DNS);
+    		edit.commit();
+        	Receiver.engine(this).updateDNS();
+        	Checkin.checkin(false);
+    		edit.putString(PREF_PROTOCOL, sharedPreferences.getString(PREF_SERVER, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp");
+    		edit.commit();
         } else if (sharedPreferences.getBoolean(PREF_CALLBACK, DEFAULT_CALLBACK) && sharedPreferences.getBoolean(PREF_CALLTHRU, DEFAULT_CALLTHRU)) {
- 	        		CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(key.equals(PREF_CALLBACK) ? PREF_CALLTHRU : PREF_CALLBACK);
-	        		cb.setChecked(false);
+    		CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(key.equals(PREF_CALLBACK) ? PREF_CALLTHRU : PREF_CALLBACK);
+    		cb.setChecked(false);
 	    } else if (key.equals(PREF_WLAN) ||
         			key.equals(PREF_3G) ||
         			key.equals(PREF_EDGE) ||
@@ -453,7 +464,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
         			key.equals(PREF_POS) ||
         			key.equals(PREF_POSURL) ||
         			key.equals(PREF_FROMUSER) ||
-        			key.equals(PREF_AUTO_ON_DEMAND) ||
+        			key.equals(PREF_AUTO_ONDEMAND) ||
         			key.equals(PREF_MWI_ENABLED)) {
         	Receiver.engine(this).halt();
     		Receiver.engine(this).StartEngine();
@@ -522,7 +533,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     	getPreferenceScreen().findPreference(PREF_EXCLUDEPAT).setSummary(settings.getString(PREF_EXCLUDEPAT, DEFAULT_EXCLUDEPAT)); 
     	getPreferenceScreen().findPreference(PREF_POSURL).setSummary(settings.getString(PREF_POSURL, DEFAULT_POSURL)); 
     	getPreferenceScreen().findPreference(PREF_CALLTHRU2).setSummary(settings.getString(PREF_CALLTHRU2, DEFAULT_CALLTHRU2)); 
-    	if (! settings.getString(PREF_PREF, DEFAULT_PREF).equals("PSTN")) {
+    	if (! settings.getString(PREF_PREF, DEFAULT_PREF).equals(VAL_PREF_PSTN)) {
     		getPreferenceScreen().findPreference(PREF_PAR).setEnabled(true);
     	} else {
     		getPreferenceScreen().findPreference(PREF_PAR).setEnabled(false);

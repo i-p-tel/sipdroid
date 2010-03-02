@@ -163,6 +163,7 @@
 <string name="settings_profile_dialog_delete_text">Opravdu chcete snazat profil <xliff:g id="profile">%s</xliff:g>?</string>
 <string name="settings_profile_export_error">Chyba při exportu nastavení!</string>
 <string name="settings_profile_import_error">Chyba při importu nastavení!</string>
+<string name="settings_profile_import_confirmation">Profile byl importován.</string>
 <string name="settings_profile_delete_error">Tento profil nelze smazat!</string>
 <string name="settings_profile_delete_confirmation">Profil byl smazán.</string>
 

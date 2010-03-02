@@ -301,7 +301,7 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		static void updateAutoAnswer() {
-			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON_DEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON_DEMAND) &&
+			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ONDEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ONDEMAND) &&
 				Sipdroid.on(mContext)) {
 				if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_DEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_DEMAND))
 					updateAutoAnswer(1);
