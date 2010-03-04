@@ -420,7 +420,12 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	@Override
 	public void onDestroy()	{
 		super.onDestroy();
-		exportSettings();
+
+		// Export settings only if there is some username, password and server
+		if (! settings.getString(PREF_USERNAME, "").equals("") && ! settings.getString(PREF_PASSWORD, "").equals("") && ! settings.getString(PREF_SERVER, "").equals("")) {
+			exportSettings();
+		}
+
 		settings.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
