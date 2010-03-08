@@ -97,6 +97,7 @@ public interface Codec {
 	 * @returns true if the codec can only be used on Edge Networks
 	 */
 	boolean edgeOnly();
+	boolean edgeOr3GOnly();
 
 	/**
 	 * (implemented by {@link CodecBase}

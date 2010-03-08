@@ -100,6 +100,7 @@
 <string name="settings_wlan">WLAN verwenden</string>
 <string name="settings_3g">3G verwenden</string>
 <string name="settings_edge">EDGE verwenden</string>
+<string name="settings_vpn">VPN verwenden</string>
 <string name="settings_check">Prüfen Sie, ob Ihr Mobilfunkanbieter VoIP-Nutzung erlaubt</string>
 
 <string name="dialog_default">Sipdroid ist nicht als Telefon voreingestellt. Möchten Sie es als Telefon voreinstellen?
@@ -119,13 +120,9 @@
 <string name="settings_compression">Sprachkompression</string>
     <string-array name="compression_display_values">
         <item>Nur über EDGE</item>
+        <item>Nur über EDGE und 3G</item>
         <item>Immer versuchen</item>
         <item>Nie</item>
-    </string-array>
-    <string-array name="compression_values">
-        <item>edge</item>
-        <item>always</item>
-        <item>never</item>
     </string-array>
 <string name="settings_auto_on">Rufannahme im Betrieb</string>
 <string name="settings_auto_on2">Bei eingeschaltetem Bildschirm mit kurzem Vibrationsalarm</string>

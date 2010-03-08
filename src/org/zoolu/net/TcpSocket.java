@@ -47,12 +47,22 @@ public class TcpSocket {
 		socket = sock;
 	}
 
+	static boolean lock;
+	
 	/** Creates a new UdpSocket */
 	public TcpSocket(IpAddress ipaddr, int port) throws java.io.IOException {
 //		socket = new Socket(ipaddr.getInetAddress(), port); modified
 		socket = new Socket();
-		socket.connect(new InetSocketAddress(ipaddr.toString(), port),
-				Thread.currentThread().getName().equals("main")?1000:0);
+		if (lock) throw new java.io.IOException();
+		lock = true;
+		try {
+			socket.connect(new InetSocketAddress(ipaddr.toString(), port),
+				Thread.currentThread().getName().equals("main")?1000:10000);
+		} catch (java.io.IOException e) {
+			lock = false;
+			throw e;
+		}
+		lock = false;
 	}
 
 	/** Closes this socket. */

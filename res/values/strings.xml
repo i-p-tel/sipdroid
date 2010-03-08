@@ -128,6 +128,7 @@
 <string name="settings_wlan">Use WLAN</string>
 <string name="settings_3g">Use 3G</string>
 <string name="settings_edge">Use EDGE</string>
+<string name="settings_vpn">Use VPN</string>
 <string name="settings_check">Check with your mobile operator if he allows VoIP</string>
 
 <string name="dialog_default">Sipdroid is not currently set as default phone. Would you like to make it as default phone?
@@ -152,11 +153,13 @@
 <string name="settings_compression">Voice Compression</string>
     <string-array name="compression_display_values">
         <item>Only over EDGE</item>
+        <item>Only over EDGE and 3G</item>
         <item>Always try</item>
         <item>Never</item>
     </string-array>
     <string-array name="compression_values">
         <item>edge</item>
+        <item>edgeor3g</item>
         <item>always</item>
         <item>never</item>
     </string-array>
@@ -218,7 +221,7 @@
 
 <string name="settings_title">Sipdroid settings</string>
 
-<string name="settings_profile_title">Sipdroid settings (<xliff:g id="profile">%s</xliff:g>)</string>
+<string name="settings_profile_title">Sipdroid Settings (<xliff:g id="profile">%s</xliff:g>)</string>
 <string name="settings_profile_menu_import">Import</string>
 <string name="settings_profile_menu_delete">Delete</string>
 <string name="settings_profile_dialog_profiles_title">Profiles</string>

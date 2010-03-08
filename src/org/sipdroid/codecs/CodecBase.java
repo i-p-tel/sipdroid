@@ -35,7 +35,7 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 
 	private boolean loaded = false;
 	private boolean enabled = false;
-	private boolean edgeOnly = false;
+	private boolean edgeOnly = false,edgeOr3GOnly = false;
 	private String value;
 
 	void update() {
@@ -63,6 +63,10 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 
 	public boolean edgeOnly() {
 		return enabled && edgeOnly;
+	}
+	
+	public boolean edgeOr3GOnly() {
+		return enabled && edgeOr3GOnly;
 	}
 
 	public String name() {
@@ -108,6 +112,10 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 				edgeOnly = true;
 			else
 				edgeOnly = false;
+			if (v.equals("edgeor3g"))
+				edgeOr3GOnly = true;
+			else
+				edgeOr3GOnly = false;
 		}
 	}
 

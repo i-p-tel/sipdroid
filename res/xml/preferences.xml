@@ -51,6 +51,10 @@
 				android:key="edge"
 				android:title="@string/settings_edge"
 				android:summary="@string/settings_check" />
+			<CheckBoxPreference
+				android:key="vpn"
+				android:title="@string/settings_vpn"
+				android:summary="@string/settings_check" />
 			<ListPreference
 				android:key="pref"
 				android:title="@string/settings_pref"

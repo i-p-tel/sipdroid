@@ -30,9 +30,7 @@ import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -74,6 +72,7 @@ import org.sipdroid.sipua.phone.Connection;
 		final static String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
 		final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
 		final static String ACTION_DEVICE_IDLE = "com.android.server.WifiManager.action.DEVICE_IDLE";
+		final static String ACTION_VPN_CONNECTIVITY = "vpn.connectivity";
 		
 		public final static int REGISTER_NOTIFICATION = 1;
 		public final static int CALL_NOTIFICATION = 2;
@@ -525,6 +524,17 @@ import org.sipdroid.sipua.phone.Connection;
 		public static boolean on_wlan;
 		static boolean is_fast;
 		
+		static boolean on_vpn() {
+			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_ON_VPN, org.sipdroid.sipua.ui.Settings.DEFAULT_ON_VPN);
+		}
+		
+		static void on_vpn(boolean enable) {
+    		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+    		
+    		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_ON_VPN,enable);
+    		edit.commit();
+		}
+		
 		public static boolean isFast() {
         	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         	WifiInfo wi = wm.getConnectionInfo();
@@ -535,10 +545,12 @@ import org.sipdroid.sipua.phone.Connection;
 	        	if (wi.getIpAddress() != 0 && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
 	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
 	        		on_wlan = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN, org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
-	        		return is_fast = on_wlan;
-	        	}
-        	}
-        	on_wlan = false;
+	        		if (!on_vpn())
+	        			return is_fast = on_wlan;
+	        	} else
+	        		on_wlan = false;
+        	} else
+        		on_wlan = false;
          	return is_fast = isFast2();
 		}
 		
@@ -547,6 +559,8 @@ import org.sipdroid.sipua.phone.Connection;
 
         	if (Sipdroid.market)
         		return false;
+        	if (on_vpn() && (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_EDGE || on_wlan))
+        		return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_VPN, org.sipdroid.sipua.ui.Settings.DEFAULT_VPN);
         	if (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS)
         		return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_3G, org.sipdroid.sipua.ui.Settings.DEFAULT_3G);
         	if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
@@ -563,12 +577,21 @@ import org.sipdroid.sipua.phone.Connection;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
 	        	engine(context).register();
 	        } else
-	        if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-	        	engine(context).register();
+		    if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+		    	engine(context).register();
+			} else
+			if (intentAction.equals(ACTION_VPN_CONNECTIVITY) && intent.hasExtra("connection_state")) {
+				String state = intent.getSerializableExtra("connection_state").toString();
+				if (state != null && on_vpn() != state.equals("CONNECTED")) {
+					on_vpn(state.equals("CONNECTED"));
+					if (engine(context).sip_provider != null)
+						engine(context).sip_provider.haltConnections();
+					engine(context).register();
+				}
 			} else
 	        if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
 	        	boolean was_fast = is_fast;
-	        	if (was_fast != isFast())
+	        	if (!was_fast && isFast())
 	        		engine(context).register();
 			} else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&

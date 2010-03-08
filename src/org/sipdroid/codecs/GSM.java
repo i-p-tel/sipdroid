@@ -69,7 +69,7 @@ class GSM extends CodecBase implements Codec {
 	}
 
 	public void close() {
-		org.sipdroid.pjlib.Codec.close();
+//		org.sipdroid.pjlib.Codec.close();
 	}
 
 }
