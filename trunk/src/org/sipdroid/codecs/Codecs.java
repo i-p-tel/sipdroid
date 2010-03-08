@@ -107,6 +107,19 @@ public class Codecs {
 		return codecsNames.get(name);
 	}
 
+	public static void check() {
+		for(Codec c : codecs) {
+			c.init();
+			if (!c.isLoaded()) {
+				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
+				SharedPreferences.Editor e = sp.edit();
+
+				e.putString(c.name(), "never");
+				e.commit();
+			}
+		}		
+	}
+	
 	private static void addPreferences(PreferenceScreen ps) {
 		Context cx = ps.getContext();
 		Resources r = cx.getResources();
@@ -123,11 +136,6 @@ public class Codecs {
 				l.setEnabled(true);
 				c.setListPreference(l);
 			} else {
-				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
-				SharedPreferences.Editor e = sp.edit();
-
-				e.putString(c.name(), "never");
-				e.commit();
 				l.setValue("never");
 				l.setEnabled(false);
 			}
@@ -139,12 +147,14 @@ public class Codecs {
 
 	public static int[] getCodecs() {
 		Vector<Integer> v = new Vector<Integer>(codecs.size());
-		boolean onEdge = onEdge();
+		boolean onEdge = onEdge(),onEdgeOr3G = onEdgeOr3G();
 
 		for (Codec c : codecs) {
 			if (!c.isEnabled())
 				continue;
 			if (c.edgeOnly() && !onEdge)
+				continue;
+			if (c.edgeOr3GOnly() && !onEdgeOr3G)
 				continue;
 			v.add(c.number());
 		}
@@ -169,7 +179,7 @@ public class Codecs {
 	};
 
 	public static Map getCodec(SessionDescriptor offers) {
-		boolean onEdge = onEdge();
+		boolean onEdge = onEdge(),onEdgeOr3G = onEdgeOr3G();
 		Vector<AttributeField> attrs = offers.getMediaDescriptor("audio").getAttributes("rtpmap");
 		Vector<String> names = new Vector<String>(attrs.size());
 		Vector<Integer> numbers = new Vector<Integer>(attrs.size());
@@ -195,6 +205,8 @@ public class Codecs {
 				continue;
 			if (c.edgeOnly() && !onEdge)
 				continue;
+			if (c.edgeOr3GOnly() && !onEdgeOr3G)
+				continue;
 			int i =  names.indexOf(c.name());
 			if (i == -1)
 				continue;
@@ -208,6 +220,11 @@ public class Codecs {
 	private static boolean onEdge() {
 		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
 		return !Receiver.on_wlan && tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE;
+	}
+
+	private static boolean onEdgeOr3G() {
+		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		return !Receiver.on_wlan && tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_EDGE;
 	}
 
 	public static class CodecSettings extends PreferenceActivity {

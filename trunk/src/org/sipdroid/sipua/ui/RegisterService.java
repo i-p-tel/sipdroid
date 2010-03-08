@@ -59,6 +59,7 @@ public class RegisterService extends Service {
 			 intentfilter.addAction(Intent.ACTION_USER_PRESENT);
 			 intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
 			 intentfilter.addAction(Intent.ACTION_SCREEN_ON);
+			 intentfilter.addAction(Receiver.ACTION_VPN_CONNECTIVITY);
 	         registerReceiver(m_receiver = new Receiver(), intentfilter);      
         }
         if (m_caller == null) {

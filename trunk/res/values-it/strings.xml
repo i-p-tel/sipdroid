@@ -142,13 +142,9 @@
 <string name="settings_compression">Compressione Voce</string>
     <string-array name="compression_display_values">
         <item>Solo in EDGE</item>
+        <item>Solo in EDGE/3G</item>
         <item>Sempre attivo</item>
         <item>Mai</item>
-    </string-array>
-    <string-array name="compression_values">
-        <item>edge</item>
-        <item>sempre</item>
-        <item>mai</item>
     </string-array>
 <string name="settings_auto_on">Risposta automatica abilitata</string>
 <string name="settings_auto_on2">Breve avviso con vibrazione, quando lo schermo è acceso</string>

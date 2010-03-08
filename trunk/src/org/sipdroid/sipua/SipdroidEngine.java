@@ -60,7 +60,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	/** UserAgentProfile */
 	private UserAgentProfile user_profile;
 
-	private SipProvider sip_provider;
+	public SipProvider sip_provider;
 	
 	static PowerManager.WakeLock wl;
 	
@@ -167,7 +167,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 			Receiver.alarm(0, LoopAlarm.class);
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
 			wl.acquire();
-		}		
+		} else
+			Receiver.onText(Receiver.REGISTER_NOTIFICATION, null, 0, 0);
 	}
 	
 	public void register() {

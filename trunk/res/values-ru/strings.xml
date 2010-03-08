@@ -126,13 +126,9 @@
 <string name="settings_compression">Сжатие</string>
     <string-array name="compression_display_values">
         <item>Только при EDGE</item>
+        <item>Только при EDGE/3G</item>
         <item>Всегда</item>
         <item>Никогда</item>
-    </string-array>
-    <string-array name="compression_values">
-        <item>edge</item>
-        <item>always</item>
-        <item>never</item>
     </string-array>
 <string name="settings_auto_on">Авто-ответ</string>
 <string name="settings_auto_on2">Короткое предупреждение вибрацией, когда экран включён</string>

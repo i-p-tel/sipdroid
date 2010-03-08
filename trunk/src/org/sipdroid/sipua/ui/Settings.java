@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import org.sipdroid.codecs.Codecs;
 import org.sipdroid.sipua.R;
 import org.zoolu.sip.provider.SipStack;
 
@@ -99,6 +100,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_WLAN = "wlan";
 	public static final String PREF_3G = "3g";
 	public static final String PREF_EDGE = "edge";
+	public static final String PREF_VPN = "vpn";
 	public static final String PREF_PREF = "pref";
 	public static final String PREF_AUTO_ON = "auto_on";
 	public static final String PREF_AUTO_ONDEMAND = "auto_on_demand";
@@ -134,10 +136,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String	DEFAULT_DOMAIN = "";
 	public static final String	DEFAULT_FROMUSER = "";
 	public static final String	DEFAULT_PORT = "" + SipStack.default_port;
-	public static final String	DEFAULT_PROTOCOL = "";
+	public static final String	DEFAULT_PROTOCOL = "tcp";
 	public static final boolean	DEFAULT_WLAN = true;
 	public static final boolean	DEFAULT_3G = false;
 	public static final boolean	DEFAULT_EDGE = false;
+	public static final boolean	DEFAULT_VPN = false;
 	public static final String	DEFAULT_PREF = VAL_PREF_SIP;
 	public static final boolean	DEFAULT_AUTO_ON = false;
 	public static final boolean	DEFAULT_AUTO_ONDEMAND = false;
@@ -175,6 +178,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_OLDRING = "oldring";
 	public static final String PREF_AUTO_DEMAND = "auto_demand";
 	public static final String PREF_WIFI_DISABLED = "wifi_disabled";
+	public static final String PREF_ON_VPN = "on_vpn";
 	public static final String PREF_NODEFAULT = "nodefault";
 	public static final String PREF_ON = "on";
 	public static final String PREF_PREFIX = "prefix";
@@ -191,6 +195,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final int		DEFAULT_OLDRING = 0;
 	public static final boolean	DEFAULT_AUTO_DEMAND = false;
 	public static final boolean	DEFAULT_WIFI_DISABLED = false;
+	public static final boolean DEFAULT_ON_VPN = false;
 	public static final boolean	DEFAULT_NODEFAULT = false;
 	public static final boolean	DEFAULT_ON = false;
 	public static final String	DEFAULT_PREFIX = "";
@@ -221,6 +226,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		addPreferencesFromResource(R.xml.preferences);
 		setDefaultValues();
 		setSettingsTitle();
+		Codecs.check();
 	}
 
 	private void setDefaultValues() {
@@ -234,6 +240,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			edit.putString(PREF_PORT, DEFAULT_PORT);
 			edit.putString(PREF_SERVER, DEFAULT_SERVER);
 			edit.putString(PREF_PREF, DEFAULT_PREF);				
+			edit.putString(PREF_PROTOCOL, DEFAULT_PROTOCOL);
 			edit.commit();
         	Receiver.engine(this).updateDNS();
 		}
@@ -465,7 +472,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
         			key.equals(PREF_STUN_SERVER) ||
         			key.equals(PREF_STUN_SERVER_PORT) ||
         			key.equals(PREF_PROTOCOL) ||
-        			key.equals(PREF_EDGE) ||
+        			key.equals(PREF_VPN) ||
         			key.equals(PREF_POS) ||
         			key.equals(PREF_POSURL) ||
         			key.equals(PREF_FROMUSER) ||
