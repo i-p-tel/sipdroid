@@ -128,6 +128,7 @@
 <string name="settings_wlan">Używaj WLAN</string>
 <string name="settings_3g">Używaj 3G</string>
 <string name="settings_edge">Używaj EDGE</string>
+<string name="settings_vpn">Używaj VPN</string>
 <string name="settings_check">Upewnij się, że Twój operator komórkowy zezwala na połączenia VoIP</string>
 
 <string name="dialog_default">Sipdroid nie jest aktualnie ustawiony jako domyślny telefon. Czy chcesz go ustawić jak domyślny?
@@ -151,12 +152,14 @@
     </string-array>
 <string name="settings_compression">Kompresja głosu</string>
     <string-array name="compression_display_values">
-        <item>Tylko przy EDGE</item>
+        <item>Tylko w EDGE</item>
+        <item>Tylko w EDGE i 3G</item>
         <item>Zawsze próbuj</item>
         <item>Nigdy</item>
     </string-array>
     <string-array name="compression_values">
         <item>edge</item>
+        <item>edgeor3g</item>
         <item>always</item>
         <item>never</item>
     </string-array>
@@ -226,6 +229,7 @@
 <string name="settings_profile_dialog_delete_text">Czy na pewno chcesz skasować profil <xliff:g id="profile">%s</xliff:g> ?</string>
 <string name="settings_profile_export_error">Nie można wyeksportować ustawień!</string>
 <string name="settings_profile_import_error">Nie można zaimportować ustawień!</string>
+<string name="settings_profile_import_confirmation">Profil zaimportowany.</string>
 <string name="settings_profile_delete_error">Nie można usunąć tego profilu!</string>
 <string name="settings_profile_delete_confirmation">Profil został skasowany.</string>
 
