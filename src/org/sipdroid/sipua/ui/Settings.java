@@ -29,11 +29,9 @@ import org.sipdroid.sipua.R;
 import org.zoolu.sip.provider.SipStack;
 
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
