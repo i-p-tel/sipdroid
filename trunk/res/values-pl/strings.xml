@@ -130,6 +130,7 @@
 <string name="settings_edge">Używaj EDGE</string>
 <string name="settings_vpn">Używaj VPN</string>
 <string name="settings_check">Upewnij się, że Twój operator komórkowy zezwala na połączenia VoIP</string>
+<string name="settings_vpn2">PBXes.org oferuje darmową usługę VPN, zapoznaj się z sekcją POMOCY na witrynie</string>
 
 <string name="dialog_default">Sipdroid nie jest aktualnie ustawiony jako domyślny telefon. Czy chcesz go ustawić jak domyślny?
 \n
@@ -223,7 +224,6 @@
 <string name="settings_profile_dialog_delete_text">Czy na pewno chcesz skasować profil <xliff:g id="profile">%s</xliff:g> ?</string>
 <string name="settings_profile_export_error">Nie można wyeksportować ustawień!</string>
 <string name="settings_profile_import_error">Nie można zaimportować ustawień!</string>
-<string name="settings_profile_import_confirmation">Profil zaimportowany.</string>
 <string name="settings_profile_delete_error">Nie można usunąć tego profilu!</string>
 <string name="settings_profile_delete_confirmation">Profil został skasowany.</string>
 
