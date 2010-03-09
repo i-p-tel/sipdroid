@@ -52,8 +52,6 @@ import org.zoolu.tools.Log;
 import org.zoolu.tools.LogLevel;
 import org.zoolu.tools.Parser;
 
-import android.content.Context;
-
 /**
  * Simple SIP user agent (UA). It includes audio/video applications.
  * <p>
@@ -397,6 +395,11 @@ public class UserAgent extends CallListenerAdapter {
 		local_video_port = 0;
 		int dtmf_pt = 0;
 		c = Codecs.getCodec(local_sdp);
+		if (c == null) {
+			Receiver.call_end_reason = R.string.card_title_ended_no_codec;
+			hangup();
+			return;
+		}
 		MediaDescriptor m = local_sdp.getMediaDescriptor("video");
 		if ( m != null)
 			local_video_port = m.getMedia().getPort();

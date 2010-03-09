@@ -226,9 +226,14 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		setSettingsTitle();
 		Codecs.check();
 	}
+	
+	void reload() {
+		setPreferenceScreen(null);
+		addPreferencesFromResource(R.xml.preferences);		
+	}
 
 	private void setDefaultValues() {
-		settings = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
+		settings = getPreferenceScreen().getSharedPreferences();
 
 		if (settings.getString(PREF_SERVER, "").equals("")) {
 			CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(PREF_WLAN);
@@ -241,6 +246,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			edit.putString(PREF_PROTOCOL, DEFAULT_PROTOCOL);
 			edit.commit();
         	Receiver.engine(this).updateDNS();
+        	reload();
 		}
 		if (settings.getString(PREF_STUN_SERVER, "").equals("")) {
 			Editor edit = settings.edit();
@@ -248,6 +254,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			edit.putString(PREF_STUN_SERVER, DEFAULT_STUN_SERVER);
 			edit.putString(PREF_STUN_SERVER_PORT, DEFAULT_STUN_SERVER_PORT);				
 			edit.commit();
+			reload();
 		}
 
 		if (! settings.contains(PREF_MWI_ENABLED)) {
@@ -382,10 +389,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
        		Receiver.engine(context).halt();
    			Receiver.engine(context).StartEngine();
 
-   			// Exit the settings to get all values updated
-   			finish();
-
-   			Toast.makeText(context, getString(R.string.settings_profile_import_confirmation), Toast.LENGTH_LONG).show();
+   			reload();
 		}
 	};
 
@@ -455,6 +459,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
         	Checkin.checkin(false);
     		edit.putString(PREF_PROTOCOL, sharedPreferences.getString(PREF_SERVER, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp");
     		edit.commit();
+    		reload();
         } else if (sharedPreferences.getBoolean(PREF_CALLBACK, DEFAULT_CALLBACK) && sharedPreferences.getBoolean(PREF_CALLTHRU, DEFAULT_CALLTHRU)) {
     		CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(key.equals(PREF_CALLBACK) ? PREF_CALLTHRU : PREF_CALLBACK);
     		cb.setChecked(false);

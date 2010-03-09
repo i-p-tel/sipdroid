@@ -54,7 +54,7 @@
 			<CheckBoxPreference
 				android:key="vpn"
 				android:title="@string/settings_vpn"
-				android:summary="@string/settings_check" />
+				android:summary="@string/settings_vpn2" />
 			<ListPreference
 				android:key="pref"
 				android:title="@string/settings_pref"

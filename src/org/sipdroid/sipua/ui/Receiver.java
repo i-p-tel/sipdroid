@@ -544,9 +544,9 @@ import org.sipdroid.sipua.phone.Connection;
         				+" "+wi.getIpAddress());
 	        	if (wi.getIpAddress() != 0 && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
 	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
-	        		on_wlan = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN, org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
+	        		on_wlan = true;
 	        		if (!on_vpn())
-	        			return is_fast = on_wlan;
+	        			return is_fast = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN, org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
 	        	} else
 	        		on_wlan = false;
         	} else
@@ -575,6 +575,7 @@ import org.sipdroid.sipua.phone.Connection;
         	if (!Sipdroid.release) Log.i("SipUA:",intentAction);
         	if (mContext == null) mContext = context;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
+	        	on_vpn(false);
 	        	engine(context).register();
 	        } else
 		    if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {

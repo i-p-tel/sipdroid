@@ -381,7 +381,8 @@ public class RtpStreamReceiver extends Thread {
 				 else
 					 cnt2 = 0;
 
-				 if (cnt <= 500 || cnt2 >= 2 || headroom - 875 < len) {
+				 if (cnt <= 500 || cnt2 >= 2 || headroom - 875 < len ||
+						 p_type.codec.number() != 8 || p_type.codec.number() != 0) {
 					 len = p_type.codec.decode(buffer, lin, rtp_packet.getPayloadLength());
 					 
 		 			 if (speakermode == AudioManager.MODE_NORMAL)

@@ -157,12 +157,6 @@
         <item>Zawsze próbuj</item>
         <item>Nigdy</item>
     </string-array>
-    <string-array name="compression_values">
-        <item>edge</item>
-        <item>edgeor3g</item>
-        <item>always</item>
-        <item>never</item>
-    </string-array>
 <string name="settings_auto_on">Odbieranie automatyczne włączone</string>
 <string name="settings_auto_on2">Krótkie wibracje kiedy ekran włączony</string>
 <string name="settings_auto_ondemand">Odbieranie automatyczne na żądanie</string>
