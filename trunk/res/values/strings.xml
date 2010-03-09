@@ -130,6 +130,7 @@
 <string name="settings_edge">Use EDGE</string>
 <string name="settings_vpn">Use VPN</string>
 <string name="settings_check">Check with your mobile operator if he allows VoIP</string>
+<string name="settings_vpn2">PBXes offers free VPN service, see HELP section there</string>
 
 <string name="dialog_default">Sipdroid is not currently set as default phone. Would you like to make it as default phone?
 \n
@@ -229,7 +230,6 @@
 <string name="settings_profile_dialog_delete_text">Do you really want to delete <xliff:g id="profile">%s</xliff:g> profile?</string>
 <string name="settings_profile_export_error">Can not export settings!</string>
 <string name="settings_profile_import_error">Can not import settings!</string>
-<string name="settings_profile_import_confirmation">Profile has been imported.</string>
 <string name="settings_profile_delete_error">Can not delete this profile!</string>
 <string name="settings_profile_delete_confirmation">Profile has been deleted.</string>
 
