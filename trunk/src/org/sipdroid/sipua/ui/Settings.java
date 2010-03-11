@@ -233,7 +233,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	}
 
 	private void setDefaultValues() {
-		settings = getPreferenceScreen().getSharedPreferences();
+		settings = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
 
 		if (settings.getString(PREF_SERVER, "").equals("")) {
 			CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(PREF_WLAN);
@@ -382,14 +382,15 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
                 return;
             }
 
-           	setDefaultValues();
+   			setDefaultValues();
            	setSettingsTitle();
 
            	// Restart the engine
        		Receiver.engine(context).halt();
    			Receiver.engine(context).StartEngine();
-
+   			
    			reload();
+   			updateSummaries();
 		}
 	};
 
