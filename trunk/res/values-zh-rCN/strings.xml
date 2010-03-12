@@ -89,7 +89,7 @@
 		<item>16999</item>
 		<item>26999</item>
 		<item>36999</item>
-		<item>custom</item>
+		<item>自定义</item>
 	</string-array>
 	<string-array name="port_values">
 		<item>53</item>
@@ -142,7 +142,7 @@
 
 <string name="yes">是</string>
 <string name="no">否</string>
-<string name="dontask">不要请提示我</string>
+<string name="dontask">不再提示</string>
 
 <string name="settings_pref">Sipdroid优先级</string>
 <string name="settings_pref2">在拨号时在电话号码后加上字符\'+\'，或者长按联系人选择 \'发送短信\'以强制使用Sipdroid拨号。</string>
