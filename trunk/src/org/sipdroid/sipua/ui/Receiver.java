@@ -23,7 +23,10 @@ package org.sipdroid.sipua.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URL;
+import java.util.Enumeration;
 
 import android.app.AlarmManager;
 import android.app.KeyguardManager;
@@ -536,36 +539,62 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		public static boolean isFast() {
+			is_fast = isFastWifi();
+			if (!is_fast) is_fast = isFastGSM();
+			if (!is_fast) is_fast = isFastEth();
+			return is_fast;
+		}
+			
+		static boolean isFastWifi() {
         	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         	WifiInfo wi = wm.getConnectionInfo();
 
         	if (wi != null) {
-        		if (!Sipdroid.release) Log.i("SipUA:","isFast() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())
+        		if (!Sipdroid.release) Log.i("SipUA:","isFastWifi() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())
         				+" "+wi.getIpAddress());
 	        	if (wi.getIpAddress() != 0 && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
 	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
 	        		on_wlan = true;
 	        		if (!on_vpn())
-	        			return is_fast = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN, org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
-	        	} else
-	        		on_wlan = false;
-        	} else
-        		on_wlan = false;
-         	return is_fast = isFast2();
+	        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN, org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
+	        		else
+	        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_VPN, org.sipdroid.sipua.ui.Settings.DEFAULT_VPN);  
+	        	}
+        	}
+        	on_wlan = false;
+        	return false;
 		}
 		
-		static boolean isFast2() {
+		static boolean isFastGSM() {
         	TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
         	if (Sipdroid.market)
         		return false;
-        	if (on_vpn() && (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_EDGE || on_wlan))
+        	if (on_vpn() && (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_EDGE))
         		return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_VPN, org.sipdroid.sipua.ui.Settings.DEFAULT_VPN);
         	if (tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_UMTS)
         		return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_3G, org.sipdroid.sipua.ui.Settings.DEFAULT_3G);
         	if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_EDGE, org.sipdroid.sipua.ui.Settings.DEFAULT_EDGE);
         	return false;
+		}
+		
+		static boolean isFastEth() {
+			boolean on_eth = false;
+			try {
+				for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+					NetworkInterface intf = en.nextElement();
+
+					if ( intf.getName().startsWith("eth") ) {
+						on_eth = true;
+						on_wlan = true; //treat eth connection as wlan
+						break;
+					}
+				}
+			} catch (SocketException ex) {
+				// do nothing
+			}			
+			return on_eth;
 		}
 		
 	    @Override
