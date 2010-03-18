@@ -26,6 +26,7 @@ import java.util.Vector;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
+import org.zoolu.sdp.MediaField;
 import org.zoolu.sdp.SessionDescriptor;
 import org.zoolu.sdp.AttributeField;
 
@@ -180,41 +181,92 @@ public class Codecs {
 
 	public static Map getCodec(SessionDescriptor offers) {
 		boolean onEdge = onEdge(),onEdgeOr3G = onEdgeOr3G();
-		Vector<AttributeField> attrs = offers.getMediaDescriptor("audio").getAttributes("rtpmap");
-		Vector<String> names = new Vector<String>(attrs.size());
-		Vector<Integer> numbers = new Vector<Integer>(attrs.size());
+		MediaField m = offers.getMediaDescriptor("audio").getMedia(); 
+		if (m==null) 
+			return null;
 
-		for (AttributeField a : attrs) {
-			String s = a.getValue();
-			// skip over "rtpmap:"
-			s = s.substring(7, s.indexOf("/"));
-			int i = s.indexOf(" ");
-			try {
-				String name = s.substring(i + 1);
-				int number = Integer.parseInt(s.substring(0, i));
-				names.add(name);
-				numbers.add(number);
-			} catch (NumberFormatException e) {
-				// continue ... remote sent bogus rtp setting
+		String proto = m.getTransport();
+		//see http://tools.ietf.org/html/rfc4566#page-22, paragraph 5.14, <fmt> description 
+		if ( proto.equals("RTP/AVP") || proto.equals("RTP/SAVP") ) {
+			Vector<String> formats = m.getFormatList();
+			Vector<String> names = new Vector<String>(formats.size());
+			Vector<Integer> numbers = new Vector<Integer>(formats.size());
+
+			//add all avail formats with empty names
+			for (String fmt : formats) {
+				try {
+					int number = Integer.parseInt(fmt);
+					numbers.add(number);
+					names.add("");
+				} catch (NumberFormatException e) {
+					// continue ... remote sent bogus rtp setting
+				}
+			};
+		
+			//if we have attrs for format -> set name
+			Vector<AttributeField> attrs = offers.getMediaDescriptor("audio").getAttributes("rtpmap");			
+			for (AttributeField a : attrs) {
+				String s = a.getValue();
+				// skip over "rtpmap:"
+				s = s.substring(7, s.indexOf("/"));
+				int i = s.indexOf(" ");
+				try {
+					String name = s.substring(i + 1);
+					int number = Integer.parseInt(s.substring(0, i));
+					int index = numbers.indexOf(number);
+					if (index >=0)
+						names.set(index, name);
+				} catch (NumberFormatException e) {
+					// continue ... remote sent bogus rtp setting
+				}
 			}
-		}
+			
+			Codec codec = null;
+			int index = formats.size() + 1;
+			
+			for (Codec c : codecs) {
+				if (!c.isEnabled())
+					continue;
+				if (c.edgeOnly() && !onEdge)
+					continue;
+				if (c.edgeOr3GOnly() && !onEdgeOr3G)
+					continue;
 
-		// find the first codec in our list that's also in the offers
-		for (Codec c : codecs) {
-			if (!c.isEnabled())
-				continue;
-			if (c.edgeOnly() && !onEdge)
-				continue;
-			if (c.edgeOr3GOnly() && !onEdgeOr3G)
-				continue;
-			int i =  names.indexOf(c.name());
-			if (i == -1)
-				continue;
-
-			return new Map(numbers.elementAt(i), c);
-		}
-		// no codec found ... we can't talk
-		return null;
+				//search current codec in offers by name
+				int i = names.indexOf(c.name());
+				if (i >= 0) {
+					if ( (codec==null) || (i < index) ) {
+						codec = c;
+						index = i;
+						if (index == 0) break; /*default codec found*/
+						continue;
+					}
+				}
+				
+				//search current codec in offers by number
+				i = numbers.indexOf(c.number());
+				if (i >= 0) {
+					if ( (codec==null) || (i < index) )  
+						if ( names.elementAt(i).equals("") 
+						||  (names.elementAt(i).toLowerCase().equals(c.name().toLowerCase())) ) {
+						//fmt number has no attr with name 
+						//or codec has different name than in offer, but the same number and equals case non-sensitive
+							codec = c;
+							index = i;
+							if (index == 0) break; /*default codec found*/
+							continue;
+						};
+					}
+				};
+				
+				if (codec!=null) 
+					return new Map(numbers.elementAt(index), codec);
+				else
+					// no codec found ... we can't talk
+					return null;
+		} else
+			/*formats of other protocols not supported yet*/
+			return null;
 	}
 
 	private static boolean onEdge() {
