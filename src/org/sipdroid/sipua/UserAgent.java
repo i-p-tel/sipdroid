@@ -184,7 +184,8 @@ public class UserAgent extends CallListenerAdapter {
 		//audio
 		if (user_profile.audio || !user_profile.video)
 		{
-			addMediaDescriptor("audio", user_profile.audio_port, c, user_profile.audio_sample_rate);
+//			addMediaDescriptor("audio", user_profile.audio_port, c, user_profile.audio_sample_rate);
+			addMediaDescriptor("audio", user_profile.audio_port, c);
 		}
 		
 		if (user_profile.video)
@@ -214,8 +215,8 @@ public class UserAgent extends CallListenerAdapter {
 	}
 	
 	/** Adds a set of media to the SDP */
-	private void addMediaDescriptor(String media, int port, Codecs.Map c,
-					int rate) {
+//	private void addMediaDescriptor(String media, int port, Codecs.Map c,int rate) {
+	private void addMediaDescriptor(String media, int port, Codecs.Map c) {
 		SessionDescriptor sdp = new SessionDescriptor(local_session);
 	
 		Vector<String> avpvec = new Vector<String>();
@@ -225,15 +226,15 @@ public class UserAgent extends CallListenerAdapter {
 			for (int i : Codecs.getCodecs()) {
 				Codec codec = Codecs.get(i);
 				avpvec.add(String.valueOf(i));
-				afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", i, codec.name(), rate)));
+				afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", i, codec.name(), codec.samp_rate())));
 			}
 		} else {
 			avpvec.add(String.valueOf(c.number));
-			afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", c.number, c.codec.name(), rate)));
+			afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", c.number, c.codec.name(), c.codec.samp_rate())));
 		}
 		if (user_profile.dtmf_avp != 0){
 			avpvec.add(String.valueOf(user_profile.dtmf_avp));
-			afvec.add(new AttributeField("rtpmap", String.format("%d telephone-event/%d", user_profile.dtmf_avp, rate)));
+			afvec.add(new AttributeField("rtpmap", String.format("%d telephone-event/%d", user_profile.dtmf_avp, user_profile.audio_sample_rate)));
 			afvec.add(new AttributeField("fmtp", String.format("%d 0-15", user_profile.dtmf_avp)));
 		}
 				
@@ -450,9 +451,9 @@ public class UserAgent extends CallListenerAdapter {
 
 				audio_app = new JAudioLauncher(local_audio_port,
 						remote_media_address, remote_audio_port, dir, audio_in,
-						audio_out, user_profile.audio_sample_rate,
+						audio_out, c.codec.samp_rate(),
 						user_profile.audio_sample_size,
-						user_profile.audio_frame_size, log, c, dtmf_pt);
+						c.codec.frame_size(), log, c, dtmf_pt);
 			}
 			audio_app.startMedia();
 		}

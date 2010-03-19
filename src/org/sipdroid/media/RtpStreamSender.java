@@ -43,6 +43,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 /**
  * RtpStreamSender is a generic stream sender. It takes an InputStream and sends
@@ -285,10 +286,21 @@ public class RtpStreamSender extends Thread {
 			println("Reading blocks of " + buffer.length + " bytes");
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
-				AudioRecord.getMinBufferSize(8000, 
+		
+		Log.d("RTPSteamSender","Sampe rate  = " + p_type.codec.samp_rate());
+		Log.d("RTPSteamSender","Buffer size = " + AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
+				AudioFormat.CHANNEL_CONFIGURATION_MONO, 
+				AudioFormat.ENCODING_PCM_16BIT) );
+		
+		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
+				AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
 						AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-						AudioFormat.ENCODING_PCM_16BIT));
+						AudioFormat.ENCODING_PCM_16BIT)*10);		
+		
+//		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
+//				AudioRecord.getMinBufferSize(8000, 
+//						AudioFormat.CHANNEL_CONFIGURATION_MONO, 
+//						AudioFormat.ENCODING_PCM_16BIT));
 		short[] lin = new short[frame_size*11];
 		int num,ring = 0;
 		random = new Random();

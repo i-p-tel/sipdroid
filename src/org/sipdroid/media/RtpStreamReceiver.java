@@ -307,8 +307,10 @@ public class RtpStreamReceiver extends Thread {
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,AudioManager.VIBRATE_SETTING_OFF);
 		int oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-		track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
-				BUFFER_SIZE*2*2, AudioTrack.MODE_STREAM);
+//		track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
+//				BUFFER_SIZE*2*2, AudioTrack.MODE_STREAM);
+		track = new AudioTrack(AudioManager.STREAM_MUSIC, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
+				BUFFER_SIZE*2*5, AudioTrack.MODE_STREAM);		
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
 		int user, server, lserver, luser, cnt, todo, headroom, len = 0, seq = 0, cnt2 = 0, m = 1,
