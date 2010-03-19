@@ -53,6 +53,9 @@ public class Codecs {
 			add(new alaw());
 			add(new ulaw());
 			add(new BV16());
+			add(new SILK8());
+			add(new SILK16());
+			add(new SILK24());		
 		}};
 	private static final HashMap<Integer, Codec> codecsNumbers;
 	private static final HashMap<String, Codec> codecsNames;

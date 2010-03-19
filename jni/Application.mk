@@ -2,4 +2,10 @@ APP_PROJECT_PATH := $(call my-dir)
 APP_MODULES  := OSNetworkSystem
 APP_MODULES	 += speex_jni
 APP_MODULES	 += bv16_jni
+APP_MODULES	 += silkcommon
+APP_MODULES	 += silk8_jni
+APP_MODULES	 += silk16_jni
+APP_MODULES	 += silk24_jni
 
+APP_OPTIM        := release 
+APP_CFLAGS       += -O3
