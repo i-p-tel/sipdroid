@@ -58,6 +58,16 @@ public interface Codec {
 	int encode(short lin[], int offset, byte alaw[], int frames);
 
 	/**
+	 * The sampling rate for this particular codec
+	 */	
+	int samp_rate();
+	
+	/**
+	 * The audio frame size for this particular codec
+	 */	
+	int frame_size();
+	
+	/**
 	 * Optionally used to initiallize the codec before any
 	 * encoding or decoding
 	 */
