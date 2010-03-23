@@ -97,7 +97,9 @@ public interface Codec {
 	 * @returns true if the codec loaded properly
 	 */
 	boolean isLoaded();
-
+	boolean isFailed();
+	void fail();
+	
 	/**
 	 * (implemented by {@link CodecBase}
 	 * <p>
@@ -124,6 +126,7 @@ public interface Codec {
 	 * @returns The RTP assigned name string for the codec
 	 */
 	String name();
+	String getValue();
 
 	/**
 	 * (implemented by {@link CodecBase}

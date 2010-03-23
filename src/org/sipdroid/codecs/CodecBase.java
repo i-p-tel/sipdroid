@@ -35,7 +35,7 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 	protected String CODEC_DESCRIPTION;
 	protected String CODEC_DEFAULT_SETTING = "never";
 
-	private boolean loaded = false;
+	private boolean loaded = false,failed = false;
 	private boolean enabled = false;
 	private boolean edgeOnly = false,edgeOr3GOnly = false;
 	private String value;
@@ -44,6 +44,10 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
 		value = sp.getString(CODEC_NAME, CODEC_DEFAULT_SETTING);
 		updateFlags(value);		
+	}
+	
+	public String getValue() {
+		return value;
 	}
 	
 	void load() {
@@ -63,6 +67,15 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 		return loaded;
 	}
     
+	public boolean isFailed() {
+		return failed;
+	}
+	
+	public void fail() {
+		update();
+		failed = true;
+	}
+	
 	public void enable(boolean e) {
 		enabled = e;
 	}
@@ -88,7 +101,7 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 	}
 
 	public String getTitle() {
-		return CODEC_USER_NAME + " (" + CODEC_DESCRIPTION + ")";
+		return CODEC_NAME + " (" + CODEC_DESCRIPTION + ")";
 	}
 
 	public int number() {

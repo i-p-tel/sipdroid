@@ -36,14 +36,11 @@ import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.sipdroid.codecs.Codecs;
 
-import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.preference.PreferenceManager;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 
 /**
  * RtpStreamSender is a generic stream sender. It takes an InputStream and sends
@@ -271,7 +268,6 @@ public class RtpStreamSender extends Thread {
 		int seqn = 0;
 		long time = 0;
 		double p = 0;
-		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
 		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(Settings.PREF_IMPROVE, Settings.DEFAULT_IMPROVE);
 		int micgain = (int)(Settings.getMicGain()*10);
 		long frame_period = 1000 / frame_rate;
@@ -286,21 +282,16 @@ public class RtpStreamSender extends Thread {
 			println("Reading blocks of " + buffer.length + " bytes");
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-		
-		Log.d("RTPSteamSender","Sampe rate  = " + p_type.codec.samp_rate());
-		Log.d("RTPSteamSender","Buffer size = " + AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
+		int min = AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
 				AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-				AudioFormat.ENCODING_PCM_16BIT) );
+				AudioFormat.ENCODING_PCM_16BIT);
+		
+		println("Sample rate  = " + p_type.codec.samp_rate());
+		println("Buffer size = " + min);
 		
 		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
-				AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
-						AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-						AudioFormat.ENCODING_PCM_16BIT)*10);		
+				min);
 		
-//		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
-//				AudioRecord.getMinBufferSize(8000, 
-//						AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-//						AudioFormat.ENCODING_PCM_16BIT));
 		short[] lin = new short[frame_size*11];
 		int num,ring = 0;
 		random = new Random();
@@ -438,8 +429,7 @@ public class RtpStreamSender extends Thread {
  			 else
  				 m = 1;
 		}
-		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
-		while (am.getMode() == AudioManager.MODE_IN_CALL)
+		while (RtpStreamReceiver.getMode() == AudioManager.MODE_IN_CALL)
 			try {
 				sleep(1000);
 			} catch (InterruptedException e) {

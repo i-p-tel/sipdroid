@@ -34,6 +34,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
@@ -48,14 +49,14 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class Codecs {
     	private static final Vector<Codec> codecs = new Vector<Codec>() {{
+			add(new SILK8());
+			add(new SILK16());
+			add(new SILK24());		
+			add(new BV16());
 			add(new Speex());
 			add(new GSM());
 			add(new alaw());
 			add(new ulaw());
-			add(new BV16());
-			add(new SILK8());
-			add(new SILK16());
-			add(new SILK24());		
 		}};
 	private static final HashMap<Integer, Codec> codecsNumbers;
 	private static final HashMap<String, Codec> codecsNames;
@@ -112,8 +113,10 @@ public class Codecs {
 	}
 
 	public static void check() {
+		HashMap<String, String> old = new HashMap<String, String>(codecs.size());
+
 		for(Codec c : codecs) {
-			c.init();
+			old.put(c.name(), c.getValue());
 			if (!c.isLoaded()) {
 				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
 				SharedPreferences.Editor e = sp.edit();
@@ -121,7 +124,21 @@ public class Codecs {
 				e.putString(c.name(), "never");
 				e.commit();
 			}
-		}		
+		}
+		
+		for(Codec c : codecs)
+			if (!old.get(c.name()).equals("never")) {
+				c.init();
+				if (c.isLoaded()) {
+					SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
+					SharedPreferences.Editor e = sp.edit();
+	
+					e.putString(c.name(), old.get(c.name()));
+					e.commit();
+					c.init();
+				} else
+					c.fail();
+			}
 	}
 	
 	private static void addPreferences(PreferenceScreen ps) {
@@ -135,14 +152,8 @@ public class Codecs {
 			l.setEntryValues(r.getStringArray(R.array.compression_values));
 			l.setKey(c.name());
 			l.setPersistent(true);
-			c.init();
-			if (c.isLoaded()) {
-				l.setEnabled(true);
-				c.setListPreference(l);
-			} else {
-				l.setValue("never");
-				l.setEnabled(false);
-			}
+			l.setEnabled(!c.isFailed());
+			c.setListPreference(l);
 			l.setSummary(l.getEntry());
 			l.setTitle(c.getTitle());
 			ps.addPreference(l);
@@ -169,14 +180,30 @@ public class Codecs {
 	}
 
 	public static class Map {
-		public final int number;
-		public final Codec codec;
+		public int number;
+		public Codec codec;
+		Vector<Integer> numbers;
+		Vector<Codec> codecs;
 
-		Map(int n, Codec c) {
+		Map(int n, Codec c, Vector<Integer> ns, Vector<Codec> cs) {
 			number = n;
 			codec = c;
+			numbers = ns;
+			codecs = cs;
 		}
 
+		public boolean change(int n) {
+			int i = numbers.indexOf(n);
+			
+			if (i >= 0 && codecs.elementAt(i) != null) {
+				codec.close();
+				number = n;
+				codec = codecs.elementAt(i);
+				return true;
+			}
+			return false;
+		}
+		
 		public String toString() {
 			return "Codecs.Map { " + number + ": " + codec + "}";
 		}
@@ -194,6 +221,7 @@ public class Codecs {
 			Vector<String> formats = m.getFormatList();
 			Vector<String> names = new Vector<String>(formats.size());
 			Vector<Integer> numbers = new Vector<Integer>(formats.size());
+			Vector<Codec> codecmap = new Vector<Codec>(formats.size());
 
 			//add all avail formats with empty names
 			for (String fmt : formats) {
@@ -201,6 +229,7 @@ public class Codecs {
 					int number = Integer.parseInt(fmt);
 					numbers.add(number);
 					names.add("");
+					codecmap.add(null);
 				} catch (NumberFormatException e) {
 					// continue ... remote sent bogus rtp setting
 				}
@@ -218,7 +247,7 @@ public class Codecs {
 					int number = Integer.parseInt(s.substring(0, i));
 					int index = numbers.indexOf(number);
 					if (index >=0)
-						names.set(index, name);
+						names.set(index, name.toLowerCase());
 				} catch (NumberFormatException e) {
 					// continue ... remote sent bogus rtp setting
 				}
@@ -236,12 +265,12 @@ public class Codecs {
 					continue;
 
 				//search current codec in offers by name
-				int i = names.indexOf(c.name());
+				int i = names.indexOf(c.userName().toLowerCase());
 				if (i >= 0) {
+					codecmap.set(i, c);
 					if ( (codec==null) || (i < index) ) {
 						codec = c;
 						index = i;
-						if (index == 0) break; /*default codec found*/
 						continue;
 					}
 				}
@@ -249,24 +278,22 @@ public class Codecs {
 				//search current codec in offers by number
 				i = numbers.indexOf(c.number());
 				if (i >= 0) {
-					if ( (codec==null) || (i < index) )  
-						if ( names.elementAt(i).equals("") 
-						||  (names.elementAt(i).toLowerCase().equals(c.name().toLowerCase())) ) {
-						//fmt number has no attr with name 
-						//or codec has different name than in offer, but the same number and equals case non-sensitive
-							codec = c;
-							index = i;
-							if (index == 0) break; /*default codec found*/
-							continue;
-						};
-					}
-				};
-				
-				if (codec!=null) 
-					return new Map(numbers.elementAt(index), codec);
-				else
-					// no codec found ... we can't talk
-					return null;
+						if ( names.elementAt(i).equals("")) {
+							codecmap.set(i, c);
+							if ( (codec==null) || (i < index) )  {
+								//fmt number has no attr with name 
+								codec = c;
+								index = i;
+								continue;
+							}
+						}
+				}
+			}			
+			if (codec!=null) 
+				return new Map(numbers.elementAt(index), codec, numbers, codecmap);
+			else
+				// no codec found ... we can't talk
+				return null;
 		} else
 			/*formats of other protocols not supported yet*/
 			return null;
@@ -343,6 +370,24 @@ public class Codecs {
 			return super.onContextItemSelected(item);
 		}
 
+		@Override
+		public boolean onPreferenceTreeClick(PreferenceScreen ps, Preference p) {
+			ListPreference l = (ListPreference) p;
+			for (Codec c : codecs)
+				if (c.name().equals(l.getKey())) {
+					c.init();
+					if (!c.isLoaded()) {
+						l.setValue("never");
+						c.fail();
+						l.setEnabled(false);
+						l.setSummary(l.getEntry());
+						if (l.getDialog() != null)
+							l.getDialog().dismiss();
+					}
+				}
+			return super.onPreferenceTreeClick(ps,p);
+		}
+		
 		@Override
 		public void onDestroy() {
 			super.onDestroy();

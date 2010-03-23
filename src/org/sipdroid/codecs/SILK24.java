@@ -40,11 +40,11 @@ class SILK24 extends CodecBase implements Codec {
 	private static final int DEFAULT_COMPLEXITY = 0;
 	
 	SILK24() {
-		CODEC_NAME = "SILK"; 
-		CODEC_USER_NAME = "silk24"; 
+		CODEC_USER_NAME = "SILK"; 
+		CODEC_NAME = "silk24"; 
 		CODEC_DESCRIPTION = "12-40kbit"; 
 		CODEC_NUMBER = 120;
-		CODEC_DEFAULT_SETTING = "edge";
+		CODEC_DEFAULT_SETTING = "never";
 		CODEC_SAMPLE_RATE = 24000;
 		CODEC_FRAME_SIZE = 480;
 		super.update();

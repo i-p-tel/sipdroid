@@ -40,8 +40,8 @@ class SILK8 extends CodecBase implements Codec {
 	private static final int DEFAULT_COMPLEXITY = 0;
 	
 	SILK8() {
-		CODEC_NAME = "SILK";  
-		CODEC_USER_NAME = "silk8";
+		CODEC_USER_NAME = "SILK";  
+		CODEC_NAME = "silk8";
 		CODEC_DESCRIPTION = "6-20kbit"; 
 		CODEC_NUMBER = 117;
 		CODEC_DEFAULT_SETTING = "edge";

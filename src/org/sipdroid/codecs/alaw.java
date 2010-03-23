@@ -24,7 +24,7 @@ import org.sipdroid.media.G711;
 class alaw extends CodecBase implements Codec {
 	alaw() {
 		CODEC_NAME = "PCMA";
-		CODEC_USER_NAME = "alaw";
+		CODEC_USER_NAME = "PCMA";
 		CODEC_DESCRIPTION = "64kbit";
 		CODEC_NUMBER = 8;
 		CODEC_DEFAULT_SETTING = "always";

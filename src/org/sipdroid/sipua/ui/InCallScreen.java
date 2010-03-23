@@ -99,6 +99,14 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	}
 	
 	@Override
+	public void onStart() {
+		super.onStart();
+		if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
+     		mHandler.sendEmptyMessageDelayed(MSG_BACK, Receiver.call_end_reason == -1?
+    				2000:5000);
+	}
+
+	@Override
 	public void onPause() {
 		super.onPause();
     	if (!Sipdroid.release) Log.i("SipUA:","on pause");
@@ -107,13 +115,10 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     		Receiver.moveTop();
     		break;
     	case UserAgent.UA_STATE_IDLE:
-		int delay = 2000;
     		if (Receiver.ccCall != null)
     			mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
-		if (Receiver.call_end_reason != -1)
-			// longer delay to see error message
-			delay = 5000;
-		mHandler.sendEmptyMessageDelayed(MSG_BACK, delay);
+     		mHandler.sendEmptyMessageDelayed(MSG_BACK, Receiver.call_end_reason == -1?
+    				2000:5000);
     		break;
     	}
 		if (socket != null) {
@@ -235,7 +240,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	
 					if (Settings.System.getInt(getContentResolver(),
 							Settings.System.DTMF_TONE_WHEN_DIALING, 1) == 1)
-						tg = new ToneGenerator(AudioManager.STREAM_MUSIC, (int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
+						tg = new ToneGenerator(AudioManager.STREAM_VOICE_CALL, (int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 					for (;;) {
 						if (!running) {
 							t = null;
@@ -510,7 +515,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
         		Receiver.stopRingtone();
         		return true;
         	}
-        	break;
+        	RtpStreamReceiver.adjust(keyCode);
+        	return true;
         }
         if (Receiver.call_state == UserAgent.UA_STATE_INCALL) {
 	        char number = event.getNumber();
@@ -524,14 +530,20 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_ENDCALL && (Receiver.pstn_state == null ||
-				(Receiver.pstn_state.equals("IDLE") && (SystemClock.elapsedRealtime()-Receiver.pstn_time) > 3000))) {
-    		reject();      
-            return true;			
+		switch (keyCode) {
+        case KeyEvent.KEYCODE_VOLUME_DOWN:
+        case KeyEvent.KEYCODE_VOLUME_UP:
+        	return true;
+        case KeyEvent.KEYCODE_ENDCALL:
+        	if (Receiver.pstn_state == null ||
+				(Receiver.pstn_state.equals("IDLE") && (SystemClock.elapsedRealtime()-Receiver.pstn_time) > 3000)) {
+        			reject();      
+        			return true;		
+        	}
+        	break;
 		}
 		Receiver.pstn_time = 0;
 		return false;
 	}
 	
-
 }
