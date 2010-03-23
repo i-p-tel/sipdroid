@@ -226,11 +226,11 @@ public class UserAgent extends CallListenerAdapter {
 			for (int i : Codecs.getCodecs()) {
 				Codec codec = Codecs.get(i);
 				avpvec.add(String.valueOf(i));
-				afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", i, codec.name(), codec.samp_rate())));
+				afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", i, codec.userName(), codec.samp_rate())));
 			}
 		} else {
 			avpvec.add(String.valueOf(c.number));
-			afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", c.number, c.codec.name(), c.codec.samp_rate())));
+			afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", c.number, c.codec.userName(), c.codec.samp_rate())));
 		}
 		if (user_profile.dtmf_avp != 0){
 			avpvec.add(String.valueOf(user_profile.dtmf_avp));

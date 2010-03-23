@@ -24,7 +24,7 @@ import org.sipdroid.media.G711;
 class ulaw extends CodecBase implements Codec {
 	ulaw() {
 		CODEC_NAME = "PCMU";
-		CODEC_USER_NAME = "ulaw";
+		CODEC_USER_NAME = "PCMU";
 		CODEC_DESCRIPTION = "64kbit";
 		CODEC_NUMBER = 0;
 		CODEC_DEFAULT_SETTING = "always";

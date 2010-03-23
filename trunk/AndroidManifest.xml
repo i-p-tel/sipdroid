@@ -25,7 +25,7 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="1.4 beta"
+    android:versionName="1.4.1 beta"
     android:versionCode="59">
 	<uses-sdk android:minSdkVersion="3" />
 	<supports-screens

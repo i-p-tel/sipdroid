@@ -27,11 +27,13 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.media.RtpStreamSender;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
+import org.sipdroid.sipua.UserAgent;
 
 import android.content.Context;
 import android.content.Intent;
@@ -227,6 +229,11 @@ public class VideoCamera extends CallScreen implements
             case KeyEvent.KEYCODE_CAMERA:
                 // Disable the CAMERA button while in-call since it's too
                 // easy to press accidentally.
+            	return true;
+            	
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+            	RtpStreamReceiver.adjust(keyCode);
             	return true;
         }
 

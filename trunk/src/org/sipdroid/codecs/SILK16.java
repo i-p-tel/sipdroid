@@ -40,11 +40,11 @@ class SILK16 extends CodecBase implements Codec {
 	private static final int DEFAULT_COMPLEXITY = 0;
 
 	SILK16() {
-		CODEC_NAME = "SILK"; 
-		CODEC_USER_NAME = "silk16"; 
+		CODEC_USER_NAME = "SILK"; 
+		CODEC_NAME = "silk16"; 
 		CODEC_DESCRIPTION = "8-30kbit"; 
 		CODEC_NUMBER = 119;
-		CODEC_DEFAULT_SETTING = "edge";
+		CODEC_DEFAULT_SETTING = "always";
 		CODEC_SAMPLE_RATE = 16000;
 		CODEC_FRAME_SIZE = 320;
 		super.update();
