@@ -31,7 +31,7 @@ class GSM extends CodecBase implements Codec {
 		CODEC_USER_NAME = "GSM";
 		CODEC_DESCRIPTION = "13kbit";
 		CODEC_NUMBER = 3;
-		CODEC_DEFAULT_SETTING = "edge";
+		CODEC_DEFAULT_SETTING = "always";
 		/* up convert original compression parameter for this codec */
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
 		String pref = sp.getString(Settings.PREF_COMPRESSION, Settings.DEFAULT_COMPRESSION);

@@ -33,7 +33,6 @@ import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
-import org.sipdroid.sipua.UserAgent;
 
 import android.content.Context;
 import android.content.Intent;
@@ -529,4 +528,15 @@ public class VideoCamera extends CallScreen implements
 	public void onHangup() {
 		finish();
 	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+        case KeyEvent.KEYCODE_VOLUME_DOWN:
+        case KeyEvent.KEYCODE_VOLUME_UP:
+        	return true;
+		}
+		return false;
+	}
+	
 }

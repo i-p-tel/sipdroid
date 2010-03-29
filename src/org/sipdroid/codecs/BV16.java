@@ -30,7 +30,7 @@ class BV16 extends CodecBase implements Codec {
 		CODEC_USER_NAME = "BV16";
 		CODEC_DESCRIPTION = "16kbit";
 		CODEC_NUMBER = 106;
-		CODEC_DEFAULT_SETTING = "edge";
+		CODEC_DEFAULT_SETTING = "always";
 		super.update();
 	}
 

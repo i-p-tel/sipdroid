@@ -156,16 +156,10 @@
     </string-array>
 <string name="settings_compression">Röstkomprimering</string>
     <string-array name="compression_display_values">
-        <item>Endast över EDGE</item>
-        <item>Endast över EDGE och 3G</item>
+        <item>Endast över WLAN</item>
+        <item>Endast över WLAN och 3G</item>
         <item>Försök alltid</item>
         <item>Aldrig</item>
-    </string-array>
-    <string-array name="compression_values">
-        <item>edge</item>
-        <item>edgeor3g</item>
-        <item>always</item>
-        <item>never</item>
     </string-array>
 <string name="settings_auto_on">Autosvar på</string>
 <string name="settings_auto_on2">Kort vibrationssignal när skärmen är på</string>

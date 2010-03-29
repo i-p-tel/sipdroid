@@ -44,7 +44,7 @@ class SILK8 extends CodecBase implements Codec {
 		CODEC_NAME = "silk8";
 		CODEC_DESCRIPTION = "6-20kbit"; 
 		CODEC_NUMBER = 117;
-		CODEC_DEFAULT_SETTING = "edge";
+		CODEC_DEFAULT_SETTING = "always";
 		super.update();
 	}
 

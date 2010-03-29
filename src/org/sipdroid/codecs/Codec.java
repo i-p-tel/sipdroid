@@ -99,18 +99,8 @@ public interface Codec {
 	boolean isLoaded();
 	boolean isFailed();
 	void fail();
+	boolean isValid();
 	
-	/**
-	 * (implemented by {@link CodecBase}
-	 * <p>
-	 * checks to see if the user has enabled the codec for use on
-	 * edge only.
-	 *
-	 * @returns true if the codec can only be used on Edge Networks
-	 */
-	boolean edgeOnly();
-	boolean edgeOr3GOnly();
-
 	/**
 	 * (implemented by {@link CodecBase}
 	 *
@@ -126,6 +116,7 @@ public interface Codec {
 	 * @returns The RTP assigned name string for the codec
 	 */
 	String name();
+	String key();
 	String getValue();
 
 	/**

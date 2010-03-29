@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import org.sipdroid.sipua.UserAgentProfile;
 import org.zoolu.tools.Random;
 
 import android.content.Intent;
@@ -24,14 +25,24 @@ public class Checkin {
 			        String line;
 			        String[] lines;
 			        BufferedReader in;
+			        UserAgentProfile user_profile = null;
 			        
+			        if (!in_call)
+						try {
+							sleep(3000);
+						} catch (InterruptedException e) {
+						}
 					in = new BufferedReader(new InputStreamReader(url.openStream()));
 					for (;;) {
 						line = in.readLine();
 						if (line == null) break;
 						lines = line.split(" ");
 						if (lines.length == 2) {
-							if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_DNS, Settings.DEFAULT_DNS).equals(lines[0])) {
+							if (user_profile == null)
+								user_profile = Receiver.engine(Receiver.mContext).user_profile;
+							if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_DNS, Settings.DEFAULT_DNS).equals(lines[0]) ||
+									(user_profile != null && user_profile.realm != null &&
+											user_profile.realm.contains(lines[0]))) {
 								if (in_call) {
 									hold = SystemClock.elapsedRealtime();
 									Receiver.engine(Receiver.mContext).rejectcall();

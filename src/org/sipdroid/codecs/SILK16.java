@@ -44,7 +44,7 @@ class SILK16 extends CodecBase implements Codec {
 		CODEC_NAME = "silk16"; 
 		CODEC_DESCRIPTION = "8-30kbit"; 
 		CODEC_NUMBER = 119;
-		CODEC_DEFAULT_SETTING = "always";
+		CODEC_DEFAULT_SETTING = "wlanor3g";
 		CODEC_SAMPLE_RATE = 16000;
 		CODEC_FRAME_SIZE = 320;
 		super.update();

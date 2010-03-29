@@ -141,8 +141,8 @@
     </string-array>
 <string name="settings_compression">Compressione Voce</string>
     <string-array name="compression_display_values">
-        <item>Solo in EDGE</item>
-        <item>Solo in EDGE/3G</item>
+        <item>Solo in WLAN</item>
+        <item>Solo in WLAN/3G</item>
         <item>Sempre attivo</item>
         <item>Mai</item>
     </string-array>

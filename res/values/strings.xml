@@ -153,14 +153,14 @@
     </string-array>
 <string name="settings_compression">Voice Compression</string>
     <string-array name="compression_display_values">
-        <item>Only over EDGE</item>
-        <item>Only over EDGE and 3G</item>
+        <item>Only over WLAN</item>
+        <item>Only over WLAN and 3G</item>
         <item>Always try</item>
         <item>Never</item>
     </string-array>
     <string-array name="compression_values">
-        <item>edge</item>
-        <item>edgeor3g</item>
+        <item>wlan</item>
+        <item>wlanor3g</item>
         <item>always</item>
         <item>never</item>
     </string-array>

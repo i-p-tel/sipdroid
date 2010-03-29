@@ -160,18 +160,10 @@
     </string-array>
 <string name="settings_compression">語音壓縮</string>
     <string-array name="compression_display_values">
-        <item>僅當使用EDGE時</item>
-        <item>僅當使用EDGE/3G時</item>
+        <item>僅當使用WLAN時</item>
+        <item>僅當使用WLAN/3G時</item>
         <item>總是嘗試使用</item>
         <item>從不使用</item>
-
-
-    </string-array>
-    <string-array name="compression_values">
-        <item>edge</item>
-        <item>edgeor3g</item>
-        <item>always</item>
-        <item>never</item>
     </string-array>
 <string name="settings_auto_on">開啟自動應答</string>
 <string name="settings_auto_on2">僅用於非鎖定狀態下，振動提醒</string>

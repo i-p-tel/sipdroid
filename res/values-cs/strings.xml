@@ -99,8 +99,8 @@
     </string-array>
 <string name="settings_compression">Komprese hlasu</string>
     <string-array name="compression_display_values">
-        <item>Pouze přes EDGE</item>
-        <item>Pouze přes EDGE/3G</item>
+        <item>Pouze přes WLAN</item>
+        <item>Pouze přes WLAN/3G</item>
         <item>Vždy zkusit</item>
         <item>Nikdy</item>
     </string-array>

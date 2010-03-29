@@ -58,7 +58,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	private KeepAliveSip ka;
 	
 	/** UserAgentProfile */
-	private UserAgentProfile user_profile;
+	public UserAgentProfile user_profile;
 
 	public SipProvider sip_provider;
 	
