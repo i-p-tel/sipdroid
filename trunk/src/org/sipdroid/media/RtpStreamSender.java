@@ -377,6 +377,8 @@ public class RtpStreamSender extends Thread {
 			 num = record.read(lin,(ring+delay*frame_size)%(frame_size*11),frame_size);
 			 if (num <= 0)
 				 continue;
+			 if (!p_type.codec.isValid())
+				 continue;
 
 			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
  				 calc(lin,(ring+delay*frame_size)%(frame_size*11),num);

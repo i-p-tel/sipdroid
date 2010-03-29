@@ -38,6 +38,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.text.InputType;
@@ -124,7 +125,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_CALLBACK = "callback";
 	public static final String PREF_CALLTHRU = "callthru";
 	public static final String PREF_CALLTHRU2 = "callthru2";
-	public static final String PREF_CODECS = "codecs";
+	public static final String PREF_CODECS = "codecs_new";
 	public static final String PREF_DNS = "dns";
 
 	// Default values of the preferences
@@ -369,7 +370,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
         	// Copy shared preference file on the SD card
         	copyFile(new File(sharedPrefsPath + sharedPrefsFile + ".xml"), new File(profilePath + getProfileNameString()));
         } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.settings_profile_export_error), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, getString(R.string.settings_profile_export_error), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -431,11 +432,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public void onDestroy()	{
 		super.onDestroy();
 
-		// Export settings only if there is some username, password and server
-		if (! settings.getString(PREF_USERNAME, "").equals("") && ! settings.getString(PREF_PASSWORD, "").equals("") && ! settings.getString(PREF_SERVER, "").equals("")) {
-			exportSettings();
-		}
-
 		settings.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
@@ -458,9 +454,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     		edit.commit();
         	Receiver.engine(this).updateDNS();
         	Checkin.checkin(false);
-    		edit.putString(PREF_PROTOCOL, sharedPreferences.getString(PREF_SERVER, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp");
-    		edit.commit();
-    		reload();
+			ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(PREF_PROTOCOL);
+			lp.setValue(sharedPreferences.getString(PREF_SERVER, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp");
         } else if (sharedPreferences.getBoolean(PREF_CALLBACK, DEFAULT_CALLBACK) && sharedPreferences.getBoolean(PREF_CALLTHRU, DEFAULT_CALLTHRU)) {
     		CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(key.equals(PREF_CALLBACK) ? PREF_CALLTHRU : PREF_CALLBACK);
     		cb.setChecked(false);
@@ -491,6 +486,12 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 
 		updateSummaries();
 		setSettingsTitle();
+		
+		// Export settings only if there is some username and server
+		if (! settings.getString(PREF_USERNAME, "").equals("") && ! settings.getString(PREF_SERVER, "").equals("")) {
+			exportSettings();
+		}
+		
     }
 
 	void updateSleep() {

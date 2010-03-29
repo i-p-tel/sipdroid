@@ -21,10 +21,12 @@ package org.sipdroid.codecs;
 
 import org.sipdroid.sipua.ui.Receiver;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 
 class CodecBase implements Preference.OnPreferenceChangeListener {
 	protected String CODEC_NAME;
@@ -37,12 +39,12 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 
 	private boolean loaded = false,failed = false;
 	private boolean enabled = false;
-	private boolean edgeOnly = false,edgeOr3GOnly = false;
+	private boolean wlanOnly = false,wlanOr3GOnly = false;
 	private String value;
 
 	void update() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
-		value = sp.getString(CODEC_NAME, CODEC_DEFAULT_SETTING);
+		value = sp.getString(key(), CODEC_DEFAULT_SETTING);
 		updateFlags(value);		
 	}
 	
@@ -84,18 +86,38 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 		return enabled;
 	}
 
-	public boolean edgeOnly() {
-		return enabled && edgeOnly;
+	public boolean isValid() {
+		if (!isEnabled())
+			return false;
+		if (Receiver.on_wlan)
+			return true;
+		if (wlanOnly())
+			return false;
+		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		int nt = tm.getNetworkType();
+		if (wlanOr3GOnly() && nt < TelephonyManager.NETWORK_TYPE_UMTS)
+			return false;
+		if (nt < TelephonyManager.NETWORK_TYPE_EDGE)
+			return false;
+		return true;
+	}
+		
+	private boolean wlanOnly() {
+		return enabled && wlanOnly;
 	}
 	
-	public boolean edgeOr3GOnly() {
-		return enabled && edgeOr3GOnly;
+	private boolean wlanOr3GOnly() {
+		return enabled && wlanOr3GOnly;
 	}
 
 	public String name() {
 		return CODEC_NAME;
 	}
 
+	public String key() {
+		return CODEC_NAME+"_new";
+	}
+	
 	public String userName() {
 		return CODEC_USER_NAME;
 	}
@@ -131,14 +153,14 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 			enabled = false;
 		} else {
 			enabled = true;
-			if (v.equals("edge"))
-				edgeOnly = true;
+			if (v.equals("wlan"))
+				wlanOnly = true;
 			else
-				edgeOnly = false;
-			if (v.equals("edgeor3g"))
-				edgeOr3GOnly = true;
+				wlanOnly = false;
+			if (v.equals("wlanor3g"))
+				wlanOr3GOnly = true;
 			else
-				edgeOr3GOnly = false;
+				wlanOr3GOnly = false;
 		}
 	}
 

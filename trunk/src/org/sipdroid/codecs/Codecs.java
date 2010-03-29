@@ -39,7 +39,6 @@ import android.preference.PreferenceActivity;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.telephony.TelephonyManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -49,14 +48,14 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class Codecs {
     	private static final Vector<Codec> codecs = new Vector<Codec>() {{
-			add(new SILK8());
-			add(new SILK16());
 			add(new SILK24());		
-			add(new BV16());
-			add(new Speex());
-			add(new GSM());
+			add(new SILK16());
+			add(new SILK8());
 			add(new alaw());
 			add(new ulaw());
+			add(new Speex());
+			add(new GSM());
+			add(new BV16());
 		}};
 	private static final HashMap<Integer, Codec> codecsNumbers;
 	private static final HashMap<String, Codec> codecsNames;
@@ -121,7 +120,7 @@ public class Codecs {
 				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
 				SharedPreferences.Editor e = sp.edit();
 
-				e.putString(c.name(), "never");
+				e.putString(c.key(), "never");
 				e.commit();
 			}
 		}
@@ -133,7 +132,7 @@ public class Codecs {
 					SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
 					SharedPreferences.Editor e = sp.edit();
 	
-					e.putString(c.name(), old.get(c.name()));
+					e.putString(c.key(), old.get(c.name()));
 					e.commit();
 					c.init();
 				} else
@@ -150,7 +149,7 @@ public class Codecs {
 			ListPreference l = new ListPreference(cx);
 			l.setEntries(r.getStringArray(R.array.compression_display_values));
 			l.setEntryValues(r.getStringArray(R.array.compression_values));
-			l.setKey(c.name());
+			l.setKey(c.key());
 			l.setPersistent(true);
 			l.setEnabled(!c.isFailed());
 			c.setListPreference(l);
@@ -162,14 +161,9 @@ public class Codecs {
 
 	public static int[] getCodecs() {
 		Vector<Integer> v = new Vector<Integer>(codecs.size());
-		boolean onEdge = onEdge(),onEdgeOr3G = onEdgeOr3G();
 
 		for (Codec c : codecs) {
-			if (!c.isEnabled())
-				continue;
-			if (c.edgeOnly() && !onEdge)
-				continue;
-			if (c.edgeOr3GOnly() && !onEdgeOr3G)
+			if (!c.isValid())
 				continue;
 			v.add(c.number());
 		}
@@ -210,7 +204,6 @@ public class Codecs {
 	};
 
 	public static Map getCodec(SessionDescriptor offers) {
-		boolean onEdge = onEdge(),onEdgeOr3G = onEdgeOr3G();
 		MediaField m = offers.getMediaDescriptor("audio").getMedia(); 
 		if (m==null) 
 			return null;
@@ -257,11 +250,7 @@ public class Codecs {
 			int index = formats.size() + 1;
 			
 			for (Codec c : codecs) {
-				if (!c.isEnabled())
-					continue;
-				if (c.edgeOnly() && !onEdge)
-					continue;
-				if (c.edgeOr3GOnly() && !onEdgeOr3G)
+				if (!c.isValid())
 					continue;
 
 				//search current codec in offers by name
@@ -297,16 +286,6 @@ public class Codecs {
 		} else
 			/*formats of other protocols not supported yet*/
 			return null;
-	}
-
-	private static boolean onEdge() {
-		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-		return !Receiver.on_wlan && tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE;
-	}
-
-	private static boolean onEdgeOr3G() {
-		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-		return !Receiver.on_wlan && tm.getNetworkType() >= TelephonyManager.NETWORK_TYPE_EDGE;
 	}
 
 	public static class CodecSettings extends PreferenceActivity {
@@ -374,7 +353,7 @@ public class Codecs {
 		public boolean onPreferenceTreeClick(PreferenceScreen ps, Preference p) {
 			ListPreference l = (ListPreference) p;
 			for (Codec c : codecs)
-				if (c.name().equals(l.getKey())) {
+				if (c.key().equals(l.getKey())) {
 					c.init();
 					if (!c.isLoaded()) {
 						l.setValue("never");

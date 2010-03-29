@@ -37,7 +37,7 @@ class Speex extends CodecBase implements Codec {
 		CODEC_USER_NAME = "speex";
 		CODEC_DESCRIPTION = "11kbit";
 		CODEC_NUMBER = 97;
-		CODEC_DEFAULT_SETTING = "edge";
+		CODEC_DEFAULT_SETTING = "always";
 		super.update();
 	}
 

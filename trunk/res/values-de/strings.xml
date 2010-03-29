@@ -119,8 +119,8 @@
     </string-array>
 <string name="settings_compression">Sprachkompression</string>
     <string-array name="compression_display_values">
-        <item>Nur über EDGE</item>
-        <item>Nur über EDGE und 3G</item>
+        <item>Nur über WLAN</item>
+        <item>Nur über WLAN und 3G</item>
         <item>Immer versuchen</item>
         <item>Nie</item>
     </string-array>
