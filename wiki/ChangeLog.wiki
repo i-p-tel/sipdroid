@@ -8,6 +8,7 @@
 
   * 1.4.2
     * Fix issue 270, issue 330, issue 351, issue 352, issue 353, issue 374, issue 387
+    * Add SILK wideband codec
 
   * 1.4
     * Settings profiles
