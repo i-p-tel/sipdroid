@@ -38,10 +38,6 @@ public class RegisterService extends Service {
 			unregisterReceiver(m_receiver);
 			m_receiver = null;
 		}
-		if (m_caller != null) {
-			unregisterReceiver(m_caller);
-			m_caller = null;
-		}
 		Receiver.alarm(0, OneShotAlarm2.class);
 	}
     
@@ -61,12 +57,6 @@ public class RegisterService extends Service {
 			 intentfilter.addAction(Intent.ACTION_SCREEN_ON);
 			 intentfilter.addAction(Receiver.ACTION_VPN_CONNECTIVITY);
 	         registerReceiver(m_receiver = new Receiver(), intentfilter);      
-        }
-        if (m_caller == null) {
-        	IntentFilter intentfilter = new IntentFilter();
-			 intentfilter.addAction(Intent.ACTION_NEW_OUTGOING_CALL);
-			 intentfilter.setPriority(-1);
-	         registerReceiver(m_caller = new Caller(), intentfilter);      
         }
         Receiver.engine(this).isRegistered();
         RtpStreamReceiver.restoreSettings();

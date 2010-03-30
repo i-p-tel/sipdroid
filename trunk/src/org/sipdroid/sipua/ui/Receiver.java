@@ -585,7 +585,7 @@ import org.sipdroid.sipua.phone.Connection;
 				for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
 					NetworkInterface intf = en.nextElement();
 
-					if ( intf.getName().startsWith("eth") ) {
+					if (intf.getName() != null && intf.getName().startsWith("eth")) {
 						on_eth = true;
 						on_wlan = true; //treat eth connection as wlan
 						break;

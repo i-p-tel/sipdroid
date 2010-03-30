@@ -19,7 +19,7 @@
  */
 package org.sipdroid.codecs;
 
-import android.util.Log;
+import org.sipdroid.sipua.ui.Sipdroid;
 
 class BV16 extends CodecBase implements Codec {
 
@@ -39,8 +39,8 @@ class BV16 extends CodecBase implements Codec {
 		try {
 			System.loadLibrary("bv16_jni");
 			super.load();
-		}   catch (UnsatisfiedLinkError ule) {
-            Log.e("JNI", "WARNING: Could not load bv16_jni.so");
+		} catch (Throwable e) {
+			if (!Sipdroid.release) e.printStackTrace();
 		}
     
 	}  

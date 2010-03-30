@@ -25,8 +25,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="1.4.2 beta"
-    android:versionCode="60">
+    android:versionName="1.4.4 beta"
+    android:versionCode="62">
 	<uses-sdk android:minSdkVersion="3" />
 	<supports-screens
           android:normalScreens="true"
@@ -101,11 +101,14 @@
 	    <receiver android:name=".ui.OwnWifi"/>
 	    <receiver android:name=".ui.OneShotLocation"/>
 	    <receiver android:name=".ui.LoopLocation"/>
-	    <receiver android:name=".ui.Caller"/>
+	    <receiver android:name=".ui.Caller">
+	        <intent-filter android:priority="-1">
+	        	<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+	        </intent-filter>
+	    </receiver>
         <receiver android:name=".ui.Receiver" android:enabled="true">
 	      	<intent-filter>
 	        	<action android:name="android.intent.action.BOOT_COMPLETED" />
-	        	<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
 	      	</intent-filter>
 	    </receiver>
     	<service android:name=".ui.RegisterService" />
