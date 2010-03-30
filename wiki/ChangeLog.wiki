@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.4.4
+    * Fix issue 388
+
   * 1.4.2
     * Fix issue 270, issue 330, issue 351, issue 352, issue 353, issue 374, issue 387
 
@@ -47,7 +50,7 @@
     * Make optional username a clean new parameter, no migration from caller id (fixes issue 281)
 
   * 1.3.1
-    * Fix issues 277, 278, 279
+    * Fix issue 277
 
   * 1.3
     * Fix issues 118, 151, 194, 256, 257, 258, 266, 268, 275
