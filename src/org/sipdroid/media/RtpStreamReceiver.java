@@ -229,7 +229,7 @@ public class RtpStreamReceiver extends Thread {
 	
 	public static int getMode() {
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
-		if (Build.VERSION.SDK_INT >= 5)
+		if (Integer.parseInt(Build.VERSION.SDK) >= 5)
 			return am.isSpeakerphoneOn()?AudioManager.MODE_NORMAL:AudioManager.MODE_IN_CALL;
 		else
 			return am.getMode();
@@ -240,7 +240,7 @@ public class RtpStreamReceiver extends Thread {
 		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, mode != AudioManager.MODE_NORMAL);
 		edit.commit();
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
-		if (Build.VERSION.SDK_INT >= 5)
+		if (Integer.parseInt(Build.VERSION.SDK) >= 5)
 			am.setSpeakerphoneOn(mode == AudioManager.MODE_NORMAL);
 		else
 			am.setMode(mode);

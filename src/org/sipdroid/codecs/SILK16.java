@@ -19,7 +19,7 @@
  */
 package org.sipdroid.codecs;
 
-import android.util.Log;
+import org.sipdroid.sipua.ui.Sipdroid;
 
 class SILK16 extends CodecBase implements Codec { 
 	/* 
@@ -56,8 +56,8 @@ class SILK16 extends CodecBase implements Codec {
 //			System.loadLibrary("silkcommon");
 			System.loadLibrary("silk16_jni");
 			super.load();
-		}   catch (UnsatisfiedLinkError ule) {
-            Log.e("JNI", "WARNING: Could not load silk16_jni.so");
+		} catch (Throwable e) {
+			if (!Sipdroid.release) e.printStackTrace();
 		}
     
 	}  
