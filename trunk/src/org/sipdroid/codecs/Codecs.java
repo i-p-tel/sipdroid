@@ -56,6 +56,7 @@ public class Codecs {
 			add(new Speex());
 			add(new GSM());
 			add(new BV16());
+			add(new G722());			
 		}};
 	private static final HashMap<Integer, Codec> codecsNumbers;
 	private static final HashMap<String, Codec> codecsNames;

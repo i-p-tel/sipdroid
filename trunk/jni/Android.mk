@@ -239,3 +239,15 @@ LOCAL_STATIC_LIBRARIES :=  silkcommon
 LOCAL_ARM_MODE := arm
 LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
 include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+SPANDSP     := spandsp
+LOCAL_MODULE    := g722_jni
+LOCAL_SRC_FILES := g722_jni.cpp \
+	$(SPANDSP)/g722.c \
+	$(SPANDSP)/vector_int.c
+LOCAL_ARM_MODE := arm
+LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(SPANDSP)/spandsp $(LOCAL_PATH)/$(SPANDSP)
+LOCAL_CFLAGS = -O3
+include $(BUILD_SHARED_LIBRARY)
