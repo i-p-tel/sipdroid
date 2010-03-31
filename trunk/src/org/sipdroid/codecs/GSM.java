@@ -21,6 +21,7 @@ package org.sipdroid.codecs;
 
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
+import org.sipdroid.sipua.ui.Sipdroid;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -44,32 +45,25 @@ class GSM extends CodecBase implements Codec {
 		super.update();
 	}
 
+	void load() {
+		try {
+			System.loadLibrary("gsm_jni");
+			super.load();
+		} catch (Throwable e) {
+			if (!Sipdroid.release) e.printStackTrace();
+		}
+    
+	}  
+ 	
+	public native int open();
+	public native int decode(byte encoded[], short lin[], int size);
+	public native int encode(short lin[], int offset, byte encoded[], int size);
+	public native void close();
+	
 	public void init() {
 		load();
 		if (isLoaded())
-			org.sipdroid.pjlib.Codec.init();
-	}
-
-	void load() {
-		if(org.sipdroid.pjlib.Codec.loaded)
-			super.load();
-	}
-    
-	public int decode(byte encoded[], short lin[], int frames) {
-		byte[] buf = new byte[33+12];
-		int i;
-
-		for (i = 12; i < 45; i++)
-			buf[i] = encoded[i];
-		return org.sipdroid.pjlib.Codec.decode(buf, lin, 0);
-	}
-
-	public int encode(short lin[], int offset, byte encoded[], int frames) {
-		return org.sipdroid.pjlib.Codec.encode(lin, offset, encoded, frames);
-	}
-
-	public void close() {
-//		org.sipdroid.pjlib.Codec.close();
+			open();
 	}
 
 }
