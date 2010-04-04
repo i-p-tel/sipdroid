@@ -173,7 +173,6 @@ Sipdroid runs standard SIP. For full interoperability register Sipdroid to [http
 Possible issues when registering directly to other SIP servers are:
 
  * Battery drain on 3G/EDGE,
- * Poor voice on EDGE,
  * Unreliable incoming calls,
  * One way voice, or
  * No connection at all
