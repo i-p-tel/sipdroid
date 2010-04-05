@@ -174,6 +174,7 @@
 <string name="settings_nodata2">При пропущенных пакетах подавать звуковой сигнал</string>
 
 <string name="settings_advanced_options">Дополнительно</string>
+<string name="settings_audio_options">Звук</string>
 <string name="settings_policy_never">Другая политика сна, чтобы держать Wi-Fi включённым.</string>
 <string name="settings_policy_default">Сбросить политику сна Wi-Fi к стандартной.</string>
 <string name="settings_search">Поиск и замена</string>
@@ -205,6 +206,7 @@
 <string name="settings_par2">Параллельный набор всех номеров контакта</string>
 <string name="settings_improve">Улучшенный звук</string>
 <string name="settings_improve2">Требуется последняя версия программы (PBXes личных данных)</string>
+<string name="settings_hdvoice">PBXes поддерживает HD Voice</string>
 <string name="settings_posurl">URL для местоположения/обратного вызова</string>
 <string name="settings_pos">Обновлять местоположение</string>
 <string name="settings_pos2">Можно уведомлять контакты из PBXes (требуется платный доступ)</string>
@@ -245,6 +247,7 @@
 <string name="card_title_in_progress">Разговор</string>
 <string name="card_title_incoming_call">Входящий вызов</string>
 <string name="card_title_call_ended">Вызов закончен</string>
+<string name="card_title_ended_no_codec">Ошибка: несовместимые кодеки</string>
 <string name="card_title_on_hold">Удерживается</string>
 
 <string name="unknown">Неизвестно</string>
@@ -259,5 +262,4 @@
 <string name="codecs_move">Сдвинуть этот кодек</string>
 <string name="codecs_move_up">Вверх</string>
 <string name="codecs_move_down">Вниз</string>
-<string name="cancel">Отмена</string>
 </resources>
