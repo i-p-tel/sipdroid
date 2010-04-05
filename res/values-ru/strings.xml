@@ -205,7 +205,7 @@
 <string name="settings_par">Одновременный дозвон</string>
 <string name="settings_par2">Параллельный набор всех номеров контакта</string>
 <string name="settings_improve">Улучшенный звук</string>
-<string name="settings_improve2">Требуется платный доступ и последняя версия программы (в личных данных)</string>
+<string name="settings_improve2">Требуется последняя версия программы (PBXes личных данных)</string>
 <string name="settings_posurl">URL для местоположения/обратного вызова</string>
 <string name="settings_pos">Обновлять местоположение</string>
 <string name="settings_pos2">Можно уведомлять контакты из PBXes (требуется платный доступ)</string>

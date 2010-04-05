@@ -102,6 +102,7 @@
 <string name="settings_edge">EDGE verwenden</string>
 <string name="settings_vpn">VPN verwenden</string>
 <string name="settings_check">Prüfen Sie, ob Ihr Mobilfunkanbieter VoIP-Nutzung erlaubt</string>
+<string name="settings_vpn2">PBXes bietet einen VPN-Dienst gratis an, siehe PBXes >> HILFE</string>
 
 <string name="dialog_default">Sipdroid ist nicht als Telefon voreingestellt. Möchten Sie es als Telefon voreinstellen?
 \n
@@ -140,6 +141,7 @@
 <string name="settings_nodata2">Fehlende Sprachpakete mit Hinweistönen anzeigen</string>
 
 <string name="settings_advanced_options">Erweiterte Einstellungen</string>
+<string name="settings_audio_options">Audioeinstellungen</string>
 <string name="settings_policy_never">Systemeinstellung geändert: WLAN bleibt bei Standy in Betrieb</string>
 <string name="settings_policy_default">Systemeinstellung wiederhergestellt: WLAN geht bei Standby außer Betrieb</string>
 <string name="settings_search">Suchen &amp; Ersetzen</string>
@@ -164,7 +166,8 @@
 <string name="settings_par">Gleichzeitige Anwahl</string>
 <string name="settings_par2">Wählt alle Nummern eines Gesprächspartners gleichzeitig an</string>
 <string name="settings_improve">Bessere Tonqualität</string>
-<string name="settings_improve2">Erfordert bezahlten Account, neueste Software-Version (Persönliche Angaben)</string>
+<string name="settings_improve2">Erfordert neueste Software-Version (PBXes Persönliche Angaben)</string>
+<string name="settings_hdvoice">PBXes unterstützt HD Voice</string>
 <string name="settings_posurl">URL für Position/Callback</string>
 <string name="settings_pos">Position aktualisieren</string>
 <string name="settings_pos2">Kann PBXes-Kontakten angesagt werden (erfordert Premium-Account)</string>

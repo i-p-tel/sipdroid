@@ -423,7 +423,6 @@ public class VideoCamera extends CallScreen implements
 						}
 						
      					rtp_packet.setPayloadType(103);
-    					android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
     					while (Receiver.listener_video != null) {
     						num = -1;
     						try {

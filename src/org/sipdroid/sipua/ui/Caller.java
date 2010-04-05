@@ -75,8 +75,6 @@ public class Caller extends BroadcastReceiver {
 					noexclude = 0;
 					force = true;
 				}
-				if (PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals("SIPONLY"))
-					force = true;
 				if (sip_type && !force) {
 	    			String sExPat = PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_EXCLUDEPAT, Settings.DEFAULT_EXCLUDEPAT); 
 	   				boolean bExNums = false;
@@ -105,6 +103,8 @@ public class Caller extends BroadcastReceiver {
 					if (bExTypes || bExNums)
 						sip_type = false;
 				}
+				if (PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals("SIPONLY"))
+					force = true;
 
     			if (!sip_type)
     			{

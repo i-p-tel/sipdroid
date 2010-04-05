@@ -120,7 +120,7 @@
 <string name="settings_par">Apeluri simultane</string>
 <string name="settings_par2">Sună toate numerele unei persoane în paralel</string>
 <string name="settings_improve">Îmbunătăţire Audio</string>
-<string name="settings_improve2">Necesită cont platit, cea mai noua versiune software (în Personal Data)</string>
+<string name="settings_improve2">Necesită cea mai noua versiune software (PBXes Personal Data)</string>
 <string name="settings_posurl">URL pentru Locaţie/Callback</string>
 <string name="settings_pos">Actualizează Locaţie</string>
 <string name="settings_pos2">Contactele PBXes pot fi anuntate (necesită premium account)</string>

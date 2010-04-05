@@ -184,7 +184,7 @@
 <string name="settings_par">Chiamate simultanee in uscita</string>
 <string name="settings_par2">Componi tutti i numeri di telefono di una persona contemporaneamente</string>
 <string name="settings_improve">Meglioramento audio</string>
-<string name="settings_improve2">Richiede un\'account a pagamento, versione del software più recente (nella scheda Dati Personali)</string>
+<string name="settings_improve2">Richiede versione del software più recente (PBXes Dati Personali)</string>
 <string name="settings_posurl">URL per Posizione/CallBack</string>
 <string name="settings_pos">Aggiorna posizione</string>
 <string name="settings_pos2">Può essere annunciato ai contatti PBXes (richiede account premium)</string>

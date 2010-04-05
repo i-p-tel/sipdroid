@@ -225,6 +225,7 @@ public class UserAgent extends CallListenerAdapter {
 			// offer all known codecs
 			for (int i : Codecs.getCodecs()) {
 				Codec codec = Codecs.get(i);
+				if (i == 0) codec.init();
 				avpvec.add(String.valueOf(i));
 				if (codec.number() == 9)
 					afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", i, codec.userName(), 8000))); // kludge for G722. See RFC3551.
@@ -232,6 +233,7 @@ public class UserAgent extends CallListenerAdapter {
 					afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", i, codec.userName(), codec.samp_rate())));
 			}
 		} else {
+			c.codec.init();
 			avpvec.add(String.valueOf(c.number));
 			if (c.codec.number() == 9)
 				afvec.add(new AttributeField("rtpmap", String.format("%d %s/%d", c.number, c.codec.userName(), 8000))); // kludge for G722. See RFC3551.

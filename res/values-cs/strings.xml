@@ -143,8 +143,8 @@
 <string name="settings_pbxes_options">PBXes funkce</string>
 <string name="settings_par">Simultánní odchozí volání</string>
 <string name="settings_par2">Vytočí paralelně všechny čísla jedné osoby</string>
-<string name="settings_improve2">Zlepšit zvuk</string>
-<string name="settings_improve">Vyžaduje placený účet a nejnovější verzi software (v Personal Data)</string>
+<string name="settings_improve">Zlepšit zvuk</string>
+<string name="settings_improve2">Vyžaduje nejnovější verzi software (PBXes Personal Data)</string>
 <string name="settings_posurl">URL pro polohu/zpětné volání</string>
 <string name="settings_pos">Aktualizovat polohu</string>
 <string name="settings_pos2">Může být oznámena PBXes kontaktu (vyžaduje Premium účet)</string>

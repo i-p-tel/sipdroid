@@ -479,13 +479,13 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
         			key.equals(PREF_MWI_ENABLED)) {
         	Receiver.engine(this).halt();
     		Receiver.engine(this).StartEngine();
+    		setSettingsTitle();
 		}
 		if (key.equals(PREF_WLAN) || key.equals(PREF_3G) || key.equals(PREF_EDGE) || key.equals(PREF_OWNWIFI)) {
 			updateSleep();
 		}
 
 		updateSummaries();
-		setSettingsTitle();
 		
 		// Export settings only if there is some username and server
 		if (! settings.getString(PREF_USERNAME, "").equals("") && ! settings.getString(PREF_SERVER, "").equals("")) {

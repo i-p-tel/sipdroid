@@ -296,12 +296,14 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     				if (RtpStreamReceiver.timeout != 0)
     					mStats.setText("no data");
     				else if (RtpStreamSender.m == 2)
-	    				mStats.setText(Math.round(RtpStreamReceiver.loss/RtpStreamReceiver.good*100)+"% loss, "+
-	    						Math.round(RtpStreamReceiver.lost/RtpStreamReceiver.good*100)+"% lost, "+
-	    						Math.round(RtpStreamReceiver.late/RtpStreamReceiver.good*100)+"% late");
+	    				mStats.setText(Math.round(RtpStreamReceiver.loss/RtpStreamReceiver.good*100)+"%loss, "+
+	    						Math.round(RtpStreamReceiver.lost/RtpStreamReceiver.good*100)+"%lost, "+
+	    						Math.round(RtpStreamReceiver.late/RtpStreamReceiver.good*100)+"%late (>"+
+	    						(RtpStreamReceiver.jitter-250*RtpStreamReceiver.mu)/8/RtpStreamReceiver.mu+"ms)");
     				else
-	    				mStats.setText(Math.round(RtpStreamReceiver.lost/RtpStreamReceiver.good*100)+"% lost, "+
-	    						Math.round(RtpStreamReceiver.late/RtpStreamReceiver.good*100)+"% late");
+	    				mStats.setText(Math.round(RtpStreamReceiver.lost/RtpStreamReceiver.good*100)+"%lost, "+
+	    						Math.round(RtpStreamReceiver.late/RtpStreamReceiver.good*100)+"%late (>"+
+	    						(RtpStreamReceiver.jitter-250*RtpStreamReceiver.mu)/8/RtpStreamReceiver.mu+"ms)");
     				mStats.setVisibility(View.VISIBLE);
     			} else
     				mStats.setVisibility(View.GONE);
@@ -404,8 +406,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
-		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
-
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.incall);
 		
