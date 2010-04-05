@@ -130,7 +130,7 @@
 <string name="settings_edge">Use EDGE</string>
 <string name="settings_vpn">Use VPN</string>
 <string name="settings_check">Check with your mobile operator if he allows VoIP</string>
-<string name="settings_vpn2">PBXes offers free VPN service, see HELP section there</string>
+<string name="settings_vpn2">PBXes offers free VPN service, see PBXes >> HELP</string>
 
 <string name="dialog_default">Sipdroid is not currently set as default phone. Would you like to make it as default phone?
 \n
@@ -180,6 +180,7 @@
 <string name="settings_nodata2">Indicate missing voice packets by audible tones</string>
 
 <string name="settings_advanced_options">Advanced Options</string>
+<string name="settings_audio_options">Audio Settings</string>
 <string name="settings_policy_never">Changed system sleep policy to keep Wi-Fi on.</string>
 <string name="settings_policy_default">Reset Wi-Fi sleep policy to default.</string>
 <string name="settings_search">Search &amp; Replace</string>
@@ -210,7 +211,8 @@
 <string name="settings_par">Simultaneous Outbound</string>
 <string name="settings_par2">Dials all of one person\'s phone numbers in parallel</string>
 <string name="settings_improve">Improve Audio</string>
-<string name="settings_improve2">Requires paid account, newest software version (in Personal Data)</string>
+<string name="settings_improve2">Requires newest software version (PBXes Personal Data)</string>
+<string name="settings_hdvoice">PBXes supports HD Voice</string>
 <string name="settings_posurl">URL for Location/Callback</string>
 <string name="settings_pos">Update Location</string>
 <string name="settings_pos2">Can be announced to PBXes contacts (requires premium account)</string>

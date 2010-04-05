@@ -427,8 +427,8 @@ SPAN_DECLARE(int) g722_decode(g722_decode_state_t *s, int16_t amp[], const uint8
                     s->ptr = 0;
                 /* We shift by 12 to allow for the QMF filters (DC gain = 4096), less 1
                    to allow for the 15 bit input to the G.722 algorithm. */
-                amp[outlen++] = (int16_t) (vec_circular_dot_prodi16(s->y, qmf_coeffs_rev, 12, s->ptr) >> 11);
-                amp[outlen++] = (int16_t) (vec_circular_dot_prodi16(s->x, qmf_coeffs_fwd, 12, s->ptr) >> 11);
+                amp[outlen++] = saturate (vec_circular_dot_prodi16(s->y, qmf_coeffs_rev, 12, s->ptr) >> 11);
+                amp[outlen++] = saturate (vec_circular_dot_prodi16(s->x, qmf_coeffs_fwd, 12, s->ptr) >> 11);
             }
         }
     }
@@ -520,8 +520,14 @@ SPAN_DECLARE(int) g722_encode(g722_encode_state_t *s, uint8_t g722_data[], const
             else
             {
                 /* Apply the transmit QMF */
-                s->x[s->ptr] = amp[j++];
-                s->y[s->ptr] = amp[j++];
+                xlow = amp[j++];
+                if (xlow > 16350) xlow = 16350;
+                else if (xlow < -16350) xlow = -16350;
+                s->x[s->ptr] = xlow;
+                xlow = amp[j++];
+                if (xlow > 16350) xlow = 16350;
+                else if (xlow < -16350) xlow = -16350;
+                s->y[s->ptr] = xlow;
                 if (++s->ptr >= 12)
                     s->ptr = 0;
                 sumodd = vec_circular_dot_prodi16(s->x, qmf_coeffs_fwd, 12, s->ptr);

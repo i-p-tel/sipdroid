@@ -40,6 +40,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
 /**
@@ -143,8 +144,8 @@ public class RtpStreamSender extends Thread {
 		this.p_type = payload_type;
 		this.frame_rate = frame_rate;
 		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_SERVER, "").equals(Settings.DEFAULT_SERVER) &&
-				payload_type.codec.number() != 97)
-			this.frame_size = (payload_type.codec.number() != 0 && payload_type.codec.number() != 8)?960:1024;
+				(payload_type.codec.number() == 0 || payload_type.codec.number() == 8))
+			this.frame_size = 1024;
 		else
 			this.frame_size = frame_size;
 		this.do_sync = do_sync;
@@ -282,9 +283,10 @@ public class RtpStreamSender extends Thread {
 			println("Reading blocks of " + buffer.length + " bytes");
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
+		int mu = p_type.codec.samp_rate()/8000;
 		int min = AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
 				AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-				AudioFormat.ENCODING_PCM_16BIT);
+				AudioFormat.ENCODING_PCM_16BIT)*(1+mu)/2;
 		
 		println("Sample rate  = " + p_type.codec.samp_rate());
 		println("Buffer size = " + min);
@@ -362,7 +364,7 @@ public class RtpStreamSender extends Thread {
 			 }
 			 //DTMF change end
 
-			 if (frame_size == 160) {
+			 if (frame_size < 960) {
 				 now = System.currentTimeMillis();
 				 next_tx_delay = frame_period - (now - last_tx_time);
 				 last_tx_time = now;
@@ -400,15 +402,15 @@ public class RtpStreamSender extends Thread {
 			 if (Receiver.call_state != UserAgent.UA_STATE_INCALL &&
 					 Receiver.call_state != UserAgent.UA_STATE_OUTGOING_CALL && alerting != null) {
 				 try {
-					if (alerting.available() < num)
+					if (alerting.available() < num/mu)
 						alerting.reset();
-					alerting.read(buffer,12,num);
+					alerting.read(buffer,12,num/mu);
 				 } catch (IOException e) {
 					if (!Sipdroid.release) e.printStackTrace();
 				 }
 				 if (p_type.codec.number() != 8) {
-					  G711.alaw2linear(buffer, lin, num);
-					  num = p_type.codec.encode(lin, 0, buffer, num);
+					 G711.alaw2linear(buffer, lin, num, mu);
+					 num = p_type.codec.encode(lin, 0, buffer, num);
 				 }
 			 } else {
 				 num = p_type.codec.encode(lin, ring%(frame_size*11), buffer, num);
@@ -426,16 +428,17 @@ public class RtpStreamSender extends Thread {
 			 time += frame_size;
  			 if (improve && RtpStreamReceiver.good != 0 &&
  					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01 &&
- 					 (p_type.codec.number() == 0 || p_type.codec.number() == 8))        	
+ 					 (p_type.codec.number() == 0 || p_type.codec.number() == 8 || p_type.codec.number() == 9))        	
  				 m = 2;
  			 else
  				 m = 1;
 		}
-		while (RtpStreamReceiver.getMode() == AudioManager.MODE_IN_CALL)
-			try {
-				sleep(1000);
-			} catch (InterruptedException e) {
-			}
+		if (!Build.MODEL.contains("Samsung") && Integer.parseInt(Build.VERSION.SDK) < 5)
+			while (RtpStreamReceiver.getMode() == AudioManager.MODE_IN_CALL)
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+				}
 		record.stop();
 		record.release();
 		m = 0;

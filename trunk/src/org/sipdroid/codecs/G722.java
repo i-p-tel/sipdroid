@@ -30,7 +30,7 @@ class G722 extends CodecBase implements Codec {
 	private static final int DEFAULT_BITRATE = 64000;
 
 	G722() {
-		CODEC_NAME = "G722";
+		CODEC_NAME = "G722 HD Voice";
 		CODEC_USER_NAME = "G722";
 		CODEC_DESCRIPTION = "64kbit";
 		CODEC_NUMBER = 9;

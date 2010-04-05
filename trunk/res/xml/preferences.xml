@@ -96,15 +96,7 @@
 				android:persistent="false"
 				android:ringtoneType="ringtone" /> 
 	</PreferenceScreen>
-	<PreferenceScreen android:title="@string/settings_advanced_options">
-			<EditTextPreference
-				android:key="search"
-				android:title="@string/settings_search"
-				android:singleLine="true" />
-			<EditTextPreference
-				android:key="excludepat"
-				android:title="@string/settings_excludepat"
-				android:singleLine="true" />
+	<PreferenceScreen android:title="@string/settings_audio_options">
 			<ListPreference
 				android:key="eargain"
 				android:title="@string/settings_eargain"
@@ -133,6 +125,25 @@
 				android:entryValues="@array/eargain_values"
 				android:defaultValue="1.0"
 				android:dialogTitle="@string/settings_hmicgain" />
+	</PreferenceScreen>
+	<PreferenceScreen
+		android:key="codecs"
+		android:title="@string/codecs" >
+        	<intent
+                	android:action="android.intent.action.MAIN"
+	                android:targetPackage="org.sipdroid.sipua"
+	                android:targetClass="org.sipdroid.codecs.Codecs$CodecSettings" />
+
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_advanced_options">
+			<EditTextPreference
+				android:key="search"
+				android:title="@string/settings_search"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="excludepat"
+				android:title="@string/settings_excludepat"
+				android:singleLine="true" />
 			<CheckBoxPreference
 				android:key="ownwifi"
 				android:title="@string/settings_ownwifi"
@@ -181,13 +192,4 @@
 				android:hint="Accessno.,PIN#"
 				android:singleLine="true" />
 	</PreferenceScreen> 
-	<PreferenceScreen
-		android:key="codecs"
-		android:title="@string/codecs" >
-        	<intent
-                	android:action="android.intent.action.MAIN"
-	                android:targetPackage="org.sipdroid.sipua"
-	                android:targetClass="org.sipdroid.codecs.Codecs$CodecSettings" />
-
-	</PreferenceScreen>
 </PreferenceScreen>

@@ -159,12 +159,6 @@
 		<item>Toujours active</item>
 		<item>Jamais</item>
 	</string-array>
-	<string-array name="compression_values">
-        <item>wlan</item>
-        <item>wlanor3g</item>
-        <item>always</item>
-        <item>never</item>
-    </string-array>
 	<string name="settings_auto_on">Rép. Auto en service</string>
 	<string name="settings_auto_on2">Courtes vibrations d\'alerte quand l\'écran est en marche</string>
 	<string name="settings_auto_ondemand">Rép. Auto à la demande</string>
@@ -213,8 +207,8 @@
 	<string name="settings_par2">Compose les numéros de téléphone de chacun en
 		paralèlle</string>
 	<string name="settings_improve">Améliorations audio</string>
-	<string name="settings_improve2">Nécessite un compte payant, la dernière version du
-		logiciel (cf. "Personal Data")</string>
+	<string name="settings_improve2">Nécessite la dernière version du
+		logiciel (PBXes Personal Data)</string>
 	<string name="settings_posurl">URL de l\'adresse/Callback</string>
 	<string name="settings_pos">Mettre à jour l\'adresse</string>
 	<string name="settings_pos2">Peut être indiqués aux contacts PBXes (Nécessite un
