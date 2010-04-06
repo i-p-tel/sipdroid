@@ -175,6 +175,7 @@
 	<string name="settings_nodata2">Indique des paquets "voix" par des tonalités audibles</string>
 
 	<string name="settings_advanced_options">Options Avancées</string>
+	<string name="settings_audio_options">Paramètres Audio</string>
 	<string name="settings_policy_never">Politique de mise en veille du sysyème changée pour maintenir le Wi-Fi allumé.</string>
 	<string name="settings_policy_default">Retour aux paramètres par défaut de la politique de mise en veille du Wi-Fi.</string>
 	<string name="settings_search">Chercher &amp; Remplacer</string>
@@ -209,6 +210,7 @@
 	<string name="settings_improve">Améliorations audio</string>
 	<string name="settings_improve2">Nécessite la dernière version du
 		logiciel (PBXes Personal Data)</string>
+	<string name="settings_hdvoice">PBXes supporte la voix en HD</string>
 	<string name="settings_posurl">URL de l\'adresse/Callback</string>
 	<string name="settings_pos">Mettre à jour l\'adresse</string>
 	<string name="settings_pos2">Peut être indiqués aux contacts PBXes (Nécessite un
