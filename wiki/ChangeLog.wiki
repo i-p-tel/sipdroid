@@ -3,6 +3,10 @@
 
 === Beta-Versions ===
 
+  * 1.4.6
+    * Fix G722 incompatibility
+    * Better on HTC Desire, Archos 5 (issue 268)
+
   * 1.4.5
     * Fix issue 242, issue 301, issue 319, issue 402
     * G722 HD Voice
