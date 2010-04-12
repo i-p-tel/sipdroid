@@ -38,6 +38,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -417,7 +418,9 @@ import org.sipdroid.sipua.phone.Connection;
 		static PowerManager.WakeLock pwl;
 		
 		static void lock(boolean lock) {
-			if (Build.MODEL.equals("Nexus One")) {
+			if (Build.MODEL.equals("Nexus One") ||
+					Build.MODEL.equals("Archos5") ||
+					Build.MODEL.equals("HTC Desire")) {
 				if (lock) {
 					if (pwl == null) {
 						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
