@@ -286,7 +286,7 @@ public class RtpStreamSender extends Thread {
 		int mu = p_type.codec.samp_rate()/8000;
 		int min = AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
 				AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-				AudioFormat.ENCODING_PCM_16BIT)*(1+mu)/2;
+				AudioFormat.ENCODING_PCM_16BIT)*3/2;
 		
 		println("Sample rate  = " + p_type.codec.samp_rate());
 		println("Buffer size = " + min);
@@ -425,7 +425,10 @@ public class RtpStreamSender extends Thread {
  					 rtp_socket.send(rtp_packet);
  			 } catch (IOException e) {
  			 }
-			 time += frame_size;
+ 			 if (p_type.codec.number() == 9)
+ 				 time += frame_size/2;
+ 			 else
+ 				 time += frame_size;
  			 if (improve && RtpStreamReceiver.good != 0 &&
  					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01 &&
  					 (p_type.codec.number() == 0 || p_type.codec.number() == 8 || p_type.codec.number() == 9))        	
@@ -433,7 +436,7 @@ public class RtpStreamSender extends Thread {
  			 else
  				 m = 1;
 		}
-		if (!Build.MODEL.contains("Samsung") && Integer.parseInt(Build.VERSION.SDK) < 5)
+		if (!Build.MODEL.contains("Samsung") && !Build.MODEL.contains("Galaxy") && Integer.parseInt(Build.VERSION.SDK) < 5)
 			while (RtpStreamReceiver.getMode() == AudioManager.MODE_IN_CALL)
 				try {
 					sleep(1000);

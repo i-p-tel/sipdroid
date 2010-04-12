@@ -63,7 +63,7 @@ public class RtpStreamReceiver extends Thread {
 	public static final int BUFFER_SIZE = 1024;
 
 	/** Maximum blocking time, spent waiting for reading new bytes [milliseconds] */
-	public static final int SO_TIMEOUT = 200;
+	public static final int SO_TIMEOUT = 1000;
 
 	/** The RtpSocket */
 	RtpSocket rtp_socket = null;
@@ -298,6 +298,7 @@ public class RtpStreamReceiver extends Thread {
 	public static float good, late, lost, loss;
 	double avgheadroom;
 	public static int timeout;
+	int seq;
 	
 	void empty() {
 		try {
@@ -309,15 +310,17 @@ public class RtpStreamReceiver extends Thread {
 		} catch (IOException e) {
 		}
 		try {
-			rtp_socket.getDatagramSocket().setSoTimeout(1000);
+			rtp_socket.getDatagramSocket().setSoTimeout(SO_TIMEOUT);
 		} catch (SocketException e2) {
 			if (!Sipdroid.release) e2.printStackTrace();
 		}
+		seq = 0;
 	}
 	
 	RtpPacket rtp_packet;
 	AudioTrack track;
-	int maxjitter,minjitter,minjitteradjust;
+	int maxjitter,minjitter,minjitteradjust,minheadroom;
+	int cnt,cnt2,user,luser,luser2,lserver;
 	public static int jitter,mu;
 	
 	void setCodec() {
@@ -334,6 +337,10 @@ public class RtpStreamReceiver extends Thread {
 		maxjitter /= 2*2;
 		minjitter = minjitteradjust = 500*mu;
 		jitter = 875*mu;
+		minheadroom = maxjitter*2;
+		timeout = 1;
+		luser = luser2 = -8000*mu;
+		cnt = cnt2 = user = lserver = 0;
 	}
 	
 	/** Runs it in a new Thread. */
@@ -367,15 +374,9 @@ public class RtpStreamReceiver extends Thread {
 		setCodec();
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
-		int user, server, lserver, luser, headroom, minheadroom, cnt, todo, len = 0, seq = 0, cnt2, m = 1,
-			expseq, getseq, vm = 1, gap, gseq, luser2;
-		timeout = 1;
-		luser = luser2 = -8000*mu;
-		cnt = cnt2 = user = lserver = 0;
-		minheadroom = maxjitter*2;
+		int server, headroom, todo, len = 0, m = 1, expseq, getseq, vm = 1, gap, gseq;
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_VOICE_CALL,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 		track.play();
-		empty();
 		System.gc();
 		while (running) {
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
@@ -390,7 +391,6 @@ public class RtpStreamReceiver extends Thread {
 				track.play();
 				System.gc();
 				timeout = 1;
-				seq = 0;
 				luser = luser2 = -8000*mu;
 			}
 			try {
@@ -440,9 +440,6 @@ public class RtpStreamReceiver extends Thread {
 						 track.stop();
 						 track.release();
 						 setCodec();
-						 timeout = 1;
-						 luser = luser2 = -8000*mu;
-						 cnt = cnt2 = user = lserver = 0;
 					 }
 					 len = p_type.codec.decode(buffer, lin, rtp_packet.getPayloadLength());
 					 
@@ -524,7 +521,7 @@ public class RtpStreamReceiver extends Thread {
 		tg.release();
 		saveVolume();
 		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL,oldvol,0);
-		if (Build.MODEL.contains("Samsung"))
+		if (Build.MODEL.contains("Galaxy") || Build.MODEL.contains("Samsung"))
 			while (RtpStreamSender.m != 0)
 				try {
 					sleep(1000);
