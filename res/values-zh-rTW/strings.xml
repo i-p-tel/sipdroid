@@ -138,14 +138,14 @@
 
 <string name="dialog_default">Sipdroid現在不是默認的電話程序，是否要將其設定為默認？
 \n
-\n如果你選擇了 \'否\'，你仍然可以在撥號時在電話號碼後加上字元\'+\'，或者長按聯系人選擇 \'發送簡訊\'以強制使用Sipdroid撥號。</string>
+\n如果你選擇了 \'否\'，你仍然可以在撥號時在電話號碼後加上字元\'+\'，或長按聯系人選擇 \'發送簡訊\'以強制使用Sipdroid撥號。</string>
 
 <string name="yes">是</string>
 <string name="no">否</string>
 <string name="dontask">不再提示</string>
 
 <string name="settings_pref">Sipdroid優先順序</string>
-<string name="settings_pref2">在撥號時在電話號碼後加上字元\'+\'，或者長按聯系人選擇 \'發送簡訊\'以強制使用Sipdroid撥號。</string>
+<string name="settings_pref2">在撥號時在電話號碼後加上字元\'+\'，或長按聯系人選擇 \'發送簡訊\'以強制使用Sipdroid撥號。</string>
 
     <string-array name="pref_display_values">
         <item>僅使用Sipdroid</item>
