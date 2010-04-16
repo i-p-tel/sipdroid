@@ -148,7 +148,7 @@
 <string name="settings_pref2">在撥號時在電話號碼後加上字元\'+\'，或者長按聯系人選擇 \'發送簡訊\'以強制使用Sipdroid撥號。</string>
 
     <string-array name="pref_display_values">
-        <item>Sipdroid only</item>
+        <item>僅使用Sipdroid</item>
         <item>當可用時使用Sipdroid</item>
         <item>總是使用電話</item>
 
@@ -181,6 +181,7 @@
 <string name="settings_nodata2">使用單音調指示數據包丟失</string>
 
 <string name="settings_advanced_options">高級設定</string>
+<string name="settings_audio_options">音頻設定</string>
 <string name="settings_policy_never">改變系統休眠策略以保持Wi-Fi的開啟狀態</string>
 <string name="settings_policy_default">重設Wi-Fi休眠設定為系統默認</string>
 <string name="settings_search">查找和替換</string>
