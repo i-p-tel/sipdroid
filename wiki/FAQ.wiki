@@ -226,10 +226,6 @@ The username to be entered in Sipdroid consists of account name, a dash ('-') an
 
 This tool is recommended to save battery. It uses the camera to adjust screen brightness.
 
-=== Battery Hours ===
-
-Another tool which measures and displays your remaining standby time.
-
 === ChompSMS ===
 
 This is the equivalent to Sipdroid for SMS.
