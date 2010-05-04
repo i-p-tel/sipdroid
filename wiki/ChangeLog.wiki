@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.4.7
+    * Fix issue 132, issue 323, issue 333, issue 354, issue 399, issue 408, issue 413
+
   * 1.4.6
     * Fix G722 incompatibility
     * Better on HTC Desire, Archos 5 (issue 268)
