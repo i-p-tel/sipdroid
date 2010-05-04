@@ -13,9 +13,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.SystemClock;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -136,6 +136,11 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
     boolean enabled;
     
 	void disableKeyguard() {
+    	if (mKeyguardManager == null) {
+	        mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+	        mKeyguardLock = mKeyguardManager.newKeyguardLock("Sipdroid");
+	        enabled = true;
+    	}
 		if (enabled) {
 			mKeyguardLock.disableKeyguard();
 			enabled = false;
@@ -145,7 +150,6 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 	
 	void reenableKeyguard() {
 		if (!enabled) {
-			if (SystemClock.elapsedRealtime() < enabletime + 1000)
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -156,22 +160,31 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 	}
 	
 	@Override
+	public void onResume() {
+		super.onResume();
+		if (Integer.parseInt(Build.VERSION.SDK) >= 5)
+			disableKeyguard();
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (Integer.parseInt(Build.VERSION.SDK) >= 5)
+			reenableKeyguard();
+	}
+	
+	@Override
 	public void onStart() {
 		super.onStart();
-    	if (!Sipdroid.release) Log.i("SipUA:","on start");
-    	if (mKeyguardManager == null) {
-	        mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-	        mKeyguardLock = mKeyguardManager.newKeyguardLock("Sipdroid");
-	        enabled = true;
-    	}
-        disableKeyguard();
+		if (Integer.parseInt(Build.VERSION.SDK) < 5)
+			disableKeyguard();
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-    	if (!Sipdroid.release) Log.i("SipUA:","on stop");
-		reenableKeyguard();
+		if (Integer.parseInt(Build.VERSION.SDK) < 5)
+			reenableKeyguard();
 	}
 
 }

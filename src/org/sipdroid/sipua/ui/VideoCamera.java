@@ -190,7 +190,7 @@ public class VideoCamera extends CallScreen implements
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
 
         // This is similar to what mShutterButton.performClick() does,

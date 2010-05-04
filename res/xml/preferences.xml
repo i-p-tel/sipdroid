@@ -1,6 +1,12 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
-
+			<ListPreference
+				android:key="pref"
+				android:title="@string/settings_pref"
+				android:entries="@array/pref_display_values"
+				android:entryValues="@array/pref_values"
+				android:summary="@string/settings_pref2"
+				android:dialogTitle="@string/settings_pref" />
 	<PreferenceScreen android:title="@string/settings_account">
 			<EditTextPreference
 				android:key="username"
@@ -55,13 +61,6 @@
 				android:key="vpn"
 				android:title="@string/settings_vpn"
 				android:summary="@string/settings_vpn2" />
-			<ListPreference
-				android:key="pref"
-				android:title="@string/settings_pref"
-				android:entries="@array/pref_display_values"
-				android:entryValues="@array/pref_values"
-				android:summary="@string/settings_pref2"
-				android:dialogTitle="@string/settings_pref" />
 			<CheckBoxPreference
 				android:key="auto_on"
 				android:title="@string/settings_auto_on"

@@ -33,12 +33,14 @@ import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -51,6 +53,8 @@ import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.Vibrator;
@@ -77,6 +81,11 @@ import org.sipdroid.sipua.phone.Connection;
 		final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
 		final static String ACTION_DEVICE_IDLE = "com.android.server.WifiManager.action.DEVICE_IDLE";
 		final static String ACTION_VPN_CONNECTIVITY = "vpn.connectivity";
+		final static String METADATA_DOCK_HOME = "android.dock_home";
+		final static String CATEGORY_DESK_DOCK = "android.intent.category.DESK_DOCK";
+		final static String CATEGORY_CAR_DOCK = "android.intent.category.CAR_DOCK";
+		final static int EXTRA_DOCK_STATE_DESK = 1;
+		final static int EXTRA_DOCK_STATE_CAR = 2;
 		
 		public final static int REGISTER_NOTIFICATION = 1;
 		public final static int CALL_NOTIFICATION = 2;
@@ -101,7 +110,7 @@ import org.sipdroid.sipua.phone.Connection;
 		public static String MWI_account;
 		private static String laststate,lastnumber;	
 		
-		public static SipdroidEngine engine(Context context) {
+		public static synchronized SipdroidEngine engine(Context context) {
 			mContext = context;
 			if (mSipdroidEngine == null) {
 				mSipdroidEngine = new SipdroidEngine();
@@ -161,7 +170,8 @@ import org.sipdroid.sipua.phone.Connection;
 					int rm = am.getRingerMode();
 					int vs = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
 			        KeyguardManager mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
-					if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON) &&
+					if ((pstn_state == null || pstn_state.equals("IDLE")) &&
+							PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON) &&
 							!mKeyguardManager.inKeyguardRestrictedInputMode())
 						v.vibrate(vibratePattern,1);
 					else {
@@ -223,7 +233,7 @@ import org.sipdroid.sipua.phone.Connection;
 					if (ccCall.base == 0) {
 						ccCall.base = SystemClock.elapsedRealtime();
 					}
-					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call,ccCall.base);
+					progress();
 					ccCall.setState(Call.State.ACTIVE);
 					stopRingtone();
 					if (wl != null && wl.isHeld())
@@ -395,7 +405,9 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		static void enable_wifi(boolean enable) {
-			if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_OWNWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_OWNWIFI))
+			if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_OWNWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_OWNWIFI)
+					|| !(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_3G, org.sipdroid.sipua.ui.Settings.DEFAULT_3G) ||
+							PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_EDGE, org.sipdroid.sipua.ui.Settings.DEFAULT_EDGE)))
 				return;
 			if (enable && !PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WIFI_DISABLED, org.sipdroid.sipua.ui.Settings.DEFAULT_WIFI_DISABLED))
         		return;
@@ -415,9 +427,18 @@ import org.sipdroid.sipua.phone.Connection;
     		wm.setWifiEnabled(enable);
 		}
 			    
-		static PowerManager.WakeLock pwl;
+		static PowerManager.WakeLock pwl,pwl2;
 		
 		static void lock(boolean lock) {
+			if (lock) {
+				if (pwl2 == null) {
+					PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+					pwl2 = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.Receiver");
+				}
+				if (!pwl2.isHeld())
+					pwl2.acquire();
+			} else if (pwl2 != null && pwl2.isHeld())
+				pwl2.release();
 			if (Build.MODEL.equals("Nexus One") ||
 					Build.MODEL.equals("Archos5") ||
 					Build.MODEL.equals("HTC Desire")) {
@@ -506,11 +527,42 @@ import org.sipdroid.sipua.phone.Connection;
 	        return intent;
 		}
 		
-		public static Intent createHomeIntent() {
+		static Intent createHomeDockIntent() {
 	        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+	        if (docked == EXTRA_DOCK_STATE_CAR) {
+		        intent.addCategory(CATEGORY_CAR_DOCK);
+	        } else if (docked == EXTRA_DOCK_STATE_DESK) {
+		        intent.addCategory(CATEGORY_DESK_DOCK);
+	        } else {
+	            return null;
+	        }
+	        
+	        ActivityInfo ai = intent.resolveActivityInfo(
+	                mContext.getPackageManager(), PackageManager.GET_META_DATA);
+	        if (ai == null) {
+	            return null;
+	        }
+	        
+	        if (ai.metaData != null && ai.metaData.getBoolean(METADATA_DOCK_HOME)) {
+	            intent.setClassName(ai.packageName, ai.name);
+	            return intent;
+	        }
+	        
+	        return null;
+	    }
+	    
+	    public static Intent createHomeIntent() {
+	        Intent intent = createHomeDockIntent();
+	        if (intent != null) {
+	            try {
+	                return intent;
+	            } catch (ActivityNotFoundException e) {
+	            }
+	        }
+	        intent = new Intent(Intent.ACTION_MAIN, null);
 	        intent.addCategory(Intent.CATEGORY_HOME);
 	        return intent;
-		}
+	    }
 
 	    static Intent createMWIIntent() {
 			Intent intent;
@@ -523,8 +575,20 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		public static void moveTop() {
-			onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call, 0);
+			progress();
 			mContext.startActivity(createIntent(Activity2.class)); 
+		}
+
+		public static void progress() {
+			int mode;
+			
+			mode = RtpStreamReceiver.speakermode;
+			if (mode == -1)
+				mode = speakermode();
+			if (mode == AudioManager.MODE_NORMAL)
+				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.menu_speaker), android.R.drawable.stat_sys_speakerphone,Receiver.ccCall.base);
+			else
+				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call,Receiver.ccCall.base);
 		}
 
 		public static boolean on_wlan;
@@ -583,6 +647,11 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		static boolean isFastEth() {
+			/*
+			 * The following code does not seem to work with all phones/OS versions.
+			 * Users complained about inability to disable Sipdroid by unchecking
+			 * all network types in call options.
+			 * 
 			boolean on_eth = false;
 			try {
 				for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
@@ -598,8 +667,24 @@ import org.sipdroid.sipua.phone.Connection;
 				// do nothing
 			}			
 			return on_eth;
+			*/
+			return false;
 		}
 		
+		public static int speakermode() {
+        		if (docked > 0 && headset <= 0)
+    				return AudioManager.MODE_NORMAL;
+        		else
+        			return AudioManager.MODE_IN_CALL;
+		}
+		
+	    Handler mHandler = new Handler() {
+	    	public void handleMessage(Message msg) {
+	        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+	        	wm.startScan();
+	    	}
+	    };
+
 	    @Override
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
@@ -629,6 +714,7 @@ import org.sipdroid.sipua.phone.Connection;
 			} else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
+	        	stopRingtone();
 	    		pstn_state = intent.getStringExtra("state");
 	    		pstn_time = SystemClock.elapsedRealtime();
 	    		if (pstn_state.equals("IDLE") && call_state != UserAgent.UA_STATE_IDLE)
@@ -640,15 +726,12 @@ import org.sipdroid.sipua.phone.Connection;
 	        if (intentAction.equals(ACTION_DOCK_EVENT)) {
 	        	docked = intent.getIntExtra(EXTRA_DOCK_STATE, -1);
 	        	if (call_state == UserAgent.UA_STATE_INCALL)
-	        		if (docked > 0)
-	    				engine(mContext).speaker(AudioManager.MODE_NORMAL);
-	        		else
-	        			engine(mContext).speaker(AudioManager.MODE_IN_CALL);
+	        		engine(mContext).speaker(speakermode());
 	        } else
 		    if (intentAction.equals(Intent.ACTION_HEADSET_PLUG)) {
 		        headset = intent.getIntExtra("state", -1);
-		        if (call_state == UserAgent.UA_STATE_INCALL && headset > 0)
-        			engine(mContext).speaker(AudioManager.MODE_IN_CALL);
+	        	if (call_state == UserAgent.UA_STATE_INCALL)
+	        		engine(mContext).speaker(speakermode());
 	        } else
 	        if (intentAction.equals(Intent.ACTION_SCREEN_ON)) {
 	        	alarm(0,OwnWifi.class);
@@ -664,6 +747,9 @@ import org.sipdroid.sipua.phone.Connection;
 	        		alarm(2*60,OwnWifi.class);
 	        	else
 	        		alarm(15*60,OwnWifi.class);
+	        } else
+		    if (intentAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
+		    	mHandler.sendEmptyMessageDelayed(0, 3000);
 	        }
 		}   
 }

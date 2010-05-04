@@ -893,9 +893,16 @@ public class UserAgent extends CallListenerAdapter {
 
 	/** Schedules a call-transfer event after <i>delay_time</i> secs. */
 	void callTransfer(final String transfer_to, final int delay_time) {
+		// in case of incomplete url (e.g. only 'user' is present), try to
+		// complete it
+		final String target_url;
+		if (transfer_to.indexOf("@") < 0)
+			target_url = transfer_to + "@" + realm; // modified
+		else
+			target_url = transfer_to;
 		(new Thread() {
 			public void run() {
-				runCallTransfer(transfer_to, delay_time);
+				runCallTransfer(target_url, delay_time);
 			}
 		}).start();
 	}

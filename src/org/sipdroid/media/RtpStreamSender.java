@@ -190,19 +190,10 @@ public class RtpStreamSender extends Thread {
 			j = lin[i+off];
 			s = 0.03*Math.abs(j) + 0.97*s;
 			if (s < sm) sm = s;
-			if (s > smin) nearend = 3000/5;
+			if (s > smin) nearend = 3000*mu/5;
 			else if (nearend > 0) nearend--;
 		}
-		for (i = 0; i < len; i++) {
-			j = lin[i+off];
-			if (j > 6550)
-				lin[i+off] = 6550*5;
-			else if (j < -6550)
-				lin[i+off] = -6550*5;
-			else
-				lin[i+off] = (short)(j*5);
-		}
-		r = (double)len/100000;
+		r = (double)len/(100000*mu);
 		smin = sm*r + smin*(1-r);
 	}
 
@@ -258,6 +249,7 @@ public class RtpStreamSender extends Thread {
 	}
 	
 	public static int m;
+	int mu;
 	
 	/** Runs it in a new Thread. */
 	public void run() {
@@ -283,10 +275,11 @@ public class RtpStreamSender extends Thread {
 			println("Reading blocks of " + buffer.length + " bytes");
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-		int mu = p_type.codec.samp_rate()/8000;
+		mu = p_type.codec.samp_rate()/8000;
 		int min = AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
 				AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-				AudioFormat.ENCODING_PCM_16BIT)*3/2;
+				AudioFormat.ENCODING_PCM_16BIT);
+		if (min <= 4096) min *= 3/2;
 		
 		println("Sample rate  = " + p_type.codec.samp_rate());
 		println("Buffer size = " + min);
@@ -436,7 +429,7 @@ public class RtpStreamSender extends Thread {
  			 else
  				 m = 1;
 		}
-		if (!Build.MODEL.contains("Samsung") && !Build.MODEL.contains("Galaxy") && Integer.parseInt(Build.VERSION.SDK) < 5)
+		if (Integer.parseInt(Build.VERSION.SDK) < 5)
 			while (RtpStreamReceiver.getMode() == AudioManager.MODE_IN_CALL)
 				try {
 					sleep(1000);

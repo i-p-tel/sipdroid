@@ -96,6 +96,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	public void onStop() {
 		super.onStop();
 		mHandler.removeMessages(MSG_BACK);
+		finish();
 	}
 	
 	@Override
@@ -139,7 +140,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			// or call log because it is too easy to dial accidentally from there
 	        startActivity(Receiver.createHomeIntent());
 		}
-		moveTaskToBack(true);
+//		moveTaskToBack(true);
+		onStop();
 	}
 	
 	SipdroidSocket socket;
@@ -153,14 +155,15 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     	if (!Sipdroid.release) Log.i("SipUA:","on resume");
 		switch (Receiver.call_state) {
 		case UserAgent.UA_STATE_INCOMING_CALL:
-			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON) &&
-					!mKeyguardManager.inKeyguardRestrictedInputMode())
-				mHandler.sendEmptyMessageDelayed(MSG_ANSWER, 1000);
-			else if ((PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ONDEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ONDEMAND) &&
-					PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_DEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_DEMAND)) ||
-					(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_HEADSET, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_HEADSET) &&
-							Receiver.headset > 0))
-				mHandler.sendEmptyMessageDelayed(MSG_ANSWER_SPEAKER, 10000);
+			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE"))
+				if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON) &&
+						!mKeyguardManager.inKeyguardRestrictedInputMode())
+					mHandler.sendEmptyMessageDelayed(MSG_ANSWER, 1000);
+				else if ((PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ONDEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ONDEMAND) &&
+						PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_DEMAND, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_DEMAND)) ||
+						(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_HEADSET, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_HEADSET) &&
+								Receiver.headset > 0))
+					mHandler.sendEmptyMessageDelayed(MSG_ANSWER_SPEAKER, 10000);
 			break;
 		case UserAgent.UA_STATE_INCALL:
 			if (socket == null && Receiver.engine(mContext).getLocalVideo() != 0 && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER))
@@ -215,7 +218,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 				mDialerDrawer.setVisibility(View.GONE);
 			} else
 				mDialerDrawer.setVisibility(View.VISIBLE);
-		    screenOff(true);
+			if (Receiver.docked <= 0)
+				screenOff(true);
 			break;
 		case UserAgent.UA_STATE_IDLE:
 			if (!mHandler.hasMessages(MSG_BACK))
