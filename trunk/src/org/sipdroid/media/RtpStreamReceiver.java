@@ -72,7 +72,7 @@ public class RtpStreamReceiver extends Thread {
 	boolean running;
 	AudioManager am;
 	ContentResolver cr;
-	public static int speakermode;
+	public static int speakermode = -1;
 	
 	/**
 	 * Constructs a RtpStreamReceiver.
@@ -106,10 +106,12 @@ public class RtpStreamReceiver extends Thread {
 	public int speaker(int mode) {
 		int old = speakermode;
 		
-		if (Receiver.headset > 0 && mode == AudioManager.MODE_NORMAL)
+		if ((Receiver.headset > 0 || Receiver.docked > 0) &&
+				mode != Receiver.speakermode())
 			return old;
 		saveVolume();
 		setMode(speakermode = mode);
+		setCodec();
 		restoreVolume();
 		return old;
 	}
@@ -117,18 +119,22 @@ public class RtpStreamReceiver extends Thread {
 	static ToneGenerator ringbackPlayer;
 	static int oldvol = -1;
 
+	static int stream() {
+		return speakermode == AudioManager.MODE_IN_CALL?AudioManager.STREAM_VOICE_CALL:AudioManager.STREAM_MUSIC;
+	}
+	
 	public static synchronized void ringback(boolean ringback) {
 		if (ringback && ringbackPlayer == null) {
 	        AudioManager am = (AudioManager) Receiver.mContext.getSystemService(
                     Context.AUDIO_SERVICE);
-			oldvol = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-			setMode(Receiver.docked > 0 && Receiver.headset <= 0?AudioManager.MODE_NORMAL:AudioManager.MODE_IN_CALL);
-			am.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
+			oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+			setMode(speakermode = Receiver.speakermode());
+			am.setStreamVolume(stream(),
 					PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("volume"+speakermode, 
-					am.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)*
+					am.getStreamMaxVolume(stream())*
 					(speakermode == AudioManager.MODE_NORMAL?4:3)/4
 					),0);
-			ringbackPlayer = new ToneGenerator(AudioManager.STREAM_VOICE_CALL,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
+			ringbackPlayer = new ToneGenerator(stream(),(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 			ringbackPlayer.startTone(ToneGenerator.TONE_SUP_RINGTONE);
 		} else if (!ringback && ringbackPlayer != null) {
 			ringbackPlayer.stopTone();
@@ -138,7 +144,7 @@ public class RtpStreamReceiver extends Thread {
 		        AudioManager am = (AudioManager) Receiver.mContext.getSystemService(
 	                    Context.AUDIO_SERVICE);
 				restoreMode();
-				am.setStreamVolume(AudioManager.STREAM_VOICE_CALL,oldvol,0);
+				am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 				oldvol = -1;
 			}
 		}
@@ -155,7 +161,7 @@ public class RtpStreamReceiver extends Thread {
 			j = lin[i+off];
 			s = 0.03*Math.abs(j) + 0.97*s;
 			if (s < sm) sm = s;
-			if (s > smin) nearend = 3000/5;
+			if (s > smin) nearend = 5000*mu/5;
 			else if (nearend > 0) nearend--;
 		}
 		for (i = 0; i < len; i++) {
@@ -167,7 +173,7 @@ public class RtpStreamReceiver extends Thread {
 			else
 				lin[i+off] = (short)(j*5);
 		}
-		r = (double)len/100000;
+		r = (double)len/(100000*mu);
 		smin = sm*r + smin*(1-r);
 	}
 	
@@ -175,7 +181,7 @@ public class RtpStreamReceiver extends Thread {
         AudioManager mAudioManager = (AudioManager) Receiver.mContext.getSystemService(
                     Context.AUDIO_SERVICE);
         mAudioManager.adjustStreamVolume(
-                    AudioManager.STREAM_VOICE_CALL,
+                    stream(),
                     keyCode == KeyEvent.KEYCODE_VOLUME_UP
                             ? AudioManager.ADJUST_RAISE
                             : AudioManager.ADJUST_LOWER,
@@ -187,7 +193,7 @@ public class RtpStreamReceiver extends Thread {
 			public void run() {
 				AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 				am.setStreamVolume(stream, vol, flags);
-				if (stream == AudioManager.STREAM_VOICE_CALL) restored = true;
+				if (stream == stream()) restored = true;
 			}
         }).start();
 	}
@@ -209,9 +215,9 @@ public class RtpStreamReceiver extends Thread {
 				track.setStereoVolume(AudioTrack.getMaxVolume(),AudioTrack.getMaxVolume());
 				break;
 		}
-		setStreamVolume(AudioManager.STREAM_VOICE_CALL,
+		setStreamVolume(stream(),
 				PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("volume"+speakermode, 
-				am.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)*
+				am.getStreamMaxVolume(stream())*
 				(speakermode == AudioManager.MODE_NORMAL?4:3)/4
 				),0);
 	}
@@ -219,7 +225,7 @@ public class RtpStreamReceiver extends Thread {
 	void saveVolume() {
 		if (restored) {
 			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-			edit.putInt("volume"+speakermode,am.getStreamVolume(AudioManager.STREAM_VOICE_CALL));
+			edit.putInt("volume"+speakermode,am.getStreamVolume(stream()));
 			edit.commit();
 		}
 	}
@@ -252,7 +258,7 @@ public class RtpStreamReceiver extends Thread {
 	
 	public static void setMode(int mode) {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, mode != AudioManager.MODE_NORMAL);
+		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, true);
 		edit.commit();
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
 		if (Integer.parseInt(Build.VERSION.SDK) >= 5)
@@ -263,16 +269,25 @@ public class RtpStreamReceiver extends Thread {
 	
 	public static void restoreMode() {
 		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, org.sipdroid.sipua.ui.Settings.DEFAULT_SETMODE)) {
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
+			edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, false);
+			edit.commit();
 			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE")) {
-				setMode(AudioManager.MODE_NORMAL);
-			} else {
-				Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
-				edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, false);
-				edit.commit();
+				AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
+				if (Integer.parseInt(Build.VERSION.SDK) >= 5)
+					am.setSpeakerphoneOn(false);
+				else
+					am.setMode(AudioManager.MODE_NORMAL);
 			}
 		}
 	}
 
+	void initMode() {
+		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL &&
+				(Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE")))
+			setMode(AudioManager.MODE_NORMAL);	
+	}
+	
 	public static void restoreSettings() {
 		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_OLDVALID, org.sipdroid.sipua.ui.Settings.DEFAULT_OLDVALID)) {
 			AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
@@ -324,23 +339,31 @@ public class RtpStreamReceiver extends Thread {
 	public static int jitter,mu;
 	
 	void setCodec() {
-		p_type.codec.init();
-		codec = p_type.codec.getTitle();
-		mu = p_type.codec.samp_rate()/8000;
-		maxjitter = AudioTrack.getMinBufferSize(p_type.codec.samp_rate(), 
-				AudioFormat.CHANNEL_CONFIGURATION_MONO, 
-				AudioFormat.ENCODING_PCM_16BIT);
-		if (maxjitter < 2*2*BUFFER_SIZE*3*mu)
-			maxjitter = 2*2*BUFFER_SIZE*3*mu;
-		track = new AudioTrack(AudioManager.STREAM_VOICE_CALL, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
-				maxjitter, AudioTrack.MODE_STREAM);
-		maxjitter /= 2*2;
-		minjitter = minjitteradjust = 500*mu;
-		jitter = 875*mu;
-		minheadroom = maxjitter*2;
-		timeout = 1;
-		luser = luser2 = -8000*mu;
-		cnt = cnt2 = user = lserver = 0;
+		synchronized (this) {
+			p_type.codec.init();
+			codec = p_type.codec.getTitle();
+			mu = p_type.codec.samp_rate()/8000;
+			maxjitter = AudioTrack.getMinBufferSize(p_type.codec.samp_rate(), 
+					AudioFormat.CHANNEL_CONFIGURATION_MONO, 
+					AudioFormat.ENCODING_PCM_16BIT);
+			if (maxjitter < 2*2*BUFFER_SIZE*3*mu)
+				maxjitter = 2*2*BUFFER_SIZE*3*mu;
+			track = new AudioTrack(stream(), p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
+					maxjitter, AudioTrack.MODE_STREAM);
+			maxjitter /= 2*2;
+			minjitter = minjitteradjust = 500*mu;
+			jitter = 875*mu;
+			minheadroom = maxjitter*2;
+			timeout = 1;
+			luser = luser2 = -8000*mu;
+			cnt = cnt2 = user = lserver = 0;
+		}
+	}
+	
+	void write(short a[],int b,int c) {
+		synchronized (this) {
+			user += track.write(a,b,c);
+		}
 	}
 	
 	/** Runs it in a new Thread. */
@@ -360,7 +383,7 @@ public class RtpStreamReceiver extends Thread {
 			println("Reading blocks of max " + buffer.length + " bytes");
 
 		running = true;
-		speakermode = Receiver.docked > 0 && Receiver.headset <= 0?AudioManager.MODE_NORMAL:AudioManager.MODE_IN_CALL;
+		speakermode = Receiver.speakermode();
 		restored = false;
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
@@ -370,7 +393,8 @@ public class RtpStreamReceiver extends Thread {
 		Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_NEVER);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,AudioManager.VIBRATE_SETTING_OFF);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,AudioManager.VIBRATE_SETTING_OFF);
-		if (oldvol != -1) oldvol = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+		if (oldvol == -1) oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+		initMode();
 		setCodec();
 		short lin[] = new short[BUFFER_SIZE];
 		short lin2[] = new short[BUFFER_SIZE];
@@ -399,7 +423,7 @@ public class RtpStreamReceiver extends Thread {
 					tg.stopTone();
 					track.pause();
 					for (int i = maxjitter*2; i > 0; i -= BUFFER_SIZE)
-						user += track.write(lin2,0,i>BUFFER_SIZE?BUFFER_SIZE:i);
+						write(lin2,0,i>BUFFER_SIZE?BUFFER_SIZE:i);
 					cnt += maxjitter*2;
 					track.play();
 					empty();
@@ -439,7 +463,9 @@ public class RtpStreamReceiver extends Thread {
 					 if (rtp_packet.getPayloadType() != p_type.number && p_type.change(rtp_packet.getPayloadType())) {
 						 track.stop();
 						 track.release();
+						 saveVolume();
 						 setCodec();
+						 restoreVolume();
 					 }
 					 len = p_type.codec.decode(buffer, lin, rtp_packet.getPayloadLength());
 					 
@@ -460,15 +486,15 @@ public class RtpStreamReceiver extends Thread {
 							 minheadroom = maxjitter*2;
 						 }
 					todo = jitter - headroom;
-					user += track.write(lin2,0,todo>BUFFER_SIZE?BUFFER_SIZE:todo);
+					write(lin2,0,todo>BUFFER_SIZE?BUFFER_SIZE:todo);
 				 }
 
 				 if (cnt > 500*mu && cnt2 < 2) {
 					 todo = headroom - jitter;
 					 if (todo < len)
-						 user += track.write(lin,todo,len-todo);
+						 write(lin,todo,len-todo);
 				 } else
-					 user += track.write(lin,0,len);
+					 write(lin,0,len);
 				 
 				 if (seq != 0) {
 					 getseq = gseq&0xff;
@@ -520,16 +546,10 @@ public class RtpStreamReceiver extends Thread {
 		tg.stopTone();
 		tg.release();
 		saveVolume();
-		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL,oldvol,0);
-		if (Build.MODEL.contains("Galaxy") || Build.MODEL.contains("Samsung"))
-			while (RtpStreamSender.m != 0)
-				try {
-					sleep(1000);
-				} catch (InterruptedException e) {
-				}
+		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		restoreSettings();
-		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL,oldvol,0);
-		oldvol = -1;
+		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
+		oldvol = speakermode = -1;
 		tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
 		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
 		try {

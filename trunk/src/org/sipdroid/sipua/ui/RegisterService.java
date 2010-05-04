@@ -26,6 +26,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.IBinder;
 
 public class RegisterService extends Service {
@@ -56,6 +57,7 @@ public class RegisterService extends Service {
 			 intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
 			 intentfilter.addAction(Intent.ACTION_SCREEN_ON);
 			 intentfilter.addAction(Receiver.ACTION_VPN_CONNECTIVITY);
+			 intentfilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 	         registerReceiver(m_receiver = new Receiver(), intentfilter);      
         }
         Receiver.engine(this).isRegistered();

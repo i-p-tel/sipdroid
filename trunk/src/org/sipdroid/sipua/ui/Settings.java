@@ -392,6 +392,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
    			
    			reload();
    			updateSummaries();
+   			updateSleep();
 		}
 	};
 
@@ -499,7 +500,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		int get = android.provider.Settings.System.getInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, -1);
 		int set = get;
 		boolean wlan = settings.getBoolean(PREF_WLAN, DEFAULT_WLAN);
-		boolean g3 = settings.getBoolean(PREF_3G, DEFAULT_3G);
+		boolean g3 = settings.getBoolean(PREF_3G, DEFAULT_3G) ||
+			settings.getBoolean(PREF_EDGE, DEFAULT_EDGE);
 		boolean ownwifi = settings.getBoolean(PREF_OWNWIFI, DEFAULT_OWNWIFI);
 
 		if (g3 && ! ownwifi) {
