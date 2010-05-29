@@ -64,8 +64,10 @@ public class SIPUri extends Activity {
 				target = uri.getLastPathSegment();
 		}
 		if (!Sipdroid.release) Log.v("SIPUri", "sip uri: " + target);
-		if (m_AlertDlg != null) 
+		if (m_AlertDlg != null)  {
 			m_AlertDlg.cancel();
+			m_AlertDlg = null;
+		}
 		if (target.equals("") || !Receiver.engine(this).call(target)) {
 			m_AlertDlg = new AlertDialog.Builder(this)
 			.setMessage(R.string.notfast)

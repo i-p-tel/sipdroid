@@ -58,7 +58,7 @@ public class RtpStreamSender extends Thread {
 	Codecs.Map p_type;
 
 	/** Number of frame per second */
-	long frame_rate;
+	int frame_rate;
 
 	/** Number of bytes per frame */
 	int frame_size;
@@ -142,10 +142,20 @@ public class RtpStreamSender extends Thread {
 			  SipdroidSocket src_socket, String dest_addr,
 			  int dest_port) {
 		this.p_type = payload_type;
-		this.frame_rate = frame_rate;
-		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_SERVER, "").equals(Settings.DEFAULT_SERVER) &&
-				(payload_type.codec.number() == 0 || payload_type.codec.number() == 8))
-			this.frame_size = 1024;
+		this.frame_rate = (int)frame_rate;
+		if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_SERVER, "").equals(Settings.DEFAULT_SERVER))
+			switch (payload_type.codec.number()) {
+			case 0:
+			case 8:
+				this.frame_size = 1024;
+				break;
+			case 9:
+				this.frame_size = 960;
+				break;
+			default:
+				this.frame_size = frame_size;
+				break;
+			}
 		else
 			this.frame_size = frame_size;
 		this.do_sync = do_sync;
@@ -255,15 +265,11 @@ public class RtpStreamSender extends Thread {
 	public void run() {
 		if (rtp_socket == null)
 			return;
-		byte[] buffer = new byte[frame_size + 12];
-		RtpPacket rtp_packet = new RtpPacket(buffer, 0);
-		rtp_packet.setPayloadType(p_type.number);
 		int seqn = 0;
 		long time = 0;
 		double p = 0;
 		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(Settings.PREF_IMPROVE, Settings.DEFAULT_IMPROVE);
 		int micgain = (int)(Settings.getMicGain()*10);
-		long frame_period = 1000 / frame_rate;
 		long last_tx_time = 0;
 		long next_tx_delay;
 		long now;
@@ -271,15 +277,29 @@ public class RtpStreamSender extends Thread {
 		m = 1;
 		int dtframesize = 4;
 		
-		if (DEBUG)
-			println("Reading blocks of " + buffer.length + " bytes");
-
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
 		mu = p_type.codec.samp_rate()/8000;
 		int min = AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
 				AudioFormat.CHANNEL_CONFIGURATION_MONO, 
 				AudioFormat.ENCODING_PCM_16BIT);
-		if (min <= 4096) min *= 3/2;
+		if (min < 4096) {
+			min = 4096*3/2;
+			if (min <= 2048 && frame_size == 1024) frame_size /= 2;
+		} else if (min == 4096) {
+			min *= 3/2;
+			if (frame_size == 960) frame_size = 320;
+		} else {
+			if (frame_size == 960) frame_size = 320;
+			if (frame_size == 1024) frame_size *= 2;
+		}
+		frame_rate = p_type.codec.samp_rate()/frame_size;
+		long frame_period = 1000 / frame_rate;
+		frame_rate *= 1.5;
+		byte[] buffer = new byte[frame_size + 12];
+		RtpPacket rtp_packet = new RtpPacket(buffer, 0);
+		rtp_packet.setPayloadType(p_type.number);
+		if (DEBUG)
+			println("Reading blocks of " + buffer.length + " bytes");
 		
 		println("Sample rate  = " + p_type.codec.samp_rate());
 		println("Buffer size = " + min);
@@ -287,8 +307,8 @@ public class RtpStreamSender extends Thread {
 		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
 				min);
 		
-		short[] lin = new short[frame_size*11];
-		int num,ring = 0;
+		short[] lin = new short[frame_size*(frame_rate+1)];
+		int num,ring = 0,pos;
 		random = new Random();
 		InputStream alerting = null;
 		try {
@@ -357,7 +377,7 @@ public class RtpStreamSender extends Thread {
 			 }
 			 //DTMF change end
 
-			 if (frame_size < 960) {
+			 if (frame_size < 480) {
 				 now = System.currentTimeMillis();
 				 next_tx_delay = frame_period - (now - last_tx_time);
 				 last_tx_time = now;
@@ -369,27 +389,28 @@ public class RtpStreamSender extends Thread {
 					 last_tx_time += next_tx_delay-sync_adj;
 				 }
 			 }
-			 num = record.read(lin,(ring+delay*frame_size)%(frame_size*11),frame_size);
+			 pos = (ring+delay*frame_rate*frame_size)%(frame_size*(frame_rate+1));
+			 num = record.read(lin,pos,frame_size);
 			 if (num <= 0)
 				 continue;
 			 if (!p_type.codec.isValid())
 				 continue;
 
 			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
- 				 calc(lin,(ring+delay*frame_size)%(frame_size*11),num);
+ 				 calc(lin,pos,num);
  	 			 if (RtpStreamReceiver.nearend != 0)
-	 				 noise(lin,(ring+delay*frame_size)%(frame_size*11),num,p);
+	 				 noise(lin,pos,num,p/2);
 	 			 else if (nearend == 0)
 	 				 p = 0.9*p + 0.1*s;
  			 } else switch (micgain) {
  			 case 1:
- 				 calc1(lin,(ring+delay*frame_size)%(frame_size*11),num);
+ 				 calc1(lin,pos,num);
  				 break;
  			 case 5:
- 				 calc5(lin,(ring+delay*frame_size)%(frame_size*11),num);
+ 				 calc5(lin,pos,num);
  				 break;
  			 case 10:
- 				 calc10(lin,(ring+delay*frame_size)%(frame_size*11),num);
+ 				 calc10(lin,pos,num);
  				 break;
  			 }
 			 if (Receiver.call_state != UserAgent.UA_STATE_INCALL &&
@@ -406,7 +427,7 @@ public class RtpStreamSender extends Thread {
 					 num = p_type.codec.encode(lin, 0, buffer, num);
 				 }
 			 } else {
-				 num = p_type.codec.encode(lin, ring%(frame_size*11), buffer, num);
+				 num = p_type.codec.encode(lin, ring%(frame_size*(frame_rate+1)), buffer, num);
 			 }
  			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
@@ -422,7 +443,7 @@ public class RtpStreamSender extends Thread {
  				 time += frame_size/2;
  			 else
  				 time += frame_size;
- 			 if (improve && RtpStreamReceiver.good != 0 &&
+ 			 if (improve && delay == 0 && RtpStreamReceiver.good != 0 &&
  					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01 &&
  					 (p_type.codec.number() == 0 || p_type.codec.number() == 8 || p_type.codec.number() == 9))        	
  				 m = 2;

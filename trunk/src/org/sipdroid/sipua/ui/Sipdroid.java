@@ -35,6 +35,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CallLog.Calls;
@@ -190,7 +191,31 @@ public class Sipdroid extends Activity {
 		setAccountString();
 
 		final Context mContext = this;
-		if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) &&
+		if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_MESSAGE, Settings.DEFAULT_MESSAGE))
+			new AlertDialog.Builder(this)
+				.setMessage(R.string.dialog_message)
+	            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	                		Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+	                		edit.putBoolean(Settings.PREF_MESSAGE, true);
+	                		edit.commit();
+	            			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=PlLZHCHlSY4")));
+	                   }
+	                })
+	            .setNeutralButton(R.string.no, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	
+	                    }
+	                })
+	            .setNegativeButton(R.string.dontask, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	                		Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+	                		edit.putBoolean(Settings.PREF_MESSAGE, true);
+	                		edit.commit();
+	                    }
+	                })
+				.show();
+		else if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) &&
 				!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_NODEFAULT, Settings.DEFAULT_NODEFAULT))
 			new AlertDialog.Builder(this)
 				.setMessage(R.string.dialog_default)
@@ -273,7 +298,7 @@ public class Sipdroid extends Activity {
 			break;
 
         case KeyEvent.KEYCODE_BACK:
-            moveTaskToBack(true);
+            finish();
             return true;
 
         }

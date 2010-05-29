@@ -94,7 +94,7 @@ JNIEXPORT jint JNICALL Java_org_sipdroid_codecs_G722_encode
 			
 		env->GetShortArrayRegion(lin, offset + i,frsz, indata);
 
-		ret=g722_encode(&enc_state,(uint8_t *) adpcmdata, indata, size);
+		ret=g722_encode(&enc_state,(uint8_t *) adpcmdata, indata, frsz);
 
 #ifdef DEBUG_G722
 			__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, 

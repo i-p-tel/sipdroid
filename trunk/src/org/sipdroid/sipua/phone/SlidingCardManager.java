@@ -288,7 +288,7 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
 
         // Update slide hints based on the current Phone state.
 
-        final boolean hasRingingCall = Receiver.ccCall.getState() == Call.State.INCOMING;
+        final boolean hasRingingCall = Receiver.ccCall != null && Receiver.ccCall.getState() == Call.State.INCOMING;
 
         int slideUpHint = 0;
         int slideDownHint = 0;

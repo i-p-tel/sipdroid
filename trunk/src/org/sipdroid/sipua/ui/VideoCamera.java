@@ -46,7 +46,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -129,7 +131,7 @@ public class VideoCamera extends CallScreen implements
                             }
                             text = hoursString + ":" + text;
                         }
-                        mRecordingTimeView.setText(getResources().getString(R.string.card_title_in_progress)+" "+text);
+                        mRecordingTimeView.setText("          "+getResources().getString(R.string.card_title_in_progress)+" "+text);
 
                         // Work around a limitation of the T-Mobile G1: The T-Mobile
                         // hardware blitter can't pixel-accurately scale and clip at the same time,
@@ -179,7 +181,11 @@ public class VideoCamera extends CallScreen implements
 		try {
 			lss = new LocalServerSocket("Sipdroid");
 			receiver.connect(new LocalSocketAddress("Sipdroid"));
+			receiver.setReceiveBufferSize(500000);
+			receiver.setSendBufferSize(500000);
 			sender = lss.accept();
+			sender.setReceiveBufferSize(500000);
+			sender.setSendBufferSize(500000);
 		} catch (IOException e1) {
 			if (!Sipdroid.release) e1.printStackTrace();
 			finish();
@@ -281,6 +287,8 @@ public class VideoCamera extends CallScreen implements
         }
     }
 
+    boolean videoQualityHigh;
+    
     // initializeVideo() starts preview and prepare media recorder.
     // Returns false if initializeVideo fails
     private boolean initializeVideo() {
@@ -301,7 +309,7 @@ public class VideoCamera extends CallScreen implements
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mMediaRecorder.setOutputFile(sender.getFileDescriptor());
 
-		boolean videoQualityHigh = false;
+		videoQualityHigh = PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_VQUALITY, org.sipdroid.sipua.ui.Settings.DEFAULT_VQUALITY).equals("high");
 
         if (intent.hasExtra(MediaStore.EXTRA_VIDEO_QUALITY)) {
             int extraVideoQuality = intent.getIntExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
@@ -403,6 +411,7 @@ public class VideoCamera extends CallScreen implements
     					RtpSocket rtp_socket = null;
     					int seqn = 0;
     					int num,number = 0,src,dest;
+    					int avgtime = 30;
 
     					try {
     						rtp_socket = new RtpSocket(new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
@@ -423,7 +432,7 @@ public class VideoCamera extends CallScreen implements
 						}
 						
      					rtp_packet.setPayloadType(103);
-    					while (Receiver.listener_video != null) {
+    					while (Receiver.listener_video != null && videoValid()) {
     						num = -1;
     						try {
     							num = fis.read(buffer,14+number,frame_size-number);
@@ -439,10 +448,10 @@ public class VideoCamera extends CallScreen implements
     							continue;							
     						}
     						number += num;
-    						
-    						for (num = 14+number-2; num > 14; num--)
+    						    						
+        					for (num = 14; num <= 14+number-2; num++)
     							if (buffer[num] == 0 && buffer[num+1] == 0) break;
-    						if (num == 14) {
+    						if (num > 14+number-2) {
     							num = 0;
     							rtp_packet.setMarker(false);
     						} else {	
@@ -457,21 +466,39 @@ public class VideoCamera extends CallScreen implements
     			 			} catch (IOException e) {
     			 				if (!Sipdroid.release) e.printStackTrace();	
     			 			}
-    			 			try {
-    			 				if (fis.available() < 24000)
-    			 					Thread.sleep((number-num)/24);
-							} catch (Exception e) {
-								break;
-							}
 							
     			 			if (num > 0) {
     				 			num -= 2;
     				 			dest = 14;
     				 			src = 14+number - num;
+    				 			if (num > 0 && buffer[src] == 0) {
+    				 				src++;
+    				 				num--;
+    				 			}
     				 			number = num;
     				 			while (num-- > 0)
     				 				buffer[dest++] = buffer[src++];
     							buffer[12] = 4;
+    							try {
+    								if (videoQualityHigh) {
+    									if (fis.available() > 60000 && avgtime > 0)
+											avgtime--;
+    									else {
+    										if (fis.available() < 10000 && avgtime < 50)
+    											avgtime++;
+    									}
+	    							} else {
+										if (fis.available() > 30000 && avgtime > 0)
+											avgtime--;   								
+										else {
+											if (fis.available() < 5000 && avgtime < 50)
+												avgtime++;
+										}
+    								}
+    								Thread.sleep(avgtime);
+								} catch (Exception e) {
+    								break;
+								}
         			 			rtp_packet.setTimestamp(SystemClock.elapsedRealtime()*90);
     			 			} else {
     			 				number = 0;
@@ -479,12 +506,16 @@ public class VideoCamera extends CallScreen implements
     			 			}
     					}
     					rtp_socket.getDatagramSocket().close();
+    					try {
+							while (fis.read(buffer,0,frame_size) > 0);
+						} catch (IOException e) {
+						}
     				}
     			}).start();   
             }
         	
             speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
-            RtpStreamSender.delay = 10;
+            RtpStreamSender.delay = 1;
         }
     }
 
@@ -536,6 +567,17 @@ public class VideoCamera extends CallScreen implements
         	return true;
 		}
 		return false;
+	}
+	
+	static TelephonyManager tm;
+	
+	static boolean videoValid() {
+		if (Receiver.on_wlan)
+			return true;
+		if (tm == null) tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		if (tm.getNetworkType() < TelephonyManager.NETWORK_TYPE_UMTS)
+			return false;
+		return true;	
 	}
 	
 }

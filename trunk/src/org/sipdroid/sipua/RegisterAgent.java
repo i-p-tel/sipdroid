@@ -302,7 +302,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 		Message req = getSubscribeMessage(false);
 		if (!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(Settings.PREF_MWI_ENABLED, Settings.DEFAULT_MWI_ENABLED))
 			return;
-		sd.subscribe(req);
+		if (sd != null) sd.subscribe(req);
 	}
 
 	void delayStartMWI()

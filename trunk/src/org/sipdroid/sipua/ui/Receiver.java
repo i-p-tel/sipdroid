@@ -93,6 +93,9 @@ import org.sipdroid.sipua.phone.Connection;
 		public final static int AUTO_ANSWER_NOTIFICATION = 4;
 		public final static int MWI_NOTIFICATION = 5;
 		
+		final int MSG_SCAN = 1;
+		final int MSG_ENABLE = 2;
+		
 		final static long[] vibratePattern = {0,1000,1000};
 		
 		public static int docked = -1,headset = -1;
@@ -149,7 +152,6 @@ import org.sipdroid.sipua.phone.Connection;
 				switch(call_state)
 				{
 				case UserAgent.UA_STATE_INCOMING_CALL:
-					lock(true);
 					enable_wifi(true);
 					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
 					String text = caller.toString();
@@ -198,7 +200,6 @@ import org.sipdroid.sipua.phone.Connection;
 		        	Checkin.checkin(true);
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
-					lock(true);
 					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
 					engine(mContext).register();
@@ -213,7 +214,6 @@ import org.sipdroid.sipua.phone.Connection;
 		        	Checkin.checkin(true);
 					break;
 				case UserAgent.UA_STATE_IDLE:
-					lock(false);
 					broadcastCallStateChanged("IDLE", null);
 					onText(CALL_NOTIFICATION, null, 0,0);
 					ccCall.setState(Call.State.DISCONNECTED);
@@ -228,7 +228,6 @@ import org.sipdroid.sipua.phone.Connection;
 					engine(mContext).listen();
 					break;
 				case UserAgent.UA_STATE_INCALL:
-					lock(true);
 					broadcastCallStateChanged("OFFHOOK", null);
 					if (ccCall.base == 0) {
 						ccCall.base = SystemClock.elapsedRealtime();
@@ -241,7 +240,6 @@ import org.sipdroid.sipua.phone.Connection;
 			        mContext.startActivity(createIntent(InCallScreen.class));
 					break;
 				case UserAgent.UA_STATE_HOLD:
-					lock(false);
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_on_hold), android.R.drawable.stat_sys_phone_call_on_hold,ccCall.base);
 					ccCall.setState(Call.State.HOLDING);
 			        mContext.startActivity(createIntent(InCallScreen.class));
@@ -429,28 +427,32 @@ import org.sipdroid.sipua.phone.Connection;
 			    
 		static PowerManager.WakeLock pwl,pwl2;
 		
-		static void lock(boolean lock) {
+		public static void lock(boolean lock) {
+			if (call_state == UserAgent.UA_STATE_HOLD) lock = false;
 			if (lock) {
 				if (pwl2 == null) {
 					PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 					pwl2 = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.Receiver");
-				}
-				if (!pwl2.isHeld())
 					pwl2.acquire();
-			} else if (pwl2 != null && pwl2.isHeld())
+				}
+			} else if (pwl2 != null) {
 				pwl2.release();
+				pwl2 = null;
+			}
 			if (Build.MODEL.equals("Nexus One") ||
 					Build.MODEL.equals("Archos5") ||
+					Build.MODEL.equals("HTC Incredible") ||
 					Build.MODEL.equals("HTC Desire")) {
-				if (lock) {
+				if (lock && on_wlan) {
 					if (pwl == null) {
 						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-						pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "Sipdroid.Receiver");
-					}
-					if (!pwl.isHeld())
+						pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.Receiver");
 						pwl.acquire();
-				} else if (pwl != null && pwl.isHeld())
+					}
+				} else if (pwl != null) {
 					pwl.release();
+					pwl = null;
+				}
 			}
 		}
 
@@ -580,9 +582,8 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 
 		public static void progress() {
-			int mode;
-			
-			mode = RtpStreamReceiver.speakermode;
+			if (call_state == UserAgent.UA_STATE_IDLE) return;
+			int mode = RtpStreamReceiver.speakermode;
 			if (mode == -1)
 				mode = speakermode();
 			if (mode == AudioManager.MODE_NORMAL)
@@ -680,8 +681,15 @@ import org.sipdroid.sipua.phone.Connection;
 		
 	    Handler mHandler = new Handler() {
 	    	public void handleMessage(Message msg) {
-	        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-	        	wm.startScan();
+	    		switch (msg.what) {
+	    		case MSG_SCAN:
+		        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+		        	wm.startScan();
+	    			break;
+	    		case MSG_ENABLE:
+	    			enable_wifi(true);
+	    			break;
+	    		}
 	    	}
 	    };
 
@@ -737,7 +745,7 @@ import org.sipdroid.sipua.phone.Connection;
 	        	alarm(0,OwnWifi.class);
 	        } else
 	        if (intentAction.equals(Intent.ACTION_USER_PRESENT)) {
-	        	enable_wifi(true);
+	        	mHandler.sendEmptyMessageDelayed(MSG_ENABLE, 3000);
 	        } else
 	        if (intentAction.equals(Intent.ACTION_SCREEN_OFF)) {
 	        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
@@ -747,9 +755,13 @@ import org.sipdroid.sipua.phone.Connection;
 	        		alarm(2*60,OwnWifi.class);
 	        	else
 	        		alarm(15*60,OwnWifi.class);
+	        	if (SipdroidEngine.pwl != null && SipdroidEngine.pwl.isHeld()) {
+	        		SipdroidEngine.pwl.release();
+	        		SipdroidEngine.pwl.acquire();
+	        	}
 	        } else
 		    if (intentAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
-		    	mHandler.sendEmptyMessageDelayed(0, 3000);
+		    	mHandler.sendEmptyMessageDelayed(MSG_SCAN, 3000);
 	        }
 		}   
 }

@@ -121,11 +121,12 @@ public class JAudioLauncher implements MediaLauncher
       {  sender.halt(); sender=null;
          printLog("sender halted",LogLevel.LOW);
       }      
-       if (receiver!=null)
+      if (receiver!=null)
       {  receiver.halt(); receiver=null;
          printLog("receiver halted",LogLevel.LOW);
       }      
-      socket.close();
+      if (socket != null)
+    	  socket.close();
       return true;
    }
 
