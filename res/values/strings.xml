@@ -120,6 +120,15 @@
         <item>udp</item>
         <item>tcp</item>
     </string-array>
+<string name="settings_vquality">Video Quality</string>
+    <string-array name="vquality_display_values">
+        <item>High (352x288 @ 360kbit)</item>
+        <item>Low (176x144 @ 192kbit)</item>
+    </string-array>
+    <string-array name="vquality_values">
+        <item>high</item>
+        <item>low</item>
+    </string-array>
 <string name="settings_stun">Use STUN Server</string>
 <string name="settings_stun_server">STUN Server name</string>
 <string name="settings_stun_server_port">STUN Server port</string>
@@ -135,6 +144,7 @@
 <string name="dialog_default">Sipdroid is not currently set as default phone. Would you like to make it as default phone?
 \n
 \nIf you answer \'No\' here, you can still dial over Sipdroid from the system by adding \'+\' behind a number in Dialer, or by selecting \'text to\' in Contacts.</string>
+<string name="dialog_message">Would you like to see a message from Pascal introducing Sipdroid 1.5?</string>
 <string name="yes">Yes</string>
 <string name="no">No</string>
 <string name="dontask">Don\'t ask me again</string>
@@ -180,7 +190,7 @@
 <string name="settings_nodata2">Indicate missing voice packets by audible tones</string>
 
 <string name="settings_advanced_options">Advanced Options</string>
-<string name="settings_audio_options">Audio Settings</string>
+<string name="settings_av_options">Audio/Video Settings</string>
 <string name="settings_policy_never">Changed system sleep policy to keep Wi-Fi on.</string>
 <string name="settings_policy_default">Reset Wi-Fi sleep policy to default.</string>
 <string name="settings_search">Search &amp; Replace</string>

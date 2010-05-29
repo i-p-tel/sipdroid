@@ -95,6 +95,11 @@
         <item>UDP (kürzerer Standby mit 3G)</item>
         <item>TCP (längerer Standby mit 3G)</item>
     </string-array>
+<string name="settings_vquality">Video-Qualität</string>
+    <string-array name="vquality_display_values">
+        <item>Hoch (352x288 @ 360kbit)</item>
+        <item>Niedrig (176x144 @ 192kbit)</item>
+    </string-array>
 
 <string name="settings_options">Anrufeinstellungen</string>
 <string name="settings_wlan">WLAN verwenden</string>
@@ -141,7 +146,7 @@
 <string name="settings_nodata2">Fehlende Sprachpakete mit Hinweistönen anzeigen</string>
 
 <string name="settings_advanced_options">Erweiterte Einstellungen</string>
-<string name="settings_audio_options">Audioeinstellungen</string>
+<string name="settings_av_options">Audio/Videoeinstellungen</string>
 <string name="settings_policy_never">Systemeinstellung geändert: WLAN bleibt bei Standy in Betrieb</string>
 <string name="settings_policy_default">Systemeinstellung wiederhergestellt: WLAN geht bei Standby außer Betrieb</string>
 <string name="settings_search">Suchen &amp; Ersetzen</string>

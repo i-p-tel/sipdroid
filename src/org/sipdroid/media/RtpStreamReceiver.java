@@ -161,7 +161,7 @@ public class RtpStreamReceiver extends Thread {
 			j = lin[i+off];
 			s = 0.03*Math.abs(j) + 0.97*s;
 			if (s < sm) sm = s;
-			if (s > smin) nearend = 5000*mu/5;
+			if (s > smin) nearend = 6000*mu/5;
 			else if (nearend > 0) nearend--;
 		}
 		for (i = 0; i < len; i++) {
@@ -403,6 +403,7 @@ public class RtpStreamReceiver extends Thread {
 		track.play();
 		System.gc();
 		while (running) {
+			Receiver.lock(true);
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 				tg.stopTone();
 				track.pause();
@@ -541,6 +542,7 @@ public class RtpStreamReceiver extends Thread {
 				 lserver = server;
 			}
 		}
+		Receiver.lock(false);
 		track.stop();
 		track.release();
 		tg.stopTone();
@@ -550,15 +552,6 @@ public class RtpStreamReceiver extends Thread {
 		restoreSettings();
 		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		oldvol = speakermode = -1;
-		tg = new ToneGenerator(AudioManager.STREAM_RING,ToneGenerator.MAX_VOLUME/4*3);
-		tg.startTone(ToneGenerator.TONE_PROP_PROMPT);
-		try {
-			sleep(500);
-		} catch (InterruptedException e) {
-		}
-		tg.stopTone();
-		tg.release();
-
 		p_type.codec.close();
 		rtp_socket.close();
 		rtp_socket = null;

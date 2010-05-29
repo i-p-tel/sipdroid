@@ -95,7 +95,7 @@
 				android:persistent="false"
 				android:ringtoneType="ringtone" /> 
 	</PreferenceScreen>
-	<PreferenceScreen android:title="@string/settings_audio_options">
+	<PreferenceScreen android:title="@string/settings_av_options">
 			<ListPreference
 				android:key="eargain"
 				android:title="@string/settings_eargain"
@@ -124,6 +124,13 @@
 				android:entryValues="@array/eargain_values"
 				android:defaultValue="1.0"
 				android:dialogTitle="@string/settings_hmicgain" />
+			<ListPreference
+				android:key="vquality"
+				android:title="@string/settings_vquality"
+				android:entries="@array/vquality_display_values"
+				android:entryValues="@array/vquality_values"
+				android:defaultValue="low"
+				android:dialogTitle="@string/settings_vquality" />
 	</PreferenceScreen>
 	<PreferenceScreen
 		android:key="codecs"

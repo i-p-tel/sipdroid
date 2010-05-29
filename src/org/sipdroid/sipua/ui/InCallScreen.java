@@ -96,7 +96,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	public void onStop() {
 		super.onStop();
 		mHandler.removeMessages(MSG_BACK);
-		finish();
+		if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
+			finish();
 	}
 	
 	@Override
@@ -140,7 +141,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			// or call log because it is too easy to dial accidentally from there
 	        startActivity(Receiver.createHomeIntent());
 		}
-//		moveTaskToBack(true);
 		onStop();
 	}
 	
@@ -188,8 +188,9 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 						}
 						keepalive.setPayloadType(126);
 						try {
+							sleep(3000);
 							rtp_socket.send(keepalive);
-						} catch (IOException e1) {
+						} catch (Exception e1) {
 							return;
 						}
 						for (;;) {
@@ -204,6 +205,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 								}
 							}
 							if (videopacket.getPayloadLength() > 200) {
+								enabled = true;
 					            speakermode = Receiver.engine(mContext).speaker(AudioManager.MODE_NORMAL);
 					            speakervalid = Receiver.ccConn.date;
 								Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("rtsp://"+Receiver.engine(mContext).getRemoteAddr()+"/"+Receiver.engine(mContext).getRemoteVideo()+"/sipdroid"));
@@ -426,7 +428,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(true);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(true);
 			menu.findItem(SPEAKER_MENU_ITEM).setVisible(Receiver.headset <= 0);
-			menu.findItem(VIDEO_MENU_ITEM).setVisible(Receiver.engine(this).getRemoteVideo() != 0);
+			menu.findItem(VIDEO_MENU_ITEM).setVisible(VideoCamera.videoValid() && Receiver.call_state == UserAgent.UA_STATE_INCALL && Receiver.engine(this).getRemoteVideo() != 0);
 			menu.findItem(TRANSFER_MENU_ITEM).setVisible(true);
 		} else {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(false);

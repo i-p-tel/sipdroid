@@ -186,9 +186,9 @@ public abstract class BaseMessage {
 		String call_id = getCallIdHeader().getCallId();
 		ViaHeader top_via = getViaHeader();
 		String branch = null;
-		if (top_via.hasBranch())
+		if (top_via != null && top_via.hasBranch())
 			branch = top_via.getBranch();
-		String sent_by = top_via.getSentBy();
+//		String sent_by = top_via.getSentBy();
 		CSeqHeader cseqh = getCSeqHeader();
 		long seqn = cseqh.getSequenceNumber();
 		String method = cseqh.getMethod();

@@ -162,28 +162,28 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Integer.parseInt(Build.VERSION.SDK) >= 5)
+		if (Integer.parseInt(Build.VERSION.SDK) >= 5 && Integer.parseInt(Build.VERSION.SDK) <= 7)
 			disableKeyguard();
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
-		if (Integer.parseInt(Build.VERSION.SDK) >= 5)
+		if (Integer.parseInt(Build.VERSION.SDK) >= 5 && Integer.parseInt(Build.VERSION.SDK) <= 7)
 			reenableKeyguard();
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		if (Integer.parseInt(Build.VERSION.SDK) < 5)
+		if (Integer.parseInt(Build.VERSION.SDK) < 5 || Integer.parseInt(Build.VERSION.SDK) > 7)
 			disableKeyguard();
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		if (Integer.parseInt(Build.VERSION.SDK) < 5)
+		if (Integer.parseInt(Build.VERSION.SDK) < 5 || Integer.parseInt(Build.VERSION.SDK) > 7)
 			reenableKeyguard();
 	}
 

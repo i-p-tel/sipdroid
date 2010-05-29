@@ -61,7 +61,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 	public SipProvider sip_provider;
 	
-	static PowerManager.WakeLock wl,pwl;
+	public static PowerManager.WakeLock wl,pwl;
 	
 	public boolean StartEngine() {
 		try {
@@ -70,6 +70,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 				wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.SipdroidEngine");
 				if (Build.MODEL.equals("Nexus One") ||
 						Build.MODEL.equals("Archos5") ||
+						Build.MODEL.equals("HTC Incredible") ||
 						Build.MODEL.equals("HTC Desire"))
 					pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.SipdroidEngine");
 			}
@@ -139,7 +140,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	public void CheckEngine() {
-		if (!sip_provider.hasOutboundProxy())
+		if (sip_provider != null && !sip_provider.hasOutboundProxy())
 			setOutboundProxy();
 	}
 

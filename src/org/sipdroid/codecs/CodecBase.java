@@ -86,6 +86,9 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 		return enabled;
 	}
 
+	TelephonyManager tm;
+	int nt;
+	
 	public boolean isValid() {
 		if (!isEnabled())
 			return false;
@@ -93,8 +96,8 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 			return true;
 		if (wlanOnly())
 			return false;
-		TelephonyManager tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-		int nt = tm.getNetworkType();
+		if (tm == null) tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		nt = tm.getNetworkType();
 		if (wlanOr3GOnly() && nt < TelephonyManager.NETWORK_TYPE_UMTS)
 			return false;
 		if (nt < TelephonyManager.NETWORK_TYPE_EDGE)
