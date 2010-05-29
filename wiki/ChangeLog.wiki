@@ -3,6 +3,10 @@
 
 === Beta-Versions ===
 
+  * 1.5
+    * Video SIP calling in High Quality
+    * Better on HTC Incredible (issue 268)
+
   * 1.4.7
     * Fix issue 132, issue 323, issue 333, issue 354, issue 399, issue 408, issue 413
 
