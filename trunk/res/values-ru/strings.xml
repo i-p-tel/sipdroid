@@ -25,8 +25,7 @@
 /////////////////////////////////////////////////////////////////////
 -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
 <string name="app_name">Sipdroid</string>
 <string name="pstn_name">Телефон</string>
@@ -121,6 +120,15 @@
         <item>udp</item>
         <item>tcp</item>
     </string-array>
+<string name="settings_vquality">Качество видео</string>
+    <string-array name="vquality_display_values">
+        <item>Высокое (352×288 @ 360Кб)</item>
+        <item>Низкое (176×144 @ 192Кб)</item>
+    </string-array>
+    <!-- <string-array name="vquality_values">
+        <item>high</item>
+        <item>low</item>
+    </string-array> -->
 <string name="settings_stun">STUN-сервер</string>
 <string name="settings_stun_server">Имя STUN-сервера</string>
 <string name="settings_stun_server_port">Порт STUN-сервера</string>
@@ -136,6 +144,7 @@
 <string name="dialog_default">Sipdroid не является телефоном по умолчанию. Хотите установить его по умолчанию?
 \n
 \nЕсли Вы ответите «Нет», то всё равно сможете звонить через Sipdroid, добавив «+» перед номером телефона или выбрав «Отправить сообщение» в Контактах.</string>
+<string name="dialog_message">Хотите увидеть обращение Паскаля о новой версии Sipdroid 1.5?</string>
 <string name="yes">Да</string>
 <string name="no">Нет</string>
 <string name="dontask">Не спрашивать</string>
