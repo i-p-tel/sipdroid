@@ -117,12 +117,19 @@
     <string-array name="protocol_display_values">
         <item>UDP (3G網路下待機時間短)</item>
         <item>TCP (3G網路下待機時間長)</item>
-
-
     </string-array>
     <string-array name="protocol_values">
         <item>udp</item>
         <item>tcp</item>
+    </string-array>
+<string name="settings_vquality">視頻質量</string>
+    <string-array name="vquality_display_values">
+        <item>高 (352x288 @ 360kbit)</item>
+        <item>低 (176x144 @ 192kbit)</item>
+    </string-array>
+    <string-array name="vquality_values">
+        <item>high</item>
+        <item>low</item>
     </string-array>
 <string name="settings_stun">使用STUN伺服器</string>
 <string name="settings_stun_server">STUN伺服器地址</string>
@@ -166,7 +173,7 @@
         <item>從不使用</item>
     </string-array>
 <string name="settings_auto_on">開啟自動應答</string>
-<string name="settings_auto_on2">僅用於非鎖定狀態下，振動提醒</string>
+<string name="settings_auto_on2">振動提醒，僅用於非鎖定狀態下</string>
 <string name="settings_auto_ondemand">快速切換自動應答</string>
 <string name="settings_auto_ondemand2">在狀態欄顯示切換按鈕</string>
 <string name="settings_auto_headset">耳機插入時自動應答</string>
@@ -181,7 +188,7 @@
 <string name="settings_nodata2">使用單音調指示數據包丟失</string>
 
 <string name="settings_advanced_options">高級設定</string>
-<string name="settings_audio_options">音頻設定</string>
+<string name="settings_av_options">音頻/視頻設定</string>
 <string name="settings_policy_never">改變系統休眠策略以保持Wi-Fi的開啟狀態</string>
 <string name="settings_policy_default">重設Wi-Fi休眠設定為系統默認</string>
 <string name="settings_search">查找和替換</string>
