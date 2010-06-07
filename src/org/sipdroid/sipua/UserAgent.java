@@ -858,6 +858,7 @@ public class UserAgent extends CallListenerAdapter {
 	/** Schedules a re-inviting event after <i>delay_time</i> secs. */
 	void reInvite(final String contact_url, final int delay_time) {
 		SessionDescriptor sdp = new SessionDescriptor(local_session);
+		sdp.IncrementOLine();
 		final SessionDescriptor new_sdp;
 		if (statusIs(UserAgent.UA_STATE_INCALL)) { // modified
 			new_sdp = new SessionDescriptor(
@@ -869,6 +870,7 @@ public class UserAgent extends CallListenerAdapter {
 							"IP4", IpAddress.localIpAddress), new TimeField());
 		}
 		new_sdp.addMediaDescriptors(sdp.getMediaDescriptors());
+		local_session = sdp.toString();
 		(new Thread() {
 			public void run() {
 				runReInvite(contact_url, new_sdp.toString(), delay_time);

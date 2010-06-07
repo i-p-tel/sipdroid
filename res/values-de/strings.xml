@@ -61,7 +61,7 @@
 
 <string name="settings_account">Zugangsdaten</string>
 <string name="settings_username">Authentifizierungsname</string>
-<string name="settings_password">Paßwort</string>
+<string name="settings_password">Passwort</string>
 <string name="settings_server">Server</string>
 <string name="settings_domain">Domäne</string>
 <string name="settings_domain2">Nur eintragen, wenn Domäne und Server verschieden sind</string>
@@ -150,7 +150,7 @@
 <string name="settings_policy_never">Systemeinstellung geändert: WLAN bleibt bei Standy in Betrieb</string>
 <string name="settings_policy_default">Systemeinstellung wiederhergestellt: WLAN geht bei Standby außer Betrieb</string>
 <string name="settings_search">Suchen &amp; Ersetzen</string>
-<string name="settings_excludepat">Muster ausschließen</string>
+<string name="settings_excludepat">Muster ausschliessen</string>
 <string name="settings_sipringtone">SIP Klingelton</string>
 <string name="settings_sipringtone2">Klingelton für eingehende SIP-Anrufe</string>
 <string name="settings_sipringtone_dialog">Klingeltöne</string>
@@ -193,6 +193,7 @@
 <string name="menu_transfer">Verbinden</string>
 <string name="menu_speaker">Lautsprecher</string>
 <string name="menu_endCall">Anruf beenden</string>
+<string name="menu_answer">Annehmen</string>
 
 <string name="transfer_title">Weiterverbinden mit</string>
 

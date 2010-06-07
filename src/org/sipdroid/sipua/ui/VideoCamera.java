@@ -24,6 +24,7 @@ package org.sipdroid.sipua.ui;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
@@ -36,12 +37,15 @@ import org.sipdroid.sipua.R;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.location.LocationManager;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.LocalServerSocket;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -57,11 +61,12 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 public class VideoCamera extends CallScreen implements 
-	SipdroidListener, SurfaceHolder.Callback, MediaRecorder.OnErrorListener {
+	SipdroidListener, SurfaceHolder.Callback, MediaRecorder.OnErrorListener, MediaPlayer.OnErrorListener {
 	
 	Thread t;
 	Context mContext = this;
@@ -73,7 +78,8 @@ public class VideoCamera extends CallScreen implements
     private static final float VIDEO_ASPECT_RATIO = 176.0f / 144.0f;
     VideoPreview mVideoPreview;
     SurfaceHolder mSurfaceHolder = null;
-    ImageView mVideoFrame;
+    VideoView mVideoFrame;
+    MediaController mMediaController;
 
     private MediaRecorder mMediaRecorder;
     private boolean mMediaRecorderRecording = false;
@@ -131,8 +137,12 @@ public class VideoCamera extends CallScreen implements
                             }
                             text = hoursString + ":" + text;
                         }
-                        mRecordingTimeView.setText("          "+getResources().getString(R.string.card_title_in_progress)+" "+text);
-
+                       	mRecordingTimeView.setText(text);
+                        if (mVideoFrame != null && mVideoFrame.getBufferPercentage() != 100 &&
+                        		mVideoFrame.getBufferPercentage() != 0) {
+                        	mMediaController.show();
+                        }
+                        
                         // Work around a limitation of the T-Mobile G1: The T-Mobile
                         // hardware blitter can't pixel-accurately scale and clip at the same time,
                         // and the SurfaceFlinger doesn't attempt to work around this limitation.
@@ -166,7 +176,7 @@ public class VideoCamera extends CallScreen implements
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         mRecordingTimeView = (TextView) findViewById(R.id.recording_time);
-        mVideoFrame = (ImageView) findViewById(R.id.video_frame);
+        mVideoFrame = (VideoView) findViewById(R.id.video_frame);
     }
 
 	int speakermode;
@@ -250,7 +260,9 @@ public class VideoCamera extends CallScreen implements
 		boolean result = super.onPrepareOptionsMenu(menu);
 
 		menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
-		
+		menu.findItem(SPEAKER_MENU_ITEM).setVisible(Receiver.headset <= 0);
+		menu.findItem(ANSWER_MENU_ITEM).setVisible(false);
+
 		return result;
 	}
 
@@ -287,6 +299,21 @@ public class VideoCamera extends CallScreen implements
         }
     }
 
+    boolean isAvailableSprintFFC;
+    
+	private void checkForCamera()
+	{
+		try
+		{
+			Class.forName("android.hardware.HtcFrontFacingCamera");
+			isAvailableSprintFFC = true;
+		}
+		catch (Exception ex)
+		{
+			isAvailableSprintFFC = false;
+		}
+	}
+
     boolean videoQualityHigh;
     
     // initializeVideo() starts preview and prepare media recorder.
@@ -303,8 +330,33 @@ public class VideoCamera extends CallScreen implements
             return false;
         }
 
+        if (Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER)) {
+        	mVideoFrame.setVideoURI(Uri.parse("rtsp://"+Receiver.engine(mContext).getRemoteAddr()+"/"+
+        		Receiver.engine(mContext).getRemoteVideo()+"/sipdroid"));
+        	mVideoFrame.setMediaController(mMediaController = new MediaController(this));
+        	mVideoFrame.setOnErrorListener(this);
+        	mVideoFrame.requestFocus();
+        	mVideoFrame.start();
+        }
+        
         mMediaRecorder = new MediaRecorder();
+        Camera mCamera = null;
 
+        checkForCamera();
+		if (isAvailableSprintFFC)
+		{
+			try
+			{
+				Method method = Class.forName("android.hardware.HtcFrontFacingCamera").getDeclaredMethod("getCamera", null);
+				mCamera = (Camera) method.invoke(null, null);
+			}
+			catch (Exception ex)
+			{
+				Log.d(TAG, ex.toString());
+			}
+			VideoCameraNew.unlock(mCamera);
+			mMediaRecorder.setCamera(mCamera);
+		}
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mMediaRecorder.setOutputFile(sender.getFileDescriptor());
@@ -578,6 +630,11 @@ public class VideoCamera extends CallScreen implements
 		if (tm.getNetworkType() < TelephonyManager.NETWORK_TYPE_UMTS)
 			return false;
 		return true;	
+	}
+
+	@Override
+	public boolean onError(MediaPlayer mp, int what, int extra) {
+		return true;
 	}
 	
 }

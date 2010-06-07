@@ -226,6 +226,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+    	if (Receiver.mContext == null) Receiver.mContext = context;
 		addPreferencesFromResource(R.xml.preferences);
 		setDefaultValues();
 		setSettingsTitle();

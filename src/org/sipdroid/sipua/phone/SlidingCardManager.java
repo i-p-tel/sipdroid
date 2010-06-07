@@ -240,7 +240,7 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
         }
         final int popupBottomPosY = mainFrameY + mMainFrame.getHeight() - height;
 
-        if (Receiver.ccCall.getState() != Call.State.DISCONNECTED) {
+        if (Receiver.ccCall != null && Receiver.ccCall.getState() != Call.State.DISCONNECTED) {
             // When the phone is in use, the position of the card is
             // determined solely by whether an incoming call is ringing or
             // not.

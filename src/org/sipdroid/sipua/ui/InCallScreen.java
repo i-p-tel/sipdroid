@@ -235,7 +235,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		if (Receiver.ccCall != null) mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
         if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
 		mHandler.sendEmptyMessage(MSG_TICK);
-	    if (t == null) {
+	    if (t == null && Receiver.call_state != UserAgent.UA_STATE_IDLE) {
 			mDigits.setText("");
 			running = true;
 	        (t = new Thread() {
@@ -297,7 +297,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     			moveBack();
     			break;
     		case MSG_TICK:
-			mCodec.setText(RtpStreamReceiver.getCodec());
+    			mCodec.setText(RtpStreamReceiver.getCodec());
     			if (RtpStreamReceiver.good != 0) {
     				if (RtpStreamReceiver.timeout != 0)
     					mStats.setText("no data");
@@ -437,6 +437,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			menu.findItem(SPEAKER_MENU_ITEM).setVisible(false);
 			menu.findItem(TRANSFER_MENU_ITEM).setVisible(false);
 		}
+		menu.findItem(ANSWER_MENU_ITEM).setVisible(Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL);
 		
 		return result;
 	}
@@ -489,7 +490,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 				return true;
         	}
         	break;
-        	
+        
         case KeyEvent.KEYCODE_CALL:
         	switch (Receiver.call_state) {
         	case UserAgent.UA_STATE_INCOMING_CALL:
