@@ -3,6 +3,11 @@
 
 === Beta-Versions ===
 
+  * 1.5.1
+    * 2-way video (issue 409)
+    * Use front facing camera on EVO 4G
+    * Fix issue 336, issue 477, issue 484
+
   * 1.5
     * Video SIP calling in High Quality
     * Better on HTC Incredible (issue 268)
