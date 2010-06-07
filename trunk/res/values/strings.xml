@@ -256,6 +256,7 @@
 <string name="menu_transfer">Transfer</string>
 <string name="menu_speaker">Speaker</string>
 <string name="menu_endCall">End call</string>
+<string name="menu_answer">Answer</string>
 
 <string name="transfer_title">Transfer Call to</string>
 

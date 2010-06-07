@@ -48,6 +48,7 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 	public static final int VIDEO_MENU_ITEM = FIRST_MENU_ID + 5;
 	public static final int SPEAKER_MENU_ITEM = FIRST_MENU_ID + 6;
 	public static final int TRANSFER_MENU_ITEM = FIRST_MENU_ID + 7;
+	public static final int ANSWER_MENU_ITEM = FIRST_MENU_ID + 8;
 
 	private static EditText transferText;
 
@@ -61,8 +62,10 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 		m.setIcon(android.R.drawable.stat_sys_speakerphone);
 		m = menu.add(0, MUTE_MENU_ITEM, 0, R.string.menu_mute);
 		m.setIcon(android.R.drawable.stat_notify_call_mute);
-		m = menu.add(0, TRANSFER_MENU_ITEM, 0, R.string.menu_transfer);
+		m = menu.add(0, ANSWER_MENU_ITEM, 0, R.string.menu_answer);
 		m.setIcon(android.R.drawable.ic_menu_call);
+		m = menu.add(0, TRANSFER_MENU_ITEM, 0, R.string.menu_transfer);
+		m.setIcon(android.R.drawable.stat_sys_phone_call_forward);
 		m = menu.add(0, VIDEO_MENU_ITEM, 0, R.string.menu_video);
 		m.setIcon(android.R.drawable.ic_menu_camera);
 		m = menu.add(0, HANG_UP_MENU_ITEM, 0, R.string.menu_endCall);
@@ -98,6 +101,11 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 		switch (item.getItemId()) {
 		case HANG_UP_MENU_ITEM:
 			Receiver.engine(this).rejectcall();
+			break;
+			
+		case ANSWER_MENU_ITEM:
+			Receiver.stopRingtone();
+			Receiver.engine(this).answercall();
 			break;
 			
 		case HOLD_MENU_ITEM:

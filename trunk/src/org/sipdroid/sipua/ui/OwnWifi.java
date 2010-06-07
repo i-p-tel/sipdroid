@@ -32,6 +32,7 @@ public class OwnWifi extends BroadcastReceiver {
     @Override
 	public void onReceive(Context context, Intent intent) {
     	if (!Sipdroid.release) Log.i("SipUA:","ownwifi");
+    	if (Receiver.mContext == null) Receiver.mContext = context;
     	if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
     		Receiver.enable_wifi(false);
     }

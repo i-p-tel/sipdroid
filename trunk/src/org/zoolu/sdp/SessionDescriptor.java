@@ -148,6 +148,13 @@ public class SessionDescriptor {
 				new ConnectionField(connection), new TimeField(time));
 	}
 
+	public void IncrementOLine()
+	{
+		String str = o.getSessionVersion();
+		Integer intObj2 = Integer.valueOf(str);
+		intObj2++;
+		o = new OriginField(o.getUserName(), o.getSessionId(), Integer.toString(intObj2),o.getAddress());
+	}
 	/**
 	 * Creates a new SessionDescriptor.
 	 * <p>

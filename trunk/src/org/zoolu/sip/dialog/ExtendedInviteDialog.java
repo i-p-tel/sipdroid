@@ -30,6 +30,7 @@ import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.header.StatusLine;
 import org.zoolu.sip.header.RequestLine;
 import org.zoolu.sip.header.AuthorizationHeader;
+import org.zoolu.sip.header.ViaHeader;
 import org.zoolu.sip.header.WwwAuthenticateHeader;
 import org.zoolu.sip.transaction.*;
 import org.zoolu.sip.message.*;
@@ -256,6 +257,12 @@ public class ExtendedInviteDialog extends org.zoolu.sip.dialog.InviteDialog {
 			attempts++;
 			Message req = tc.getRequestMessage();
 			req.setCSeqHeader(req.getCSeqHeader().incSequenceNumber());
+			ViaHeader vh=req.getViaHeader();
+			String newbranch = SipProvider.pickBranch();
+			vh.setBranch(newbranch); 
+			req.removeViaHeader();
+
+			req.addViaHeader(vh);
 			WwwAuthenticateHeader wah;
 			if (code == 401)
 				wah = msg.getWwwAuthenticateHeader();
