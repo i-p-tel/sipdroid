@@ -159,10 +159,12 @@ This is not supported natively. If you are registered to PBXes and the
 other party starts sending video it will show up on the Android phone.
 
 ==== Streaming ====
-When you start sending video as described in 1) while you are in a
+When you start sending video as described above while you are in a
 call to a regular phone, and you have a PBXes Premium Account, the
 other party can open your webcall URL, click on your photo and see
 your video.
+
+Streaming can also be used if you call somebody on his Android phone who is not registered to PBXes. Then he can still open your webcall URL from his mobile browser and see you.
 
 == SIP Providers ==
 
