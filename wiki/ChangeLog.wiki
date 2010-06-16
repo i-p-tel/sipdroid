@@ -4,7 +4,7 @@
 === Beta-Versions ===
 
   * 1.5.2
-    * Show video in PBXes echo test (*43)
+    * Show video in PBXes echo test (`*43`)
     * Video will no more stutter in low light conditions
     * Fix issue 500, issue 506, issue 507
 
