@@ -95,7 +95,7 @@ public class VideoCamera extends CallScreen implements
 
     int mCurrentZoomIndex = 0;
 
-    private TextView mRecordingTimeView;
+    private TextView mRecordingTimeView,mFPS;
 
     ArrayList<MenuItem> mGalleryItems = new ArrayList<MenuItem>();
 
@@ -106,7 +106,9 @@ public class VideoCamera extends CallScreen implements
     long started;
 	LocalSocket receiver,sender;
 	LocalServerSocket lss;
-
+	int obuffering;
+	int fps;
+	
     /** This Handler is used to post message back onto the main thread of the application */
     private class MainHandler extends Handler {
         @Override
@@ -138,10 +140,22 @@ public class VideoCamera extends CallScreen implements
                             text = hoursString + ":" + text;
                         }
                        	mRecordingTimeView.setText(text);
-                        if (mVideoFrame != null && mVideoFrame.getBufferPercentage() != 100 &&
-                        		mVideoFrame.getBufferPercentage() != 0) {
-                        	mMediaController.show();
-                        }
+                       	if (fps != 0) mFPS.setText(fps+"fps");
+                       	if (mVideoFrame != null) {
+                       		int buffering = mVideoFrame.getBufferPercentage();
+                            if (buffering != 100 && buffering != 0) {
+                            	mMediaController.show();
+                            }
+                            if (obuffering != buffering && buffering == 100 && rtp_socket != null) {
+        						RtpPacket keepalive = new RtpPacket(new byte[12],0);
+        						keepalive.setPayloadType(125);
+        						try {
+									rtp_socket.send(keepalive);
+								} catch (IOException e) {
+								}
+                            }
+                            obuffering = buffering;
+                      	}
                         
                         // Work around a limitation of the T-Mobile G1: The T-Mobile
                         // hardware blitter can't pixel-accurately scale and clip at the same time,
@@ -176,6 +190,7 @@ public class VideoCamera extends CallScreen implements
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         mRecordingTimeView = (TextView) findViewById(R.id.recording_time);
+        mFPS = (TextView) findViewById(R.id.fps);
         mVideoFrame = (VideoView) findViewById(R.id.video_frame);
     }
 
@@ -338,7 +353,7 @@ public class VideoCamera extends CallScreen implements
         	mVideoFrame.requestFocus();
         	mVideoFrame.start();
         }
-        
+
         mMediaRecorder = new MediaRecorder();
         Camera mCamera = null;
 
@@ -428,6 +443,8 @@ public class VideoCamera extends CallScreen implements
         }
     }
 
+    RtpSocket rtp_socket;
+    
     private void startVideoRecording() {
         Log.v(TAG, "startVideoRecording");
         if (!mMediaRecorderRecording) {
@@ -460,11 +477,12 @@ public class VideoCamera extends CallScreen implements
     					byte[] buffer = new byte[frame_size + 14];
     					buffer[12] = 4;
     					RtpPacket rtp_packet = new RtpPacket(buffer, 0);
-    					RtpSocket rtp_socket = null;
     					int seqn = 0;
-    					int num,number = 0,src,dest;
-    					int avgtime = 30;
-
+    					int num,number = 0,src,dest,len = 0,head = 0,lasthead = 0,cnt = 0,stable = 0;
+    					long now,lasttime = 0;
+    					double avgrate = videoQualityHigh?45000:24000;
+    					double avglen = avgrate/20;
+    					
     					try {
     						rtp_socket = new RtpSocket(new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
     								InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
@@ -500,7 +518,24 @@ public class VideoCamera extends CallScreen implements
     							continue;							
     						}
     						number += num;
-    						    						
+    						head += num;
+    						try {
+								if (lasthead != head+fis.available() && ++stable >= 5) {
+									now = SystemClock.elapsedRealtime();
+									if (lasttime != 0) {
+										fps = (int)((double)cnt*1000/(now-lasttime));
+										avgrate = (double)fis.available()*1000/(now-lasttime);
+									}
+									if (cnt != 0 && len != 0)
+										avglen = len/cnt;
+									lasttime = now;
+									lasthead = head+fis.available();
+									len = cnt = stable = 0;
+								}
+							} catch (IOException e1) {
+    							if (!Sipdroid.release) e1.printStackTrace();
+							}
+    						
         					for (num = 14; num <= 14+number-2; num++)
     							if (buffer[num] == 0 && buffer[num+1] == 0) break;
     						if (num > 14+number-2) {
@@ -513,8 +548,9 @@ public class VideoCamera extends CallScreen implements
     						
     			 			rtp_packet.setSequenceNumber(seqn++);
     			 			rtp_packet.setPayloadLength(number-num+2);
-    			 			try {
+    			 			if (seqn > 10) try {
     			 				rtp_socket.send(rtp_packet);
+        			 			len += number-num;
     			 			} catch (IOException e) {
     			 				if (!Sipdroid.release) e.printStackTrace();	
     			 			}
@@ -531,23 +567,11 @@ public class VideoCamera extends CallScreen implements
     				 			while (num-- > 0)
     				 				buffer[dest++] = buffer[src++];
     							buffer[12] = 4;
+    							
+    							cnt++;
     							try {
-    								if (videoQualityHigh) {
-    									if (fis.available() > 60000 && avgtime > 0)
-											avgtime--;
-    									else {
-    										if (fis.available() < 10000 && avgtime < 50)
-    											avgtime++;
-    									}
-	    							} else {
-										if (fis.available() > 30000 && avgtime > 0)
-											avgtime--;   								
-										else {
-											if (fis.available() < 5000 && avgtime < 50)
-												avgtime++;
-										}
-    								}
-    								Thread.sleep(avgtime);
+    								if (avgrate != 0)
+    									Thread.sleep((int)(avglen/avgrate*1000));
 								} catch (Exception e) {
     								break;
 								}

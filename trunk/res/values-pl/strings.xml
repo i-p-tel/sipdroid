@@ -204,7 +204,7 @@
 <string name="settings_par">Jednoczesne dzwonienie</string>
 <string name="settings_par2">Wybiera wszystkie numeru kontaktu jednocześnie</string>
 <string name="settings_improve">Ulepszony dźwięk</string>
-<string name="settings_improve2">Wymaga najnowszej wersji oprogramowania (PBXes Personal Data)</string>
+<string name="settings_improve2">wymaga płatnego konta</string>
 <string name="settings_posurl">Adres URL do położenia/oddzwaniania</string>
 <string name="settings_pos">Odświeżaj położenie</string>
 <string name="settings_pos2">Może być ogłoszone kontaktom z PBXes (wymaga konta premium)</string>

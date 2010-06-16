@@ -223,7 +223,7 @@
 	<string name="settings_par">Appels simultanés</string>
 	<string name="settings_par2">Compose les numéros de téléphone de chacun en paralèlle</string>
 	<string name="settings_improve">Améliorations audio</string>
-	<string name="settings_improve2">Nécessite la dernière version du logiciel (PBXes Personal Data)</string>
+	<string name="settings_improve2">nécessite un compte payant</string>
 	<string name="settings_hdvoice">PBXes supporte la voix en HD</string>
 	<string name="settings_posurl">URL de l\'adresse/Callback</string>
 	<string name="settings_pos">Mettre à jour l\'adresse</string>

@@ -51,7 +51,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	// Current settings handler
 	private static SharedPreferences settings;
 	// Context definition
-	private Context context = null;
+	private Settings context = null;
 
 	// Path where to store all profiles - !!!should be replaced by some system variable!!!
 	private final static String profilePath = "/sdcard/Sipdroid/";
@@ -226,7 +226,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-    	if (Receiver.mContext == null) Receiver.mContext = context;
+    	if (Receiver.mContext == null) Receiver.mContext = this;
 		addPreferencesFromResource(R.xml.preferences);
 		setDefaultValues();
 		setSettingsTitle();
@@ -381,6 +381,12 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 
 	private OnClickListener profileOnClick = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichItem) {
+			boolean wlan = settings.getBoolean(PREF_WLAN, DEFAULT_WLAN);
+			boolean g3 = settings.getBoolean(PREF_3G, DEFAULT_3G) ||
+				settings.getBoolean(PREF_EDGE, DEFAULT_EDGE);
+			boolean ownwifi = settings.getBoolean(PREF_OWNWIFI, DEFAULT_OWNWIFI);
+			boolean message = settings.getBoolean(PREF_MESSAGE, DEFAULT_MESSAGE);
+
 			try {
 				copyFile(new File(profilePath + profileFiles[whichItem]), new File(sharedPrefsPath + sharedPrefsFile + ".xml"));
             } catch (Exception e) {
@@ -395,9 +401,20 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
        		Receiver.engine(context).halt();
    			Receiver.engine(context).StartEngine();
    			
+   			settings.unregisterOnSharedPreferenceChangeListener(context);
    			reload();
+   			settings.registerOnSharedPreferenceChangeListener(context);
    			updateSummaries();
-   			updateSleep();
+   			if (wlan != settings.getBoolean(PREF_WLAN, DEFAULT_WLAN) ||
+   					g3 != (settings.getBoolean(PREF_3G, DEFAULT_3G) ||
+   						settings.getBoolean(PREF_EDGE, DEFAULT_EDGE)) ||
+   					ownwifi != settings.getBoolean(PREF_OWNWIFI, DEFAULT_OWNWIFI))
+   				updateSleep();
+   			if (message) {
+   	    		Editor edit = settings.edit();
+   	    		edit.putBoolean(PREF_MESSAGE, true);
+   	    		edit.commit();
+   			}
 		}
 	};
 

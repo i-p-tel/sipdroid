@@ -207,7 +207,7 @@
 <string name="settings_par">Samtidiga utgående</string>
 <string name="settings_par2">Ringer en person\'s samtliga telefonnummer samtidigt</string>
 <string name="settings_improve">Förbättra Audio</string>
-<string name="settings_improve2">Kräver senaste mjukvaru version (PBXes Personal Data)</string>
+<string name="settings_improve2">kräver betalkonto</string>
 <string name="settings_posurl">URL för Location/Callback</string>
 <string name="settings_pos">Uppdatera Location</string>
 <string name="settings_pos2">Kan medelas till PBXes contacts (kräver premium konto)</string>

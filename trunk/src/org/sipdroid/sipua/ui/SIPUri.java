@@ -68,7 +68,7 @@ public class SIPUri extends Activity {
 			m_AlertDlg.cancel();
 			m_AlertDlg = null;
 		}
-		if (target.equals("") || !Receiver.engine(this).call(target)) {
+		if (target.equals("") || !Receiver.engine(this).call(target,true)) {
 			m_AlertDlg = new AlertDialog.Builder(this)
 			.setMessage(R.string.notfast)
 			.setTitle(R.string.app_name)

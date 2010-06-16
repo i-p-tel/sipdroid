@@ -150,7 +150,7 @@
 <string name="settings_policy_never">Systemeinstellung geändert: WLAN bleibt bei Standy in Betrieb</string>
 <string name="settings_policy_default">Systemeinstellung wiederhergestellt: WLAN geht bei Standby außer Betrieb</string>
 <string name="settings_search">Suchen &amp; Ersetzen</string>
-<string name="settings_excludepat">Muster ausschliessen</string>
+<string name="settings_excludepat">Muster ausschließen</string>
 <string name="settings_sipringtone">SIP Klingelton</string>
 <string name="settings_sipringtone2">Klingelton für eingehende SIP-Anrufe</string>
 <string name="settings_sipringtone_dialog">Klingeltöne</string>
@@ -171,7 +171,7 @@
 <string name="settings_par">Gleichzeitige Anwahl</string>
 <string name="settings_par2">Wählt alle Nummern eines Gesprächspartners gleichzeitig an</string>
 <string name="settings_improve">Bessere Tonqualität</string>
-<string name="settings_improve2">Erfordert neueste Software-Version (PBXes Persönliche Angaben)</string>
+<string name="settings_improve2">erfordert bezahlten Account</string>
 <string name="settings_hdvoice">PBXes unterstützt HD Voice</string>
 <string name="settings_posurl">URL für Position/Callback</string>
 <string name="settings_pos">Position aktualisieren</string>
