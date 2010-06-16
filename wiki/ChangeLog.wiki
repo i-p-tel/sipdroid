@@ -3,6 +3,11 @@
 
 === Beta-Versions ===
 
+  * 1.5.2
+    * Show video in PBXes echo test (*43)
+    * Video will no more stutter in low light conditions
+    * Fix issue 500, issue 506, issue 507
+
   * 1.5.1
     * 2-way video (issue 409)
     * Use front facing camera on EVO 4G
@@ -10,14 +15,12 @@
 
   * 1.5
     * Video SIP calling in High Quality
-    * Better on HTC Incredible (issue 268)
 
   * 1.4.7
     * Fix issue 132, issue 323, issue 333, issue 354, issue 399, issue 408, issue 413
 
   * 1.4.6
     * Fix G722 incompatibility
-    * Better on HTC Desire, Archos 5 (issue 268)
 
   * 1.4.5
     * Fix issue 242, issue 301, issue 319, issue 402
@@ -76,7 +79,7 @@
     * Fix issue 277
 
   * 1.3
-    * Fix issues 118, 151, 194, 256, 257, 258, 266, 268, 275
+    * Fix issues 118, 151, 194, 256, 257, 258, 266, 275
 
   * 1.2.4
     * Bugfix
