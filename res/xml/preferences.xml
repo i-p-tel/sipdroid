@@ -173,8 +173,7 @@
 				android:summary="@string/settings_par2" />
 			<CheckBoxPreference
 				android:key="improve"
-				android:title="@string/settings_improve"
-				android:summary="@string/settings_improve2" />
+				android:title="@string/settings_improve"/>
 			<EditTextPreference
 				android:key="posurl"
 				android:title="@string/settings_posurl"

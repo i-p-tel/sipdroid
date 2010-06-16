@@ -442,6 +442,7 @@ import org.sipdroid.sipua.phone.Connection;
 			if (Build.MODEL.equals("Nexus One") ||
 					Build.MODEL.equals("Archos5") ||
 					Build.MODEL.equals("HTC Incredible") ||
+					Build.MODEL.equals("HTC EVO 4G") ||
 					Build.MODEL.equals("HTC Desire")) {
 				if (lock && on_wlan) {
 					if (pwl == null) {

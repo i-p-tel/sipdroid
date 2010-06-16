@@ -319,7 +319,7 @@ public class Sipdroid extends Activity {
 				.setIcon(R.drawable.icon22)
 				.setCancelable(true)
 				.show();
-		else if (!Receiver.engine(this).call(target))
+		else if (!Receiver.engine(this).call(target,true))
 			m_AlertDlg = new AlertDialog.Builder(this)
 				.setMessage(R.string.notfast)
 				.setTitle(R.string.app_name)

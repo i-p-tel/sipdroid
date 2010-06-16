@@ -42,7 +42,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dip"
+            android:layout_marginBottom="60dip"
             android:layout_marginRight="6dip"
             android:paddingRight="2dip"
             android:shadowColor="#c0000000"
@@ -54,5 +54,20 @@
             android:textSize="20dip"
             android:textStyle="bold"
             android:visibility="gone"/> 
+     <TextView 
+            android:id="@+id/fps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dip"
+            android:layout_marginRight="6dip"
+            android:paddingRight="2dip"
+            android:shadowColor="#c0000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:gravity="right"
+            android:textColor="@color/recording_time_elapsed_text"
+            android:textSize="20dip"/> 
  
 </RelativeLayout> 

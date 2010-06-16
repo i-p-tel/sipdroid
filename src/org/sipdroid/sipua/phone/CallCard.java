@@ -744,14 +744,16 @@ public class CallCard extends FrameLayout
             mPhoneNumber.setText(displayNumber);
             mPhoneNumber.setVisibility(View.VISIBLE);
         } else {
-            mPhoneNumber.setVisibility(View.GONE);
+//            mPhoneNumber.setVisibility(View.GONE);
+        	mPhoneNumber.setText("");
         }
 
         if (label != null) {
             mLabel.setText(label);
             mLabel.setVisibility(View.VISIBLE);
         } else {
-            mLabel.setVisibility(View.GONE);
+//            mLabel.setVisibility(View.GONE);
+        	mLabel.setText("");
         }
     }
 

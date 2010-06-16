@@ -71,6 +71,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 				if (Build.MODEL.equals("Nexus One") ||
 						Build.MODEL.equals("Archos5") ||
 						Build.MODEL.equals("HTC Incredible") ||
+						Build.MODEL.equals("HTC EVO 4G") ||
 						Build.MODEL.equals("HTC Desire"))
 					pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.SipdroidEngine");
 			}
@@ -311,10 +312,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	/** Makes a new call */
-	public boolean call(String target_url) {
+	public boolean call(String target_url,boolean force) {
 		ua.printLog("UAC: CALLING " + target_url);
 		
-		if (!isRegistered() || !Receiver.isFast()) {
+		if ((!isRegistered() && !force) || !Receiver.isFast()) {
 			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_CALLBACK, Settings.DEFAULT_CALLBACK) &&
 					PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_POSURL, Settings.DEFAULT_POSURL).length() > 0) {
 				Receiver.url("n="+Uri.decode(target_url));

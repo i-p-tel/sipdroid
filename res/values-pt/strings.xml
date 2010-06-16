@@ -199,6 +199,7 @@
 	<string name="settings_par">Chamadas Simultâneas</string>
 	<string name="settings_par2">Marcar todos os números de uma pessoa em paralelo</string>
 	<string name="settings_improve">Melhorar Áudio</string>
+	<string name="settings_improve2">requer conta paga</string>
 	<string name="settings_posurl">URL para Localização/Callback</string>
 	<string name="settings_pos">Actualizar Local</string>
 	<string name="settings_pos2">Pode ser anunciado aos contactos do PBXes (requer conta premium)</string>

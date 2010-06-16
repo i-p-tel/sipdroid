@@ -221,7 +221,7 @@
 <string name="settings_par">多个拨出电话</string>
 <string name="settings_par2">允许同时拨打多个电话</string>
 <string name="settings_improve">音质优化</string>
-<string name="settings_improve2">需最新的软件版本，请登录PBXes.com并点击Personal Data</string>
+<string name="settings_improve2">需要收费帐号及</string>
 <string name="settings_posurl">地理位置及回拨URL地址</string>
 <string name="settings_pos">更新地理位置</string>
 <string name="settings_pos2">地址可被通报至PBXes的联系人(需要PBXes.com的Premium账户)</string>
