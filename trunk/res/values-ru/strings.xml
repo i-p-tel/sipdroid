@@ -190,7 +190,7 @@
 <string name="settings_nodata2">При пропущенных пакетах подавать звуковой сигнал</string>
 
 <string name="settings_advanced_options">Дополнительно</string>
-<string name="settings_audio_options">Звук</string>
+<string name="settings_av_options">Аудио/Видео</string>
 <string name="settings_policy_never">Другая политика сна, чтобы держать Wi-Fi включённым.</string>
 <string name="settings_policy_default">Сбросить политику сна Wi-Fi к стандартной.</string>
 <string name="settings_search">Поиск и замена</string>
@@ -256,6 +256,7 @@
 <string name="menu_transfer">Перевести</string>
 <string name="menu_speaker">Громкая связь</string>
 <string name="menu_endCall">Завершить вызов</string>
+<string name="menu_answer">Ответить</string>
 
 <string name="transfer_title">Перевести вызов на</string>
 
