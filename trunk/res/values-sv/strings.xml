@@ -43,8 +43,6 @@
 \nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
 \nCopyright (C) 2006 The Android Open Source Project (http://android.com)
 \nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
-\nCopyright (C) 2003-2008 Benny Prijono (benny@prijono.org)
-\nCopyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
 \n
 \nDetta program är fri mjukvara; det är tillåtet att distribuera det och/eller modifiera det under villkoren i GNU General Public License som puliserats av Free Software Foundation; antingen version 3 av Licensen, eller (om så önskas) någon senare version.
 \n
@@ -123,6 +121,15 @@
         <item>udp</item>
         <item>tcp</item>
     </string-array>
+<string name="settings_vquality">Video kvalitet</string>
+    <string-array name="vquality_display_values">
+        <item>Hög (352x288 @ 360kbit)</item>
+        <item>Låg (176x144 @ 192kbit)</item>
+    </string-array>
+    <string-array name="vquality_values">
+        <item>high</item>
+        <item>low</item>
+    </string-array>
 <string name="settings_stun">Använd STUN Server</string>
 <string name="settings_stun_server">STUN Server namn</string>
 <string name="settings_stun_server_port">STUN Server port</string>
@@ -138,6 +145,7 @@
 <string name="dialog_default">Sipdroid är inte definerad som föredragen telefon. Vill du göra den till föredragen telefon?
 \n
 \nOm du svarar \'No\' här, kan du fortfarande ringa med Sipdroid från systemet genom att lägga till \'+\' bakom numret i Dialer, eller genom att välja \'text to\' i Contacts.</string>
+<string name="dialog_message">Vill du se a ett medelande från Pascal som introducerar Sipdroid 1.5?</string>
 <string name="yes">Ja</string>
 <string name="no">Nej</string>
 <string name="dontask">Fråga mig inte igen</string>
@@ -161,6 +169,12 @@
         <item>Försök alltid</item>
         <item>Aldrig</item>
     </string-array>
+    <string-array name="compression_values">
+        <item>wlan</item>
+        <item>wlanor3g</item>
+        <item>always</item>
+        <item>never</item>
+    </string-array>
 <string name="settings_auto_on">Autosvar på</string>
 <string name="settings_auto_on2">Kort vibrationssignal när skärmen är på</string>
 <string name="settings_auto_ondemand">Autosvar på begäran</string>
@@ -177,6 +191,7 @@
 <string name="settings_nodata2">Indikera tappade talpaket med toner</string>
 
 <string name="settings_advanced_options">Avancerade Alternativ</string>
+<string name="settings_av_options">Audio/Video Settings</string>
 <string name="settings_policy_never">Ändrat system sleep policy till att hålla Wi-Fi på.</string>
 <string name="settings_policy_default">Återställ Wi-Fi sleep policy till utgångsvärde.</string>
 <string name="settings_search">Sök &amp; Ersätt</string>
@@ -208,6 +223,7 @@
 <string name="settings_par2">Ringer en person\'s samtliga telefonnummer samtidigt</string>
 <string name="settings_improve">Förbättra Audio</string>
 <string name="settings_improve2">kräver betalkonto</string>
+<string name="settings_hdvoice">PBXes supportar HD samtal</string>
 <string name="settings_posurl">URL för Location/Callback</string>
 <string name="settings_pos">Uppdatera Location</string>
 <string name="settings_pos2">Kan medelas till PBXes contacts (kräver premium konto)</string>
@@ -241,6 +257,7 @@
 <string name="menu_transfer">Transferera</string>
 <string name="menu_speaker">Högtalare</string>
 <string name="menu_endCall">Avsluta samtal</string>
+<string name="menu_answer">Svara</string>
 
 <string name="transfer_title">Transferera till</string>
 
