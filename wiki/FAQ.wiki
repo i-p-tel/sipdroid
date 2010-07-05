@@ -210,8 +210,6 @@ http://sipdroid.googlecode.com/svn/images/priv.png
 
 You get even more [http://pbxes.org/iptel_virtual-pbx.html features] on the paid accounts (e.g. Video Streaming, Announce Location, Call Recording, Improved Audio, Handoff of calls between networks).
 
-What is currently missing is Bluetooth and there are already some [http://code.google.com/p/sipdroid/issues/list ideas] for more enhancements.
-
 === How can I set up PBXes? ===
 
 Please have a look at the [http://pbxes.org/community_e.php?display=wiki HELP section]. Under "Getting started" you find an introduction to the necessary steps.
