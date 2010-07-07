@@ -1,4 +1,4 @@
-package org.sipdroid.media;
+package org.sipdroid.codecs;
 
 /**
  * G.711 codec. This class provides methods for u-law, A-law and linear PCM

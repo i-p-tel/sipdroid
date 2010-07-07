@@ -29,6 +29,7 @@ public interface MediaLauncher {
 	
 	public boolean muteMedia();
 	public int speakerMedia(int mode);
+	public void bluetoothMedia();
 
 	public boolean sendDTMF(char c);
 }

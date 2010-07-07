@@ -144,6 +144,12 @@ public class JAudioLauncher implements MediaLauncher
 	   return 0;
    }
 
+   public void bluetoothMedia()
+   {
+	   if (receiver != null)
+		   receiver.bluetooth();
+   }
+
    //change DTMF
 	/** Send outband DTMF packets **/
   public boolean sendDTMF(char c){

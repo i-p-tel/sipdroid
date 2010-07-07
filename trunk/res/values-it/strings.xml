@@ -138,6 +138,7 @@
         <item>Sipdroid</item>
         <item>Sipdroid, quando disponibile</item>
         <item>Telefono</item>
+		<item>Always ask</item>
     </string-array>
 <string name="settings_compression">Compressione Voce</string>
     <string-array name="compression_display_values">

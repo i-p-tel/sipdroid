@@ -156,12 +156,9 @@
         <item>Sipdroid alltid</item>
         <item>Sipdroid, när tillgängligt</item>
         <item>Telefon</item>
+		<item>Always ask</item>
     </string-array>
-    <string-array name="pref_values">
-        <item>SIPONLY</item>
-        <item>SIP</item>
-        <item>PSTN</item>
-    </string-array>
+    
 <string name="settings_compression">Röstkomprimering</string>
     <string-array name="compression_display_values">
         <item>Endast över WLAN</item>

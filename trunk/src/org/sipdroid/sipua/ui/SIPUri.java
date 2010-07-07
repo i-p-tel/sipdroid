@@ -30,6 +30,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Window;
 
@@ -37,12 +38,30 @@ public class SIPUri extends Activity {
 
 	private static AlertDialog m_AlertDlg;
 
+	void call(String target) {
+		if (!Receiver.engine(this).call(target,true)) {
+			m_AlertDlg = new AlertDialog.Builder(this)
+			.setMessage(R.string.notfast)
+			.setTitle(R.string.app_name)
+			.setIcon(R.drawable.icon22)
+			.setCancelable(true)
+			.setOnCancelListener(new OnCancelListener() {
+				public void onCancel(DialogInterface dialog) {
+					finish();
+				}
+			})
+			.show();
+		} else
+			finish();
+	}
+	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+    	if (Receiver.mContext == null) Receiver.mContext = this;
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -68,12 +87,22 @@ public class SIPUri extends Activity {
 			m_AlertDlg.cancel();
 			m_AlertDlg = null;
 		}
-		if (target.equals("") || !Receiver.engine(this).call(target,true)) {
-			m_AlertDlg = new AlertDialog.Builder(this)
-			.setMessage(R.string.notfast)
-			.setTitle(R.string.app_name)
+		if (!target.contains("@") && PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_ASK)) {
+			final String t = target;
+			new AlertDialog.Builder(this)
 			.setIcon(R.drawable.icon22)
-			.setCancelable(true)
+			.setTitle(target)
+            .setPositiveButton(R.string.app_name, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    	call(t);
+                    }
+                })
+            .setNegativeButton(R.string.pstn_name, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+            			PSTN.callPSTN("sip:"+t);
+            			finish();
+                    }
+                })
 			.setOnCancelListener(new OnCancelListener() {
 				public void onCancel(DialogInterface dialog) {
 					finish();
@@ -81,6 +110,6 @@ public class SIPUri extends Activity {
 			})
 			.show();
 		} else
-			finish();
+			call(target); 
 	}
 }

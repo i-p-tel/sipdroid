@@ -58,6 +58,7 @@ public class Caller extends BroadcastReceiver {
         		if (!Sipdroid.release) Log.i("SipUA:","outgoing call");
         		if (!Sipdroid.on(context)) return;
     			boolean sip_type = !PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN);
+    	        boolean ask = PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_ASK);
     	        
     	        if (last_number != null && last_number.equals(number) && (SystemClock.elapsedRealtime()-last_time) < 3000) {
     	        	setResultData(null);
@@ -103,7 +104,7 @@ public class Caller extends BroadcastReceiver {
 					if (bExTypes || bExNums)
 						sip_type = false;
 				}
-				if (PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals("SIPONLY"))
+				if (PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_SIPONLY))
 					force = true;
 
     			if (!sip_type)
@@ -162,18 +163,17 @@ public class Caller extends BroadcastReceiver {
 	        			        }
 	        				}        					
 	    				}
-	    				if (Receiver.engine(context).call(number,force))
+	    				if (!ask && Receiver.engine(context).call(number,force))
 	    					setResultData(null);
-	    				else if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_CALLTHRU, Settings.DEFAULT_CALLTHRU) &&
+	    				else if (!ask && PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_CALLTHRU, Settings.DEFAULT_CALLTHRU) &&
 	    						(callthru_prefix = PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_CALLTHRU2, Settings.DEFAULT_CALLTHRU2)).length() > 0) {
 	    					callthru_number = (callthru_prefix+","+callthru_number+"#").replaceAll(",", ",p");
 	    					setResultData(callthru_number);
-	    				} else if (force) {
+	    				} else if (ask || force) {
 	    					setResultData(null);
 	    			        intent = new Intent(Intent.ACTION_CALL,
-	    			                Uri.fromParts("sip", "", null));
+	    			                Uri.fromParts("sip", Uri.decode(number), null));
 	    			        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    			        Caller.noexclude = SystemClock.elapsedRealtime();
 	    			        context.startActivity(intent);					
 	    				}
 	        		}

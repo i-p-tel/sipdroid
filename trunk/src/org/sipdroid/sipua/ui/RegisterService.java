@@ -57,7 +57,9 @@ public class RegisterService extends Service {
 			 intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
 			 intentfilter.addAction(Intent.ACTION_SCREEN_ON);
 			 intentfilter.addAction(Receiver.ACTION_VPN_CONNECTIVITY);
+			 intentfilter.addAction(Receiver.ACTION_SCO_AUDIO_STATE_CHANGED);
 			 intentfilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+			 intentfilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 	         registerReceiver(m_receiver = new Receiver(), intentfilter);      
         }
         Receiver.engine(this).isRegistered();

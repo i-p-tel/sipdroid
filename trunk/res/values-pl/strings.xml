@@ -158,11 +158,7 @@
         <item>Tylko Sipdroid</item>
         <item>Sipdroid, jeśli możliwe</item>
         <item>Telefon</item>
-    </string-array>
-    <string-array name="pref_values">
-        <item>SIPONLY</item>
-        <item>SIP</item>
-        <item>PSTN</item>
+		<item>Always ask</item>
     </string-array>
 <string name="settings_compression">Kompresja głosu</string>
     <string-array name="compression_display_values">

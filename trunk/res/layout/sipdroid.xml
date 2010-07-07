@@ -49,16 +49,6 @@
 		android:layout_height="wrap_content"
 		android:padding="5dip">
 
-		<org.sipdroid.sipua.ui.InstantAutoCompleteTextView
-			android:id="@+id/txt_callee"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:text=""
-			android:singleLine="true"
-			android:hint="@string/hint"
-			android:inputType="textEmailAddress"
-			android:imeOptions="actionSend|flagNoExtractUi"/>
-
 		<LinearLayout
 			android:orientation="horizontal"
 			android:layout_width="fill_parent"
@@ -74,7 +64,7 @@
 				<Button
 					android:id="@+id/contacts_button"
 					android:layout_gravity="left"
-					android:drawableLeft="@drawable/people"
+					android:drawableLeft="@drawable/ic_menu_dial_pad"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"/>
 			</LinearLayout>
@@ -93,5 +83,16 @@
 					android:layout_height="wrap_content"/>
 			</LinearLayout>
 		</LinearLayout>
+
+		<org.sipdroid.sipua.ui.InstantAutoCompleteTextView
+			android:id="@+id/txt_callee"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:singleLine="true"
+			android:hint="@string/hint"
+			android:inputType="textEmailAddress"
+			android:imeOptions="actionSend|flagNoExtractUi"/>
+
 	</LinearLayout>
 </LinearLayout>

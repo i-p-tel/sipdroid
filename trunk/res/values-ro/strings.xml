@@ -85,6 +85,7 @@
 		<item>Sipdroid</item>
         <item>Sipdroid, când e disponibil</item>
         <item>Apelează</item>
+		<item>Always ask</item>
     </string-array>
 <string name="settings_auto_on">Foloseşte Auto-Answer</string>
 <string name="settings_auto_on2">Vibrează scurt când ecranul este pornit</string>

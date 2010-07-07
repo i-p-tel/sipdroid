@@ -39,7 +39,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CallLog.Calls;
-import android.provider.Contacts.People;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -183,7 +182,7 @@ public class Sipdroid extends Activity {
 		Button contactsButton = (Button) findViewById(R.id.contacts_button);
 		contactsButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				Intent myIntent = new Intent(Intent.ACTION_VIEW, People.CONTENT_URI);
+				Intent myIntent = new Intent(Intent.ACTION_DIAL);
 				startActivity(myIntent);
 			}
 		});

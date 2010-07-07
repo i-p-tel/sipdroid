@@ -151,10 +151,6 @@
 				android:title="@string/settings_excludepat"
 				android:singleLine="true" />
 			<CheckBoxPreference
-				android:key="ownwifi"
-				android:title="@string/settings_ownwifi"
-				android:summary="@string/settings_ownwifi2" />
-			<CheckBoxPreference
 				android:key="stun"
 				android:title="@string/settings_stun"/>
 			<EditTextPreference
@@ -165,6 +161,24 @@
 				android:key="stun_server_port"
 				android:title="@string/settings_stun_server_port"
 				android:singleLine="true" />												
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_wireless_options">
+			<CheckBoxPreference
+				android:key="ownwifi"
+				android:title="@string/settings_ownwifi"
+				android:summary="@string/settings_ownwifi2" />
+			<CheckBoxPreference
+				android:key="selectwifi"
+				android:title="@string/settings_selectwifi"
+				android:summary="@string/settings_selectwifi2" />
+			<CheckBoxPreference
+				android:key="keepon"
+				android:title="@string/settings_keepon"
+				android:summary="@string/settings_keepon2" />
+			<CheckBoxPreference
+				android:key="bluetooth"
+				android:title="@string/menu_bluetooth"
+				android:summary="@string/settings_bluetooth" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_pbxes_options">
 			<CheckBoxPreference
