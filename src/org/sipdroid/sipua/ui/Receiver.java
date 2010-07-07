@@ -23,10 +23,8 @@ package org.sipdroid.sipua.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.net.URL;
-import java.util.Enumeration;
+import java.util.List;
 
 import android.app.AlarmManager;
 import android.app.KeyguardManager;
@@ -49,7 +47,9 @@ import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.NetworkInfo.DetailedState;
+import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -65,7 +65,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import org.sipdroid.media.Bluetooth;
 import org.sipdroid.media.RtpStreamReceiver;
+import org.sipdroid.media.RtpStreamSender;
 import org.sipdroid.sipua.*;
 import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.Connection;
@@ -77,6 +79,8 @@ import org.sipdroid.sipua.phone.Connection;
 		final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
 		final static String ACTION_DOCK_EVENT = "android.intent.action.DOCK_EVENT";
 		final static String EXTRA_DOCK_STATE = "android.intent.extra.DOCK_STATE";
+		final static String ACTION_SCO_AUDIO_STATE_CHANGED = "android.media.SCO_AUDIO_STATE_CHANGED";
+		final static String EXTRA_SCO_AUDIO_STATE = "android.media.extra.SCO_AUDIO_STATE";
 		final static String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
 		final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
 		final static String ACTION_DEVICE_IDLE = "com.android.server.WifiManager.action.DEVICE_IDLE";
@@ -98,7 +102,7 @@ import org.sipdroid.sipua.phone.Connection;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
-		public static int docked = -1,headset = -1;
+		public static int docked = -1,headset = -1,bluetooth = -1;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
@@ -118,6 +122,8 @@ import org.sipdroid.sipua.phone.Connection;
 			if (mSipdroidEngine == null) {
 				mSipdroidEngine = new SipdroidEngine();
 				mSipdroidEngine.StartEngine();
+				if (Integer.parseInt(Build.VERSION.SDK) >= 8)
+					Bluetooth.init();
 			} else
 				mSipdroidEngine.CheckEngine();
         	context.startService(new Intent(context,RegisterService.class));
@@ -128,14 +134,16 @@ import org.sipdroid.sipua.phone.Connection;
 		static PowerManager.WakeLock wl;
 				
 		public static void stopRingtone() {
-			android.os.Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-			v.cancel();
+			if (v != null)
+				v.cancel();
 			if (Receiver.oRingtone != null) {
 				Ringtone ringtone = Receiver.oRingtone;
 				oRingtone = null;
 				ringtone.stop();
 			}
 		}
+		
+		static android.os.Vibrator v;
 		
 		public static void onState(int state,String caller) {
 			if (ccCall == null) {
@@ -148,7 +156,6 @@ import org.sipdroid.sipua.phone.Connection;
 				if (state != UserAgent.UA_STATE_IDLE)
 					call_end_reason = -1;
 				call_state = state;
-				android.os.Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 				switch(call_state)
 				{
 				case UserAgent.UA_STATE_INCOMING_CALL:
@@ -172,6 +179,7 @@ import org.sipdroid.sipua.phone.Connection;
 					int rm = am.getRingerMode();
 					int vs = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
 			        KeyguardManager mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+					if (v == null) v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 					if ((pstn_state == null || pstn_state.equals("IDLE")) &&
 							PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_AUTO_ON, org.sipdroid.sipua.ui.Settings.DEFAULT_AUTO_ON) &&
 							!mKeyguardManager.inKeyguardRestrictedInputMode())
@@ -439,11 +447,7 @@ import org.sipdroid.sipua.phone.Connection;
 				pwl2.release();
 				pwl2 = null;
 			}
-			if (Build.MODEL.equals("Nexus One") ||
-					Build.MODEL.equals("Archos5") ||
-					Build.MODEL.equals("HTC Incredible") ||
-					Build.MODEL.equals("HTC EVO 4G") ||
-					Build.MODEL.equals("HTC Desire")) {
+			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_KEEPON, org.sipdroid.sipua.ui.Settings.DEFAULT_KEEPON)) {
 				if (lock && on_wlan) {
 					if (pwl == null) {
 						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
@@ -589,6 +593,8 @@ import org.sipdroid.sipua.phone.Connection;
 				mode = speakermode();
 			if (mode == AudioManager.MODE_NORMAL)
 				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.menu_speaker), android.R.drawable.stat_sys_speakerphone,Receiver.ccCall.base);
+			else if (bluetooth > 0)
+				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.menu_bluetooth), R.drawable.stat_sys_phone_call_bluetooth,Receiver.ccCall.base);
 			else
 				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call,Receiver.ccCall.base);
 		}
@@ -737,6 +743,11 @@ import org.sipdroid.sipua.phone.Connection;
 	        	if (call_state == UserAgent.UA_STATE_INCALL)
 	        		engine(mContext).speaker(speakermode());
 	        } else
+	        if (intentAction.equals(ACTION_SCO_AUDIO_STATE_CHANGED)) {
+	        	bluetooth = intent.getIntExtra(EXTRA_SCO_AUDIO_STATE, -1);
+	        	progress();
+	        	RtpStreamSender.changed = true;
+	        } else
 		    if (intentAction.equals(Intent.ACTION_HEADSET_PLUG)) {
 		        headset = intent.getIntExtra("state", -1);
 	        	if (call_state == UserAgent.UA_STATE_INCALL)
@@ -763,6 +774,36 @@ import org.sipdroid.sipua.phone.Connection;
 	        } else
 		    if (intentAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
 		    	mHandler.sendEmptyMessageDelayed(MSG_SCAN, 3000);
+	        } else
+	        if (intentAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+	        	if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_SELECTWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_SELECTWIFI)) {
+		        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+		        	List<ScanResult> mScanResults = wm.getScanResults();
+		        	List<WifiConfiguration> configurations = wm.getConfiguredNetworks();
+	                int maxpri = 0;
+	                for(final WifiConfiguration config : configurations) {
+	                        if(config.priority > maxpri) {
+	                                maxpri = config.priority;
+	                        }
+	                }
+	                ScanResult bestscan = null;
+	                WifiConfiguration bestconfig = null;
+	                for(final ScanResult scan : mScanResults) {	
+	                    for(final WifiConfiguration config : configurations) {
+	                    	if (config.SSID.equals("\""+scan.SSID+"\"") && (bestscan == null || scan.level > bestscan.level)) {
+	                    		bestscan = scan;
+	                    		bestconfig = config;
+	                    	}
+	                    }
+	                }
+	                if (bestconfig != null && bestconfig.priority != maxpri) {
+	            		wm.disconnect();
+	                	bestconfig.priority = maxpri + 1;
+	                	wm.updateNetwork(bestconfig);
+	                	wm.enableNetwork(bestconfig.networkId, true);
+	                	wm.reconnect();
+	                }
+	        	}
 	        }
 		}   
 }

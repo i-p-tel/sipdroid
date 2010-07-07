@@ -27,6 +27,7 @@ import java.net.SocketException;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
+import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
@@ -41,9 +42,11 @@ import android.media.AudioTrack;
 import android.media.ToneGenerator;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 /**
  * RtpStreamReceiver is a generic stream receiver. It receives packets from RTP
@@ -73,6 +76,7 @@ public class RtpStreamReceiver extends Thread {
 	AudioManager am;
 	ContentResolver cr;
 	public static int speakermode = -1;
+	static boolean bluetoothmode;
 	
 	/**
 	 * Constructs a RtpStreamReceiver.
@@ -103,16 +107,45 @@ public class RtpStreamReceiver extends Thread {
 		running = false;
 	}
 	
+	void bluetooth() {
+		speaker(AudioManager.MODE_IN_CALL);
+		enableBluetooth(!bluetoothmode);
+	}
+	
+	static void enableBluetooth(boolean mode) {
+		if (bluetoothmode != mode && (!mode || isBluetoothAvailable()))
+			Bluetooth.enable(bluetoothmode = mode);
+	}
+	
+	public static boolean isBluetoothAvailable() {
+		if (Receiver.headset > 0 || Receiver.docked > 0)
+			return false;
+		if (!isBluetoothSupported())
+			return false;
+		return Bluetooth.isAvailable();
+	}
+	
+	public static boolean isBluetoothSupported() {
+		if (Integer.parseInt(Build.VERSION.SDK) < 8)
+			return false;
+		return Bluetooth.isSupported();
+	}
+	
 	public int speaker(int mode) {
 		int old = speakermode;
 		
-		if ((Receiver.headset > 0 || Receiver.docked > 0) &&
+		if ((Receiver.headset > 0 || Receiver.docked > 0 || Receiver.bluetooth > 0) &&
 				mode != Receiver.speakermode())
 			return old;
+		if (mode == old)
+			return old;
+		enableBluetooth(false);
 		saveVolume();
 		setMode(speakermode = mode);
 		setCodec();
 		restoreVolume();
+		if (mode == AudioManager.MODE_NORMAL)
+			Toast.makeText(Receiver.mContext, R.string.help_speakerphone, Toast.LENGTH_LONG).show();
 		return old;
 	}
 
@@ -129,6 +162,8 @@ public class RtpStreamReceiver extends Thread {
                     Context.AUDIO_SERVICE);
 			oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
 			setMode(speakermode = Receiver.speakermode());
+			enableBluetooth(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_BLUETOOTH,
+					org.sipdroid.sipua.ui.Settings.DEFAULT_BLUETOOTH));
 			am.setStreamVolume(stream(),
 					PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("volume"+speakermode, 
 					am.getStreamMaxVolume(stream())*
@@ -144,6 +179,7 @@ public class RtpStreamReceiver extends Thread {
 		        AudioManager am = (AudioManager) Receiver.mContext.getSystemService(
 	                    Context.AUDIO_SERVICE);
 				restoreMode();
+				enableBluetooth(false);
 				am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 				oldvol = -1;
 			}
@@ -177,15 +213,28 @@ public class RtpStreamReceiver extends Thread {
 		smin = sm*r + smin*(1-r);
 	}
 	
-	public static void adjust(int keyCode) {
+	static long down_time;
+	
+	public static void adjust(int keyCode,boolean down) {
         AudioManager mAudioManager = (AudioManager) Receiver.mContext.getSystemService(
-                    Context.AUDIO_SERVICE);
-        mAudioManager.adjustStreamVolume(
-                    stream(),
-                    keyCode == KeyEvent.KEYCODE_VOLUME_UP
-                            ? AudioManager.ADJUST_RAISE
-                            : AudioManager.ADJUST_LOWER,
-                    AudioManager.FLAG_SHOW_UI);
+                Context.AUDIO_SERVICE);
+        
+		if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL)
+			if (down ^ mAudioManager.getStreamVolume(stream()) == 0)
+				mAudioManager.setStreamMute(stream(), down);
+		if (down && down_time == 0)
+			down_time = SystemClock.elapsedRealtime();
+		if (!down ^ RtpStreamReceiver.speakermode != AudioManager.MODE_NORMAL)
+			if (SystemClock.elapsedRealtime()-down_time < 500) {
+		        mAudioManager.adjustStreamVolume(
+		                    stream(),
+		                    keyCode == KeyEvent.KEYCODE_VOLUME_UP
+		                            ? AudioManager.ADJUST_RAISE
+		                            : AudioManager.ADJUST_LOWER,
+		                    AudioManager.FLAG_SHOW_UI);
+			}
+		if (!down)
+			down_time = 0;
 	}
 
 	static void setStreamVolume(final int stream,final int vol,final int flags) {
@@ -340,6 +389,8 @@ public class RtpStreamReceiver extends Thread {
 	
 	void setCodec() {
 		synchronized (this) {
+			AudioTrack oldtrack;
+			
 			p_type.codec.init();
 			codec = p_type.codec.getTitle();
 			mu = p_type.codec.samp_rate()/8000;
@@ -348,6 +399,7 @@ public class RtpStreamReceiver extends Thread {
 					AudioFormat.ENCODING_PCM_16BIT);
 			if (maxjitter < 2*2*BUFFER_SIZE*3*mu)
 				maxjitter = 2*2*BUFFER_SIZE*3*mu;
+			oldtrack = track;
 			track = new AudioTrack(stream(), p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
 					maxjitter, AudioTrack.MODE_STREAM);
 			maxjitter /= 2*2;
@@ -357,6 +409,10 @@ public class RtpStreamReceiver extends Thread {
 			timeout = 1;
 			luser = luser2 = -8000*mu;
 			cnt = cnt2 = user = lserver = 0;
+			if (oldtrack != null) {
+				oldtrack.stop();
+				oldtrack.release();
+			}
 		}
 	}
 	
@@ -384,6 +440,8 @@ public class RtpStreamReceiver extends Thread {
 
 		running = true;
 		speakermode = Receiver.speakermode();
+		enableBluetooth(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_BLUETOOTH,
+				org.sipdroid.sipua.ui.Settings.DEFAULT_BLUETOOTH));
 		restored = false;
 
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
@@ -462,8 +520,6 @@ public class RtpStreamReceiver extends Thread {
 				 if (cnt <= 500*mu || cnt2 >= 2 || headroom - jitter < len ||
 						 p_type.codec.number() != 8 || p_type.codec.number() != 0) {
 					 if (rtp_packet.getPayloadType() != p_type.number && p_type.change(rtp_packet.getPayloadType())) {
-						 track.stop();
-						 track.release();
 						 saveVolume();
 						 setCodec();
 						 restoreVolume();
@@ -550,6 +606,7 @@ public class RtpStreamReceiver extends Thread {
 		saveVolume();
 		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		restoreSettings();
+		enableBluetooth(false);
 		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
 		oldvol = speakermode = -1;
 		p_type.codec.close();

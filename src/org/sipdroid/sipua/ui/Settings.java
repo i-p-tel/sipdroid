@@ -25,17 +25,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import org.sipdroid.codecs.Codecs;
+import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.sipua.R;
 import org.zoolu.sip.provider.SipStack;
 
 import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -71,6 +72,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	// All possible values of the PREF_PREF preference (see bellow) 
 	public static final String VAL_PREF_PSTN = "PSTN";
 	public static final String VAL_PREF_SIP = "SIP";
+	public static final String VAL_PREF_SIPONLY = "SIPONLY";
+	public static final String VAL_PREF_ASK = "ASK";
 
 	/*-
 	 * ****************************************
@@ -129,7 +132,10 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_DNS = "dns";
 	public static final String PREF_VQUALITY = "vquality";
 	public static final String PREF_MESSAGE = "vmessage";
-
+	public static final String PREF_BLUETOOTH = "bluetooth";
+	public static final String PREF_KEEPON = "keepon";
+	public static final String PREF_SELECTWIFI = "selectwifi";
+	
 	// Default values of the preferences
 	public static final String	DEFAULT_USERNAME = "";
 	public static final String	DEFAULT_PASSWORD = "";
@@ -171,6 +177,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String	DEFAULT_DNS = "";
 	public static final String  DEFAULT_VQUALITY = "low";
 	public static final boolean DEFAULT_MESSAGE = false;
+	public static final boolean DEFAULT_BLUETOOTH = false;
+	public static final boolean DEFAULT_KEEPON = false;
+	public static final boolean DEFAULT_SELECTWIFI = false;
 
 	// An other preference keys (not in the Preferences XML file)
 	public static final String PREF_OLDVALID = "oldvalid";
@@ -215,7 +224,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	}
 
 	public static float getMicGain() {
-		if (Receiver.headset > 0) {
+		if (Receiver.headset > 0 || Receiver.bluetooth > 0) {
 			return Float.valueOf(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(PREF_HMICGAIN, "" + DEFAULT_HMICGAIN));
 		}
 
@@ -259,6 +268,17 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 
 			edit.putString(PREF_STUN_SERVER, DEFAULT_STUN_SERVER);
 			edit.putString(PREF_STUN_SERVER_PORT, DEFAULT_STUN_SERVER_PORT);				
+			edit.commit();
+			reload();
+		}
+		if (!settings.contains(PREF_KEEPON)) {
+			Editor edit = settings.edit();
+
+			edit.putBoolean(PREF_KEEPON, Build.MODEL.equals("Nexus One") ||
+					Build.MODEL.equals("Archos5") ||
+					Build.MODEL.equals("ADR6300") ||
+					Build.MODEL.equals("PC36100") ||
+					Build.MODEL.equals("HTC Desire"));
 			edit.commit();
 			reload();
 		}
@@ -603,6 +623,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     		getPreferenceScreen().findPreference(PREF_POS).setEnabled(DEFAULT_POS);
     		getPreferenceScreen().findPreference(PREF_CALLBACK).setEnabled(DEFAULT_CALLBACK);
        	}
+       	getPreferenceScreen().findPreference(PREF_BLUETOOTH).setEnabled(RtpStreamReceiver.isBluetoothSupported());
     }
 
     @Override

@@ -62,10 +62,10 @@
 <string name="settings_account">SIP Account Settings</string>
 <string name="settings_username">Authorization Username</string>
 <string name="settings_password">Password</string>
-<string name="settings_server">Server</string>
+<string name="settings_server">Server or Proxy</string>
 <string name="settings_domain">Domain</string>
 <string name="settings_domain2">Leave empty if same as server</string>
-<string name="settings_username1">Username/Caller ID</string>
+<string name="settings_username1">Username or Caller ID</string>
 <string name="settings_callerid2">Leave empty if same as authorization username</string>
 <string name="settings_port">Port</string>
 	<string-array name="port_display_values">
@@ -160,6 +160,7 @@
         <item>SIPONLY</item>
         <item>SIP</item>
         <item>PSTN</item>
+        <item>ASK</item>
     </string-array>
 <string name="settings_compression">Voice Compression</string>
     <string-array name="compression_display_values">
@@ -214,8 +215,6 @@
         <item>0.5</item>
         <item>1.0</item>
     </string-array>
-<string name="settings_ownwifi">Control Wi-Fi Power</string>
-<string name="settings_ownwifi2">Saves battery</string>
 
 <string name="settings_pbxes_options">PBXes Features</string>
 <string name="settings_par">Simultaneous Outbound</string>
@@ -245,6 +244,15 @@
 <string name="settings_profile_delete_error">Can not delete this profile!</string>
 <string name="settings_profile_delete_confirmation">Profile has been deleted.</string>
 
+<string name="settings_wireless_options">Wireless</string>
+<string name="settings_bluetooth">Requires Android 2.2 or higher</string>
+<string name="settings_keepon">Screen on</string>
+<string name="settings_keepon2">Required by some devices for trouble-free Wi-Fi</string>
+<string name="settings_selectwifi">Select Wi-Fi AP</string>
+<string name="settings_selectwifi2">By signal level</string>
+<string name="settings_ownwifi">Control Wi-Fi Power</string>
+<string name="settings_ownwifi2">Saves battery</string>
+
 <string name="menu_settings">Settings</string>
 <string name="menu_exit">Exit</string>
 <string name="menu_about">About</string>
@@ -257,6 +265,7 @@
 <string name="menu_speaker">Speaker</string>
 <string name="menu_endCall">End call</string>
 <string name="menu_answer">Answer</string>
+<string name="menu_bluetooth">Bluetooth (experimental)</string>
 
 <string name="transfer_title">Transfer Call to</string>
 
@@ -279,4 +288,7 @@
 <string name="codecs_move">Move this codec</string>
 <string name="codecs_move_up">Move up one place</string>
 <string name="codecs_move_down">Move down one place</string>
+
+<string name="help_speakerphone">Press and hold volume buttons to force talk</string>
+
 </resources>

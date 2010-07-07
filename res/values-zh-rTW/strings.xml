@@ -158,13 +158,9 @@
         <item>僅使用Sipdroid</item>
         <item>當可用時使用Sipdroid</item>
         <item>總是使用電話</item>
+		<item>Always ask</item>
+    </string-array>
 
-    </string-array>
-    <string-array name="pref_values">
-        <item>SIPONLY</item>
-        <item>SIP</item>
-        <item>PSTN</item>
-    </string-array>
 <string name="settings_compression">語音壓縮</string>
     <string-array name="compression_display_values">
         <item>僅當使用WLAN時</item>

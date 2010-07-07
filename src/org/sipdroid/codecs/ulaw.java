@@ -19,7 +19,6 @@
  */
 package org.sipdroid.codecs;
 
-import org.sipdroid.media.G711;
 
 class ulaw extends CodecBase implements Codec {
 	ulaw() {

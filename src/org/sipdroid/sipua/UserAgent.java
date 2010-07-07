@@ -487,6 +487,11 @@ public class UserAgent extends CallListenerAdapter {
 		return 0;
 	}
 
+	public void bluetoothMediaApplication() {
+		if (audio_app != null)
+			audio_app.bluetoothMedia();
+	}
+
 	private void createOffer() {
 		initSessionDescriptor(null);
 	}

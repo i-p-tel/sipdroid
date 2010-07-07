@@ -430,12 +430,14 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 			menu.findItem(SPEAKER_MENU_ITEM).setVisible(Receiver.headset <= 0);
 			menu.findItem(VIDEO_MENU_ITEM).setVisible(VideoCamera.videoValid() && Receiver.call_state == UserAgent.UA_STATE_INCALL && Receiver.engine(this).getRemoteVideo() != 0);
 			menu.findItem(TRANSFER_MENU_ITEM).setVisible(true);
+			menu.findItem(BLUETOOTH_MENU_ITEM).setVisible(RtpStreamReceiver.isBluetoothAvailable());
 		} else {
 			menu.findItem(HOLD_MENU_ITEM).setVisible(false);
 			menu.findItem(MUTE_MENU_ITEM).setVisible(false);
 			menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
 			menu.findItem(SPEAKER_MENU_ITEM).setVisible(false);
 			menu.findItem(TRANSFER_MENU_ITEM).setVisible(false);
+			menu.findItem(BLUETOOTH_MENU_ITEM).setVisible(false);
 		}
 		menu.findItem(ANSWER_MENU_ITEM).setVisible(Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL);
 		
@@ -522,7 +524,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
         		Receiver.stopRingtone();
         		return true;
         	}
-        	RtpStreamReceiver.adjust(keyCode);
+        	RtpStreamReceiver.adjust(keyCode,true);
         	return true;
         }
         if (Receiver.call_state == UserAgent.UA_STATE_INCALL) {
@@ -540,6 +542,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_DOWN:
         case KeyEvent.KEYCODE_VOLUME_UP:
+        	RtpStreamReceiver.adjust(keyCode,false);
         	return true;
         case KeyEvent.KEYCODE_ENDCALL:
         	if (Receiver.pstn_state == null ||

@@ -38,6 +38,7 @@ import org.zoolu.sip.provider.SipStack;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -68,11 +69,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			PowerManager pm = (PowerManager) getUIContext().getSystemService(Context.POWER_SERVICE);
 			if (wl == null) {
 				wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.SipdroidEngine");
-				if (Build.MODEL.equals("Nexus One") ||
-						Build.MODEL.equals("Archos5") ||
-						Build.MODEL.equals("HTC Incredible") ||
-						Build.MODEL.equals("HTC EVO 4G") ||
-						Build.MODEL.equals("HTC Desire"))
+				if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_KEEPON, org.sipdroid.sipua.ui.Settings.DEFAULT_KEEPON))
 					pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.SipdroidEngine");
 			}
 
@@ -281,6 +278,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 		}
 		updateDNS();
 		ra.stopMWI();
+    	WifiManager wm = (WifiManager) Receiver.mContext.getSystemService(Context.WIFI_SERVICE);
+    	wm.startScan();
 	}
 	
 	public void updateDNS() {
@@ -313,9 +312,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	
 	/** Makes a new call */
 	public boolean call(String target_url,boolean force) {
-		ua.printLog("UAC: CALLING " + target_url);
-		
-		if ((!isRegistered() && !force) || !Receiver.isFast()) {
+		if (ua == null || (!isRegistered() && !force) || !Receiver.isFast()) {
 			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_CALLBACK, Settings.DEFAULT_CALLBACK) &&
 					PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_POSURL, Settings.DEFAULT_POSURL).length() > 0) {
 				Receiver.url("n="+Uri.decode(target_url));
@@ -324,6 +321,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 			return false;
 		}
 
+		ua.printLog("UAC: CALLING " + target_url);
+		
 		if (!ua.user_profile.audio && !ua.user_profile.video)
 		{
 			 ua.printLog("ONLY SIGNALING, NO MEDIA");
@@ -354,6 +353,11 @@ public class SipdroidEngine implements RegisterAgentListener {
 			Receiver.onText(Receiver.CALL_NOTIFICATION, getUIContext().getString(R.string.menu_mute), android.R.drawable.stat_notify_call_mute,Receiver.ccCall.base);
 		else
 			Receiver.progress();
+	}
+	
+	public void togglebluetooth() {
+		ua.bluetoothMediaApplication();
+		Receiver.progress();
 	}
 	
 	public int speaker(int mode) {

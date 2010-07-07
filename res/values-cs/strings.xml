@@ -96,6 +96,7 @@
         <item>Pouze Sipdroid</item>
         <item>Sipdroid, pokud je k dispozici</item>
         <item>Telefon</item>
+		<item>Always ask</item>
     </string-array>
 <string name="settings_compression">Komprese hlasu</string>
     <string-array name="compression_display_values">

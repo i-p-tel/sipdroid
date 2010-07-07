@@ -155,6 +155,7 @@
         <item>Sipdroid</item>
         <item>Sipdroid, когда возможно</item>
         <item>Телефон</item>
+		<item>Always ask</item>
     </string-array>
     <!-- <string-array name="pref_values">
         <item>SIPONLY</item>

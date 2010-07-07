@@ -157,12 +157,8 @@
 		<item>Sipdroid</item>
 		<item>Sipdroid, si disponible</item>
 		<item>Téléphone</item>
+		<item>Always ask</item>
 	</string-array>
-    <string-array name="pref_values">
-        <item>SIPONLY</item>
-        <item>SIP</item>
-        <item>PSTN</item>
-    </string-array>
 	<string name="settings_compression">Compression de la Voix</string>
 	<string-array name="compression_display_values">
 		<item>Seulement en WLAN</item>

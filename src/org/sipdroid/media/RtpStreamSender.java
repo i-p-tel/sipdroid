@@ -35,12 +35,16 @@ import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.sipdroid.codecs.Codecs;
+import org.sipdroid.codecs.G711;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 /**
@@ -182,6 +186,7 @@ public class RtpStreamSender extends Thread {
 	}
 
 	public static int delay = 0;
+	public static boolean changed;
 	
 	/** Stops running */
 	public void halt() {
@@ -263,13 +268,16 @@ public class RtpStreamSender extends Thread {
 	
 	/** Runs it in a new Thread. */
 	public void run() {
+		WifiManager wm = (WifiManager) Receiver.mContext.getSystemService(Context.WIFI_SERVICE);
+		long lastscan = 0;
+
 		if (rtp_socket == null)
 			return;
 		int seqn = 0;
 		long time = 0;
 		double p = 0;
 		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(Settings.PREF_IMPROVE, Settings.DEFAULT_IMPROVE);
-		int micgain = (int)(Settings.getMicGain()*10);
+		int micgain = 0;
 		long last_tx_time = 0;
 		long next_tx_delay;
 		long now;
@@ -303,9 +311,8 @@ public class RtpStreamSender extends Thread {
 		
 		println("Sample rate  = " + p_type.codec.samp_rate());
 		println("Buffer size = " + min);
-		
-		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
-				min);
+
+		AudioRecord record = null;
 		
 		short[] lin = new short[frame_size*(frame_rate+1)];
 		int num,ring = 0,pos;
@@ -317,8 +324,22 @@ public class RtpStreamSender extends Thread {
 			if (!Sipdroid.release) e2.printStackTrace();
 		}
 		p_type.codec.init();
-		record.startRecording();
 		while (running) {
+			 if (changed || record == null) {
+				if (record != null) {
+					record.stop();
+					record.release();
+				}
+				record = new AudioRecord(MediaRecorder.AudioSource.MIC, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
+							min);
+				if (record.getState() != AudioRecord.STATE_INITIALIZED) {
+					Receiver.engine(Receiver.mContext).rejectcall();
+					break;
+				}
+				record.startRecording();
+				changed = false;
+				micgain = (int)(Settings.getMicGain()*10);
+			 }
 			 if (muted || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 				if (Receiver.call_state == UserAgent.UA_STATE_HOLD)
 					RtpStreamReceiver.restoreMode();
@@ -398,7 +419,7 @@ public class RtpStreamSender extends Thread {
 
 			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
  				 calc(lin,pos,num);
- 	 			 if (RtpStreamReceiver.nearend != 0)
+ 	 			 if (RtpStreamReceiver.nearend != 0 && RtpStreamReceiver.down_time == 0)
 	 				 noise(lin,pos,num,p/2);
 	 			 else if (nearend == 0)
 	 				 p = 0.9*p + 0.1*s;
@@ -443,11 +464,18 @@ public class RtpStreamSender extends Thread {
  				 time += frame_size/2;
  			 else
  				 time += frame_size;
- 			 if (improve && delay == 0 && RtpStreamReceiver.good != 0 &&
- 					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01 &&
- 					 (p_type.codec.number() == 0 || p_type.codec.number() == 8 || p_type.codec.number() == 9))        	
- 				 m = 2;
- 			 else
+ 			 if (RtpStreamReceiver.good != 0 &&
+ 					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01) {
+ 				 if (Receiver.on_wlan && SystemClock.elapsedRealtime()-lastscan > 10000) {
+ 					 wm.startScan();
+ 					 lastscan = SystemClock.elapsedRealtime();
+ 				 }
+ 				 if (improve && delay == 0 &&
+ 						 (p_type.codec.number() == 0 || p_type.codec.number() == 8 || p_type.codec.number() == 9))        	
+ 					 m = 2;
+ 				 else
+ 					 m = 1;
+ 			 } else
  				 m = 1;
 		}
 		if (Integer.parseInt(Build.VERSION.SDK) < 5)
