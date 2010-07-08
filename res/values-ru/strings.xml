@@ -51,7 +51,7 @@
 <string name="regok">Зарегистрирован</string>
 <string name="regfailed">Ошибка регистрации</string>
 
-<string name="voicemail">Ожидают сообщения</string>
+<string name="voicemail">Новые сообщения</string>
 
 <string name="auto_enabled">Авто-ответ/Громкая связь</string>
 <string name="auto_disabled">Авто-ответ выключен</string>
@@ -215,8 +215,6 @@
         <item>0.5</item>
         <item>1.0</item>
     </string-array> -->
-<string name="settings_ownwifi">Питание Wi-Fi</string>
-<string name="settings_ownwifi2">Экономит батарею</string>
 
 <string name="settings_pbxes_options">Возможности PBX</string>
 <string name="settings_par">Одновременный дозвон</string>
@@ -246,6 +244,15 @@
 <string name="settings_profile_delete_error">Не могу удалить профиль!</string>
 <string name="settings_profile_delete_confirmation">Профиль был удалён.</string>
 
+<string name="settings_wireless_options">WiFi/Bluetooth</string>
+<string name="settings_bluetooth">Требуется Android 2.2 или новее</string>
+<string name="settings_keepon">Держать WiFi</string>
+<string name="settings_keepon2">На некоторых устройках исправляет проблемы с WiFi</string>
+<string name="settings_selectwifi">Выбирать точку WiFi</string>
+<string name="settings_selectwifi2">По силе сигнала</string>
+<string name="settings_ownwifi">Управление питанием Wi-Fi</string>
+<string name="settings_ownwifi2">Экономит батарею</string>
+
 <string name="menu_settings">Настройки</string>
 <string name="menu_exit">Выйти</string>
 <string name="menu_about">О программе</string>
@@ -258,6 +265,7 @@
 <string name="menu_speaker">Громкая связь</string>
 <string name="menu_endCall">Завершить вызов</string>
 <string name="menu_answer">Ответить</string>
+<string name="menu_bluetooth">Bluetooth (экспериментально)</string>
 
 <string name="transfer_title">Перевести вызов на</string>
 
@@ -280,4 +288,7 @@
 <string name="codecs_move">Сдвинуть этот кодек</string>
 <string name="codecs_move_up">Вверх</string>
 <string name="codecs_move_down">Вниз</string>
+
+<string name="help_speakerphone">Зажмите кнопку громкости для начала разговора</string>
+
 </resources>
