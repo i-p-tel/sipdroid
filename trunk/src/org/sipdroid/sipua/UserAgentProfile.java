@@ -54,6 +54,12 @@ public class UserAgentProfile extends Configure {
 	public String realm = null;
 	/** User's passwd. */
 	public String passwd = null;
+
+	// IMS MMTel settings (added by mandrajg)
+	/** q value used at registration */
+	public String qvalue = null;
+	/** MMTel flavor used */
+	public boolean mmtel = false;
 	
 	/**
 	 * Path for the 'ua.jar' lib, used to retrive various UA media (gif, wav,

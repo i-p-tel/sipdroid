@@ -132,6 +132,9 @@
 <string name="settings_stun">Use STUN Server</string>
 <string name="settings_stun_server">STUN Server name</string>
 <string name="settings_stun_server_port">STUN Server port</string>
+
+<string name="settings_mmtel">Use MMTel flavor</string>
+<string name="settings_mmtel_qvalue">Q value</string>
  
 <string name="settings_options">Call Options</string>
 <string name="settings_wlan">Use WLAN</string>

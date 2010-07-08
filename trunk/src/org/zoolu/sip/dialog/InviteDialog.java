@@ -206,9 +206,12 @@ public class InviteDialog extends Dialog implements TransactionClientListener,
 	 *            the contact url OR the contact username
 	 * @param session_descriptor
 	 *            SDP body
+	 * @param icsi
+	 *            the ICSI for this session
+	 *            
 	 */
 	public void invite(String callee, String caller, String contact,
-			String session_descriptor) {
+			String session_descriptor, String icsi) {							// modified by mandrajg
 		printLog("inside invite(callee,caller,contact,sdp)", LogLevel.MEDIUM);
 		if (!statusIs(D_INIT))
 			return;
@@ -228,7 +231,7 @@ public class InviteDialog extends Dialog implements TransactionClientListener,
 			contact_url = from_url;
 
 		Message invite = MessageFactory.createInviteRequest(sip_provider,
-				request_uri, to_url, from_url, contact_url, session_descriptor);
+				request_uri, to_url, from_url, contact_url, session_descriptor, icsi);	// modified by mandrajg
 		// do invite
 		invite(invite);
 	}
@@ -259,7 +262,7 @@ public class InviteDialog extends Dialog implements TransactionClientListener,
 	 */
 	public void inviteWithoutOffer(String callee, String caller, String contact) {
 		invite_offer = false;
-		invite(callee, caller, contact, null);
+		invite(callee, caller, contact, null, null);		// modified by mandrajg
 	}
 
 	/**

@@ -121,6 +121,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_STUN = "stun";
 	public static final String PREF_STUN_SERVER = "stun_server";
 	public static final String PREF_STUN_SERVER_PORT = "stun_server_port";
+	
+	// MMTel configurations (added by mandrajg)
+	public static final String PREF_MMTEL = "mmtel";
+	public static final String PREF_MMTEL_QVALUE = "mmtel_qvalue";
+	
 	public static final String PREF_PAR = "par";
 	public static final String PREF_IMPROVE = "improve";
 	public static final String PREF_POSURL = "posurl";
@@ -166,6 +171,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final boolean	DEFAULT_STUN = false;
 	public static final String	DEFAULT_STUN_SERVER = "stun.ekiga.net";
 	public static final String	DEFAULT_STUN_SERVER_PORT = "3478";
+	
+	// MMTel configuration (added by mandrajg)
+	public static final boolean	DEFAULT_MMTEL = false;
+	public static final String	DEFAULT_MMTEL_QVALUE = "1.00";	
+
 	public static final boolean	DEFAULT_PAR = false;
 	public static final boolean	DEFAULT_IMPROVE = false;
 	public static final String	DEFAULT_POSURL = "";
@@ -513,6 +523,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
         			key.equals(PREF_STUN) ||
         			key.equals(PREF_STUN_SERVER) ||
         			key.equals(PREF_STUN_SERVER_PORT) ||
+        			key.equals(PREF_MMTEL) ||			// (added by mandrajg)
+        			key.equals(PREF_MMTEL_QVALUE) ||	// (added by mandrajg)
         			key.equals(PREF_PROTOCOL) ||
         			key.equals(PREF_VPN) ||
         			key.equals(PREF_POS) ||
@@ -577,6 +589,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     	getPreferenceScreen().findPreference(PREF_STUN_SERVER).setSummary(settings.getString(PREF_STUN_SERVER, DEFAULT_STUN_SERVER));
     	getPreferenceScreen().findPreference(PREF_STUN_SERVER_PORT).setSummary(settings.getString(PREF_STUN_SERVER_PORT, DEFAULT_STUN_SERVER_PORT));
 
+       	// MMTel settings (added by mandrajg)
+       	getPreferenceScreen().findPreference(PREF_MMTEL_QVALUE).setSummary(settings.getString(PREF_MMTEL_QVALUE, DEFAULT_MMTEL_QVALUE));	
+    	
     	if (settings.getString(PREF_DOMAIN, DEFAULT_DOMAIN).length() == 0) {
     		getPreferenceScreen().findPreference(PREF_DOMAIN).setSummary(getString(R.string.settings_domain2));
     	} else {
@@ -611,6 +626,14 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     		getPreferenceScreen().findPreference(PREF_STUN_SERVER).setEnabled(false);
     		getPreferenceScreen().findPreference(PREF_STUN_SERVER_PORT).setEnabled(false);       	
     	}
+    	
+    	// MMTel configuration (added by mandrajg)
+    	if (settings.getBoolean(PREF_MMTEL, DEFAULT_MMTEL)) {
+    		getPreferenceScreen().findPreference(PREF_MMTEL_QVALUE).setEnabled(true);
+    	} else {
+    		getPreferenceScreen().findPreference(PREF_MMTEL_QVALUE).setEnabled(false);       	
+    	}
+    	
     	if (settings.getBoolean(PREF_CALLTHRU, DEFAULT_CALLTHRU)) {
     		getPreferenceScreen().findPreference(PREF_CALLTHRU2).setEnabled(true);
     	} else {

@@ -60,7 +60,7 @@ public class MessageFactory extends org.zoolu.sip.message.BaseMessageFactory {
 		// String branch=SipStack.pickBranch();
 		Message req = createRequest(sip_provider, SipMethods.MESSAGE,
 				request_uri, recipient, from, null, callid, cseq, localtag,
-				null, null, null);
+				null, null, null, null);									// modified by mandrajg
 		if (subject != null)
 			req.setSubjectHeader(new SubjectHeader(subject));
 		req.setBody(type, body);
@@ -78,7 +78,7 @@ public class MessageFactory extends org.zoolu.sip.message.BaseMessageFactory {
 		// String branch=SipStack.pickBranch();
 		Message req = createRequest(sip_provider, SipMethods.REFER,
 				request_uri, recipient, from, contact, callid, cseq, localtag,
-				null, null, null);
+				null, null, null, null);										// modified by mandrajg
 		req.setReferToHeader(new ReferToHeader(refer_to));
 		// if (referred_by!=null) req.setReferredByHeader(new
 		// ReferredByHeader(referred_by));
