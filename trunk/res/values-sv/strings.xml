@@ -215,8 +215,6 @@
         <item>0.5</item>
         <item>1.0</item>
     </string-array>
-<string name="settings_ownwifi">Kontroll av Wi-Fi Styrka</string>
-<string name="settings_ownwifi2">Sparar batteri</string>
 
 <string name="settings_pbxes_options">PBXes funktioner</string>
 <string name="settings_par">Samtidiga utgående</string>
@@ -245,6 +243,15 @@
 <string name="settings_profile_import_error">Kan ej importera konfigurationen!</string>
 <string name="settings_profile_delete_error">Kan ej ta bort denna profil!</string>
 <string name="settings_profile_delete_confirmation">Profilen har tagits bort.</string>
+
+<string name="settings_wireless_options">Trådlöst</string>
+<string name="settings_bluetooth">Kräver Android 2.2 eller senare</string>
+<string name="settings_keepon">Skärm på</string>
+<string name="settings_keepon2">Krävs av vissa device för problem-fri Wi-Fi</string>
+<string name="settings_selectwifi">Välj Wi-Fi AP</string>
+<string name="settings_selectwifi2">Efter signal nivå</string>
+<string name="settings_ownwifi">Styr Wi-Fi styrka</string>
+<string name="settings_ownwifi2">Sparar batteri</string>
 
 <string name="menu_settings">Inställningar</string>
 <string name="menu_exit">Avsluta</string>
