@@ -307,6 +307,12 @@ public class UserAgent extends CallListenerAdapter {
 			target_url = target_url + "@" + realm; // modified
 		}
 		
+		// MMTel addition to define MMTel ICSI to be included in INVITE (added by mandrajg)
+		String icsi = null;	
+		if (user_profile.mmtel == true){
+			icsi = "\"urn%3Aurn-7%3A3gpp-service.ims.icsi.mmtel\"";
+		}		
+		
 		target_url = sip_provider.completeNameAddress(target_url).toString();
 		
 		if (user_profile.no_offer)
@@ -315,7 +321,7 @@ public class UserAgent extends CallListenerAdapter {
 		}
 		else
 		{
-			call.call(target_url, local_session);
+			call.call(target_url, local_session, icsi);		// modified by mandrajg
 		}
 		
 		return true;
@@ -809,7 +815,7 @@ public class UserAgent extends CallListenerAdapter {
 		call.acceptTransfer();
 		call_transfer = new ExtendedCall(sip_provider, user_profile.from_url,
 				user_profile.contact_url, this);
-		call_transfer.call(refer_to.toString(), local_session);
+		call_transfer.call(refer_to.toString(), local_session, null); 		// modified by mandrajg
 	}
 
 	/** Callback function called when a call transfer is accepted. */

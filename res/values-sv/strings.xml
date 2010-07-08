@@ -134,6 +134,9 @@
 <string name="settings_stun_server">STUN Server namn</string>
 <string name="settings_stun_server_port">STUN Server port</string>
 
+<string name="settings_mmtel">Använd MMTel tillägg</string>
+<string name="settings_mmtel_qvalue">Q värde</string>
+
 <string name="settings_options">Samtals alternativ</string>
 <string name="settings_wlan">Använd WLAN</string>
 <string name="settings_3g">Använd 3G</string>
@@ -151,12 +154,12 @@
 <string name="dontask">Fråga mig inte igen</string>
 
 <string name="settings_pref">Föredragen Samtalstyp</string>
-<string name="settings_pref2">Överrid genom att addera \'+\' bakom ett nummer i Dialer, eller genom att välja \'text to\' i Contacts</string>
+<string name="settings_pref2">Överrid genom att addera \'+\' bakom nummret i Dialer, eller välja \'text to\' i Kontakter</string>
     <string-array name="pref_display_values">
         <item>Sipdroid alltid</item>
         <item>Sipdroid, när tillgängligt</item>
         <item>Telefon</item>
-		<item>Always ask</item>
+		<item>Fråga alltid</item>
     </string-array>
     
 <string name="settings_compression">Röstkomprimering</string>

@@ -127,16 +127,16 @@ public class Call implements InviteDialogListener {
 
 	/** Starts a new call, inviting a remote user (<i>callee</i>) */
 	public void call(String callee) {
-		call(callee, null, null, null);
+		call(callee, null, null, null, null);						// modified by mandrajg
 	}
 
 	/** Starts a new call, inviting a remote user (<i>callee</i>) */
-	public void call(String callee, String sdp) {
-		call(callee, null, null, sdp);
+	public void call(String callee, String sdp, String icsi) {		// modified by mandrajg
+		call(callee, null, null, sdp, icsi);
 	}
 
 	/** Starts a new call, inviting a remote user (<i>callee</i>) */
-	public void call(String callee, String from, String contact, String sdp) {
+	public void call(String callee, String from, String contact, String sdp, String icsi) {	// modified by mandrajg
 		printLog("calling " + callee, LogLevel.HIGH);
 		if (from == null)
 			from = from_url;
@@ -146,7 +146,7 @@ public class Call implements InviteDialogListener {
 			local_sdp = sdp;
 		dialog = new InviteDialog(sip_provider, this);
 		if (local_sdp != null)
-			dialog.invite(callee, from, contact, local_sdp);
+			dialog.invite(callee, from, contact, local_sdp, icsi);	// modified by mandrajg
 		else
 			dialog.inviteWithoutOffer(callee, from, contact);
 	}

@@ -1075,6 +1075,11 @@ public abstract class BaseMessage {
 		removeHeader(SipHeaders.Server);
 	}
 
+	/** Sets AcceptContactHeader */
+	public void setAcceptContactHeader(AcceptContactHeader h) {		// added by mandrajg
+		setHeader(h);
+	}
+	
 	/** Whether has AcceptHeader */
 	public boolean hasAcceptHeader() {
 		return hasHeader(SipHeaders.Accept);

@@ -109,7 +109,7 @@ public class ExtendedCall extends Call implements ExtendedInviteDialogListener {
 	}
 
 	/** Starts a new call, inviting a remote user (<i>r_user</i>) */
-	public void call(String r_user, String from, String contact, String sdp) {
+	public void call(String r_user, String from, String contact, String sdp, String icsi) {	// modified by mandrajg
 		printLog("calling " + r_user, LogLevel.MEDIUM);
 		if (username != null)
 			dialog = new ExtendedInviteDialog(sip_provider, username, realm,
@@ -123,7 +123,7 @@ public class ExtendedCall extends Call implements ExtendedInviteDialogListener {
 		if (sdp != null)
 			local_sdp = sdp;
 		if (local_sdp != null)
-			dialog.invite(r_user, from, contact, local_sdp);
+			dialog.invite(r_user, from, contact, local_sdp, icsi);		// modified by mandrajg
 		else
 			dialog.inviteWithoutOffer(r_user, from, contact);
 	}

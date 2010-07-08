@@ -32,6 +32,14 @@ public class SipHeaders extends BaseSipHeaders {
 	// ****************************** Extensions
 	// *******************************/
 
+	/** String "Accept-Contact" */
+	public static final String Accept_Contact = "Accept-Contact";	// added by mandrajg
+
+	/** Whether <i>str</i> is "Accept-Contact" */
+	public static boolean isAcceptContact(String str) {				// added by mandrajg
+		return same(str, Accept_Contact);
+	}
+
 	/** String "Refer-To" */
 	public static final String Refer_To = "Refer-To";
 

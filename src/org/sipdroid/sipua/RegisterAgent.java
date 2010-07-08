@@ -86,6 +86,12 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 	/** User's passwd. */
 	String passwd;
 
+	/** Q value for this registration (added by mandrajg)*/
+	String qvalue;
+	
+	/** IMS Communication Service Identifier for this registration (currently only one supported)(added by mandrajg) */
+	String icsi;	
+	
 	/** Nonce for the next authentication. */
 	String next_nonce;
 
@@ -123,7 +129,8 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 	 */
 	public RegisterAgent(SipProvider sip_provider, String target_url,
 			String contact_url, String username, String realm, String passwd,
-			RegisterAgentListener listener,UserAgentProfile user_profile) {
+			RegisterAgentListener listener,UserAgentProfile user_profile,
+			String qvalue, String icsi) {									// modified by mandrajg
 		
 		init(sip_provider, target_url, contact_url, listener);
 		
@@ -132,6 +139,11 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 		this.realm = realm;
 		this.passwd = passwd;
 		this.user_profile = user_profile;
+		
+		// IMS specifics (added by mandrajg)
+		this.qvalue = qvalue;
+		this.icsi = icsi;
+		
 	}
 
 	public void halt() {
@@ -207,9 +219,9 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			CurrentState = DEREGISTERING;
 		}
 		
-		//Create message re
+		//Create message re (modified by mandrajg)
 		Message req = MessageFactory.createRegisterRequest(sip_provider,
-				target, target, new NameAddress(user_profile.contact_url));
+				target, target, new NameAddress(user_profile.contact_url), qvalue, icsi);
 		
 		req.setExpiresHeader(new ExpiresHeader(String.valueOf(expire_time)));
 		

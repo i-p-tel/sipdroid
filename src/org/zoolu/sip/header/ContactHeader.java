@@ -54,6 +54,12 @@ public class ContactHeader extends EndPointHeader {
 		super(SipHeaders.Contact, nameaddr);
 	}
 
+	public ContactHeader(NameAddress nameaddr,String qvalue,String icsi) {
+		super(SipHeaders.Contact, nameaddr);
+		setParameter("q", qvalue );
+		setParameter("+g.3gpp.icsi-ref", icsi);
+	}
+	
 	public ContactHeader(SipURL url) {
 		super(SipHeaders.Contact, url);
 	}

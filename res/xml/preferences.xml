@@ -160,7 +160,14 @@
 			<EditTextPreference
 				android:key="stun_server_port"
 				android:title="@string/settings_stun_server_port"
-				android:singleLine="true" />												
+				android:singleLine="true" />
+			<CheckBoxPreference
+				android:key="mmtel"
+				android:title="@string/settings_mmtel"/>
+			<EditTextPreference
+				android:key="mmtel_qvalue"
+				android:title="@string/settings_mmtel_qvalue"
+				android:singleLine="true" />													
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_wireless_options">
 			<CheckBoxPreference
