@@ -3,6 +3,15 @@
 
 === Beta-Versions ===
 
+  * 1.5.4
+    * MMTel support
+    * Fix issue 539, issue 541
+
+  * 1.5.3
+    * New wireless options including Bluetooth (issue 22)
+    * Switch between front/back cameras by clicking video preview
+    * Fix issue 29, issue 192 
+
   * 1.5.2
     * Show video in PBXes echo test (`*43`)
     * Video will no more stutter in low light conditions
