@@ -144,7 +144,7 @@ public class RtpStreamReceiver extends Thread {
 		setMode(speakermode = mode);
 		setCodec();
 		restoreVolume();
-		if (mode == AudioManager.MODE_NORMAL)
+		if (mode == AudioManager.MODE_NORMAL && Thread.currentThread().getName().equals("main"))
 			Toast.makeText(Receiver.mContext, R.string.help_speakerphone, Toast.LENGTH_LONG).show();
 		return old;
 	}
@@ -161,7 +161,7 @@ public class RtpStreamReceiver extends Thread {
 	        AudioManager am = (AudioManager) Receiver.mContext.getSystemService(
                     Context.AUDIO_SERVICE);
 			oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-			setMode(speakermode = Receiver.speakermode());
+			setMode(speakermode);
 			enableBluetooth(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_BLUETOOTH,
 					org.sipdroid.sipua.ui.Settings.DEFAULT_BLUETOOTH));
 			am.setStreamVolume(stream(),
@@ -421,11 +421,41 @@ public class RtpStreamReceiver extends Thread {
 			user += track.write(a,b,c);
 		}
 	}
+
+	PowerManager.WakeLock pwl,pwl2;
+	
+	void lock(boolean lock) {
+		if (lock) {
+			if (pwl2 == null) {
+				PowerManager pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
+				pwl2 = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.Receiver");
+				pwl2.acquire();
+			}
+		} else if (pwl2 != null) {
+			pwl2.release();
+			pwl2 = null;
+		}
+		if (keepon) {
+			if (lock && Receiver.on_wlan) {
+				if (pwl == null) {
+					PowerManager pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
+					pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.Receiver");
+					pwl.acquire();
+				}
+			} else if (pwl != null) {
+				pwl.release();
+				pwl = null;
+			}
+		}
+	}
+
+	boolean keepon;
 	
 	/** Runs it in a new Thread. */
 	public void run() {
 		boolean nodata = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_NODATA, org.sipdroid.sipua.ui.Settings.DEFAULT_NODATA);
-		
+		keepon = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_KEEPON, org.sipdroid.sipua.ui.Settings.DEFAULT_KEEPON);
+
 		if (rtp_socket == null) {
 			if (DEBUG)
 				println("ERROR: RTP socket is null");
@@ -439,7 +469,6 @@ public class RtpStreamReceiver extends Thread {
 			println("Reading blocks of max " + buffer.length + " bytes");
 
 		running = true;
-		speakermode = Receiver.speakermode();
 		enableBluetooth(PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_BLUETOOTH,
 				org.sipdroid.sipua.ui.Settings.DEFAULT_BLUETOOTH));
 		restored = false;
@@ -461,8 +490,9 @@ public class RtpStreamReceiver extends Thread {
 		track.play();
 		System.gc();
 		while (running) {
-			Receiver.lock(true);
+			lock(true);
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
+				lock(false);
 				tg.stopTone();
 				track.pause();
 				while (running && Receiver.call_state == UserAgent.UA_STATE_HOLD) {
@@ -598,7 +628,7 @@ public class RtpStreamReceiver extends Thread {
 				 lserver = server;
 			}
 		}
-		Receiver.lock(false);
+		lock(false);
 		track.stop();
 		track.release();
 		tg.stopTone();
@@ -608,7 +638,7 @@ public class RtpStreamReceiver extends Thread {
 		restoreSettings();
 		enableBluetooth(false);
 		am.setStreamVolume(AudioManager.STREAM_MUSIC,oldvol,0);
-		oldvol = speakermode = -1;
+		oldvol = -1;
 		p_type.codec.close();
 		rtp_socket.close();
 		rtp_socket = null;

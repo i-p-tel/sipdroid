@@ -488,9 +488,13 @@ public class UserAgent extends CallListenerAdapter {
 	}
 
 	public int speakerMediaApplication(int mode) {
+		int old;
+		
 		if (audio_app != null)
 			return audio_app.speakerMedia(mode);
-		return 0;
+		old = RtpStreamReceiver.speakermode;
+		RtpStreamReceiver.speakermode = mode;
+		return old;
 	}
 
 	public void bluetoothMediaApplication() {

@@ -42,7 +42,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -51,7 +50,6 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -146,8 +144,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	
 	SipdroidSocket socket;
 	Context mContext = this;
-	int speakermode;
-	long speakervalid;
 
 	@Override
 	public void onResume() {
@@ -173,10 +169,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 						RtpPacket keepalive = new RtpPacket(new byte[12],0);
 						RtpPacket videopacket = new RtpPacket(new byte[1000],0);
 						
-						if (speakervalid != 0 && speakervalid == Receiver.ccConn.date) {
-							Receiver.engine(mContext).speaker(speakermode);
-							speakervalid = 0;
-						}
 						try {
 							rtp_socket = new RtpSocket(socket = new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
 									InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
@@ -205,10 +197,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 								}
 							}
 							if (videopacket.getPayloadLength() > 200) {
-								enabled = true;
-					            speakermode = Receiver.engine(mContext).speaker(AudioManager.MODE_NORMAL);
-					            speakervalid = Receiver.ccConn.date;
-								Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("rtsp://"+Receiver.engine(mContext).getRemoteAddr()+"/"+Receiver.engine(mContext).getRemoteVideo()+"/sipdroid"));
+								Intent i = new Intent(mContext, org.sipdroid.sipua.ui.VideoCamera.class);
+								i.putExtra("justplay",true);
 								startActivity(i);
 								return;
 							}
@@ -418,32 +408,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		initInCallScreen();
 	}
 		
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean result = super.onPrepareOptionsMenu(menu);
-
-		if (Receiver.mSipdroidEngine != null &&
-				Receiver.mSipdroidEngine.ua != null &&
-				Receiver.mSipdroidEngine.ua.audio_app != null) {
-			menu.findItem(HOLD_MENU_ITEM).setVisible(true);
-			menu.findItem(MUTE_MENU_ITEM).setVisible(true);
-			menu.findItem(SPEAKER_MENU_ITEM).setVisible(Receiver.headset <= 0);
-			menu.findItem(VIDEO_MENU_ITEM).setVisible(VideoCamera.videoValid() && Receiver.call_state == UserAgent.UA_STATE_INCALL && Receiver.engine(this).getRemoteVideo() != 0);
-			menu.findItem(TRANSFER_MENU_ITEM).setVisible(true);
-			menu.findItem(BLUETOOTH_MENU_ITEM).setVisible(RtpStreamReceiver.isBluetoothAvailable());
-		} else {
-			menu.findItem(HOLD_MENU_ITEM).setVisible(false);
-			menu.findItem(MUTE_MENU_ITEM).setVisible(false);
-			menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
-			menu.findItem(SPEAKER_MENU_ITEM).setVisible(false);
-			menu.findItem(TRANSFER_MENU_ITEM).setVisible(false);
-			menu.findItem(BLUETOOTH_MENU_ITEM).setVisible(false);
-		}
-		menu.findItem(ANSWER_MENU_ITEM).setVisible(Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL);
-		
-		return result;
-	}
-
 	public void reject() {
 		if (Receiver.ccCall != null) {
 			Receiver.stopRingtone();

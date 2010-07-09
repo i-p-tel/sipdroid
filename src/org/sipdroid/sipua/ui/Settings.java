@@ -281,17 +281,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			edit.commit();
 			reload();
 		}
-		if (!settings.contains(PREF_KEEPON)) {
-			Editor edit = settings.edit();
-
-			edit.putBoolean(PREF_KEEPON, Build.MODEL.equals("Nexus One") ||
-					Build.MODEL.equals("Archos5") ||
-					Build.MODEL.equals("ADR6300") ||
-					Build.MODEL.equals("PC36100") ||
-					Build.MODEL.equals("HTC Desire"));
-			edit.commit();
-			reload();
-		}
 
 		if (! settings.contains(PREF_MWI_ENABLED)) {
 			CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(PREF_MWI_ENABLED);
