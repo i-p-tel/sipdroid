@@ -161,6 +161,7 @@ import org.sipdroid.sipua.phone.Connection;
 				case UserAgent.UA_STATE_INCOMING_CALL:
 					enable_wifi(true);
 					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
+					RtpStreamReceiver.speakermode = speakermode();
 					String text = caller.toString();
 					if (text.indexOf("<sip:") >= 0 && text.indexOf("@") >= 0)
 						text = text.substring(text.indexOf("<sip:")+5,text.indexOf("@"));
@@ -209,6 +210,7 @@ import org.sipdroid.sipua.phone.Connection;
 					break;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
 					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
+					RtpStreamReceiver.speakermode = speakermode();
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
 					engine(mContext).register();
 					broadcastCallStateChanged("OFFHOOK", caller);
@@ -433,34 +435,6 @@ import org.sipdroid.sipua.phone.Connection;
     		wm.setWifiEnabled(enable);
 		}
 			    
-		static PowerManager.WakeLock pwl,pwl2;
-		
-		public static void lock(boolean lock) {
-			if (call_state == UserAgent.UA_STATE_HOLD) lock = false;
-			if (lock) {
-				if (pwl2 == null) {
-					PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-					pwl2 = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.Receiver");
-					pwl2.acquire();
-				}
-			} else if (pwl2 != null) {
-				pwl2.release();
-				pwl2 = null;
-			}
-			if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_KEEPON, org.sipdroid.sipua.ui.Settings.DEFAULT_KEEPON)) {
-				if (lock && on_wlan) {
-					if (pwl == null) {
-						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-						pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.Receiver");
-						pwl.acquire();
-					}
-				} else if (pwl != null) {
-					pwl.release();
-					pwl = null;
-				}
-			}
-		}
-
 		public static void url(final String opt) {
 	        (new Thread() {
 				public void run() {

@@ -104,7 +104,6 @@ public class VideoCamera extends CallScreen implements
     LocationManager mLocationManager = null;
 
     private Handler mHandler = new MainHandler();
-    long started;
 	LocalSocket receiver,sender;
 	LocalServerSocket lss;
 	int obuffering;
@@ -114,7 +113,6 @@ public class VideoCamera extends CallScreen implements
     private class MainHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-                    if (mMediaRecorderRecording) {
                         long now = SystemClock.elapsedRealtime();
                         long delta = now - Receiver.ccCall.base;
 
@@ -141,12 +139,13 @@ public class VideoCamera extends CallScreen implements
                             text = hoursString + ":" + text;
                         }
                        	mRecordingTimeView.setText(text);
-                       	if (fps != 0) mFPS.setText(fps+(videoQualityHigh?"h":"l")+"fps");
+                        if (fps != 0) mFPS.setText(fps+(videoQualityHigh?"h":"l")+"fps");
                        	if (mVideoFrame != null) {
                        		int buffering = mVideoFrame.getBufferPercentage();
                             if (buffering != 100 && buffering != 0) {
                             	mMediaController.show();
                             }
+                            if (buffering != 0 && justplay) mVideoPreview.setVisibility(View.INVISIBLE);
                             if (obuffering != buffering && buffering == 100 && rtp_socket != null) {
         						RtpPacket keepalive = new RtpPacket(new byte[12],0);
         						keepalive.setPayloadType(125);
@@ -165,7 +164,6 @@ public class VideoCamera extends CallScreen implements
                         // surface view when changing any overlapping view's contents.
                         mVideoPreview.invalidate();
                         mHandler.sendEmptyMessageDelayed(UPDATE_RECORD_TIME, 1000);
-                    }
          }
     };
 
@@ -178,6 +176,7 @@ public class VideoCamera extends CallScreen implements
 
         //setDefaultKeyMode(DEFAULT_KEYS_SHORTCUT);
         requestWindowFeature(Window.FEATURE_PROGRESS);
+        setScreenOnFlag();
         setContentView(R.layout.video_camera);
 
         mVideoPreview = (VideoPreview) findViewById(R.id.camera_preview);
@@ -196,6 +195,13 @@ public class VideoCamera extends CallScreen implements
     }
 
 	int speakermode;
+	boolean justplay;
+
+	@Override
+    public void onStart() {
+        super.onStart();
+        speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
+	}
 
 	@Override
     public void onResume() {
@@ -203,26 +209,30 @@ public class VideoCamera extends CallScreen implements
 
         mPausing = false;
 
-		receiver = new LocalSocket();
-		try {
-			lss = new LocalServerSocket("Sipdroid");
-			receiver.connect(new LocalSocketAddress("Sipdroid"));
-			receiver.setReceiveBufferSize(500000);
-			receiver.setSendBufferSize(500000);
-			sender = lss.accept();
-			sender.setReceiveBufferSize(500000);
-			sender.setSendBufferSize(500000);
-		} catch (IOException e1) {
-			if (!Sipdroid.release) e1.printStackTrace();
-			finish();
-			return;
-		}
-
-        checkForCamera();
-        initializeVideo();
-        startVideoRecording();
+        justplay = getIntent().hasExtra("justplay");
+        if (!justplay) {
+			receiver = new LocalSocket();
+			try {
+				lss = new LocalServerSocket("Sipdroid");
+				receiver.connect(new LocalSocketAddress("Sipdroid"));
+				receiver.setReceiveBufferSize(500000);
+				receiver.setSendBufferSize(500000);
+				sender = lss.accept();
+				sender.setReceiveBufferSize(500000);
+				sender.setSendBufferSize(500000);
+			} catch (IOException e1) {
+				if (!Sipdroid.release) e1.printStackTrace();
+				finish();
+				return;
+			}
+	
+	        checkForCamera();
+            mVideoPreview.setVisibility(View.VISIBLE);
+	        initializeVideo();
+	        startVideoRecording();
+        }
         
-        if (Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER)) {
+        if (!mVideoFrame.isPlaying() && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER)) {
         	mVideoFrame.setVideoURI(Uri.parse("rtsp://"+Receiver.engine(mContext).getRemoteAddr()+"/"+
         		Receiver.engine(mContext).getRemoteVideo()+"/sipdroid"));
         	mVideoFrame.setMediaController(mMediaController = new MediaController(this));
@@ -231,6 +241,9 @@ public class VideoCamera extends CallScreen implements
         	mVideoFrame.start();
         }
 
+        mRecordingTimeView.setText("");
+        mRecordingTimeView.setVisibility(View.VISIBLE);
+        mHandler.sendEmptyMessage(UPDATE_RECORD_TIME);
     }
 
     @Override
@@ -241,17 +254,18 @@ public class VideoCamera extends CallScreen implements
         // but not quite the same.
         if (mMediaRecorderRecording) {
             stopVideoRecording();
+
+            try {
+    			lss.close();
+    	        receiver.close();
+    	        sender.close();
+    		} catch (IOException e) {
+    			if (!Sipdroid.release) e.printStackTrace();
+    		}
         }
 
+        Receiver.engine(this).speaker(speakermode);
         mPausing = true;
-
-        try {
-			lss.close();
-	        receiver.close();
-	        sender.close();
-		} catch (IOException e) {
-			if (!Sipdroid.release) e.printStackTrace();
-		}
 		finish();
     }
 
@@ -287,14 +301,22 @@ public class VideoCamera extends CallScreen implements
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean result = super.onPrepareOptionsMenu(menu);
 
-		menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
-		menu.findItem(SPEAKER_MENU_ITEM).setVisible(Receiver.headset <= 0);
-		menu.findItem(ANSWER_MENU_ITEM).setVisible(false);
-		menu.findItem(BLUETOOTH_MENU_ITEM).setVisible(RtpStreamReceiver.isBluetoothAvailable());
-
+		if (!justplay) menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
 		return result;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case VIDEO_MENU_ITEM:
+			getIntent().removeExtra("justplay");
+			onResume();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         if (mPausing) {
             // We're pausing, the screen is off and we already stopped
@@ -305,10 +327,7 @@ public class VideoCamera extends CallScreen implements
             // to portrait orientation possibly triggering the notification.
             return;
         }
-
-        stopVideoRecording();
-        initializeVideo();
-        startVideoRecording();
+        if (!justplay && !mMediaRecorderRecording) initializeVideo();
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
@@ -456,15 +475,8 @@ public class VideoCamera extends CallScreen implements
     private void startVideoRecording() {
         Log.v(TAG, "startVideoRecording");
 
-            started = SystemClock.elapsedRealtime();
-            mRecordingTimeView.setText("");
-            mRecordingTimeView.setVisibility(View.VISIBLE);
-            mHandler.sendEmptyMessage(UPDATE_RECORD_TIME);
-            setScreenOnFlag();
-        
             if (Receiver.listener_video == null) {
     			Receiver.listener_video = this;   	
-                speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
                 RtpStreamSender.delay = 1;
     	        (t = new Thread() {
     				public void run() {
@@ -594,7 +606,6 @@ public class VideoCamera extends CallScreen implements
         if (mMediaRecorderRecording || mMediaRecorder != null) {
     		Receiver.listener_video = null;
     		t.interrupt();
-            Receiver.engine(this).speaker(speakermode);
             RtpStreamSender.delay = 0;
 
             if (mMediaRecorderRecording && mMediaRecorder != null) {
@@ -636,6 +647,13 @@ public class VideoCamera extends CallScreen implements
         case KeyEvent.KEYCODE_VOLUME_UP:
         	RtpStreamReceiver.adjust(keyCode,false);
         	return true;
+        case KeyEvent.KEYCODE_ENDCALL:
+        	if (Receiver.pstn_state == null ||
+				(Receiver.pstn_state.equals("IDLE") && (SystemClock.elapsedRealtime()-Receiver.pstn_time) > 3000)) {
+        			Receiver.engine(mContext).rejectcall();
+        			return true;		
+        	}
+        	break;
 		}
 		return false;
 	}

@@ -85,7 +85,7 @@ public class RtpStreamSender extends Thread {
 	boolean muted = false;
 	
 	//DTMF change
-	char dtmf = 0; 
+	String dtmf = "";
 	int dtmf_payload_type = 101;
 	
 	private static HashMap<Character, Byte> rtpEventMap = new HashMap<Character,Byte>(){{
@@ -334,6 +334,7 @@ public class RtpStreamSender extends Thread {
 							min);
 				if (record.getState() != AudioRecord.STATE_INITIALIZED) {
 					Receiver.engine(Receiver.mContext).rejectcall();
+					record = null;
 					break;
 				}
 				record.startRecording();
@@ -353,7 +354,7 @@ public class RtpStreamSender extends Thread {
 				record.startRecording();
 			 }
 			 //DTMF change start
-			 if (dtmf!=0) {
+			 if (dtmf.length() != 0) {
 	 			 record.stop();
 	 			 byte[] dtmfbuf = new byte[dtframesize + 12];
 				 RtpPacket dt_packet = new RtpPacket(dtmfbuf, 0);
@@ -368,7 +369,7 @@ public class RtpStreamSender extends Thread {
  	 				 duration = (int)(time - dttime);
 	 				 dt_packet.setSequenceNumber(seqn++);
 	 				 dt_packet.setTimestamp(dttime);
-	 				 dtmfbuf[12] = rtpEventMap.get(dtmf);
+	 				 dtmfbuf[12] = rtpEventMap.get(dtmf.charAt(0));
 	 				 dtmfbuf[13] = (byte)0x0a;
 	 				 dtmfbuf[14] = (byte)(duration >> 8);
 	 				 dtmfbuf[15] = (byte)duration;
@@ -383,7 +384,7 @@ public class RtpStreamSender extends Thread {
 	 				 duration = (int)(time - dttime);
 	 				 dt_packet.setSequenceNumber(seqn);
 	 				 dt_packet.setTimestamp(dttime);
-	 				 dtmfbuf[12] = rtpEventMap.get(dtmf);
+	 				 dtmfbuf[12] = rtpEventMap.get(dtmf.charAt(0));
 	 				 dtmfbuf[13] = (byte)0x8a;
 	 				 dtmfbuf[14] = (byte)(duration >> 8);
 	 				 dtmfbuf[15] = (byte)duration;
@@ -393,7 +394,7 @@ public class RtpStreamSender extends Thread {
 	 				 }	 			 
 	 			 }
 	 			 time += 160; seqn++;
-				dtmf=0;
+				dtmf=dtmf.substring(1);
 				record.startRecording();
 			 }
 			 //DTMF change end
@@ -484,8 +485,10 @@ public class RtpStreamSender extends Thread {
 					sleep(1000);
 				} catch (InterruptedException e) {
 				}
-		record.stop();
-		record.release();
+		if (record != null) {
+			record.stop();
+			record.release();
+		}
 		m = 0;
 		
 		p_type.codec.close();
@@ -508,7 +511,7 @@ public class RtpStreamSender extends Thread {
 	
 	/** Send outband DTMF packets */
 	public void sendDTMF(char c) {
-		dtmf = c; // will be set to 0 after sending tones
+		dtmf = dtmf+c; // will be set to 0 after sending tones
 	}
 	//DTMF change
 }
