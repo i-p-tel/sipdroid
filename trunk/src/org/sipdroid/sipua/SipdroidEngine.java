@@ -91,6 +91,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 			} else {
 				user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_DOMAIN, Settings.DEFAULT_DOMAIN);
 			}
+			// MMTel configuration (added by mandrajg)
+			user_profile.qvalue = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_MMTEL_QVALUE, Settings.DEFAULT_MMTEL_QVALUE);
+			user_profile.mmtel = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_MMTEL, Settings.DEFAULT_MMTEL);
+
 
 			SipStack.init(null);
 			SipStack.debug_level = 0;
