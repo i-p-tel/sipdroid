@@ -226,10 +226,6 @@ The username to be entered in Sipdroid consists of account name, a dash ('-') an
 
 This tool is recommended to save battery. It uses the camera to adjust screen brightness.
 
-=== ChompSMS ===
-
-This is the equivalent to Sipdroid for SMS.
-
 === Google Talk ===
 
 See [http://code.google.com/p/sipdroid/wiki/FAQ#How_can_I_dial_a_Skype_ID?_(Or_any_other_SIP_URI?) above]
