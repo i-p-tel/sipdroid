@@ -1,6 +1,12 @@
 package org.sipdroid.sipua.ui;
 
+import java.io.IOException;
+import java.net.InetAddress;
+
 import org.sipdroid.media.RtpStreamReceiver;
+import org.sipdroid.net.RtpPacket;
+import org.sipdroid.net.RtpSocket;
+import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.ui.InstantAutoCompleteTextView;
@@ -14,7 +20,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -199,16 +208,81 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 			enabled = true;
 		}
 	}
+
+	SipdroidSocket socket;
+	RtpSocket rtp_socket;
+	Context mContext = this;
+	Intent intent;
 	
 	@Override
 	public void onResume() {
 		super.onResume();
 		if (Integer.parseInt(Build.VERSION.SDK) >= 5 && Integer.parseInt(Build.VERSION.SDK) <= 7)
 			disableKeyguard();
+		if (Receiver.call_state == UserAgent.UA_STATE_INCALL && socket == null && Receiver.engine(mContext).getLocalVideo() != 0 && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER))
+	        (new Thread() {
+				public void run() {
+					RtpPacket keepalive = new RtpPacket(new byte[12],0);
+					RtpPacket videopacket = new RtpPacket(new byte[1000],0);
+					
+					try {
+						if (intent == null || rtp_socket == null) {
+							rtp_socket = new RtpSocket(socket = new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
+								InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
+								Receiver.engine(mContext).getRemoteVideo());
+							sleep(3000);
+						} else
+							socket = rtp_socket.getDatagramSocket();
+						rtp_socket.getDatagramSocket().setSoTimeout(15000);
+					} catch (Exception e) {
+						if (!Sipdroid.release) e.printStackTrace();
+						return;
+					}
+					keepalive.setPayloadType(126);
+					try {
+						rtp_socket.send(keepalive);
+					} catch (Exception e1) {
+						return;
+					}
+					for (;;) {
+						try {
+							rtp_socket.receive(videopacket);
+						} catch (IOException e) {
+							rtp_socket.getDatagramSocket().disconnect();
+							try {
+								rtp_socket.send(keepalive);
+							} catch (IOException e1) {
+								return;
+							}
+						}
+						if (videopacket.getPayloadLength() > 200) {
+							if (intent != null) {
+								intent.putExtra("justplay",true);
+								mHandler.sendEmptyMessage(0);
+							} else {
+								Intent i = new Intent(mContext, org.sipdroid.sipua.ui.VideoCamera.class);
+								i.putExtra("justplay",true);
+								startActivity(i);
+							}
+							return;
+						}
+					}
+				}
+	        }).start();  
 	}
 	
-	@Override
+    Handler mHandler = new Handler() {
+    	public void handleMessage(Message msg) {
+    		onResume();
+    	}
+    };
+    		
+    @Override
 	public void onPause() {
+		if (socket != null) {
+			socket.close();
+			socket = null;
+		}
 		super.onPause();
 		if (Integer.parseInt(Build.VERSION.SDK) >= 5 && Integer.parseInt(Build.VERSION.SDK) <= 7)
 			reenableKeyguard();

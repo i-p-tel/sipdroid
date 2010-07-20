@@ -480,6 +480,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	EditText transferText;
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    	if (!Thread.currentThread().getName().equals("main"))
+    		return;
 		if (sharedPreferences.getString(PREF_PORT, DEFAULT_PORT).equals("0")) {
 			transferText = new InstantAutoCompleteTextView(this,null);
 			transferText.setInputType(InputType.TYPE_CLASS_NUMBER);

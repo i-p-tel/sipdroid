@@ -21,7 +21,6 @@ package org.sipdroid.sipua.ui;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -36,7 +35,6 @@ import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
 
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.Camera;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -62,12 +60,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 public class VideoCamera extends CallScreen implements 
-	SipdroidListener, SurfaceHolder.Callback, MediaRecorder.OnErrorListener, MediaPlayer.OnErrorListener, OnClickListener {
+	SipdroidListener, SurfaceHolder.Callback, MediaRecorder.OnErrorListener, MediaPlayer.OnErrorListener, OnClickListener, OnLongClickListener {
 	
 	Thread t;
 	Context mContext = this;
@@ -84,17 +83,6 @@ public class VideoCamera extends CallScreen implements
 
     private MediaRecorder mMediaRecorder;
     private boolean mMediaRecorderRecording = false;
-    // The video file that the hardware camera is about to record into
-    // (or is recording into.)
-    private String mCameraVideoFilename;
-
-    // The video file that has already been recorded, and that is being
-    // examined by the user.
-    private String mCurrentVideoFilename;
-
-    boolean mPausing = false;
-
-    int mCurrentZoomIndex = 0;
 
     private TextView mRecordingTimeView,mFPS;
 
@@ -145,7 +133,7 @@ public class VideoCamera extends CallScreen implements
                             if (buffering != 100 && buffering != 0) {
                             	mMediaController.show();
                             }
-                            if (buffering != 0 && justplay) mVideoPreview.setVisibility(View.INVISIBLE);
+                            if (buffering != 0 && !mMediaRecorderRecording) mVideoPreview.setVisibility(View.INVISIBLE);
                             if (obuffering != buffering && buffering == 100 && rtp_socket != null) {
         						RtpPacket keepalive = new RtpPacket(new byte[12],0);
         						keepalive.setPayloadType(125);
@@ -201,15 +189,16 @@ public class VideoCamera extends CallScreen implements
     public void onStart() {
         super.onStart();
         speakermode = Receiver.engine(this).speaker(AudioManager.MODE_NORMAL);
+        videoQualityHigh = PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_VQUALITY, org.sipdroid.sipua.ui.Settings.DEFAULT_VQUALITY).equals("high");
+        if ((intent = getIntent()).hasExtra(MediaStore.EXTRA_VIDEO_QUALITY)) {
+            int extraVideoQuality = intent.getIntExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+            videoQualityHigh = (extraVideoQuality > 0);
+        }
 	}
 
 	@Override
     public void onResume() {
-        super.onResume();
-
-        mPausing = false;
-
-        justplay = getIntent().hasExtra("justplay");
+        justplay = intent.hasExtra("justplay");
         if (!justplay) {
 			receiver = new LocalSocket();
 			try {
@@ -225,14 +214,11 @@ public class VideoCamera extends CallScreen implements
 				finish();
 				return;
 			}
-	
 	        checkForCamera();
             mVideoPreview.setVisibility(View.VISIBLE);
-	        initializeVideo();
+	        if (!mMediaRecorderRecording) initializeVideo();
 	        startVideoRecording();
-        }
-        
-        if (!mVideoFrame.isPlaying() && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER)) {
+        } else if (Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER)) {
         	mVideoFrame.setVideoURI(Uri.parse("rtsp://"+Receiver.engine(mContext).getRemoteAddr()+"/"+
         		Receiver.engine(mContext).getRemoteVideo()+"/sipdroid"));
         	mVideoFrame.setMediaController(mMediaController = new MediaController(this));
@@ -244,6 +230,7 @@ public class VideoCamera extends CallScreen implements
         mRecordingTimeView.setText("");
         mRecordingTimeView.setVisibility(View.VISIBLE);
         mHandler.sendEmptyMessage(UPDATE_RECORD_TIME);
+        super.onResume();
     }
 
     @Override
@@ -265,7 +252,6 @@ public class VideoCamera extends CallScreen implements
         }
 
         Receiver.engine(this).speaker(speakermode);
-        mPausing = true;
 		finish();
     }
 
@@ -301,7 +287,7 @@ public class VideoCamera extends CallScreen implements
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean result = super.onPrepareOptionsMenu(menu);
 
-		if (!justplay) menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
+		if (mMediaRecorderRecording) menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
 		return result;
 	}
 
@@ -309,7 +295,7 @@ public class VideoCamera extends CallScreen implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case VIDEO_MENU_ITEM:
-			getIntent().removeExtra("justplay");
+			intent.removeExtra("justplay");
 			onResume();
 			return true;
 		default:
@@ -318,15 +304,6 @@ public class VideoCamera extends CallScreen implements
 	}
 	
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        if (mPausing) {
-            // We're pausing, the screen is off and we already stopped
-            // video recording. We don't want to start the camera again
-            // in this case in order to conserve power.
-            // The fact that surfaceChanged is called _after_ an onPause appears
-            // to be legitimate since in that case the lockscreen always returns
-            // to portrait orientation possibly triggering the notification.
-            return;
-        }
         if (!justplay && !mMediaRecorderRecording) initializeVideo();
     }
 
@@ -336,16 +313,6 @@ public class VideoCamera extends CallScreen implements
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         mSurfaceHolder = null;
-    }
-
-    private void cleanupEmptyFile() {
-        if (mCameraVideoFilename != null) {
-            File f = new File(mCameraVideoFilename);
-            if (f.length() == 0 && f.delete()) {
-              Log.v(TAG, "Empty video file deleted: " + mCameraVideoFilename);
-              mCameraVideoFilename = null;
-            }
-        }
     }
 
     boolean isAvailableSprintFFC;
@@ -369,13 +336,13 @@ public class VideoCamera extends CallScreen implements
     // Returns false if initializeVideo fails
     private boolean initializeVideo() {
         Log.v(TAG, "initializeVideo");
-
-        Intent intent = getIntent();
-
+        
         if (mSurfaceHolder == null) {
             Log.v(TAG, "SurfaceHolder is null");
             return false;
         }
+
+        mMediaRecorderRecording = true;
 
         if (mMediaRecorder == null)
         	mMediaRecorder = new MediaRecorder();
@@ -398,16 +365,10 @@ public class VideoCamera extends CallScreen implements
 			mMediaRecorder.setCamera(mCamera);
 	        mVideoPreview.setOnClickListener(this);
 		}
+        mVideoPreview.setOnLongClickListener(this);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mMediaRecorder.setOutputFile(sender.getFileDescriptor());
-
-        videoQualityHigh = PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_VQUALITY, org.sipdroid.sipua.ui.Settings.DEFAULT_VQUALITY).equals("high");
-
-        if (intent.hasExtra(MediaStore.EXTRA_VIDEO_QUALITY)) {
-            int extraVideoQuality = intent.getIntExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-            videoQualityHigh = (extraVideoQuality > 0);
-        }
 
         // Use the same frame rate for both, since internally
         // if the frame rate is too large, it can cause camera to become
@@ -427,50 +388,29 @@ public class VideoCamera extends CallScreen implements
             mMediaRecorder.setOnErrorListener(this);
             mMediaRecorder.start();
         } catch (IOException exception) {
-            Log.e(TAG, "prepare failed for " + mCameraVideoFilename);
             releaseMediaRecorder();
             finish();
             return false;
         }
-        mMediaRecorderRecording = true;
-
         return true;
     }
 
     private void releaseMediaRecorder() {
         Log.v(TAG, "Releasing media recorder.");
         if (mMediaRecorder != null) {
-            cleanupEmptyFile();
             mMediaRecorder.reset();
             mMediaRecorder.release();
             mMediaRecorder = null;
         }
     }
         
-    private void deleteCurrentVideo() {
-        if (mCurrentVideoFilename != null) {
-            deleteVideoFile(mCurrentVideoFilename);
-            mCurrentVideoFilename = null;
-        }
-    }
-
-    private void deleteVideoFile(String fileName) {
-        Log.v(TAG, "Deleting video " + fileName);
-        File f = new File(fileName);
-        if (! f.delete()) {
-            Log.v(TAG, "Could not delete " + fileName);
-        }
-    }
-
-    // from MediaRecorder.OnErrorListener
     public void onError(MediaRecorder mr, int what, int extra) {
         if (what == MediaRecorder.MEDIA_RECORDER_ERROR_UNKNOWN) {
-            // We may have run out of space on the sdcard.
             finish();
         }
     }
 
-    RtpSocket rtp_socket;
+    boolean change;
     
     private void startVideoRecording() {
         Log.v(TAG, "startVideoRecording");
@@ -491,7 +431,8 @@ public class VideoCamera extends CallScreen implements
     					double avglen = avgrate/20;
     					
     					try {
-    						rtp_socket = new RtpSocket(new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
+    						if (rtp_socket == null)
+    							rtp_socket = new RtpSocket(new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
     								InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
     								Receiver.engine(mContext).getRemoteVideo());
     					} catch (Exception e) {
@@ -590,6 +531,18 @@ public class VideoCamera extends CallScreen implements
     			 				number = 0;
     							buffer[12] = 0;
     			 			}
+    			 			if (change) {
+    			 				change = false;
+    			 				long time = SystemClock.elapsedRealtime();
+    			 				
+    	    					try {
+    								while (fis.read(buffer,14,frame_size) > 0 &&
+    										SystemClock.elapsedRealtime()-time < 3000);
+    							} catch (Exception e) {
+    							}
+    			 				number = 0;
+    							buffer[12] = 0;
+    			 			}
     					}
     					rtp_socket.getDatagramSocket().close();
     					try {
@@ -617,15 +570,10 @@ public class VideoCamera extends CallScreen implements
                     Log.e(TAG, "stop fail: " + e.getMessage());
                 }
 
-                mCurrentVideoFilename = mCameraVideoFilename;
-                Log.v(TAG, "Setting current video filename: " + mCurrentVideoFilename);
                 mMediaRecorderRecording = false;
             }
             releaseMediaRecorder();
-            mRecordingTimeView.setVisibility(View.GONE);
         }
-
-        deleteCurrentVideo();
     }
 
     private void setScreenOnFlag() {
@@ -678,6 +626,15 @@ public class VideoCamera extends CallScreen implements
 	public void onClick(View v) {
 		isAvailableSprintFFC = !isAvailableSprintFFC;
 		initializeVideo();
+		change = true;
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		videoQualityHigh = !videoQualityHigh;
+		initializeVideo();
+		change = true;
+		return true;
 	}
 	
 }

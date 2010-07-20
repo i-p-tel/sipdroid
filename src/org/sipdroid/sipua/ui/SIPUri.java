@@ -36,11 +36,9 @@ import android.view.Window;
 
 public class SIPUri extends Activity {
 
-	private static AlertDialog m_AlertDlg;
-
 	void call(String target) {
 		if (!Receiver.engine(this).call(target,true)) {
-			m_AlertDlg = new AlertDialog.Builder(this)
+			new AlertDialog.Builder(this)
 			.setMessage(R.string.notfast)
 			.setTitle(R.string.app_name)
 			.setIcon(R.drawable.icon22)
@@ -83,10 +81,6 @@ public class SIPUri extends Activity {
 				target = uri.getLastPathSegment();
 		}
 		if (!Sipdroid.release) Log.v("SIPUri", "sip uri: " + target);
-		if (m_AlertDlg != null)  {
-			m_AlertDlg.cancel();
-			m_AlertDlg = null;
-		}
 		if (!target.contains("@") && PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_ASK)) {
 			final String t = target;
 			new AlertDialog.Builder(this)
@@ -112,4 +106,11 @@ public class SIPUri extends Activity {
 		} else
 			call(target); 
 	}
+	
+	    @Override
+	    public void onPause() {
+	        super.onPause();
+	        finish();
+	    }
+	 
 }

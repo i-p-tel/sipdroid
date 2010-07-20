@@ -20,15 +20,10 @@ package org.sipdroid.sipua.ui;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import java.io.IOException;
-import java.net.InetAddress;
 import java.util.HashMap;
 
 import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.media.RtpStreamSender;
-import org.sipdroid.net.RtpPacket;
-import org.sipdroid.net.RtpSocket;
-import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
 import org.sipdroid.sipua.phone.Call;
@@ -38,7 +33,6 @@ import org.sipdroid.sipua.phone.SlidingCardManager;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
@@ -121,10 +115,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     				2000:5000);
     		break;
     	}
-		if (socket != null) {
-			socket.close();
-			socket = null;
-		}
 		if (t != null) {
 			running = false;
 			t.interrupt();
@@ -142,7 +132,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		onStop();
 	}
 	
-	SipdroidSocket socket;
 	Context mContext = this;
 
 	@Override
@@ -162,49 +151,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 					mHandler.sendEmptyMessageDelayed(MSG_ANSWER_SPEAKER, 10000);
 			break;
 		case UserAgent.UA_STATE_INCALL:
-			if (socket == null && Receiver.engine(mContext).getLocalVideo() != 0 && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER))
-		        (new Thread() {
-					public void run() {
-						RtpSocket rtp_socket;
-						RtpPacket keepalive = new RtpPacket(new byte[12],0);
-						RtpPacket videopacket = new RtpPacket(new byte[1000],0);
-						
-						try {
-							rtp_socket = new RtpSocket(socket = new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
-									InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
-									Receiver.engine(mContext).getRemoteVideo());
-							rtp_socket.getDatagramSocket().setSoTimeout(15000);
-						} catch (Exception e) {
-							if (!Sipdroid.release) e.printStackTrace();
-							return;
-						}
-						keepalive.setPayloadType(126);
-						try {
-							sleep(3000);
-							rtp_socket.send(keepalive);
-						} catch (Exception e1) {
-							return;
-						}
-						for (;;) {
-							try {
-								rtp_socket.receive(videopacket);
-							} catch (IOException e) {
-								rtp_socket.getDatagramSocket().disconnect();
-								try {
-									rtp_socket.send(keepalive);
-								} catch (IOException e1) {
-									return;
-								}
-							}
-							if (videopacket.getPayloadLength() > 200) {
-								Intent i = new Intent(mContext, org.sipdroid.sipua.ui.VideoCamera.class);
-								i.putExtra("justplay",true);
-								startActivity(i);
-								return;
-							}
-						}
-					}
-		        }).start();  
 			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 				mDialerDrawer.close();
 				mDialerDrawer.setVisibility(View.GONE);

@@ -210,7 +210,8 @@ public class RtpStreamReceiver extends Thread {
 				lin[i+off] = (short)(j*5);
 		}
 		r = (double)len/(100000*mu);
-		smin = sm*r + smin*(1-r);
+		if (sm > 2*smin || sm < smin/2)
+			smin = sm*r + smin*(1-r);
 	}
 	
 	static long down_time;

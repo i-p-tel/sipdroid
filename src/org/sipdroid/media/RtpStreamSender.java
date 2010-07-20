@@ -209,7 +209,8 @@ public class RtpStreamSender extends Thread {
 			else if (nearend > 0) nearend--;
 		}
 		r = (double)len/(100000*mu);
-		smin = sm*r + smin*(1-r);
+		if (sm > 2*smin || sm < smin/2)
+			smin = sm*r + smin*(1-r);
 	}
 
 	void calc1(short[] lin,int off,int len) {
