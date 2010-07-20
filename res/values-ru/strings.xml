@@ -133,6 +133,9 @@
 <string name="settings_stun_server">Имя STUN-сервера</string>
 <string name="settings_stun_server_port">Порт STUN-сервера</string>
 
+<string name="settings_mmtel">Использовать MMTel</string>
+<string name="settings_mmtel_qvalue">Q-значение</string>
+
 <string name="settings_options">Вызов</string>
 <string name="settings_wlan">Использовать WLAN</string>
 <string name="settings_3g">Использовать 3G</string>
