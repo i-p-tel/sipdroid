@@ -25,15 +25,14 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="1.5.4 beta"
-    android:versionCode="70">
+    android:versionName="1.5.5 beta"
+    android:versionCode="71">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
 	<supports-screens
           android:normalScreens="true"
           android:smallScreens="true"
           android:largeScreens="false"
           android:anyDensity="false" />
-	<uses-feature android:name="android.hardware.camera" android:required="false"/>
 	<application android:icon="@drawable/icon64" android:label="@string/app_name">
         <activity android:name=".ui.Sipdroid" android:label="@string/app_name" android:launchMode="singleInstance"
         	android:configChanges="orientation|keyboardHidden">

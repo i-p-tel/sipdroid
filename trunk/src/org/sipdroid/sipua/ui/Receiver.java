@@ -762,14 +762,15 @@ import org.sipdroid.sipua.phone.Connection;
 	                }
 	                ScanResult bestscan = null;
 	                WifiConfiguration bestconfig = null;
-	                for(final ScanResult scan : mScanResults) {	
-	                    for(final WifiConfiguration config : configurations) {
-	                    	if (config.SSID.equals("\""+scan.SSID+"\"") && (bestscan == null || scan.level > bestscan.level)) {
-	                    		bestscan = scan;
-	                    		bestconfig = config;
-	                    	}
-	                    }
-	                }
+	                if (mScanResults != null)
+		                for(final ScanResult scan : mScanResults) {	
+		                    for(final WifiConfiguration config : configurations) {
+		                    	if (config.SSID.equals("\""+scan.SSID+"\"") && (bestscan == null || scan.level > bestscan.level)) {
+		                    		bestscan = scan;
+		                    		bestconfig = config;
+		                    	}
+		                    }
+		                }
 	                if (bestconfig != null && bestconfig.priority != maxpri) {
 	            		wm.disconnect();
 	                	bestconfig.priority = maxpri + 1;
