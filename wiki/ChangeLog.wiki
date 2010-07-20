@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.5.5
+    * Bugfixes
+
   * 1.5.4
     * MMTel support
     * Fix issue 539, issue 541
