@@ -5,6 +5,7 @@
 
   * 1.5.5
     * Bugfixes
+    * Make visible in Market for Android 1.x devices again
 
   * 1.5.4
     * MMTel support
