@@ -111,7 +111,7 @@ public abstract class BaseMessageFactory {
 		// optional headers:
 		// start modification by mandrajg
 		if (contact != null) {
-			if ((method == "REGISTER") && (icsi != null) ){
+			if (((method == "REGISTER")||(method == "INVITE")) && (icsi != null) ){
 				MultipleHeader contacts = new MultipleHeader(SipHeaders.Contact);
 				contacts.addBottom(new ContactHeader(contact, qvalue, icsi));
 				req.setContacts(contacts);
