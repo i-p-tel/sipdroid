@@ -111,10 +111,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 				
 			IpAddress.setLocalIpAddress();
 			sip_provider = new SipProvider(IpAddress.localIpAddress, 0);
-			user_profile.contact_url = user_profile.username
-				+ "@"
-				+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"")
-				+ ";transport=" + sip_provider.getDefaultTransport();
+			user_profile.contact_url = getContactURL(user_profile.username);
 			
 			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_FROMUSER, Settings.DEFAULT_FROMUSER).length() == 0) {
 				user_profile.from_url = user_profile.username
@@ -147,6 +144,19 @@ public class SipdroidEngine implements RegisterAgentListener {
 		}
 
 		return true;
+	}
+
+	private String getContactURL(String username) {
+		int i = username.indexOf("@");
+		if (i != -1) {
+			// if the username already contains a @ 
+			//strip it and everthing following it
+			username = username.substring(0, i);
+		}
+
+		return username + "@" + IpAddress.localIpAddress
+		+ (sip_provider.getPort() != 0?":"+sip_provider.getPort():"")
+		+ ";transport=" + sip_provider.getDefaultTransport();		
 	}
 	
 	void setOutboundProxy() {
@@ -202,10 +212,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 		if (user_profile == null || user_profile.username.equals("") ||
 				user_profile.realm.equals("")) return;
 		IpAddress.setLocalIpAddress();
-		user_profile.contact_url = user_profile.username
-			+ "@"
-			+ IpAddress.localIpAddress + (sip_provider.getPort() != 0?":"+sip_provider.getPort():"")
-			+ ";transport=" + sip_provider.getDefaultTransport();			
+		user_profile.contact_url = getContactURL(user_profile.username);
+
 		if (!Receiver.isFast()) {
 			unregister();
 		} else {
