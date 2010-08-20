@@ -114,15 +114,17 @@ public class SipdroidEngine implements RegisterAgentListener {
 			user_profile.contact_url = getContactURL(user_profile.username);
 			
 			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_FROMUSER, Settings.DEFAULT_FROMUSER).length() == 0) {
-				user_profile.from_url = user_profile.username
-					+ "@"
-					+ user_profile.realm;
+				user_profile.from_url = user_profile.username;
 			} else {
-				user_profile.from_url = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_FROMUSER, Settings.DEFAULT_FROMUSER)
-					+ "@"
-					+ user_profile.realm;
+				user_profile.from_url = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_FROMUSER, Settings.DEFAULT_FROMUSER);
 			}
 
+			if (user_profile.from_url.indexOf("@") < 0) {
+				user_profile.from_url +=
+					"@"
+					+ user_profile.realm;
+			}
+			
 			CheckEngine();
 			
 			// added by mandrajg
