@@ -505,7 +505,8 @@ public abstract class BaseMessageFactory {
 		// reason=SipResponses.reasonOf(code);
 		String localtag = null;
 		if (req.createsDialog() && !req.getToHeader().hasTag()) {
-			if (SipStack.early_dialog || (code >= 200 && code < 300))
+			//fix issue 425 - also add tag to 18x responses
+			if (SipStack.early_dialog || (code >= 101 && code < 300))
 				localtag = SipProvider.pickTag(req);
 		}
 		return createResponse(req, code, reason, localtag, contact, null, null);
