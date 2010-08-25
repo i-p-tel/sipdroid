@@ -167,7 +167,6 @@
 <string name="settings_sipringtone2">Imposta la suoneria per le chiamate in arrivo dal SIP</string>
 <string name="settings_sipringtone_dialog">Suonerie</string>
 <string name="settings_eargain">Regolazione altoparlante</string>
-<string name="settings_eargain2">Regola per alzare o diminuire il volume dell\'echo del client remoto</string>
     <string-array name="eargain_display_values">
         <item>Basso (nessun echo)</item>
         <item>Medio</item>
@@ -222,5 +221,4 @@
 
 <string name="ongoing">Chiamata attuale</string>
 <string name="onHold">In attesa</string>
-<string name="callerid">ID chiamante</string>
 </resources>
