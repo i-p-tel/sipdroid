@@ -103,7 +103,6 @@
 <string name="settings_sipringtone2">Selectează ton de apel pentru apeluri SIP primite</string>
 <string name="settings_sipringtone_dialog">Tonuri de apel</string>
 <string name="settings_eargain">Amplificare casca</string>
-<string name="settings_eargain2">Ajustează pentru volum ridicat sau eliminare ecou</string>
     <string-array name="eargain_display_values">
         <item>Scazut (fara ecou)</item>
         <item>Mediu</item>
@@ -158,5 +157,4 @@
 
 <string name="ongoing">Apel curent</string>
 <string name="onHold">În aşteptare</string>
-<string name="callerid">ID Apelant</string>
 </resources>
