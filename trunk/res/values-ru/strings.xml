@@ -153,7 +153,7 @@
 <string name="dontask">Не спрашивать</string>
 
 <string name="settings_pref">Предпочитаемый тип вызова</string>
-<string name="settings_pref2">Можно всегда позвонить через Sipdroid добавив «+» перед номером телефона или выбрав «Отправить сообщение» в Контактах.</string>
+<string name="settings_pref2">Можно всегда позвонить через Sipdroid добавив «+» после номера телефона или выбрав «Отправить сообщение» в Контактах.</string>
     <string-array name="pref_display_values">
         <item>Sipdroid</item>
         <item>Sipdroid, когда возможно</item>
