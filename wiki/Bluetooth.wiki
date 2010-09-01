@@ -7,7 +7,7 @@
 
 == Introduction ==
 
-Bluetooth support is still marked "experimental" in Sipdroid. This article explains what's possible and how. First, Bluetooth is supported starting with Android "Froyo". If Bluetooth has been enabled and paired to a suitable device Sipdroid will show a "Bluetooth" button while in call. The wireless settings within Sipdroid allow to switch on Bluetooth for all calls by default.
+Bluetooth support is still marked "experimental" in Sipdroid. This article explains why, what's possible and how. First, Bluetooth is supported starting with Android "Froyo". If Bluetooth has been enabled and paired to a suitable device Sipdroid will show a "Bluetooth" button while in call. The wireless settings within Sipdroid allow to switch on Bluetooth for all calls by default.
 
 == Bluetooth/WLAN interference ==
 
@@ -27,4 +27,4 @@ A workaround for this issue is disabling Handsfree profile to make the device wo
 
 http://store.zomm.com/product_images/p/881/WHITE_ZOMM_ST_FRONT__14846_thumb.png
 
-A nice gadget we have been successfully using with above operating system tweaks is the ZOMM. It provides a speakerphone with very good echo cancellation suitable for VoIP needs.
+A nice gadget we have successfully been using with above mentioned tweaks is the "ZOMM". It's speakerphone features strong echo cancellation suitable for VoIP needs.
