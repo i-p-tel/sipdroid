@@ -192,7 +192,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			//instances as well.
 			
 			if (CurrentState == DEREGISTERING) {
-				t.terminate();
+				if (t != null) t.terminate();
 				onTransTimeout(t);
 			}
 			if (CurrentState != UNREGISTERED && CurrentState != REGISTERED)
@@ -205,7 +205,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 		else
 		{
 			if (CurrentState == REGISTERING) {
-				t.terminate();
+				if (t != null) t.terminate();
 				onTransTimeout(t);
 			}
 			if (CurrentState != REGISTERED)
@@ -606,6 +606,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 	
 	/** Callback function called when client expires timeout. */
 	public void onTransTimeout(TransactionClient transaction) {
+		if (transaction == null) return;
 		if (transaction.getTransactionMethod().equals(SipMethods.REGISTER)) {
 			printLog("Registration failure: No response from server.",
 					LogLevel.HIGH);

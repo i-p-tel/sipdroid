@@ -163,7 +163,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	
 	void setOutboundProxy() {
 		try {
-			sip_provider.setOutboundProxy(new SocketAddress(
+			if (sip_provider != null) sip_provider.setOutboundProxy(new SocketAddress(
 					IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_DNS, Settings.DEFAULT_DNS)),
 					SipStack.default_port));
 		} catch (UnknownHostException e) {
@@ -231,6 +231,14 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 
 	public void halt() { // modified
+		int cnt = 0;
+		
+		unregister();
+		while (ra.CurrentState != RegisterAgent.UNREGISTERED && cnt++ < 20)
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e1) {
+			}
 		if (wl.isHeld()) {
 			wl.release();
 			if (pwl != null && pwl.isHeld()) pwl.release();
@@ -363,6 +371,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 	public void answercall() 
 	{
+		Receiver.stopRingtone();
 		ua.accept();
 	}
 

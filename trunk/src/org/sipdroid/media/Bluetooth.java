@@ -69,6 +69,7 @@ public class Bluetooth {
 	}
 	
 	public static boolean isSupported() {
+		init();
 		return am.isBluetoothScoAvailableOffCall();
 	}
 }

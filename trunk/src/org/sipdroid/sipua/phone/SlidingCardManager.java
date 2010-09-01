@@ -26,6 +26,7 @@ import org.sipdroid.sipua.ui.InCallScreen;
 import org.sipdroid.sipua.ui.Receiver;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -353,8 +354,11 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
         // we are, as long as it's independant of our position
         final int xAbsolute = (int) ev.getRawX();
         final int yAbsolute = (int) ev.getRawY();
-
+        
         if (isSlideInProgress()) {
+            if (SystemClock.elapsedRealtime()-mTouchDownTime > 1000)
+            	abortSlide();
+            else
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
                     // Shouldn't happen in this state.
@@ -395,6 +399,8 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
         }
     }
 
+    long mTouchDownTime;
+    
     /**
      * Start sliding the card.
      * Called when we get a DOWN touch event on the slideable CallCard.
@@ -410,6 +416,7 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
 
         mSlideInProgress = true;
         mTouchDownY = y;
+        mTouchDownTime = SystemClock.elapsedRealtime();
     }
 
     /**

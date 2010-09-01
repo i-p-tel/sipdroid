@@ -351,16 +351,11 @@ public class Sipdroid extends Activity {
 			break;
 			
 		case EXIT_MENU_ITEM: 
-			Receiver.reRegister(0);
-			Receiver.engine(this).unregister();
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e1) {
-			}
 			on(this,false);
 			Receiver.pos(true);
 			Receiver.engine(this).halt();
 			Receiver.mSipdroidEngine = null;
+			Receiver.reRegister(0);
 			stopService(new Intent(this,RegisterService.class));
 			finish();
 			break;
