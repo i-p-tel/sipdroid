@@ -142,7 +142,6 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 			break;
 			
 		case ANSWER_MENU_ITEM:
-			Receiver.stopRingtone();
 			Receiver.engine(this).answercall();
 			break;
 			

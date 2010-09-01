@@ -85,6 +85,8 @@ import org.sipdroid.sipua.phone.Connection;
 		final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
 		final static String ACTION_DEVICE_IDLE = "com.android.server.WifiManager.action.DEVICE_IDLE";
 		final static String ACTION_VPN_CONNECTIVITY = "vpn.connectivity";
+		final static String ACTION_EXTERNAL_APPLICATIONS_AVAILABLE = "android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE";
+		final static String ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE = "android.intent.action.EXTERNAL_APPLICATIONS_UNAVAILABLE";
 		final static String METADATA_DOCK_HOME = "android.dock_home";
 		final static String CATEGORY_DESK_DOCK = "android.intent.category.DESK_DOCK";
 		final static String CATEGORY_CAR_DOCK = "android.intent.category.CAR_DOCK";
@@ -162,6 +164,7 @@ import org.sipdroid.sipua.phone.Connection;
 					enable_wifi(true);
 					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
 					RtpStreamReceiver.speakermode = speakermode();
+					bluetooth = -1;
 					String text = caller.toString();
 					if (text.indexOf("<sip:") >= 0 && text.indexOf("@") >= 0)
 						text = text.substring(text.indexOf("<sip:")+5,text.indexOf("@"));
@@ -211,6 +214,7 @@ import org.sipdroid.sipua.phone.Connection;
 				case UserAgent.UA_STATE_OUTGOING_CALL:
 					RtpStreamReceiver.good = RtpStreamReceiver.lost = RtpStreamReceiver.loss = RtpStreamReceiver.late = 0;
 					RtpStreamReceiver.speakermode = speakermode();
+					bluetooth = -1;
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
 					engine(mContext).register();
 					broadcastCallStateChanged("OFFHOOK", caller);
@@ -588,13 +592,6 @@ import org.sipdroid.sipua.phone.Connection;
 		}
 		
 		public static boolean isFast() {
-			is_fast = isFastWifi();
-			if (!is_fast) is_fast = isFastGSM();
-			if (!is_fast) is_fast = isFastEth();
-			return is_fast;
-		}
-			
-		static boolean isFastWifi() {
         	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         	WifiInfo wi = wm.getConnectionInfo();
 
@@ -611,9 +608,9 @@ import org.sipdroid.sipua.phone.Connection;
 	        	}
         	}
         	on_wlan = false;
-        	return false;
+			return isFastGSM();
 		}
-		
+			
 		static boolean isFastGSM() {
         	TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -626,31 +623,6 @@ import org.sipdroid.sipua.phone.Connection;
         	if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE)
        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_EDGE, org.sipdroid.sipua.ui.Settings.DEFAULT_EDGE);
         	return false;
-		}
-		
-		static boolean isFastEth() {
-			/*
-			 * The following code does not seem to work with all phones/OS versions.
-			 * Users complained about inability to disable Sipdroid by unchecking
-			 * all network types in call options.
-			 * 
-			boolean on_eth = false;
-			try {
-				for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-					NetworkInterface intf = en.nextElement();
-
-					if (intf.getName() != null && intf.getName().startsWith("eth")) {
-						on_eth = true;
-						on_wlan = true; //treat eth connection as wlan
-						break;
-					}
-				}
-			} catch (SocketException ex) {
-				// do nothing
-			}			
-			return on_eth;
-			*/
-			return false;
 		}
 		
 		public static int speakermode() {
@@ -674,6 +646,12 @@ import org.sipdroid.sipua.phone.Connection;
 	    	}
 	    };
 
+	    int asu(ScanResult scan) {
+	    	if (scan == null)
+	    		return 0;
+	    	return Math.round((scan.level + 113f) / 2f);
+	    }
+	    
 	    @Override
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
@@ -684,7 +662,10 @@ import org.sipdroid.sipua.phone.Connection;
 	        	on_vpn(false);
 	        	engine(context).register();
 	        } else
-		    if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+		    if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
+		    		intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_AVAILABLE) ||
+		    		intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE) ||
+		    		intentAction.equals(Intent.ACTION_PACKAGE_REPLACED)) {
 		    	engine(context).register();
 			} else
 			if (intentAction.equals(ACTION_VPN_CONNECTIVITY) && intent.hasExtra("connection_state")) {
@@ -754,30 +735,37 @@ import org.sipdroid.sipua.phone.Connection;
 		        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 		        	List<ScanResult> mScanResults = wm.getScanResults();
 		        	List<WifiConfiguration> configurations = wm.getConfiguredNetworks();
-	                int maxpri = 0;
-	                for(final WifiConfiguration config : configurations) {
-	                        if(config.priority > maxpri) {
-	                                maxpri = config.priority;
-	                        }
-	                }
-	                ScanResult bestscan = null;
-	                WifiConfiguration bestconfig = null;
-	                if (mScanResults != null)
-		                for(final ScanResult scan : mScanResults) {	
-		                    for(final WifiConfiguration config : configurations) {
-		                    	if (config.SSID.equals("\""+scan.SSID+"\"") && (bestscan == null || scan.level > bestscan.level)) {
-		                    		bestscan = scan;
-		                    		bestconfig = config;
-		                    	}
-		                    }
+		        	if (configurations != null) {
+		                WifiConfiguration bestconfig = null,maxconfig = null;
+		                for(final WifiConfiguration config : configurations) {
+		                        if (maxconfig == null || config.priority > maxconfig.priority) {
+		                                maxconfig = config;
+		                        }
 		                }
-	                if (bestconfig != null && bestconfig.priority != maxpri) {
-	            		wm.disconnect();
-	                	bestconfig.priority = maxpri + 1;
-	                	wm.updateNetwork(bestconfig);
-	                	wm.enableNetwork(bestconfig.networkId, true);
-	                	wm.reconnect();
-	                }
+		                ScanResult bestscan = null,maxscan = null;
+		                if (mScanResults != null)
+			                for(final ScanResult scan : mScanResults) {	
+			                    for(final WifiConfiguration config : configurations) {
+			                    	if (config.SSID.equals("\""+scan.SSID+"\"")) {
+			                    		if (bestscan == null || scan.level > bestscan.level) {
+				                    		bestscan = scan;
+				                    		bestconfig = config;
+			                    		}
+			                    		if (config == maxconfig) {
+			                    			maxscan = scan;
+			                    		}
+			                    	}
+			                    }
+			                }
+		                if (bestconfig != null && bestconfig.priority != maxconfig.priority &&
+		                		asu(bestscan) > asu(maxscan)*1.5) {
+		            		wm.disconnect();
+		                	bestconfig.priority = maxconfig.priority + 1;
+		                	wm.updateNetwork(bestconfig);
+		                	wm.enableNetwork(bestconfig.networkId, true);
+		                	wm.reconnect();
+		                }
+		        	}
 	        	}
 	        }
 		}   

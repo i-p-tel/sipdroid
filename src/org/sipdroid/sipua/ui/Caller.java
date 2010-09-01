@@ -25,6 +25,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.sipdroid.media.RtpStreamReceiver;
+import org.sipdroid.sipua.UserAgent;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -60,13 +63,29 @@ public class Caller extends BroadcastReceiver {
     			boolean sip_type = !PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN);
     	        boolean ask = PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_ASK);
     	        
+      	        if (Receiver.call_state != UserAgent.UA_STATE_IDLE && RtpStreamReceiver.isBluetoothAvailable()) {
+       	        	setResultData(null);
+       	        	switch (Receiver.call_state) {
+    	        	case UserAgent.UA_STATE_INCOMING_CALL:
+    	        		Receiver.engine(context).answercall();
+    	        		if (RtpStreamReceiver.bluetoothmode)
+    	        			break;
+    	        	default:
+    	        		if (RtpStreamReceiver.bluetoothmode)
+    	        			Receiver.engine(context).rejectcall();
+    	        		else
+    	        			Receiver.engine(context).togglebluetooth();
+    	        		break;	
+       	        	}
+       	        	return;
+      	        }
     	        if (last_number != null && last_number.equals(number) && (SystemClock.elapsedRealtime()-last_time) < 3000) {
     	        	setResultData(null);
     	        	return;
     	        }
-    	        last_time = SystemClock.elapsedRealtime();
+      	        last_time = SystemClock.elapsedRealtime();
     	        last_number = number;
-				if (number.endsWith("+")) 
+ 				if (number.endsWith("+")) 
     			{
     				sip_type = !sip_type;
     				number = number.substring(0,number.length()-1);
@@ -104,8 +123,6 @@ public class Caller extends BroadcastReceiver {
 					if (bExTypes || bExNums)
 						sip_type = false;
 				}
-				if (PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_SIPONLY))
-					force = true;
 
     			if (!sip_type)
     			{
@@ -128,16 +145,18 @@ public class Caller extends BroadcastReceiver {
 	        		    	
 	        		    	// Search & replace.
 	    				String search = sp.getString(Settings.PREF_SEARCH, Settings.DEFAULT_SEARCH);
-	    				String callthru_number = number = searchReplaceNumber(search, number);
+	    				String callthru_number = searchReplaceNumber(search, number);
 	    				String callthru_prefix;
 	    				
-						if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_PAR, Settings.DEFAULT_PAR)) 
+						if (!ask && !force && PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_PAR, Settings.DEFAULT_PAR)) 
 	    				{
-	    					String orig = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");	
+/*	    					String orig = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");	
 	     					if (orig.lastIndexOf("/phones") >= 0) 
 	    					{
-	    						orig = orig.substring(0,orig.lastIndexOf("/phones")+7);
+	     						orig = orig.substring(0,orig.lastIndexOf("/phones")+7);
 	        					Uri contactRef = Uri.parse(orig);
+	        					*/
+	        			    	Uri contactRef = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, number);
 	        				    final String[] PHONES_PROJECTION = new String[] {
 	         				        People.Phones.NUMBER, // 0
 	        				        People.Phones.TYPE, // 1
@@ -160,9 +179,16 @@ public class Caller extends BroadcastReceiver {
 	        			                }
 	        			            }
 	        			            phonesCursor.close();
-	        			        }
-	        				}        					
-	    				}
+	        			            if (number.equals(""))
+	        			            	number = callthru_number;
+	        			        } else
+	        			        	number = callthru_number;
+//	        				}        					
+	    				} else
+	    					number = callthru_number;
+						
+						if (PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_SIPONLY))
+							force = true;
 	    				if (!ask && Receiver.engine(context).call(number,force))
 	    					setResultData(null);
 	    				else if (!ask && PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_CALLTHRU, Settings.DEFAULT_CALLTHRU) &&

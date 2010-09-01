@@ -61,6 +61,7 @@ public class RegisterService extends Service {
 			 intentfilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 			 intentfilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 	         registerReceiver(m_receiver = new Receiver(), intentfilter);      
+	         intentfilter = new IntentFilter();
         }
         Receiver.engine(this).isRegistered();
         RtpStreamReceiver.restoreSettings();

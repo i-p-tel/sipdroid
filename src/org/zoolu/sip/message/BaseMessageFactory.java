@@ -384,13 +384,11 @@ public abstract class BaseMessageFactory {
 		boolean rport = via.hasRport();
 		String proto = via.getProtocol();
 		String branch = method.getViaHeader().getBranch();
-		dialog.incLocalCSeq();
-		long cseq = dialog.getLocalCSeq();
 		return createRequest(SipMethods.CANCEL, request_uri, to
 				.getNameAddress(), from.getNameAddress(), contact, proto,
 				host_addr, host_port, rport, method.getCallIdHeader()
-						.getCallId(), /* method.getCSeqHeader()
-						.getSequenceNumber() */ cseq, from.getParameter("tag"), to // modified
+						.getCallId(), method.getCSeqHeader()
+						.getSequenceNumber(), from.getParameter("tag"), to
 						.getParameter("tag"), branch, "", null, null);				// modified by mandrajg
 	}
 

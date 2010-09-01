@@ -278,6 +278,7 @@ public class RtpStreamSender extends Thread {
 		long time = 0;
 		double p = 0;
 		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(Settings.PREF_IMPROVE, Settings.DEFAULT_IMPROVE);
+		boolean selectWifi = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_SELECTWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_SELECTWIFI);
 		int micgain = 0;
 		long last_tx_time = 0;
 		long next_tx_delay;
@@ -331,6 +332,7 @@ public class RtpStreamSender extends Thread {
 					record.stop();
 					record.release();
 				}
+				changed = false;
 				record = new AudioRecord(MediaRecorder.AudioSource.MIC, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
 							min);
 				if (record.getState() != AudioRecord.STATE_INITIALIZED) {
@@ -339,7 +341,6 @@ public class RtpStreamSender extends Thread {
 					break;
 				}
 				record.startRecording();
-				changed = false;
 				micgain = (int)(Settings.getMicGain()*10);
 			 }
 			 if (muted || Receiver.call_state == UserAgent.UA_STATE_HOLD) {
@@ -468,7 +469,7 @@ public class RtpStreamSender extends Thread {
  				 time += frame_size;
  			 if (RtpStreamReceiver.good != 0 &&
  					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01) {
- 				 if (Receiver.on_wlan && SystemClock.elapsedRealtime()-lastscan > 10000) {
+ 				 if (selectWifi && Receiver.on_wlan && SystemClock.elapsedRealtime()-lastscan > 10000) {
  					 wm.startScan();
  					 lastscan = SystemClock.elapsedRealtime();
  				 }

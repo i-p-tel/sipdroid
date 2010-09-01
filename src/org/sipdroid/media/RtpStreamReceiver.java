@@ -76,7 +76,7 @@ public class RtpStreamReceiver extends Thread {
 	AudioManager am;
 	ContentResolver cr;
 	public static int speakermode = -1;
-	static boolean bluetoothmode;
+	public static boolean bluetoothmode;
 	
 	/**
 	 * Constructs a RtpStreamReceiver.
@@ -112,9 +112,24 @@ public class RtpStreamReceiver extends Thread {
 		enableBluetooth(!bluetoothmode);
 	}
 	
+	static boolean was_enabled;
+	
 	static void enableBluetooth(boolean mode) {
-		if (bluetoothmode != mode && (!mode || isBluetoothAvailable()))
+		if (bluetoothmode != mode && (!mode || isBluetoothAvailable())) {
+			if (mode) was_enabled = true;
 			Bluetooth.enable(bluetoothmode = mode);
+		}
+	}
+	
+	void cleanupBluetooth() {
+		if (was_enabled) {
+			enableBluetooth(true);
+			try {
+				sleep(3000);
+			} catch (InterruptedException e) {
+			}
+			android.os.Process.killProcess(android.os.Process.myPid());
+		}
 	}
 	
 	public static boolean isBluetoothAvailable() {
@@ -253,7 +268,8 @@ public class RtpStreamReceiver extends Thread {
 	void restoreVolume() {
 		switch (getMode()) {
 		case AudioManager.MODE_IN_CALL:
-				setStreamVolume(AudioManager.STREAM_RING,(int)(
+				int oldring = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0);
+				if (oldring > 0) setStreamVolume(AudioManager.STREAM_RING,(int)(
 						am.getStreamMaxVolume(AudioManager.STREAM_RING)*
 						org.sipdroid.sipua.ui.Settings.getEarGain()), 0);
 				track.setStereoVolume(AudioTrack.getMaxVolume()*
@@ -348,7 +364,8 @@ public class RtpStreamReceiver extends Thread {
 			am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,oldvibrate);
 			am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 			Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
-			am.setStreamVolume(AudioManager.STREAM_RING, PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0), 0);
+			int oldring = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0);
+			if (oldring > 0) am.setStreamVolume(AudioManager.STREAM_RING, oldring, 0);
 			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
 			edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_OLDVALID, false);
 			edit.commit();
@@ -647,6 +664,8 @@ public class RtpStreamReceiver extends Thread {
 
 		if (DEBUG)
 			println("rtp receiver terminated");
+
+		cleanupBluetooth();
 	}
 
 	/** Debug output */

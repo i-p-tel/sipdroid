@@ -106,7 +106,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     	if (!Sipdroid.release) Log.i("SipUA:","on pause");
     	switch (Receiver.call_state) {
     	case UserAgent.UA_STATE_INCOMING_CALL:
-    		Receiver.moveTop();
+    		if (!RtpStreamReceiver.isBluetoothAvailable()) Receiver.moveTop();
     		break;
     	case UserAgent.UA_STATE_IDLE:
     		if (Receiver.ccCall != null)
@@ -374,8 +374,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	public void answer() {
         (new Thread() {
 			public void run() {
-				Receiver.stopRingtone();
-        		Receiver.engine(mContext).answercall();
+				Receiver.engine(mContext).answercall();
 			}
 		}).start();   
 		if (Receiver.ccCall != null) {
