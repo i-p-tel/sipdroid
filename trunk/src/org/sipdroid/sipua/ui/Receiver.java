@@ -602,13 +602,13 @@ import org.sipdroid.sipua.phone.Connection;
 	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
 	        		on_wlan = true;
 	        		if (!on_vpn())
-	        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN, org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
+	        			return is_fast = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN, org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
 	        		else
-	        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_VPN, org.sipdroid.sipua.ui.Settings.DEFAULT_VPN);  
+	        			return is_fast = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_VPN, org.sipdroid.sipua.ui.Settings.DEFAULT_VPN);  
 	        	}
         	}
         	on_wlan = false;
-			return isFastGSM();
+			return is_fast = isFastGSM();
 		}
 			
 		static boolean isFastGSM() {
