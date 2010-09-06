@@ -234,7 +234,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 		int cnt = 0;
 		
 		unregister();
-		while (ra.CurrentState != RegisterAgent.UNREGISTERED && cnt++ < 20)
+		while (ra != null && ra.CurrentState != RegisterAgent.UNREGISTERED && cnt++ < 20)
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e1) {

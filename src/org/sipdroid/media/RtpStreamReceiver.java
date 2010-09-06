@@ -128,7 +128,8 @@ public class RtpStreamReceiver extends Thread {
 				sleep(3000);
 			} catch (InterruptedException e) {
 			}
-			android.os.Process.killProcess(android.os.Process.myPid());
+			if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
+				android.os.Process.killProcess(android.os.Process.myPid());
 		}
 	}
 	
