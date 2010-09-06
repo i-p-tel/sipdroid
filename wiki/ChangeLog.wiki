@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 1.5.7
+    * Fix issue 625, issue 629
+
   * 1.5.6
     * Fix issue 420, issue 425, issue 468, issue 476, issue 534, issue 560, issue 595
 
