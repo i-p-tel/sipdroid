@@ -228,7 +228,7 @@
 <string name="settings_par">多個撥出電話</string>
 <string name="settings_par2">允許同時撥打多個電話</string>
 <string name="settings_improve">音質優化</string>
-<string name="settings_improve2">需要收費帳號及</string>
+<string name="settings_improve2">需要收費帳號</string>
 <string name="settings_hdvoice">PBXes支持高清语音</string>
 <string name="settings_posurl">地理位置及回撥URL位址</string>
 <string name="settings_pos">更新地理位置</string>
