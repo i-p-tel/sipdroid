@@ -134,8 +134,11 @@
 <string name="settings_stun">使用STUN伺服器</string>
 <string name="settings_stun_server">STUN伺服器地址</string>
 <string name="settings_stun_server_port">STUN伺服器埠</string>
+
+<string name="settings_mmtel">使用MMTel技术</string>
+<string name="settings_mmtel_qvalue">Q值</string>
  
-<string name="settings_options">通話選項</string>
+<string name="settings_options">通話設定</string>
 <string name="settings_wlan">使用Wi-Fi網路</string>
 <string name="settings_3g">使用3G網路</string>
 <string name="settings_edge">使用EDGE網路</string>
@@ -146,7 +149,7 @@
 <string name="dialog_default">Sipdroid現在不是默認的電話程序，是否要將其設定為默認？
 \n
 \n如果你選擇了 \'否\'，你仍然可以在撥號時在電話號碼後加上字元\'+\'，或長按聯系人選擇 \'發送簡訊\'以強制使用Sipdroid撥號。</string>
-
+<string name="dialog_message">是否查看Sipdroid 1.5的視頻介紹？</string>
 <string name="yes">是</string>
 <string name="no">否</string>
 <string name="dontask">不再提示</string>
@@ -154,19 +157,31 @@
 <string name="settings_pref">Sipdroid優先順序</string>
 <string name="settings_pref2">在撥號時在電話號碼後加上字元\'+\'，或長按聯系人選擇 \'發送簡訊\'以強制使用Sipdroid撥號。</string>
 
+
     <string-array name="pref_display_values">
         <item>僅使用Sipdroid</item>
         <item>當可用時使用Sipdroid</item>
         <item>總是使用電話</item>
-		<item>Always ask</item>
     </string-array>
 
+	<string-array name="pref_values">
+        <item>SIPONLY</item>
+        <item>SIP</item>
+        <item>PSTN</item>
+        <item>ASK</item>
+    </string-array>
 <string name="settings_compression">語音壓縮</string>
     <string-array name="compression_display_values">
         <item>僅當使用WLAN時</item>
         <item>僅當使用WLAN/3G時</item>
         <item>總是嘗試使用</item>
         <item>從不使用</item>
+    </string-array>
+	<string-array name="compression_values">
+        <item>wlan</item>
+        <item>wlanor3g</item>
+        <item>always</item>
+        <item>never</item>
     </string-array>
 <string name="settings_auto_on">開啟自動應答</string>
 <string name="settings_auto_on2">振動提醒，僅用於非鎖定狀態下</string>
@@ -198,10 +213,8 @@
 <string name="settings_hmicgain">耳機麥克風音量</string>
     <string-array name="eargain_display_values">
         <item>低 (無迴音)</item>
-
         <item>中</item>
         <item>高 (可能會出現迴音)</item>
-
         <item>極高</item>
     </string-array>
     <string-array name="eargain_values">
@@ -210,14 +223,13 @@
         <item>0.5</item>
         <item>1.0</item>
     </string-array>
-<string name="settings_ownwifi">控制Wi-Fi電量</string>
-<string name="settings_ownwifi2">節省電力</string>
 
 <string name="settings_pbxes_options">PBXes設定</string>
 <string name="settings_par">多個撥出電話</string>
 <string name="settings_par2">允許同時撥打多個電話</string>
 <string name="settings_improve">音質優化</string>
 <string name="settings_improve2">需要收費帳號及</string>
+<string name="settings_hdvoice">PBXes支持高清语音</string>
 <string name="settings_posurl">地理位置及回撥URL位址</string>
 <string name="settings_pos">更新地理位置</string>
 <string name="settings_pos2">地址可被通報至PBXes的聯系人(需要PBXes.com的Premium賬戶)</string>
@@ -229,7 +241,7 @@
 
 <string name="settings_title">Sipdroid設定</string>
 
-<string name="settings_profile_title">Sipdroid設定 (<xliff:g id="profile">%s</xliff:g>)</string>
+<string name="settings_profile_title">Sipdroid設定(<xliff:g id="profile">%s</xliff:g>)</string>
 <string name="settings_profile_menu_import">匯入</string>
 <string name="settings_profile_menu_delete">刪除</string>
 <string name="settings_profile_dialog_profiles_title">用戶配置</string>
@@ -239,6 +251,15 @@
 <string name="settings_profile_import_error">匯入用戶配置失敗！</string>
 <string name="settings_profile_delete_error">刪除用戶配置失敗！</string>
 <string name="settings_profile_delete_confirmation">成功刪除用戶配置。</string>
+
+<string name="settings_wireless_options">Wi-Fi設定</string>
+<string name="settings_bluetooth">需要Android 2.2或更高</string>
+<string name="settings_keepon">螢幕常亮</string>
+<string name="settings_keepon2">一些設備需要選擇此項以保持Wi-Fi連接</string>
+<string name="settings_selectwifi">選擇Wi-Fi熱點</string>
+<string name="settings_selectwifi2">根據信號選擇熱點</string>
+<string name="settings_ownwifi">Wi-Fi電力控制</string>
+<string name="settings_ownwifi2">節約電力</string>
 
 <string name="menu_settings">設定</string>
 <string name="menu_exit">退出</string>
@@ -251,6 +272,7 @@
 <string name="menu_transfer">轉移</string>
 <string name="menu_speaker">揚聲器</string>
 <string name="menu_endCall">掛斷</string>
+<string name="menu_bluetooth">藍牙(實驗功能)</string>
 
 <string name="transfer_title">將通話轉移至</string>
 
@@ -273,4 +295,5 @@
 <string name="codecs_move">移動解編碼器</string>
 <string name="codecs_move_up">上移</string>
 <string name="codecs_move_down">下移</string>
+<string name="help_speakerphone">按住音量鍵以強制通話</string>
 </resources>

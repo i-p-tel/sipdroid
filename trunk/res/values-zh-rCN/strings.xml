@@ -134,6 +134,9 @@
 <string name="settings_stun">使用STUN服务器</string>
 <string name="settings_stun_server">STUN服务器地址</string>
 <string name="settings_stun_server_port">STUN服务器端口</string>
+
+<string name="settings_mmtel">使用MMTel技术</string>
+<string name="settings_mmtel_qvalue">Q值</string>
  
 <string name="settings_options">通话选项</string>
 <string name="settings_wlan">使用Wi-Fi网络</string>
@@ -146,6 +149,7 @@
 <string name="dialog_default">Sipdroid现在不是默认的电话程序，是否要将其设置为默认？
 \n
 \n如果你选择了 \'否\'，你仍然可以在拨号时在电话号码后加上字符\'+\'，或长按联系人选择 \'发送短信\'以强制使用Sipdroid拨号。</string>
+<string name="dialog_message">是否查看Sipdroid 1.5的视频介绍？</string>
 
 <string name="yes">是</string>
 <string name="no">否</string>
@@ -154,11 +158,32 @@
 <string name="settings_pref">Sipdroid优先级</string>
 <string name="settings_pref2">在拨号时在电话号码后加上字符\'+\'，或长按联系人选择 \'发送短信\'以强制使用Sipdroid拨号。</string>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <string-array name="pref_display_values">
         <item>只使用Sipdroid</item>
         <item>当可用时使用Sipdroid</item>
         <item>总是使用电话</item>
-		<item>Always ask</item>
+    </string-array>
+	
+	<string-array name="pref_values">
+        <item>SIPONLY</item>
+        <item>SIP</item>
+        <item>PSTN</item>
+        <item>ASK</item>
     </string-array>
 
 <string name="settings_compression">语音压缩</string>
@@ -167,6 +192,12 @@
         <item>仅当使用WLAN/3G时</item>
         <item>总是尝试使用</item>
         <item>从不使用</item>
+    </string-array>
+	<string-array name="compression_values">
+        <item>wlan</item>
+        <item>wlanor3g</item>
+        <item>always</item>
+        <item>never</item>
     </string-array>
 <string name="settings_auto_on">开启自动应答</string>
 <string name="settings_auto_on2">振动提醒，仅用于非锁定状态下</string>
@@ -210,14 +241,13 @@
         <item>0.5</item>
         <item>1.0</item>
     </string-array>
-<string name="settings_ownwifi">控制Wi-Fi电量</string>
-<string name="settings_ownwifi2">节省电力</string>
 
 <string name="settings_pbxes_options">PBXes设置</string>
 <string name="settings_par">多个拨出电话</string>
 <string name="settings_par2">允许同时拨打多个电话</string>
 <string name="settings_improve">音质优化</string>
-<string name="settings_improve2">需要收费帐号及</string>
+<string name="settings_improve2">需要收费帐号</string>
+<string name="settings_hdvoice">PBXes支持高清语音</string>
 <string name="settings_posurl">地理位置及回拨URL地址</string>
 <string name="settings_pos">更新地理位置</string>
 <string name="settings_pos2">地址可被通报至PBXes的联系人(需要PBXes.com的Premium账户)</string>
@@ -240,6 +270,15 @@
 <string name="settings_profile_delete_error">删除用户配置失败！</string>
 <string name="settings_profile_delete_confirmation">成功删除用户配置。</string>
 
+<string name="settings_wireless_options">Wi-Fi设置</string>
+<string name="settings_bluetooth">需要Android 2.2或更高</string>
+<string name="settings_keepon">屏幕常亮</string>
+<string name="settings_keepon2">一些设备需要选择此项以保持Wi-Fi连接</string>
+<string name="settings_selectwifi">选择Wi-Fi热点</string>
+<string name="settings_selectwifi2">根据信号选择热点</string>
+<string name="settings_ownwifi">Wi-Fi电力控制</string>
+<string name="settings_ownwifi2">节约电力</string>
+
 <string name="menu_settings">设置</string>
 <string name="menu_exit">退出</string>
 <string name="menu_about">关于</string>
@@ -251,6 +290,8 @@
 <string name="menu_transfer">转移</string>
 <string name="menu_speaker">扬声器</string>
 <string name="menu_endCall">挂断</string>
+<string name="menu_answer">应答</string>
+<string name="menu_bluetooth">蓝牙(实验功能)</string>
 
 <string name="transfer_title">将通话转移至</string>
 
@@ -273,4 +314,5 @@
 <string name="codecs_move">移动解编码器</string>
 <string name="codecs_move_up">上移</string>
 <string name="codecs_move_down">下移</string>
+<string name="help_speakerphone">按住音量键以强制通话</string>
 </resources>
