@@ -4,7 +4,7 @@
 === Beta-Versions ===
 
   * 1.6
-    * Fix issues 86, issue 116, issue 170, issue 206, issue 218, issue 391, issue 414, issue 436, issue 574, issue 615, issue 679
+    * Fix issue 86, issue 116, issue 170, issue 206, issue 218, issue 391, issue 414, issue 436, issue 574, issue 615, issue 679
 
   * 1.5.7
     * Fix issue 625, issue 629
