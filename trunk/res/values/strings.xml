@@ -56,10 +56,11 @@
 <string name="auto_enabled">Auto-Answer/Speakerphone</string>
 <string name="auto_disabled">Auto-Answer off</string>
 <string name="hint">Called Party Address</string>
+<string name="hint2">Phone Number</string>
 <string name="empty">Please enter called party address as name@domain.com</string>
 <string name="notfast">No suitable data network available</string>
 
-<string name="settings_account">SIP Account Settings</string>
+<string name="settings_account">SIP Account</string>
 <string name="settings_username">Authorization Username</string>
 <string name="settings_password">Password</string>
 <string name="settings_server">Server or Proxy</string>
@@ -188,13 +189,15 @@
 <string name="settings_notifications">Notifications</string>
 <string name="settings_MWI">Voicemail</string>
 <string name="settings_MWI2">Subscribe to SIP message waiting</string>
+<string name="settings_reg">Registration</string>
+<string name="settings_reg2">Allows selection of preferred SIP account</string>
 <string name="settings_notify">Missed Call</string>
 <string name="settings_notify2">Notify with blue LED</string>
 <string name="settings_nodata">No Data</string>
 <string name="settings_nodata2">Indicate missing voice packets by audible tones</string>
 
 <string name="settings_advanced_options">Advanced Options</string>
-<string name="settings_av_options">Audio/Video Settings</string>
+<string name="settings_av_options">Audio/Video</string>
 <string name="settings_policy_never">Changed system sleep policy to keep Wi-Fi on.</string>
 <string name="settings_policy_default">Reset Wi-Fi sleep policy to default.</string>
 <string name="settings_search">Search &amp; Replace</string>
@@ -238,6 +241,7 @@
 
 <string name="settings_profile_title">Sipdroid Settings (<xliff:g id="profile">%s</xliff:g>)</string>
 <string name="settings_profile_menu_import">Import</string>
+<string name="settings_profile_menu_export">Export</string>
 <string name="settings_profile_menu_delete">Delete</string>
 <string name="settings_profile_dialog_profiles_title">Profiles</string>
 <string name="settings_profile_dialog_delete_title">Delete profile</string>

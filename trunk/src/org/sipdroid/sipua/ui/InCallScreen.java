@@ -33,7 +33,12 @@ import org.sipdroid.sipua.phone.SlidingCardManager;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
@@ -53,7 +58,7 @@ import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
-public class InCallScreen extends CallScreen implements View.OnClickListener {
+public class InCallScreen extends CallScreen implements View.OnClickListener, SensorEventListener {
 
 	final int MSG_ANSWER = 1;
 	final int MSG_ANSWER_SPEAKER = 2;
@@ -65,10 +70,15 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 	CallCard mCallCard;
 	Phone ccPhone;
 	int oldtimeout;
+	SensorManager sensorManager;
+    Sensor proximitySensor;
+    boolean first;
 	
 	void screenOff(boolean off) {
         ContentResolver cr = getContentResolver();
         
+        if (proximitySensor != null)
+        	return;
         if (off) {
         	if (oldtimeout == 0) {
         		oldtimeout = Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 60000);
@@ -90,6 +100,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		mHandler.removeMessages(MSG_BACK);
 		if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
 			finish();
+		sensorManager.unregisterListener(this);
 	}
 	
 	@Override
@@ -98,6 +109,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
      		mHandler.sendEmptyMessageDelayed(MSG_BACK, Receiver.call_end_reason == -1?
     				2000:5000);
+	    first = true;
+	    sensorManager.registerListener(this,proximitySensor,SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	@Override
@@ -256,7 +269,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 
 	ViewGroup mInCallPanel,mMainFrame;
 	SlidingDrawer mDialerDrawer;
-	SlidingCardManager mSlidingCardManager;
+	public static SlidingCardManager mSlidingCardManager;
 	TextView mStats;
 	TextView mCodec;
 	
@@ -325,7 +338,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
     
 	Thread t;
 	EditText mDigits;
-	boolean running;
+	public static boolean running;
     private static final HashMap<Integer, Character> mDisplayMap =
         new HashMap<Integer, Character>();
     private static final HashMap<Character, Integer> mToneMap =
@@ -352,7 +365,13 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		setContentView(R.layout.incall);
 		
 		initInCallScreen();
-	}
+		
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+        if(!android.os.Build.BRAND.equalsIgnoreCase("archos"))
+        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+    }
 		
 	public void reject() {
 		if (Receiver.ccCall != null) {
@@ -464,5 +483,27 @@ public class InCallScreen extends CallScreen implements View.OnClickListener {
 		Receiver.pstn_time = 0;
 		return false;
 	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+	}
+
+	void setScreenBacklight(float a) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes(); 
+        lp.screenBrightness = a; 
+        getWindow().setAttributes(lp);		
+	}
+
+	static final float PROXIMITY_THRESHOLD = 5.0f;
 	
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		if (first) {
+			first = false;
+			return;
+		}
+		float distance = event.values[0];
+        boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
+        setScreenBacklight((float) (active?0.1:-1));
+	}
 }

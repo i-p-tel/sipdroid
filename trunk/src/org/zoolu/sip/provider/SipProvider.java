@@ -804,7 +804,7 @@ public class SipProvider implements Configurable, TransportListener,
 			}
 		} else if (transport_tcp && proto.equals(PROTO_TCP)) { // TCP
 			// printLog("using TCP",LogLevel.LOW);
-			if (!connections.containsKey(conn_id)) {
+			if (connections == null || !connections.containsKey(conn_id)) { // modified
 				printLog("no active connection found matching " + conn_id,
 						LogLevel.MEDIUM);
 				printLog("open " + proto + " connection to " + dest_ipaddr

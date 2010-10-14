@@ -83,18 +83,22 @@ public class SIPUri extends Activity {
 		if (!Sipdroid.release) Log.v("SIPUri", "sip uri: " + target);
 		if (!target.contains("@") && PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_ASK)) {
 			final String t = target;
+			final String items[] = {getString(R.string.app_name),
+					getString(R.string.pstn_name)
+			};
 			new AlertDialog.Builder(this)
 			.setIcon(R.drawable.icon22)
 			.setTitle(target)
-            .setPositiveButton(R.string.app_name, new DialogInterface.OnClickListener() {
+            .setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                    	call(t);
-                    }
-                })
-            .setNegativeButton(R.string.pstn_name, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-            			PSTN.callPSTN("sip:"+t);
-            			finish();
+                    	switch (whichButton) {
+                    	case 0:
+                    		call(t);
+                    		break;
+                    	case 1:
+                			PSTN.callPSTN("sip:"+t);
+                			finish();
+                    	}
                     }
                 })
 			.setOnCancelListener(new OnCancelListener() {

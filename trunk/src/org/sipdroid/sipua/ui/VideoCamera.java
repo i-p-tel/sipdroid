@@ -331,6 +331,7 @@ public class VideoCamera extends CallScreen implements
 	}
 
     boolean videoQualityHigh;
+    Camera mCamera;
     
     // initializeVideo() starts preview and prepare media recorder.
     // Returns false if initializeVideo fails
@@ -348,7 +349,10 @@ public class VideoCamera extends CallScreen implements
         	mMediaRecorder = new MediaRecorder();
         else
         	mMediaRecorder.reset();
-        Camera mCamera = null;
+        if (mCamera != null) {
+        	mCamera.release();
+        	mCamera = null;
+        }
 
 		if (isAvailableSprintFFC)
 		{

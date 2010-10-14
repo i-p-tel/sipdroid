@@ -120,7 +120,7 @@ public class InviteTransactionClient extends TransactionClient {
 					if (transaction_listener != null)
 						transaction_listener.onTransFailureResponse(this, msg);
 					transaction_listener = null;
-					if (connection_id == null)
+					if (true || connection_id == null) // modified
 						end_to.start();
 					else {
 						printLog("end_to=0 for reliable transport",
@@ -129,7 +129,7 @@ public class InviteTransactionClient extends TransactionClient {
 					}
 				} else { // retransmit ACK only in case of unreliable
 					// transport
-					if (connection_id == null)
+					if (true || connection_id == null) // modified
 						sip_provider.sendMessage(ack);
 				}
 				return;
@@ -158,7 +158,7 @@ public class InviteTransactionClient extends TransactionClient {
 			if (to.equals(retransmission_to) && statusIs(STATE_TRYING)) {
 				printLog("Retransmission timeout expired", LogLevel.HIGH);
 				// retransmission only in case of unreliable transport
-				if (true || connection_id == null) {
+				if (true || connection_id == null) { // modified
 					sip_provider.sendMessage(request);
 					long timeout = 2 * retransmission_to.getTime();
 					retransmission_to = new Timer(timeout, retransmission_to

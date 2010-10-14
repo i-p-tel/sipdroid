@@ -31,14 +31,13 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CallLog.Calls;
+import android.provider.Contacts.People;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -68,25 +67,22 @@ public class Sipdroid extends Activity {
 	/* Following the menu item constants which will be used for menu creation */
 	public static final int FIRST_MENU_ID = Menu.FIRST;
 	public static final int CONFIGURE_MENU_ITEM = FIRST_MENU_ID + 1;
-	public static final int CALL_MENU_ITEM = FIRST_MENU_ID + 2;
-	public static final int ABOUT_MENU_ITEM = FIRST_MENU_ID + 3;
-	public static final int EXIT_MENU_ITEM = FIRST_MENU_ID + 4;
+	public static final int ABOUT_MENU_ITEM = FIRST_MENU_ID + 2;
+	public static final int EXIT_MENU_ITEM = FIRST_MENU_ID + 3;
 
 	private static AlertDialog m_AlertDlg;
-	AutoCompleteTextView sip_uri_box;
+	AutoCompleteTextView sip_uri_box,sip_uri_box2;
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		if (!Receiver.engine(this).isRegistered())
-			Receiver.engine(this).register();
-		if (Receiver.engine(this).isRegistered()) {
-		    ContentResolver content = getContentResolver();
-		    Cursor cursor = content.query(Calls.CONTENT_URI,
-		            PROJECTION, Calls.NUMBER+" like ?", new String[] { "%@%" }, Calls.DEFAULT_SORT_ORDER);
-		    CallsAdapter adapter = new CallsAdapter(this, cursor);
-		    sip_uri_box.setAdapter(adapter);
-		}
+		Receiver.engine(this).registerMore();
+	    ContentResolver content = getContentResolver();
+	    Cursor cursor = content.query(Calls.CONTENT_URI,
+	            PROJECTION, Calls.NUMBER+" like ?", new String[] { "%@%" }, Calls.DEFAULT_SORT_ORDER);
+	    CallsAdapter adapter = new CallsAdapter(this, cursor);
+	    sip_uri_box.setAdapter(adapter);
+	    sip_uri_box2.setAdapter(adapter);
 	}
 	
 	public static class CallsAdapter extends CursorAdapter implements Filterable {
@@ -154,11 +150,12 @@ public class Sipdroid extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.sipdroid);
 		sip_uri_box = (AutoCompleteTextView) findViewById(R.id.txt_callee);
+		sip_uri_box2 = (AutoCompleteTextView) findViewById(R.id.txt_callee2);
 		sip_uri_box.setOnKeyListener(new OnKeyListener() {
 		    public boolean onKey(View v, int keyCode, KeyEvent event) {
 		        if (event.getAction() == KeyEvent.ACTION_DOWN &&
 		        		keyCode == KeyEvent.KEYCODE_ENTER) {
-		          call_menu();
+		          call_menu(sip_uri_box);
 		          return true;
 		        }
 		        return false;
@@ -167,17 +164,26 @@ public class Sipdroid extends Activity {
 		sip_uri_box.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				call_menu();
+				call_menu(sip_uri_box);
+			}
+		});
+		sip_uri_box2.setOnKeyListener(new OnKeyListener() {
+		    public boolean onKey(View v, int keyCode, KeyEvent event) {
+		        if (event.getAction() == KeyEvent.ACTION_DOWN &&
+		        		keyCode == KeyEvent.KEYCODE_ENTER) {
+		          call_menu(sip_uri_box2);
+		          return true;
+		        }
+		        return false;
+		    }
+		});
+		sip_uri_box2.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				call_menu(sip_uri_box2);
 			}
 		});
 		on(this,true);
-
-		Button callButton = (Button) findViewById(R.id.call_button);
-		callButton.setOnClickListener(new Button.OnClickListener() {
-			public void onClick(View v) {
-				call_menu();
-			}
-		});
 
 		Button contactsButton = (Button) findViewById(R.id.contacts_button);
 		contactsButton.setOnClickListener(new Button.OnClickListener() {
@@ -187,34 +193,8 @@ public class Sipdroid extends Activity {
 			}
 		});
 
-		setAccountString();
-
 		final Context mContext = this;
-		if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_MESSAGE, Settings.DEFAULT_MESSAGE))
-			new AlertDialog.Builder(this)
-				.setMessage(R.string.dialog_message)
-	            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-	                    public void onClick(DialogInterface dialog, int whichButton) {
-	                		Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
-	                		edit.putBoolean(Settings.PREF_MESSAGE, true);
-	                		edit.commit();
-	            			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=PlLZHCHlSY4")));
-	                   }
-	                })
-	            .setNeutralButton(R.string.no, new DialogInterface.OnClickListener() {
-	                    public void onClick(DialogInterface dialog, int whichButton) {
-	
-	                    }
-	                })
-	            .setNegativeButton(R.string.dontask, new DialogInterface.OnClickListener() {
-	                    public void onClick(DialogInterface dialog, int whichButton) {
-	                		Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
-	                		edit.putBoolean(Settings.PREF_MESSAGE, true);
-	                		edit.commit();
-	                    }
-	                })
-				.show();
-		else if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) &&
+		if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) &&
 				!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_NODEFAULT, Settings.DEFAULT_NODEFAULT))
 			new AlertDialog.Builder(this)
 				.setMessage(R.string.dialog_default)
@@ -240,17 +220,6 @@ public class Sipdroid extends Activity {
 				.show();
 	}
 
-	protected void setAccountString() {
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		TextView accountTextView = (TextView) findViewById(R.id.account_string);
-		if (! settings.getString(Settings.PREF_USERNAME, Settings.DEFAULT_USERNAME).equals("") && ! settings.getString(Settings.PREF_SERVER, "").equals("")) {
-			accountTextView.setText(Settings.getProfileNameString(settings));
-			accountTextView.setVisibility(View.VISIBLE);
-		} else {
-			accountTextView.setVisibility(View.GONE);
-		}
-	}
-
 	public static boolean on(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_ON, Settings.DEFAULT_ON);
 	}
@@ -266,7 +235,6 @@ public class Sipdroid extends Activity {
 	public void onResume() {
 		super.onResume();
 		if (Receiver.call_state != UserAgent.UA_STATE_IDLE) Receiver.moveTop();
-		setAccountString();
 	}
 
 	@Override
@@ -277,36 +245,15 @@ public class Sipdroid extends Activity {
 		m.setIcon(android.R.drawable.ic_menu_info_details);
 		m = menu.add(0, EXIT_MENU_ITEM, 0, R.string.menu_exit);
 		m.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-//		m = menu.add(0, CALL_MENU_ITEM, 0, R.string.menu_call);
-//		m.setIcon(android.R.drawable.ic_menu_call);
 		m = menu.add(0, CONFIGURE_MENU_ITEM, 0, R.string.menu_settings);
 		m.setIcon(android.R.drawable.ic_menu_preferences);
 						
 		return result;
 	}
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {        	
-        case KeyEvent.KEYCODE_CALL:
-			String target = this.sip_uri_box.getText().toString();
-			if (target.length() != 0) {
-				call_menu();
-				return true;
-			}	 
-			break;
-
-        case KeyEvent.KEYCODE_BACK:
-            finish();
-            return true;
-
-        }
-		return super.onKeyDown(keyCode, event);
-	}
-
-	void call_menu()
+	void call_menu(AutoCompleteTextView view)
 	{
-		String target = this.sip_uri_box.getText().toString();
+		String target = view.getText().toString();
 		if (m_AlertDlg != null) 
 		{
 			m_AlertDlg.cancel();
@@ -344,10 +291,6 @@ public class Sipdroid extends Activity {
 			.setIcon(R.drawable.icon22)
 			.setCancelable(true)
 			.show();
-			break;
-			
-		case CALL_MENU_ITEM: 
-			call_menu();
 			break;
 			
 		case EXIT_MENU_ITEM: 

@@ -49,9 +49,9 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 public class Codecs {
     	private static final Vector<Codec> codecs = new Vector<Codec>() {{
 			add(new G722());			
-			add(new SILK24());		
-			add(new SILK16());
-			add(new SILK8());
+//			add(new SILK24());		save space (until a common library for all bitrates gets available?)
+//			add(new SILK16());
+//			add(new SILK8());
 			add(new alaw());
 			add(new ulaw());
 			add(new Speex());
@@ -93,8 +93,10 @@ public class Codecs {
 					 * any) at the top and the
 					 * remaining ones ordered
 					 * according to the user */
-					codecs.remove(c);
-					codecs.add(c);
+					if (c != null) {
+						codecs.remove(c);
+						codecs.add(c);
+					}
 				} catch (Exception e) {
 					// do nothing (expecting
 					// NumberFormatException and

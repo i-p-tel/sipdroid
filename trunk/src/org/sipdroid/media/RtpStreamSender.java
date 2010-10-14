@@ -218,11 +218,20 @@ public class RtpStreamSender extends Thread {
 		
 		for (i = 0; i < len; i++) {
 			j = lin[i+off];
+			lin[i+off] = (short)(j>>2);
+		}
+	}
+
+	void calc2(short[] lin,int off,int len) {
+		int i,j;
+		
+		for (i = 0; i < len; i++) {
+			j = lin[i+off];
 			lin[i+off] = (short)(j>>1);
 		}
 	}
 
-	void calc5(short[] lin,int off,int len) {
+	void calc10(short[] lin,int off,int len) {
 		int i,j;
 		
 		for (i = 0; i < len; i++) {
@@ -233,20 +242,6 @@ public class RtpStreamSender extends Thread {
 				lin[i+off] = -16350<<1;
 			else
 				lin[i+off] = (short)(j<<1);
-		}
-	}
-
-	void calc10(short[] lin,int off,int len) {
-		int i,j;
-		
-		for (i = 0; i < len; i++) {
-			j = lin[i+off];
-			if (j > 8150)
-				lin[i+off] = 8150<<2;
-			else if (j < -8150)
-				lin[i+off] = -8150<<2;
-			else
-				lin[i+off] = (short)(j<<2);
 		}
 	}
 
@@ -292,9 +287,13 @@ public class RtpStreamSender extends Thread {
 		int min = AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 
 				AudioFormat.CHANNEL_CONFIGURATION_MONO, 
 				AudioFormat.ENCODING_PCM_16BIT);
-		if (min < 4096) {
+		if (min == 640) {
+			if (frame_size == 960) frame_size = 320;
+			if (frame_size == 1024) frame_size = 160;
 			min = 4096*3/2;
+		} else if (min < 4096) {
 			if (min <= 2048 && frame_size == 1024) frame_size /= 2;
+			min = 4096*3/2;
 		} else if (min == 4096) {
 			min *= 3/2;
 			if (frame_size == 960) frame_size = 320;
@@ -331,6 +330,11 @@ public class RtpStreamSender extends Thread {
 				if (record != null) {
 					record.stop();
 					record.release();
+					if (RtpStreamReceiver.samsung) {
+						AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
+						am.setMode(AudioManager.MODE_IN_CALL);
+						am.setMode(AudioManager.MODE_NORMAL);
+					}
 				}
 				changed = false;
 				record = new AudioRecord(MediaRecorder.AudioSource.MIC, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
@@ -430,8 +434,8 @@ public class RtpStreamSender extends Thread {
  			 case 1:
  				 calc1(lin,pos,num);
  				 break;
- 			 case 5:
- 				 calc5(lin,pos,num);
+ 			 case 2:
+ 				 calc2(lin,pos,num);
  				 break;
  			 case 10:
  				 calc10(lin,pos,num);

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -101,7 +102,7 @@ public class AckTransactionServer extends Transaction {
 		// SipProviderListener is implemented
 		// (CHANGE-040905) now timeouts started in listen()
 		transaction_to.start();
-		if (connection_id == null)
+		if (true || connection_id == null) // modified
 			retransmission_to.start();
 
 		sip_provider.sendMessage(response, connection_id);

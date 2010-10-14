@@ -29,6 +29,7 @@ import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
+import org.sipdroid.sipua.ui.InCallScreen;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.sipdroid.codecs.Codecs;
@@ -122,7 +123,7 @@ public class RtpStreamReceiver extends Thread {
 	}
 	
 	void cleanupBluetooth() {
-		if (was_enabled) {
+		if (was_enabled && Integer.parseInt(Build.VERSION.SDK) == 8 && !Build.VERSION.RELEASE.equals("2.2.1")) {
 			enableBluetooth(true);
 			try {
 				sleep(3000);
@@ -167,7 +168,7 @@ public class RtpStreamReceiver extends Thread {
 
 	static ToneGenerator ringbackPlayer;
 	static int oldvol = -1;
-
+	
 	static int stream() {
 		return speakermode == AudioManager.MODE_IN_CALL?AudioManager.STREAM_VOICE_CALL:AudioManager.STREAM_MUSIC;
 	}
@@ -323,14 +324,17 @@ public class RtpStreamReceiver extends Thread {
 			return am.getMode();
 	}
 	
+	static boolean samsung;
+	
 	public static void setMode(int mode) {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
 		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, true);
 		edit.commit();
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
-		if (Integer.parseInt(Build.VERSION.SDK) >= 5)
+		if (Integer.parseInt(Build.VERSION.SDK) >= 5) {
 			am.setSpeakerphoneOn(mode == AudioManager.MODE_NORMAL);
-		else
+			if (samsung) RtpStreamSender.changed = true;
+		} else
 			am.setMode(mode);
 	}
 	
@@ -350,6 +354,8 @@ public class RtpStreamReceiver extends Thread {
 	}
 
 	void initMode() {
+		samsung = Build.MODEL.contains("SAMSUNG") || Build.MODEL.contains("SPH-") ||
+			Build.MODEL.contains("SGH-") || Build.MODEL.contains("GT-");
 		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL &&
 				(Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE")))
 			setMode(AudioManager.MODE_NORMAL);	
@@ -442,8 +448,32 @@ public class RtpStreamReceiver extends Thread {
 	}
 
 	PowerManager.WakeLock pwl,pwl2;
+	static final int PROXIMITY_SCREEN_OFF_WAKE_LOCK = 32;
+	boolean lockLast,lockFirst;
 	
 	void lock(boolean lock) {
+		try {
+			if (lock) {
+				boolean lockNew = (keepon && Receiver.on_wlan) ||
+					(InCallScreen.mSlidingCardManager != null && InCallScreen.mSlidingCardManager.isSlideInProgress()) ||
+					Receiver.call_state != UserAgent.UA_STATE_INCALL ||
+					!InCallScreen.running;
+				if (lockFirst || lockLast != lockNew) {
+					lockFirst = false;
+					lockLast = lockNew;
+					lock(false);
+					if (pwl == null) {
+						PowerManager pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
+						pwl = pm.newWakeLock(lockNew?(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP):PROXIMITY_SCREEN_OFF_WAKE_LOCK, "Sipdroid.Receiver");
+						pwl.acquire();
+					}
+				}
+			} else if (pwl != null) {
+				pwl.release();
+				pwl = null;
+			}
+		} catch (Exception e) {
+		}
 		if (lock) {
 			if (pwl2 == null) {
 				PowerManager pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
@@ -453,18 +483,6 @@ public class RtpStreamReceiver extends Thread {
 		} else if (pwl2 != null) {
 			pwl2.release();
 			pwl2 = null;
-		}
-		if (keepon) {
-			if (lock && Receiver.on_wlan) {
-				if (pwl == null) {
-					PowerManager pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
-					pwl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.Receiver");
-					pwl.acquire();
-				}
-			} else if (pwl != null) {
-				pwl.release();
-				pwl = null;
-			}
 		}
 	}
 
@@ -508,6 +526,8 @@ public class RtpStreamReceiver extends Thread {
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_VOICE_CALL,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 		track.play();
 		System.gc();
+		empty();
+		lockFirst = true;
 		while (running) {
 			lock(true);
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
@@ -542,7 +562,7 @@ public class RtpStreamReceiver extends Thread {
 					tg.startTone(ToneGenerator.TONE_SUP_RINGTONE);
 				}
 				rtp_socket.getDatagramSocket().disconnect();
-				if (++timeout > 22) {
+				if (++timeout > 60) {
 					Receiver.engine(Receiver.mContext).rejectcall();
 					break;
 				}

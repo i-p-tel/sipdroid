@@ -20,24 +20,26 @@ package org.sipdroid.sipua.ui;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+import android.app.Activity;
 import android.content.Context;
-import android.util.AttributeSet;
-import android.widget.AutoCompleteTextView;
+import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 
-public class InstantAutoCompleteTextView extends AutoCompleteTextView {
-	public InstantAutoCompleteTextView(Context context, AttributeSet attrs) {
-		super(context, attrs);
+public class ChangeAccount extends Activity {
+
+	public static int getPref(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getInt(Settings.PREF_ACCOUNT, Settings.DEFAULT_ACCOUNT);
 	}
-	
+		
 	@Override
-	public void onWindowFocusChanged(boolean hasWindowFocus) {
-		super.onWindowFocusChanged(hasWindowFocus);
-//		if (hasWindowFocus && getAdapter() != null && getAdapter().getCount() > 0)
-//			showDropDown();
-	}
-	
-	@Override
-	public boolean enoughToFilter() {
-		return true;
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
+		
+		edit.putInt(Settings.PREF_ACCOUNT, Receiver.engine(this).pref = 1-getPref(this));
+		edit.commit();
+		Receiver.engine(this).register();
+		finish();
 	}
 }

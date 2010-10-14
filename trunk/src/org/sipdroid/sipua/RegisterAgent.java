@@ -272,7 +272,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			}
 		}
 		sd = null;
-		if (listener != null) listener.onMWIUpdate(false, 0, null);
+		if (listener != null) listener.onMWIUpdate(this, false, 0, null);
 	}
 
 	Message getSubscribeMessage(boolean current)
@@ -422,7 +422,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 				vmaccount = np.getWord(vmboxsep);
 			}
 		}
-		if (listener != null) listener.onMWIUpdate(voicemail, nummsg, vmaccount);
+		if (listener != null) listener.onMWIUpdate(this, voicemail, nummsg, vmaccount);
 	}
 
 	// **************** Transaction callback functions *****************

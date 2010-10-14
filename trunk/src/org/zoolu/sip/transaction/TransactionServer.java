@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -111,7 +112,7 @@ public class TransactionServer extends Transaction {
 			}
 			if (code >= 200 && code < 700) {
 				changeStatus(STATE_COMPLETED);
-				if (connection_id == null)
+				if (true || connection_id == null) // modified
 					clearing_to.start();
 				else {
 					printLog("clearing_to=0 for reliable transport",

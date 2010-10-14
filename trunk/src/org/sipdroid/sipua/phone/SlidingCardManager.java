@@ -588,7 +588,7 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
         mCallCard.update(mCardPreferredX, mCardPreferredY, -1, -1);
     }
 
-    /* package */ boolean isSlideInProgress() {
+    /* package */ public boolean isSlideInProgress() {
         return mSlideInProgress;
     }
 

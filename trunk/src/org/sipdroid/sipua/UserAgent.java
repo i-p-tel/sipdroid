@@ -271,7 +271,7 @@ public class UserAgent extends CallListenerAdapter {
 	/** Makes a new call (acting as UAC). */
 	public boolean call(String target_url, boolean send_anonymous) {
 		
-		if (!this.statusIs(UA_STATE_IDLE))
+		if (Receiver.call_state != UA_STATE_IDLE)
 		{
 			//We can initiate or terminate a call only when
 			//we are in an idle state
@@ -338,7 +338,7 @@ public class UserAgent extends CallListenerAdapter {
 	/** Waits for an incoming call (acting as UAS). */
 	public boolean listen() {
 		
-		if (!this.statusIs(UA_STATE_IDLE))
+		if (Receiver.call_state != UA_STATE_IDLE)
 		{
 			//We can listen for a call only when
 			//we are in an idle state
@@ -378,6 +378,7 @@ public class UserAgent extends CallListenerAdapter {
 			return false;
 		}
 		
+		printLog("ACCEPT");
 		changeStatus(UA_STATE_INCALL); // modified
 
 		call.accept(local_session);
@@ -543,12 +544,19 @@ public class UserAgent extends CallListenerAdapter {
 			return;
 		}
 		printLog("INCOMING", LogLevel.HIGH);
-		if (!Receiver.isFast()) {
+		int i = 0;
+		for (UserAgent ua : Receiver.mSipdroidEngine.uas) {
+			if (ua == this) break;
+			i++;
+		}
+		if (Receiver.call_state != UA_STATE_IDLE || !Receiver.isFast(i)) {
 			call.busy();
 			listen();
 			return;
 		}
 		
+		if (Receiver.mSipdroidEngine != null)
+			Receiver.mSipdroidEngine.ua = this;
 		changeStatus(UA_STATE_INCOMING_CALL,caller.toString());
 
 		if (sdp == null) {
