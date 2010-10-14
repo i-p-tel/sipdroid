@@ -130,7 +130,7 @@ public class TransactionClient extends Transaction {
 						transaction_listener.onTransFailureResponse(this, msg);
 				}
 				transaction_listener = null;
-				if (connection_id == null)
+				if (true || connection_id == null) // modified
 					clearing_to.start();
 				else {
 					printLog("clearing_to=0 for reliable transport",

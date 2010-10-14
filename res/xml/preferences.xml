@@ -1,13 +1,7 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
-			<ListPreference
-				android:key="pref"
-				android:title="@string/settings_pref"
-				android:entries="@array/pref_display_values"
-				android:entryValues="@array/pref_values"
-				android:summary="@string/settings_pref2"
-				android:dialogTitle="@string/settings_pref" />
-	<PreferenceScreen android:title="@string/settings_account">
+	<PreferenceScreen android:title="@string/settings_account"
+					android:key="account">
 			<EditTextPreference
 				android:key="username"
 				android:title="@string/settings_username"
@@ -43,8 +37,6 @@
 				android:entries="@array/protocol_display_values"
 				android:entryValues="@array/protocol_values"
 				android:dialogTitle="@string/settings_protocol" />
-	</PreferenceScreen>
-	<PreferenceScreen android:title="@string/settings_options">
 			<CheckBoxPreference
 				android:key="wlan"
 				android:title="@string/settings_wlan"
@@ -61,6 +53,69 @@
 				android:key="vpn"
 				android:title="@string/settings_vpn"
 				android:summary="@string/settings_vpn2" />
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_account"
+				android:key="account1">
+			<EditTextPreference
+				android:key="username1"
+				android:title="@string/settings_username"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="password1"
+				android:title="@string/settings_password"
+				android:password="true"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="server1"
+				android:title="@string/settings_server"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="domain1"
+				android:title="@string/settings_domain"
+				android:summary="@string/settings_domain2"
+				android:singleLine="true" />
+			<EditTextPreference android:singleLine="true"
+				android:title="@string/settings_username1"
+				android:key="fromuser1"
+				android:summary="@string/settings_callerid2">
+			</EditTextPreference>
+			<ListPreference
+				android:key="port1"
+				android:title="@string/settings_port"
+				android:entries="@array/port_display_values"
+				android:entryValues="@array/port_values"
+				android:dialogTitle="@string/settings_port" />
+			<ListPreference
+				android:key="protocol1"
+				android:title="@string/settings_protocol"
+				android:entries="@array/protocol_display_values"
+				android:entryValues="@array/protocol_values"
+				android:dialogTitle="@string/settings_protocol" />
+			<CheckBoxPreference
+				android:key="wlan1"
+				android:title="@string/settings_wlan"
+				android:summary="@string/settings_check" />
+			<CheckBoxPreference
+				android:key="3g1"
+				android:title="@string/settings_3g"
+				android:summary="@string/settings_check" />
+			<CheckBoxPreference
+				android:key="edge1"
+				android:title="@string/settings_edge"
+				android:summary="@string/settings_check" />
+			<CheckBoxPreference
+				android:key="vpn1"
+				android:title="@string/settings_vpn"
+				android:summary="@string/settings_vpn2" />
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_options">
+			<ListPreference
+				android:key="pref"
+				android:title="@string/settings_pref"
+				android:entries="@array/pref_display_values"
+				android:entryValues="@array/pref_values"
+				android:summary="@string/settings_pref2"
+				android:dialogTitle="@string/settings_pref" />
 			<CheckBoxPreference
 				android:key="auto_on"
 				android:title="@string/settings_auto_on"
@@ -79,6 +134,10 @@
 				android:key="MWI_enabled"
 				android:title="@string/settings_MWI"
 				android:summary="@string/settings_MWI2" />
+			<CheckBoxPreference
+				android:key="registration"
+				android:title="@string/settings_reg"
+				android:summary="@string/settings_reg2" />
 			<CheckBoxPreference
 				android:key="notify"
 				android:title="@string/settings_notify"

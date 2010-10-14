@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="card_title_call_ended">Trucada finalitzada</string>
+  <string name="card_title_dialing">Marcant</string>
+  <string name="card_title_in_progress">Trucada en curs</string>
+  <string name="card_title_incoming_call">Trucada entrant</string>
+  <string name="card_title_on_hold">En espera</string>
+  <string name="menu_call">Marca</string>
+  <string name="menu_endCall">Penja</string>
+  <string name="menu_hold">Reté la trucada</string>
+  <string name="menu_mute">Silenci</string>
+  <string name="menu_speaker">Altaveu</string>
+  <string name="unknown">Desconegut</string>
+  <string name="slide_hint_down_to_end_call">Arrossegueu cap avall per a finalitzar la trucada.</string>
+  <string name="slide_hint_up_to_answer">Arrossegueu cap amunt per a contestar.</string>
+</resources>

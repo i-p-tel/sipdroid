@@ -200,7 +200,8 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 	void reenableKeyguard() {
 		if (!enabled) {
 				try {
-					Thread.sleep(1000);
+					if (Integer.parseInt(Build.VERSION.SDK) < 5)
+						Thread.sleep(1000);
 				} catch (InterruptedException e) {
 				}
 			mKeyguardLock.reenableKeyguard();

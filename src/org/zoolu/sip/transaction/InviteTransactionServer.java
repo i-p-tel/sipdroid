@@ -167,7 +167,7 @@ public class InviteTransactionServer extends TransactionServer {
 				&& (statusIs(STATE_TRYING) || statusIs(STATE_PROCEEDING))) {
 			changeStatus(STATE_COMPLETED);
 			// retransmission only in case of unreliable transport
-			if (connection_id == null) {
+			if (true || connection_id == null) { // modified
 				retransmission_to.start();
 				end_to.start();
 			} else {
