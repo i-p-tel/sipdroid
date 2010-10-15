@@ -71,7 +71,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	Phone ccPhone;
 	int oldtimeout;
 	SensorManager sensorManager;
-    public static Sensor proximitySensor;
+    Sensor proximitySensor;
     boolean first;
 	
 	void screenOff(boolean off) {
