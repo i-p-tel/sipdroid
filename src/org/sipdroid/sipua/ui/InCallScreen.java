@@ -71,7 +71,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	Phone ccPhone;
 	int oldtimeout;
 	SensorManager sensorManager;
-    Sensor proximitySensor;
+    public static Sensor proximitySensor;
     boolean first;
 	
 	void screenOff(boolean off) {
@@ -101,6 +101,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
 			finish();
 		sensorManager.unregisterListener(this);
+		started = false;
 	}
 	
 	@Override
@@ -111,6 +112,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
     				2000:5000);
 	    first = true;
 	    sensorManager.registerListener(this,proximitySensor,SensorManager.SENSOR_DELAY_NORMAL);
+	    started = true;
 	}
 
 	@Override
@@ -338,7 +340,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
     
 	Thread t;
 	EditText mDigits;
-	public static boolean running;
+	boolean running;
+	public static boolean started;
     private static final HashMap<Integer, Character> mDisplayMap =
         new HashMap<Integer, Character>();
     private static final HashMap<Character, Integer> mToneMap =
