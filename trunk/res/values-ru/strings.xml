@@ -56,6 +56,7 @@
 <string name="auto_enabled">Авто-ответ/Громкая связь</string>
 <string name="auto_disabled">Авто-ответ выключен</string>
 <string name="hint">Адрес собеседника</string>
+<string name="hint2">Номер телефона</string>
 <string name="empty">Введите адрес собеседника в виде name@domain.com</string>
 <string name="notfast">Подходящая связь не найдена</string>
 
@@ -188,6 +189,8 @@
 <string name="settings_notifications">Уведомления</string>
 <string name="settings_MWI">Голосовая почта</string>
 <string name="settings_MWI2">Подписка на оставленные сообщения в SIP</string>
+<string name="settings_reg">Регистрация</string>
+<string name="settings_reg2">Разрешить выбор учётной записи SIP</string>
 <string name="settings_notify">Пропущенный вызов</string>
 <string name="settings_notify2">Мигать синим светодиодом</string>
 <string name="settings_nodata">Обрыв данных</string>
@@ -238,6 +241,7 @@
 
 <string name="settings_profile_title">Настройки Sipdroid (<xliff:g id="profile">%s</xliff:g>)</string>
 <string name="settings_profile_menu_import">Импорт</string>
+<string name="settings_profile_menu_export">Экспорт</string>
 <string name="settings_profile_menu_delete">Удалить</string>
 <string name="settings_profile_dialog_profiles_title">Профили</string>
 <string name="settings_profile_dialog_delete_title">Удалить профиль</string>
