@@ -457,7 +457,8 @@ public class RtpStreamReceiver extends Thread {
 				boolean lockNew = (keepon && Receiver.on_wlan) ||
 					(InCallScreen.mSlidingCardManager != null && InCallScreen.mSlidingCardManager.isSlideInProgress()) ||
 					Receiver.call_state != UserAgent.UA_STATE_INCALL ||
-					!InCallScreen.running;
+					RtpStreamSender.delay != 0 ||
+					!InCallScreen.started;
 				if (lockFirst || lockLast != lockNew) {
 					lockFirst = false;
 					lockLast = lockNew;

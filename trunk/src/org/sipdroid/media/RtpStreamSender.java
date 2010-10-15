@@ -361,7 +361,6 @@ public class RtpStreamSender extends Thread {
 			 }
 			 //DTMF change start
 			 if (dtmf.length() != 0) {
-	 			 record.stop();
 	 			 byte[] dtmfbuf = new byte[dtframesize + 12];
 				 RtpPacket dt_packet = new RtpPacket(dtmfbuf, 0);
 				 dt_packet.setPayloadType(dtmf_payload_type);
@@ -401,7 +400,6 @@ public class RtpStreamSender extends Thread {
 	 			 }
 	 			 time += 160; seqn++;
 				dtmf=dtmf.substring(1);
-				record.startRecording();
 			 }
 			 //DTMF change end
 

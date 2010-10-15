@@ -76,10 +76,10 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 		m.setIcon(android.R.drawable.ic_menu_call);
 		m = menu.add(0, BLUETOOTH_MENU_ITEM, 0, R.string.menu_bluetooth);
 		m.setIcon(R.drawable.stat_sys_phone_call_bluetooth);
-		m = menu.add(0, VIDEO_MENU_ITEM, 0, R.string.menu_video);
-		m.setIcon(android.R.drawable.ic_menu_camera);
 		m = menu.add(0, TRANSFER_MENU_ITEM, 0, R.string.menu_transfer);
 		m.setIcon(android.R.drawable.ic_menu_call);			
+		m = menu.add(0, VIDEO_MENU_ITEM, 0, R.string.menu_video);
+		m.setIcon(android.R.drawable.ic_menu_camera);
 		m = menu.add(0, HANG_UP_MENU_ITEM, 0, R.string.menu_endCall);
 		m.setIcon(R.drawable.ic_menu_end_call);
 				
