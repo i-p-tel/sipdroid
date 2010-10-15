@@ -57,8 +57,10 @@
 
 <string name="auto_enabled">自动应答/扬声器</string>
 <string name="auto_disabled">自动应答关闭</string>
-<string name="hint">输入电话号码或SIP地址</string>
-<string name="empty">请输入电话号码或一个类似于name@domain.com的SIP地址</string>
+
+<string name="hint">SIP地址</string>
+<string name="hint2">电话号码</string>
+<string name="empty">请输入一个类似于name@domain.com的SIP地址</string>
 <string name="notfast">无适用的网络</string>
 
 <string name="settings_account">SIP账户设置</string>
@@ -209,6 +211,8 @@
 <string name="settings_notifications">通知设置</string>
 <string name="settings_MWI">语音留言</string>
 <string name="settings_MWI2">自动检查是否有未读的语音留言</string>
+<string name="settings_reg">登录</string>
+<string name="settings_reg2">允许选择SIP帐户</string>
 <string name="settings_notify">未接电话</string>
 <string name="settings_notify2">使用蓝色LED灯提醒</string>
 <string name="settings_nodata">无数据</string>

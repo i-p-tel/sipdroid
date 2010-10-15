@@ -57,8 +57,9 @@
 
 <string name="auto_enabled">自動應答/揚聲器</string>
 <string name="auto_disabled">自動應答關閉</string>
-<string name="hint">輸入電話號碼或SIP位址</string>
-<string name="empty">請輸入電話號碼或一個類似於name@domain.com的SIP位址</string>
+<string name="hint">SIP位址</string>
+<string name="hint2">電話號碼</string>
+<string name="empty">請輸入一個類似於name@domain.com的SIP位址</string>
 <string name="notfast">無適用的網路</string>
 
 <string name="settings_account">SIP賬戶設定</string>
@@ -193,6 +194,8 @@
 <string name="settings_notifications">通知設定</string>
 <string name="settings_MWI">語音留言</string>
 <string name="settings_MWI2">自動檢查是否有未讀的語音留言</string>
+<string name="settings_reg">登入</string>
+<string name="settings_reg2">允許選擇SIP帳戶</string>
 <string name="settings_notify">未接電話</string>
 <string name="settings_notify2">使用藍色LED燈提醒</string>
 <string name="settings_nodata">無數據</string>
