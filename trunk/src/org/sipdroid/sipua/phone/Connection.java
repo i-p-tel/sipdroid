@@ -5,6 +5,7 @@ import org.sipdroid.sipua.ui.Receiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.provider.CallLog;
@@ -56,6 +57,14 @@ public class Connection
         CALL_BARRED,        /* call was blocked by call barrring */
         FDN_BLOCKED         /* call was blocked by fixed dial number */
     }
+    
+    /** ACTION for publishing information about calls. */
+    private static final String ACTION_CM_SIP = // .
+    "de.ub0r.android.callmeter.SAVE_SIPCALL";
+    /** Extra holding uri of done call. */
+    private static final String EXTRA_SIP_URI = "uri";
+    /** Extra holding name of provider. */
+    private static final String EXTRA_SIP_PROVIDER = "provider";
 
     Object userData;
 
@@ -189,6 +198,14 @@ public class Connection
 
         Uri result = resolver.insert(Calls.CONTENT_URI, values);
         
+        if (result != null) { // send info about call to call meter
+        	final Intent intent = new Intent(ACTION_CM_SIP);
+        	intent.putExtra(EXTRA_SIP_URI, result.toString());
+        	// TODO: add provider
+        	// intent.putExtra(EXTRA_SIP_PROVIDER, null);
+        	context.sendBroadcast(intent);
+        }
+
         return result;
     }
 
