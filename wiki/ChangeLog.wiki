@@ -3,6 +3,11 @@
 
 === Beta-Versions ===
 
+  * 2.0
+    * Create PBX account linked to Google Voice
+    * Call option "always ask"
+    * Fix issue 699, issue 723
+
   * 1.6.1
     * Fix issue 680, issue 687, issue 690
 
