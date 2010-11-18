@@ -61,6 +61,7 @@
 <string name="notfast">No suitable data network available</string>
 
 <string name="settings_account">SIP Account</string>
+<string name="settings_line">Line</string>
 <string name="settings_username">Authorization Username</string>
 <string name="settings_password">Password</string>
 <string name="settings_server">Server or Proxy</string>
@@ -159,6 +160,7 @@
         <item>Sipdroid only</item>
         <item>Sipdroid, when available</item>
         <item>Phone</item>
+        <item>Always ask</item>
     </string-array>
     <string-array name="pref_values">
         <item>SIPONLY</item>
@@ -297,5 +299,6 @@
 <string name="codecs_move_down">Move down one place</string>
 
 <string name="help_speakerphone">Press and hold volume buttons to force talk</string>
+<string name="menu_create">New PBX linked to my Google Voice</string>
 
 </resources>

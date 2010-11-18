@@ -89,6 +89,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 		user_profile.qvalue = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_MMTEL_QVALUE, Settings.DEFAULT_MMTEL_QVALUE);
 		user_profile.mmtel = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_MMTEL, Settings.DEFAULT_MMTEL);
 
+		user_profile.pub = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_EDGE+suffix, Settings.DEFAULT_EDGE) ||
+			PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_3G+suffix, Settings.DEFAULT_3G);
 		return user_profile;
 	}
 
@@ -164,7 +166,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 					ras[i] = new RegisterAgent(sip_providers[i], user_profile.from_url, // modified
 							user_profile.contact_url, user_profile.username,
 							user_profile.realm, user_profile.passwd, this, user_profile,
-							user_profile.qvalue, icsi); // added by mandrajg
+							user_profile.qvalue, icsi, user_profile.pub); // added by mandrajg
 					kas[i] = new KeepAliveSip(sip_providers[i],100000);
 				} catch (Exception E) {
 				}
@@ -291,12 +293,12 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 
 	public void halt() { // modified
-		int cnt = 0;
+		long time = SystemClock.elapsedRealtime();
 		
 		int i = 0;
 		for (RegisterAgent ra : ras) {
 			unregister(i);
-			while (ra != null && ra.CurrentState != RegisterAgent.UNREGISTERED && cnt++ < 20)
+			while (ra != null && ra.CurrentState != RegisterAgent.UNREGISTERED && SystemClock.elapsedRealtime()-time < 2000)
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e1) {
@@ -430,6 +432,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			try {
 				edit.putString(Settings.PREF_DNS+i, IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_SERVER+(i!=0?i:""), "")).toString());
 			} catch (UnknownHostException e1) {
+				i++;
 				continue;
 			}
 			edit.commit();

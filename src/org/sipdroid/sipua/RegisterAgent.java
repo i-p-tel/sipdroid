@@ -63,10 +63,11 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 	static final int MAX_ATTEMPTS = 3;
 	
 	/* States for the RegisterAgent Module */
-	public static final int UNREGISTERED = 0;
-	public static final int REGISTERING = 1;
-	public static final int REGISTERED = 2;
-	public static final int DEREGISTERING = 3;
+	public static final int UNDEFINED = 0;
+	public static final int UNREGISTERED = 1;
+	public static final int REGISTERING = 2;
+	public static final int REGISTERED = 3;
+	public static final int DEREGISTERING = 4;
 	
 	/** RegisterAgent listener */
 	RegisterAgentListener listener;
@@ -92,6 +93,8 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 	/** IMS Communication Service Identifier for this registration (currently only one supported)(added by mandrajg) */
 	String icsi;	
 	
+	Boolean pub;
+	
 	/** Nonce for the next authentication. */
 	String next_nonce;
 
@@ -114,7 +117,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 	int attempts,subattempts;
 
 	/** Current State of the registrar component */
-	int CurrentState = UNREGISTERED;
+	int CurrentState;
 
 	UserAgentProfile user_profile;
 
@@ -130,7 +133,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 	public RegisterAgent(SipProvider sip_provider, String target_url,
 			String contact_url, String username, String realm, String passwd,
 			RegisterAgentListener listener,UserAgentProfile user_profile,
-			String qvalue, String icsi) {									// modified by mandrajg
+			String qvalue, String icsi, Boolean pub) {									// modified by mandrajg
 		
 		init(sip_provider, target_url, contact_url, listener);
 		
@@ -144,6 +147,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 		this.qvalue = qvalue;
 		this.icsi = icsi;
 		
+		this.pub = pub;
 	}
 
 	public void halt() {
@@ -195,7 +199,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 				if (t != null) t.terminate();
 				onTransTimeout(t);
 			}
-			if (CurrentState != UNREGISTERED && CurrentState != REGISTERED)
+			if (CurrentState != UNREGISTERED && CurrentState != REGISTERED && CurrentState != UNDEFINED)
 			{
 				return false;
 			}
@@ -208,7 +212,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 				if (t != null) t.terminate();
 				onTransTimeout(t);
 			}
-			if (CurrentState != REGISTERED)
+			if (CurrentState != REGISTERED && CurrentState != UNDEFINED)
 			{
 				//This is an error condition we must exit, we should not de-register if
 				//we have not registered at all
@@ -510,11 +514,10 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 				}
 				else
 				{
-					CurrentState = REGISTERED;
+					CurrentState = UNREGISTERED;
 					if (listener != null)
 					{
-						listener.onUaRegistrationFailure(this, target, contact,
-								result);
+						listener.onUaRegistrationSuccess(this, target, contact, result);
 					}
 				}
 				
@@ -616,7 +619,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			
 			if (CurrentState == REGISTERING)
 			{
-				CurrentState = UNREGISTERED;
+				CurrentState = UNDEFINED;
 				
 				if (listener != null)
 				{
@@ -627,11 +630,22 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			}
 			else
 			{
-				CurrentState = REGISTERED;
-				if (listener != null)
-				{
-					listener.onUaRegistrationFailure(this, target, contact,
-							"Timeout");
+				if (pub && android.provider.Settings.System.getInt(
+					      Receiver.mContext.getContentResolver(), 
+					      android.provider.Settings.System.AIRPLANE_MODE_ON, 0) == 0) {
+					CurrentState = UNDEFINED;
+					if (listener != null)
+					{
+						listener.onUaRegistrationFailure(this, target, contact,
+								"Timeout");
+						Receiver.reRegister(1000);
+					}
+				} else {
+					CurrentState = UNREGISTERED;
+					if (listener != null)
+					{
+						listener.onUaRegistrationSuccess(this, target, contact, "Timeout");
+					}
 				}
 			}
 		}

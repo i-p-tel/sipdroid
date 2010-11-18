@@ -624,7 +624,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	    	getPreferenceScreen().findPreference(PREF_PORT+j).setSummary(settings.getString(PREF_PORT+j, DEFAULT_PORT));
 	    	getPreferenceScreen().findPreference(PREF_PROTOCOL+j).setSummary(settings.getString(PREF_PROTOCOL+j,
 	    		settings.getString(PREF_SERVER+j, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp").toUpperCase());
-	    	getPreferenceScreen().findPreference(PREF_ACCOUNT+j).setSummary(username.equals("")||server.equals("")?"":username+"@"+server);
+	    	getPreferenceScreen().findPreference(PREF_ACCOUNT+j).setSummary(username.equals("")||server.equals("")?getResources().getString(R.string.settings_line)+" "+(i+1):username+"@"+server);
        	}
        	
     	getPreferenceScreen().findPreference(PREF_SEARCH).setSummary(settings.getString(PREF_SEARCH, DEFAULT_SEARCH)); 

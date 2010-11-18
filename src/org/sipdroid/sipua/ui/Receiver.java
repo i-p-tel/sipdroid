@@ -783,7 +783,7 @@ import org.zoolu.sip.provider.SipProvider;
 		                    	if (activeSSID != null && activeSSID.equals(scan.SSID))
 		                    		activeFound = true;
 			                    for(final WifiConfiguration config : configurations) {
-			                    	if (config.SSID.equals("\""+scan.SSID+"\"")) {
+			                    	if (config.SSID != null && config.SSID.equals("\""+scan.SSID+"\"")) {
 			                    		if (bestscan == null || scan.level > bestscan.level) {
 				                    		bestscan = scan;
 				                    		bestconfig = config;

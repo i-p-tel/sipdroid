@@ -163,6 +163,7 @@
         <item>僅使用Sipdroid</item>
         <item>當可用時使用Sipdroid</item>
         <item>總是使用電話</item>
+        <item>Always ask</item>
     </string-array>
 
 	<string-array name="pref_values">

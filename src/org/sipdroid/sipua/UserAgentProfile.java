@@ -61,6 +61,8 @@ public class UserAgentProfile extends Configure {
 	/** MMTel flavor used */
 	public boolean mmtel = false;
 	
+	public boolean pub = false;
+	
 	/**
 	 * Path for the 'ua.jar' lib, used to retrive various UA media (gif, wav,
 	 * etc.) By default, it is used the "lib/ua.jar" folder
