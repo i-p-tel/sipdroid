@@ -92,9 +92,11 @@ public class Sipdroid extends Activity implements OnDismissListener {
 	}
 	
 	public static class CallsAdapter extends CursorAdapter implements Filterable {
-		List<String> list;
+		List<String> list = null;
 		
 		public int getCount() {
+			if (list == null)
+				return 0;
 			return list.size();
 		}
 		

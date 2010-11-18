@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.List;
 
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.SipdroidEngine;
@@ -34,6 +35,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,7 +74,8 @@ public class CreateAccount extends Dialog {
 		Intent intent = new Intent(Intent.ACTION_SENDTO);
 		intent.setPackage("com.google.android.apps.googlevoice");
 		intent.setData(Uri.fromParts("smsto", "", null));
-		if (context.getPackageManager().queryIntentActivities(intent,PackageManager.GET_INTENT_FILTERS).size() == 0)
+		List<ResolveInfo> a = context.getPackageManager().queryIntentActivities(intent,PackageManager.GET_INTENT_FILTERS);
+		if (a == null || a.size() == 0)
 			return false;
         Account[] accounts = AccountManager.get(context).getAccountsByType("com.google");
         for (Account account : accounts)

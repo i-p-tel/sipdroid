@@ -1169,7 +1169,7 @@ public class SipProvider implements Configurable, TransportListener,
 		if (connections != null && connections.containsKey(conn_id)) { // modified
 			ConnectedTransport conn = (ConnectedTransport) connections
 					.get(conn_id);
-			conn.halt();
+			if (conn != null) conn.halt();
 			connections.remove(conn_id);
 			// DEBUG log:
 			printLog("active connenctions:", LogLevel.LOW);
