@@ -32,6 +32,7 @@ import java.util.Enumeration;
 
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
+import org.sipdroid.sipua.ui.Sipdroid;
 
 import android.preference.PreferenceManager;
 import android.content.Context;
@@ -157,10 +158,13 @@ public class IpAddress {
 								//System.out.println("Public ip is:" + StunDiscover.di.getPublicIP().getHostAddress());
 								localIpAddress = StunDiscover.di.getPublicIP().getHostAddress();
 							} catch (BindException be) {
-								System.out.println(inetAddress.toString() + ": " + be.getMessage());
+								if (!Sipdroid.release)
+									System.out.println(inetAddress.toString() + ": " + be.getMessage());
 							} catch (Exception e) {
-								System.out.println(e.getMessage());
-								e.printStackTrace();
+								if (!Sipdroid.release) {
+									System.out.println(e.getMessage());
+									e.printStackTrace();
+								}
 							} 
 						}
 					}					

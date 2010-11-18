@@ -257,7 +257,7 @@
 			<EditTextPreference
 				android:key="posurl"
 				android:title="@string/settings_posurl"
-				android:hint="http://pbxes.org/name"
+				android:hint="https://www1.pbxes.com/name"
 				android:singleLine="true" />
 			<CheckBoxPreference
 				android:key="pos"

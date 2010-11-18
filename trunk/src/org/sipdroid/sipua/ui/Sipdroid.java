@@ -21,6 +21,9 @@
 
 package org.sipdroid.sipua.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
 
@@ -31,9 +34,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CallLog.Calls;
@@ -59,7 +64,7 @@ import android.widget.AdapterView.OnItemClickListener;
 // for modifying it additional terms according to section 7, GPL apply
 // see ADDITIONAL_TERMS.txt
 /////////////////////////////////////////////////////////////////////
-public class Sipdroid extends Activity {
+public class Sipdroid extends Activity implements OnDismissListener {
 
 	public static final boolean release = true;
 	public static final boolean market = false;
@@ -72,7 +77,8 @@ public class Sipdroid extends Activity {
 
 	private static AlertDialog m_AlertDlg;
 	AutoCompleteTextView sip_uri_box,sip_uri_box2;
-
+	Button createButton;
+	
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -86,6 +92,27 @@ public class Sipdroid extends Activity {
 	}
 	
 	public static class CallsAdapter extends CursorAdapter implements Filterable {
+		List<String> list;
+		
+		public int getCount() {
+			return list.size();
+		}
+		
+		Cursor uniq(Cursor cursor) {
+			list = new ArrayList<String>();
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+ 		        String phoneNumber = cursor.getString(1);
+		        String cachedName = cursor.getString(2);
+		        if (cachedName != null && cachedName.trim().length() > 0)
+		        	phoneNumber += " <" + cachedName + ">";
+		        if (list.contains(phoneNumber)) continue;
+				list.add(phoneNumber);
+			}
+			cursor.moveToFirst();
+			return cursor;
+		}
+		
 	    public CallsAdapter(Context context, Cursor c) {
 	        super(context, c);
 	        mContent = context.getContentResolver();
@@ -95,43 +122,45 @@ public class Sipdroid extends Activity {
 	        final LayoutInflater inflater = LayoutInflater.from(context);
 	        final TextView view = (TextView) inflater.inflate(
 	                android.R.layout.simple_dropdown_item_1line, parent, false);
-	        view.setText(cursor.getString(1));
+	    	String phoneNumber = list.get(cursor.getPosition());	        
+	        view.setText(phoneNumber);
 	        return view;
 	    }
 	
 	    @Override
 	    public void bindView(View view, Context context, Cursor cursor) {
-	    	
-	        String phoneNumber = cursor.getString(1);
-	        String cachedName = cursor.getString(2);
-	        if (cachedName != null && cachedName.trim().length() > 0)
-	        	phoneNumber += " <" + cachedName + ">";	  
-	        
+	    	String phoneNumber = list.get(cursor.getPosition());	        
 	        ((TextView) view).setText(phoneNumber);
 	    }
 	
 	    @Override
 	    public String convertToString(Cursor cursor) {
-	        return cursor.getString(1);
+	    	String phoneNumber = list.get(cursor.getPosition());
+	    	if (phoneNumber.contains(" <"))
+	    		phoneNumber = phoneNumber.substring(0,phoneNumber.indexOf(" <"));
+	        return phoneNumber;
 	    }
 	
 	    @Override
 	    public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
 	        if (getFilterQueryProvider() != null) {
-	            return getFilterQueryProvider().runQuery(constraint);
+	            return uniq(getFilterQueryProvider().runQuery(constraint));
 	        }
 	
 	        StringBuilder buffer;
 	        String[] args;
 	        buffer = new StringBuilder();
 	        buffer.append(Calls.NUMBER);
+	        buffer.append(" LIKE ? OR ");
+	        buffer.append(Calls.CACHED_NAME);
 	        buffer.append(" LIKE ?");
-	        args = new String[] { (constraint != null && constraint.length() > 0?
-	       				constraint.toString() : "%@") + "%"};
+	        String arg = "%" + (constraint != null && constraint.length() > 0?
+       				constraint.toString() : "@") + "%";
+	        args = new String[] { arg, arg};
 	
-	        return mContent.query(Calls.CONTENT_URI, PROJECTION,
+	        return uniq(mContent.query(Calls.CONTENT_URI, PROJECTION,
 	                buffer.toString(), args,
-	                Calls.DEFAULT_SORT_ORDER);
+	                Calls.NUMBER + " asc"));
 	    }
 	
 	    private ContentResolver mContent;        
@@ -194,6 +223,17 @@ public class Sipdroid extends Activity {
 		});
 
 		final Context mContext = this;
+		final OnDismissListener listener = this;
+		
+		createButton = (Button) findViewById(R.id.create_button);
+		createButton.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				CreateAccount createDialog = new CreateAccount(mContext);
+				createDialog.setOnDismissListener(listener);
+		        createDialog.show();
+			}
+		});
+		
 		if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) &&
 				!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_NODEFAULT, Settings.DEFAULT_NODEFAULT))
 			new AlertDialog.Builder(this)
@@ -235,6 +275,8 @@ public class Sipdroid extends Activity {
 	public void onResume() {
 		super.onResume();
 		if (Receiver.call_state != UserAgent.UA_STATE_IDLE) Receiver.moveTop();
+		createButton.setVisibility(Integer.parseInt(Build.VERSION.SDK) >= 5 && CreateAccount.isPossible(this)?
+				View.VISIBLE:View.GONE); 
 	}
 
 	@Override
@@ -334,5 +376,10 @@ public class Sipdroid extends Activity {
 		} catch(NameNotFoundException ex) {}
 		
 		return unknown;		
+	}
+
+	@Override
+	public void onDismiss(DialogInterface dialog) {
+		onResume();
 	}
 }

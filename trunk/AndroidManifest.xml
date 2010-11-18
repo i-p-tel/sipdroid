@@ -25,8 +25,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="1.6.1 beta"
-    android:versionCode="76"
+    android:versionName="2.0pre2 beta"
+    android:versionCode="77"
     android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
 	<supports-screens
@@ -150,4 +150,5 @@
 	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" ></uses-permission>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" ></uses-permission>
 	<uses-permission android:name="android.permission.BLUETOOTH" ></uses-permission>
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" ></uses-permission>
 </manifest> 

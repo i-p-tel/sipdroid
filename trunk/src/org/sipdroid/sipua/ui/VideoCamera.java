@@ -44,6 +44,7 @@ import android.net.LocalServerSocket;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -315,7 +316,7 @@ public class VideoCamera extends CallScreen implements
         mSurfaceHolder = null;
     }
 
-    boolean isAvailableSprintFFC;
+    boolean isAvailableSprintFFC,useFront = true;
     
 	private void checkForCamera()
 	{
@@ -350,25 +351,34 @@ public class VideoCamera extends CallScreen implements
         else
         	mMediaRecorder.reset();
         if (mCamera != null) {
+        	if (Integer.parseInt(Build.VERSION.SDK) >= 8)
+        		VideoCameraNew2.reconnect(mCamera);
         	mCamera.release();
         	mCamera = null;
         }
 
-		if (isAvailableSprintFFC)
-		{
-			try
+        if (useFront && Integer.parseInt(Build.VERSION.SDK) >= 5) {
+			if (isAvailableSprintFFC)
 			{
-				Method method = Class.forName("android.hardware.HtcFrontFacingCamera").getDeclaredMethod("getCamera", null);
-				mCamera = (Camera) method.invoke(null, null);
-			}
-			catch (Exception ex)
-			{
-				Log.d(TAG, ex.toString());
+				try
+				{
+					Method method = Class.forName("android.hardware.HtcFrontFacingCamera").getDeclaredMethod("getCamera", null);
+					mCamera = (Camera) method.invoke(null, null);
+				}
+				catch (Exception ex)
+				{
+					Log.d(TAG, ex.toString());
+				}
+			} else {
+				mCamera = Camera.open(); 
+				Camera.Parameters parameters = mCamera.getParameters(); 
+				parameters.set("camera-id", 2); 
+				mCamera.setParameters(parameters); 
 			}
 			VideoCameraNew.unlock(mCamera);
 			mMediaRecorder.setCamera(mCamera);
 	        mVideoPreview.setOnClickListener(this);
-		}
+        }
         mVideoPreview.setOnLongClickListener(this);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -403,6 +413,12 @@ public class VideoCamera extends CallScreen implements
         Log.v(TAG, "Releasing media recorder.");
         if (mMediaRecorder != null) {
             mMediaRecorder.reset();
+            if (mCamera != null) {
+	        	if (Integer.parseInt(Build.VERSION.SDK) >= 8)
+	        		VideoCameraNew2.reconnect(mCamera);
+	        	mCamera.release();
+	        	mCamera = null;
+            }
             mMediaRecorder.release();
             mMediaRecorder = null;
         }
@@ -628,7 +644,7 @@ public class VideoCamera extends CallScreen implements
 
 	@Override
 	public void onClick(View v) {
-		isAvailableSprintFFC = !isAvailableSprintFFC;
+		useFront = !useFront;
 		initializeVideo();
 		change = true;
 	}

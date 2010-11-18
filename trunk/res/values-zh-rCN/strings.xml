@@ -179,6 +179,7 @@
         <item>只使用Sipdroid</item>
         <item>当可用时使用Sipdroid</item>
         <item>总是使用电话</item>
+        <item>Always ask</item>
     </string-array>
 	
 	<string-array name="pref_values">
