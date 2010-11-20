@@ -57,10 +57,12 @@
 <string name="auto_enabled">Réponse Auto/Haut-parleur</string>
 <string name="auto_disabled">Réponse Auto coupée</string>
 <string name="hint">Adresse du correspondant</string>
+<string name="hint2">Numéro de téléphone</string>
 <string name="empty">Veuillez entrer une adresse pour le correspondant à appeller telle que nom@domaine.com</string>
 <string name="notfast">Aucun réseau de données convenable de disponible</string>
 
-<string name="settings_account">Réglages du compte SIP</string>
+<string name="settings_account">Compte SIP</string>
+<string name="settings_line">Ligne</string>
 <string name="settings_username">Nom d\'utilisateur pour l\'authentification</string>
 <string name="settings_password">Mot de passe</string>
 <string name="settings_server">Serveur ou Proxy</string>
@@ -137,7 +139,6 @@
 <string name="settings_mmtel">Utiliser la saveur MMTel</string>
 <string name="settings_mmtel_qvalue">valeur de Q</string>
 
-
 <string name="settings_options">Options d\'appel</string>
 <string name="settings_wlan">Utiliser le WLAN</string>
 <string name="settings_3g">Utiliser la 3G</string>
@@ -161,7 +162,7 @@
 	<item>Sipdroid</item>
 	<item>Sipdroid, si disponible</item>
 	<item>Téléphone</item>
-	<item>Always ask</item>
+	<item>Toujours demander</item>
 </string-array>
 <string-array name="pref_values">
        <item>SIPONLY</item>
@@ -190,15 +191,17 @@
 <string name="settings_auto_headset2">Quand l\'oreillette est connectée</string>
 
 <string name="settings_notifications">Notifications</string>
-<string name="settings_MWI">Vérifier les messages vocaux</string>
+<string name="settings_MWI">Messages vocaux</string>
 <string name="settings_MWI2">S\'abonner à l\'attente de messages SIP</string>
+<string name="settings_reg">Enregistrement</string>
+<string name="settings_reg2">Permet la sélection du compte SIP préféré</string>
 <string name="settings_notify">Appel Manqué</string>
-<string name="settings_notify2">Notifier à l\'aide de la LED bleue</string>
+<string name="settings_notify2">Notifier avec la LED bleue</string>
 <string name="settings_nodata">Aucune donnée</string>
 <string name="settings_nodata2">Indique des paquets "voix" par des tonalités audibles</string>
 
 <string name="settings_advanced_options">Options Avancées</string>
-<string name="settings_av_options">Paramètres Audio/Vidéo</string>
+<string name="settings_av_options">Audio/Vidéo</string>
 <string name="settings_policy_never">Politique de mise en veille du sysyème changée pour maintenir le Wi-Fi allumé.</string>
 <string name="settings_policy_default">Retour aux paramètres par défaut de la politique de mise en veille du Wi-Fi.</string>
 <string name="settings_search">Chercher &amp; Remplacer</string>
@@ -242,6 +245,7 @@
 
 <string name="settings_profile_title">Paramètres Sipdroid (<xliff:g id="profile">%s</xliff:g>)</string>
 <string name="settings_profile_menu_import">Importer</string>
+<string name="settings_profile_menu_export">Exporter</string>
 <string name="settings_profile_menu_delete">Effacer</string>
 <string name="settings_profile_dialog_profiles_title">Profiles</string>
 <string name="settings_profile_dialog_delete_title">Effacer le profile</string>
@@ -254,8 +258,8 @@
 <string name="settings_wireless_options">Sans-fils</string>
 <string name="settings_bluetooth">Nécessite Android 2.2 ou Supérieur</string>
 <string name="settings_keepon">Ecran allumé</string>
-<string name="settings_keepon2">Requis par certain terminaux pour avoir le Wi-Fi sans-soucis</string>
-<string name="settings_selectwifi">Selectionnerl\'Ap Wi-Fi</string>
+<string name="settings_keepon2">Requis par certain terminaux pour avoir le Wi-Fi sans souci</string>
+<string name="settings_selectwifi">Selectionnerl\'AP Wi-Fi</string>
 <string name="settings_selectwifi2">Par niveau du signal</string>
 <string name="settings_ownwifi">Controler la puissance du Wi-Fi</string>
 <string name="settings_ownwifi2">Economise les batteries</string>
@@ -291,11 +295,12 @@
 <string name="ongoing">Appel en cours</string>
 <string name="onHold">En attente</string>
 <string name="codecs">Codecs Audio</string>
-<string name="codecs_summary">Selectionner les Codecs Audio pour être disponible pour les appels vocaux</string>
+<string name="codecs_summary">Sélectionner les Codecs Audio pour être disponible pour les appels vocaux</string>
 <string name="codecs_move">Déplacer ce codec</string>
 <string name="codecs_move_up">Monter d\'une place</string>
 <string name="codecs_move_down">Descendre d\'une place</string>
 	
 <string name="help_speakerphone">Appuyer et maintenir les boutons de volume pour forcer la conversation</string>
-	
+<string name="menu_create">Nouveau PBX lié à mon Google Voice</string>
+
 </resources>
