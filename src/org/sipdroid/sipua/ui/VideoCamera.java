@@ -199,6 +199,7 @@ public class VideoCamera extends CallScreen implements
 
 	@Override
     public void onResume() {
+		if (!Sipdroid.release) Log.i("SipUA:","on resume");
         justplay = intent.hasExtra("justplay");
         if (!justplay) {
 			receiver = new LocalSocket();
@@ -212,6 +213,7 @@ public class VideoCamera extends CallScreen implements
 				sender.setSendBufferSize(500000);
 			} catch (IOException e1) {
 				if (!Sipdroid.release) e1.printStackTrace();
+				super.onResume();
 				finish();
 				return;
 			}
@@ -438,6 +440,17 @@ public class VideoCamera extends CallScreen implements
             if (Receiver.listener_video == null) {
     			Receiver.listener_video = this;   	
                 RtpStreamSender.delay = 1;
+
+                try {
+					if (rtp_socket == null)
+						rtp_socket = new RtpSocket(new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
+							InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
+							Receiver.engine(mContext).getRemoteVideo());
+				} catch (Exception e) {
+					if (!Sipdroid.release) e.printStackTrace();
+					return;
+				}		
+				
     	        (t = new Thread() {
     				public void run() {
     					int frame_size = 1400;
@@ -449,16 +462,6 @@ public class VideoCamera extends CallScreen implements
     					long now,lasttime = 0;
     					double avgrate = videoQualityHigh?45000:24000;
     					double avglen = avgrate/20;
-    					
-    					try {
-    						if (rtp_socket == null)
-    							rtp_socket = new RtpSocket(new SipdroidSocket(Receiver.engine(mContext).getLocalVideo()),
-    								InetAddress.getByName(Receiver.engine(mContext).getRemoteAddr()),
-    								Receiver.engine(mContext).getRemoteVideo());
-    					} catch (Exception e) {
-    						if (!Sipdroid.release) e.printStackTrace();
-    						return;
-    					}		
     					
     					InputStream fis = null;
 						try {

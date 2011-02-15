@@ -198,6 +198,7 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
             return;
         }
 
+        /*
         if (mMainFrame.getHeight() == 0) {
             // The code here needs to know the sizes and positions of some
             // views in the mMainFrame view hierarchy, so you're only
@@ -208,6 +209,7 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
             throw new IllegalStateException(
                     "updateCardPreferredPosition: main frame not measured yet");
         }
+        */
 
         // Given the current state of the Phone and the UI, decide whether
         // the card should be at the TOP or BOTTOM of the screen right now.

@@ -51,7 +51,7 @@ public class UserAgentProfile extends Configure {
 	/** User's name (used to build the contact_url if not explitely defined) */
 	public String username = null;
 	/** User's realm. */
-	public String realm = null;
+	public String realm = null,realm_orig = null;
 	/** User's passwd. */
 	public String passwd = null;
 

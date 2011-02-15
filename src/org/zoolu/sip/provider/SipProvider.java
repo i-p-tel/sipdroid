@@ -818,6 +818,8 @@ public class SipProvider implements Configurable, TransportListener,
 				}
 				printLog("connection " + conn + " opened", LogLevel.HIGH);
 				addConnection(conn);
+				if (!msg.isRegister())
+					Receiver.engine(Receiver.mContext).register(); // modified
 			} else {
 				printLog("active connection found matching " + conn_id,
 						LogLevel.MEDIUM);

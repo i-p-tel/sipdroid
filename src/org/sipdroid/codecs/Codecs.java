@@ -118,6 +118,7 @@ public class Codecs {
 		HashMap<String, String> old = new HashMap<String, String>(codecs.size());
 
 		for(Codec c : codecs) {
+			c.update();
 			old.put(c.name(), c.getValue());
 			if (!c.isLoaded()) {
 				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);

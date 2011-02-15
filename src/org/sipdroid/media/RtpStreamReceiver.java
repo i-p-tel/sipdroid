@@ -123,7 +123,7 @@ public class RtpStreamReceiver extends Thread {
 	}
 	
 	void cleanupBluetooth() {
-		if (was_enabled && Integer.parseInt(Build.VERSION.SDK) == 8 && !Build.VERSION.RELEASE.equals("2.2.1")) {
+		if (was_enabled && Integer.parseInt(Build.VERSION.SDK) == 8) {
 			enableBluetooth(true);
 			try {
 				sleep(3000);
@@ -273,7 +273,7 @@ public class RtpStreamReceiver extends Thread {
 				int oldring = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0);
 				if (oldring > 0) setStreamVolume(AudioManager.STREAM_RING,(int)(
 						am.getStreamMaxVolume(AudioManager.STREAM_RING)*
-						org.sipdroid.sipua.ui.Settings.getEarGain()), 0);
+						org.sipdroid.sipua.ui.Settings.getEarGain()*3/4), 0);
 				track.setStereoVolume(AudioTrack.getMaxVolume()*
 						org.sipdroid.sipua.ui.Settings.getEarGain()
 						,AudioTrack.getMaxVolume()*
@@ -460,18 +460,21 @@ public class RtpStreamReceiver extends Thread {
 					RtpStreamSender.delay != 0 ||
 					!InCallScreen.started;
 				if (lockFirst || lockLast != lockNew) {
-					lockFirst = false;
 					lockLast = lockNew;
 					lock(false);
+					lockFirst = false;
 					if (pwl == null) {
 						PowerManager pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
 						pwl = pm.newWakeLock(lockNew?(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP):PROXIMITY_SCREEN_OFF_WAKE_LOCK, "Sipdroid.Receiver");
 						pwl.acquire();
 					}
 				}
-			} else if (pwl != null) {
-				pwl.release();
-				pwl = null;
+			} else {
+				lockFirst = true;
+				if (pwl != null) {
+					pwl.release();
+					pwl = null;
+				}
 			}
 		} catch (Exception e) {
 		}
