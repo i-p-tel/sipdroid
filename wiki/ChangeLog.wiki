@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 2.1
+    * Fix issue 634, issue 669, issue 764, issue 822, issue 844
+
   * 2.0.1
     * Fix issue 743, issue 745, issue 746
 
