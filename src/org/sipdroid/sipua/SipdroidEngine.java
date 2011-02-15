@@ -258,7 +258,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 		for (RegisterAgent ra : ras) {
 			try {
 				if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
-						user_profiles[i].realm.equals("")) continue;
+						user_profiles[i].realm.equals("")) {
+					i++;
+					continue;
+				}
 				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
 		
 				if (ra != null && !ra.isRegistered() && Receiver.isFast(i) && ra.register()) {
@@ -278,7 +281,40 @@ public class SipdroidEngine implements RegisterAgentListener {
 		for (RegisterAgent ra : ras) {
 			try {
 				if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
-						user_profiles[i].realm.equals("")) continue;
+						user_profiles[i].realm.equals("")) {
+					i++;
+					continue;
+				}
+				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
+		
+				if (!Receiver.isFast(i)) {
+					unregister(i);
+				} else {
+					if (ra != null && ra.register()) {
+						Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
+						wl[i].acquire();
+					}
+				}
+			} catch (Exception ex) {
+				
+			}
+			i++;
+		}
+	}
+	
+	public void registerUdp() {
+		IpAddress.setLocalIpAddress();
+		int i = 0;
+		for (RegisterAgent ra : ras) {
+			try {
+				if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
+						user_profiles[i].realm.equals("") ||
+						sip_providers[i] == null ||
+						sip_providers[i].getDefaultTransport() == null ||
+						sip_providers[i].getDefaultTransport().equals("tcp")) {
+					i++;
+					continue;
+				}
 				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
 		
 				if (!Receiver.isFast(i)) {

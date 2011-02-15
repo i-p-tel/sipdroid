@@ -26,7 +26,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
     android:versionName="2.1 beta"
-    android:versionCode="80"
+    android:versionCode="81"
     android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
 	<supports-screens
