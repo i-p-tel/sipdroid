@@ -427,13 +427,13 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
                 return;
             }
 
+   			settings.unregisterOnSharedPreferenceChangeListener(context);
    			setDefaultValues();
 
            	// Restart the engine
        		Receiver.engine(context).halt();
    			Receiver.engine(context).StartEngine();
    			
-   			settings.unregisterOnSharedPreferenceChangeListener(context);
    			reload();
    			settings.registerOnSharedPreferenceChangeListener(context);
    			updateSummaries();
@@ -495,8 +495,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     		return;
 		if (key.startsWith(PREF_PORT) && sharedPreferences.getString(key, DEFAULT_PORT).equals("0")) {
 	   		Editor edit = sharedPreferences.edit();
-    		for (int i = 0; i < SipdroidEngine.LINES; i++)
-    			edit.putString(key, DEFAULT_PORT);
+    		edit.putString(key, DEFAULT_PORT);
     		edit.commit();
 
     		transferText = new InstantAutoCompleteTextView(this,null);
@@ -511,13 +510,17 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			return;
 		} else if (key.startsWith(PREF_SERVER)) {
     		Editor edit = sharedPreferences.edit();
-    		for (int i = 0; i < SipdroidEngine.LINES; i++)
+    		for (int i = 0; i < SipdroidEngine.LINES; i++) {
     			edit.putString(PREF_DNS+i, DEFAULT_DNS);
+    			String j = (i!=0?""+i:"");
+    			if (key.equals(PREF_SERVER+j)) {
+    				ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(PREF_PROTOCOL+j);
+    				lp.setValue(sharedPreferences.getString(PREF_SERVER+j, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp");
+    			}
+    		}
     		edit.commit();
         	Receiver.engine(this).updateDNS();
         	Checkin.checkin(false);
-			ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(PREF_PROTOCOL);
-			lp.setValue(sharedPreferences.getString(PREF_SERVER, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp");
         } else if (sharedPreferences.getBoolean(PREF_CALLBACK, DEFAULT_CALLBACK) && sharedPreferences.getBoolean(PREF_CALLTHRU, DEFAULT_CALLTHRU)) {
     		CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(key.equals(PREF_CALLBACK) ? PREF_CALLTHRU : PREF_CALLBACK);
     		cb.setChecked(false);

@@ -48,7 +48,8 @@
 \nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details (http://www.gnu.org/licenses).</string>
 
 <string name="reg">Registering...</string>
-<string name="regok">Registered</string>
+<string name="regpref">Preferred</string>
+<string name="regclick">Click to select</string>
 <string name="regfailed">Registration failed</string>
 
 <string name="voicemail">Message(s) Waiting</string>

@@ -79,6 +79,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 		} else {
 			user_profile.realm = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_DOMAIN+suffix, Settings.DEFAULT_DOMAIN);
 		}
+		user_profile.realm_orig = user_profile.realm;
 		if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_FROMUSER+suffix, Settings.DEFAULT_FROMUSER).length() == 0) {
 			user_profile.from_url = user_profile.username;
 		} else {
@@ -196,7 +197,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			if (sip_provider != null) sip_provider.setOutboundProxy(new SocketAddress(
 					IpAddress.getByName(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_DNS+i, Settings.DEFAULT_DNS)),
 					Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_PORT+(i!=0?i:""), Settings.DEFAULT_PORT))));
-		} catch (UnknownHostException e) {
+		} catch (Exception e) {
 		}
 	}
 	
@@ -239,6 +240,9 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	public void unregister(int i) {
+			if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
+					user_profiles[i].realm.equals("")) return;
+
 			RegisterAgent ra = ras[i];
 			if (ra != null && ra.unregister()) {
 				Receiver.alarm(0, LoopAlarm.class);
@@ -255,7 +259,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			try {
 				if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
 						user_profiles[i].realm.equals("")) continue;
-				user_profiles[i].contact_url = getContactURL(user_profiles[i].username,sip_providers[i]);
+				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
 		
 				if (ra != null && !ra.isRegistered() && Receiver.isFast(i) && ra.register()) {
 					Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
@@ -275,7 +279,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			try {
 				if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
 						user_profiles[i].realm.equals("")) continue;
-				user_profiles[i].contact_url = getContactURL(user_profiles[i].username,sip_providers[i]);
+				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
 		
 				if (!Receiver.isFast(i)) {
 					unregister(i);
@@ -349,7 +353,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 		if (isRegistered(i)) {
 			if (Receiver.on_wlan)
 				Receiver.alarm(60, LoopAlarm.class);
-			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.regok),R.drawable.sym_presence_available,0);
+			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(i == pref?R.string.regpref:R.string.regclick),R.drawable.sym_presence_available,0);
 			reg_ra.subattempts = 0;
 			reg_ra.startMWI();
 			Receiver.registered();
