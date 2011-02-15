@@ -217,6 +217,7 @@ import org.zoolu.sip.provider.SipProvider;
 					RtpStreamReceiver.speakermode = speakermode();
 					bluetooth = -1;
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
+					engine(mContext).registerUdp();
 					broadcastCallStateChanged("OFFHOOK", caller);
 					ccCall.setState(Call.State.DIALING);
 					ccConn.setUserData(null);
