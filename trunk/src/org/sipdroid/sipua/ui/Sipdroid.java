@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sipdroid.sipua.R;
+import org.sipdroid.sipua.SipdroidEngine;
 import org.sipdroid.sipua.UserAgent;
 
 import android.app.Activity;
@@ -242,7 +243,47 @@ public class Sipdroid extends Activity implements OnDismissListener {
 			}
 		});
 		
-		if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) &&
+		if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_NOPORT, Settings.DEFAULT_NOPORT)) {
+			boolean ask = false;
+    		for (int i = 0; i < SipdroidEngine.LINES; i++) {
+    			String j = (i!=0?""+i:"");
+    			if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_SERVER+j, Settings.DEFAULT_SERVER).equals(Settings.DEFAULT_SERVER)
+    					&& PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_USERNAME+j, Settings.DEFAULT_USERNAME).length() != 0 &&
+    					PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PORT+j, Settings.DEFAULT_PORT).equals(Settings.DEFAULT_PORT))
+    				ask = true;
+    		}
+    		if (ask)
+			new AlertDialog.Builder(this)
+				.setMessage(R.string.dialog_port)
+	            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	                		Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+	                		for (int i = 0; i < SipdroidEngine.LINES; i++) {
+	                			String j = (i!=0?""+i:"");
+	                			if (PreferenceManager.getDefaultSharedPreferences(mContext).getString(Settings.PREF_SERVER+j, Settings.DEFAULT_SERVER).equals(Settings.DEFAULT_SERVER)
+	                					&& PreferenceManager.getDefaultSharedPreferences(mContext).getString(Settings.PREF_USERNAME+j, Settings.DEFAULT_USERNAME).length() != 0 &&
+	                					PreferenceManager.getDefaultSharedPreferences(mContext).getString(Settings.PREF_PORT+j, Settings.DEFAULT_PORT).equals(Settings.DEFAULT_PORT))
+	                				edit.putString(Settings.PREF_PORT+j, "5061");
+	                		}
+	                		edit.commit();
+	                   		Receiver.engine(mContext).halt();
+	               			Receiver.engine(mContext).StartEngine();
+	                   }
+	                })
+	            .setNeutralButton(R.string.no, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	
+	                    }
+	                })
+	            .setNegativeButton(R.string.dontask, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	                		Editor edit = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+	                		edit.putBoolean(Settings.PREF_NOPORT, true);
+	                		edit.commit();
+	                    }
+	                })
+				.show();
+		} else if (PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) &&
 				!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_NODEFAULT, Settings.DEFAULT_NODEFAULT))
 			new AlertDialog.Builder(this)
 				.setMessage(R.string.dialog_default)
@@ -378,9 +419,12 @@ public class Sipdroid extends Activity implements OnDismissListener {
 		}
 		
 		try {
-			return context.getPackageManager()
-				   .getPackageInfo(context.getPackageName(), 0)
-				   .versionName;
+	    	String ret = context.getPackageManager()
+			   .getPackageInfo(context.getPackageName(), 0)
+			   .versionName;
+	    	if (ret.contains(" + "))
+	    		ret = ret.substring(0,ret.indexOf(" + "))+"b";
+	    	return ret;
 		} catch(NameNotFoundException ex) {}
 		
 		return unknown;		

@@ -232,6 +232,7 @@ public class VideoCamera extends CallScreen implements
 
         mRecordingTimeView.setText("");
         mRecordingTimeView.setVisibility(View.VISIBLE);
+        mHandler.removeMessages(UPDATE_RECORD_TIME);
         mHandler.sendEmptyMessage(UPDATE_RECORD_TIME);
         super.onResume();
     }
@@ -458,7 +459,7 @@ public class VideoCamera extends CallScreen implements
     					buffer[12] = 4;
     					RtpPacket rtp_packet = new RtpPacket(buffer, 0);
     					int seqn = 0;
-    					int num,number = 0,src,dest,len = 0,head = 0,lasthead = 0,cnt = 0,stable = 0;
+    					int num,number = 0,src,dest,len = 0,head = 0,lasthead = 0,lasthead2 = 0,cnt = 0,stable = 0;
     					long now,lasttime = 0;
     					double avgrate = videoQualityHigh?45000:24000;
     					double avglen = avgrate/20;
@@ -492,16 +493,17 @@ public class VideoCamera extends CallScreen implements
     						number += num;
     						head += num;
     						try {
-								if (lasthead != head+fis.available() && ++stable >= 5) {
-									now = SystemClock.elapsedRealtime();
-									if (lasttime != 0) {
-										fps = (int)((double)cnt*1000/(now-lasttime));
-										avgrate = (double)fis.available()*1000/(now-lasttime);
-									}
+								now = SystemClock.elapsedRealtime();
+								if (lasthead != head+fis.available() && ++stable >= 5 && now-lasttime > 700) {
 									if (cnt != 0 && len != 0)
 										avglen = len/cnt;
+									if (lasttime != 0) {
+										fps = (int)((double)cnt*1000/(now-lasttime));
+										avgrate = (double)((head+fis.available())-lasthead2)*1000/(now-lasttime);
+									}
 									lasttime = now;
 									lasthead = head+fis.available();
+									lasthead2 = head;
 									len = cnt = stable = 0;
 								}
 							} catch (IOException e1) {

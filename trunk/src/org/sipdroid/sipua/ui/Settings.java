@@ -207,6 +207,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_WIFI_DISABLED = "wifi_disabled";
 	public static final String PREF_ON_VPN = "on_vpn";
 	public static final String PREF_NODEFAULT = "nodefault";
+	public static final String PREF_NOPORT = "noport";
 	public static final String PREF_ON = "on";
 	public static final String PREF_PREFIX = "prefix";
 	public static final String PREF_COMPRESSION = "compression";
@@ -224,6 +225,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final boolean	DEFAULT_WIFI_DISABLED = false;
 	public static final boolean DEFAULT_ON_VPN = false;
 	public static final boolean	DEFAULT_NODEFAULT = false;
+	public static final boolean DEFAULT_NOPORT = false;
 	public static final boolean	DEFAULT_ON = false;
 	public static final String	DEFAULT_PREFIX = "";
 	public static final String	DEFAULT_COMPRESSION = null;
@@ -279,7 +281,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 				cb.setChecked(true);
 				Editor edit = settings.edit();
 
-				edit.putString(PREF_PORT+j, DEFAULT_PORT);
+				edit.putString(PREF_PORT+j, "5061");
 				edit.putString(PREF_SERVER+j, DEFAULT_SERVER);
 				edit.putString(PREF_PREF+j, DEFAULT_PREF);				
 				edit.putString(PREF_PROTOCOL+j, DEFAULT_PROTOCOL);
@@ -516,6 +518,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     			if (key.equals(PREF_SERVER+j)) {
     				ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(PREF_PROTOCOL+j);
     				lp.setValue(sharedPreferences.getString(PREF_SERVER+j, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp");
+    				lp = (ListPreference) getPreferenceScreen().findPreference(PREF_PORT+j);
+    				lp.setValue(sharedPreferences.getString(PREF_SERVER+j, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "5061" : DEFAULT_PORT);
     			}
     		}
     		edit.commit();

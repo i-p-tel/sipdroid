@@ -23,6 +23,7 @@
 package org.sipdroid.sipua.ui;
 
 import org.sipdroid.sipua.R;
+import org.sipdroid.sipua.SipdroidEngine;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -66,7 +67,7 @@ public class SIPUri extends Activity {
 		Sipdroid.on(this,true);
 		Uri uri = getIntent().getData();
 		String target;
-		if (uri.getScheme().equals("sip"))
+		if (uri.getScheme().equals("sip") || uri.getScheme().equals("sipdroid"))
 			target = uri.getSchemeSpecificPart();
 		else {
 			if (uri.getAuthority().equals("aim") ||
@@ -83,19 +84,24 @@ public class SIPUri extends Activity {
 		if (!Sipdroid.release) Log.v("SIPUri", "sip uri: " + target);
 		if (!target.contains("@") && PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_ASK)) {
 			final String t = target;
-			final String items[] = {getString(R.string.app_name),
-					getString(R.string.pstn_name)
-			};
+			String items[] = {getString(R.string.pstn_name)};
+			for (int p = 0; p < SipdroidEngine.LINES; p++)
+				if (Receiver.isFast(p) || (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Settings.PREF_CALLBACK, Settings.DEFAULT_CALLBACK) &&
+						PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_POSURL, Settings.DEFAULT_POSURL).length() > 0)) {
+					items = new String[2];
+					items[0] = getString(R.string.app_name);
+					items[1] = getString(R.string.pstn_name);
+					break;
+				}
+			final String fitems[] = items;
 			new AlertDialog.Builder(this)
 			.setIcon(R.drawable.icon22)
 			.setTitle(target)
             .setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                    	switch (whichButton) {
-                    	case 0:
+                    	if (fitems[whichButton].equals(getString(R.string.app_name)))
                     		call(t);
-                    		break;
-                    	case 1:
+                    	else {
                 			PSTN.callPSTN("sip:"+t);
                 			finish();
                     	}

@@ -113,6 +113,7 @@
 <string name="dialog_default">Sipdroid ist nicht als Telefon voreingestellt. Möchten Sie es als Telefon voreinstellen?
 \n
 \nAuch wenn Sie mit \'Nein\' antworten, können Sie aus dem System über Sipdroid wählen, indem Sie \'+\' hinter eine Nummer im Telefon anhängen oder bei einem Kontakt auf \'Textnachricht an\' klicken.</string>
+<string name="dialog_port">Möchten Sie den SIP-Port von 5060 auf 5061 ändern, um die Zuverlässigkeit zu erhöhen?</string>
 <string name="yes">Ja</string>
 <string name="no">Nein</string>
 <string name="dontask">Nicht fragen</string>

@@ -520,7 +520,7 @@ import org.zoolu.sip.provider.SipProvider;
 		
 		public static long expire_time;
 		
-		public static void reRegister(int renew_time) {
+		public static synchronized void reRegister(int renew_time) {
 			if (renew_time == 0)
 				expire_time = 0;
 			else {
@@ -625,6 +625,9 @@ import org.zoolu.sip.provider.SipProvider;
         	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         	WifiInfo wi = wm.getConnectionInfo();
 
+        	if (PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_USERNAME+(i!=0?i:""),"").equals("") ||
+        			PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER+(i!=0?i:""),"").equals(""))
+        		return false;
         	if (wi != null) {
         		if (!Sipdroid.release) Log.i("SipUA:","isFastWifi() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())
         				+" "+wi.getIpAddress());
