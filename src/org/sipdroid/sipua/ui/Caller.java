@@ -51,7 +51,7 @@ public class Caller extends BroadcastReceiver {
 		long last_time;
 		
 		@Override
-		public void onReceive(Context context, Intent intent) {
+		public void onReceive(final Context context, Intent intent) {
 	        String intentAction = intent.getAction();
 	        String number = getResultData();
 	        Boolean force = false;
@@ -197,10 +197,19 @@ public class Caller extends BroadcastReceiver {
 	    					setResultData(callthru_number);
 	    				} else if (ask || force) {
 	    					setResultData(null);
-	    			        intent = new Intent(Intent.ACTION_CALL,
-	    			                Uri.fromParts("sip", Uri.decode(number), null));
-	    			        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    			        context.startActivity(intent);					
+	    					final String n = number;
+	    			        (new Thread() {
+	    						public void run() {
+			    					try {
+										Thread.sleep(200);
+									} catch (InterruptedException e) {
+									}
+			    			        Intent intent = new Intent(Intent.ACTION_CALL,
+			    			                Uri.fromParts("sipdroid", Uri.decode(n), null));
+			    			        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			    			        context.startActivity(intent);					
+	    						}
+	    			        }).start();  
 	    				}
 	        		}
 	            }

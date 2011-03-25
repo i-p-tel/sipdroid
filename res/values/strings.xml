@@ -151,6 +151,7 @@
 \n
 \nIf you answer \'No\' here, you can still dial over Sipdroid from the system by adding \'+\' behind a number in Dialer, or by selecting \'text to\' in Contacts.</string>
 <string name="dialog_message">Would you like to see a message from Pascal introducing Sipdroid 1.5?</string>
+<string name="dialog_port">Would you like to change SIP port from 5060 to 5061 for improved reliability?</string>
 <string name="yes">Yes</string>
 <string name="no">No</string>
 <string name="dontask">Don\'t ask me again</string>

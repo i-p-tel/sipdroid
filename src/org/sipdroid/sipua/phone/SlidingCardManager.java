@@ -358,7 +358,7 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
         final int yAbsolute = (int) ev.getRawY();
         
         if (isSlideInProgress()) {
-            if (SystemClock.elapsedRealtime()-mTouchDownTime > 1000)
+            if (SystemClock.elapsedRealtime()-mTouchDownTime > 1000 || InCallScreen.pactive)
             	abortSlide();
             else
             switch (action) {

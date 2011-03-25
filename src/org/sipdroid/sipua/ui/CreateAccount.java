@@ -61,7 +61,7 @@ public class CreateAccount extends Dialog {
 	static String email;
 	
 	public static Boolean isPossible(Context context) {
-		Boolean found = false;
+		Boolean found = true; // disabled temporarily
 	   	for (int i = 0; i < SipdroidEngine.LINES; i++) {
 	   		String j = (i!=0?""+i:"");
 	   		String username = PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_USERNAME+j, Settings.DEFAULT_USERNAME),
@@ -79,11 +79,10 @@ public class CreateAccount extends Dialog {
 		if (a == null || a.size() == 0)
 			return false;
         Account[] accounts = AccountManager.get(context).getAccountsByType("com.google");
-        for (Account account : accounts)
-          if (account.name.contains("@gmail.com") || account.name.contains("@googlemail.com")) {
+        for (Account account : accounts) {
         	  email = account.name;
         	  return true;
-          }
+        }
         return false;
 	}
 	

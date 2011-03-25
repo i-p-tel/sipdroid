@@ -102,6 +102,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 					Editor edit = PreferenceManager.getDefaultSharedPreferences(getUIContext()).edit();
 	
 					edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_KEEPON, Build.MODEL.equals("Nexus One") ||
+							Build.MODEL.equals("Nexus S") ||
 							Build.MODEL.equals("Archos5") ||
 							Build.MODEL.equals("ADR6300") ||
 							Build.MODEL.equals("PC36100") ||

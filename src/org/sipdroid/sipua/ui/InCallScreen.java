@@ -111,6 +111,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
      		mHandler.sendEmptyMessageDelayed(MSG_BACK, Receiver.call_end_reason == -1?
     				2000:5000);
 	    first = true;
+	    pactive = false;
 	    sensorManager.registerListener(this,proximitySensor,SensorManager.SENSOR_DELAY_NORMAL);
 	    started = true;
 	}
@@ -498,6 +499,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	}
 
 	static final float PROXIMITY_THRESHOLD = 5.0f;
+	public static boolean pactive;
 	
 	@Override
 	public void onSensorChanged(SensorEvent event) {
@@ -507,6 +509,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		}
 		float distance = event.values[0];
         boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
+        pactive = active;
         setScreenBacklight((float) (active?0.1:-1));
 	}
 }

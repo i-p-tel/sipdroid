@@ -381,8 +381,7 @@ public class RtpStreamSender extends Thread {
 	 				 try {
 						rtp_socket.send(dt_packet);
 						sleep(20);
-	 				 } catch (IOException e1) {
-	 				 } catch (InterruptedException e1) {
+	 				 } catch (Exception e1) {
 	 				 }
 	 			 }
 	 			 for (int i = 0; i < 3; i++) {
@@ -395,7 +394,7 @@ public class RtpStreamSender extends Thread {
 	 				 dtmfbuf[15] = (byte)duration;
 	 				 try {
 						rtp_socket.send(dt_packet);
-	 				 } catch (IOException e1) {
+	 				 } catch (Exception e1) {
 	 				 }	 			 
 	 			 }
 	 			 time += 160; seqn++;
@@ -463,7 +462,7 @@ public class RtpStreamSender extends Thread {
  				 rtp_socket.send(rtp_packet);
  				 if (m == 2)
  					 rtp_socket.send(rtp_packet);
- 			 } catch (IOException e) {
+ 			 } catch (Exception e) {
  			 }
  			 if (p_type.codec.number() == 9)
  				 time += frame_size/2;
