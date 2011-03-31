@@ -78,6 +78,7 @@ public class RtpStreamReceiver extends Thread {
 	ContentResolver cr;
 	public static int speakermode = -1;
 	public static boolean bluetoothmode;
+	CallRecorder call_recorder = null;
 	
 	/**
 	 * Constructs a RtpStreamReceiver.
@@ -87,9 +88,10 @@ public class RtpStreamReceiver extends Thread {
 	 * @param socket
 	 *            the local receiver SipdroidSocket
 	 */
-	public RtpStreamReceiver(SipdroidSocket socket, Codecs.Map payload_type) {
+	public RtpStreamReceiver(SipdroidSocket socket, Codecs.Map payload_type, CallRecorder rec) {
 		init(socket);
 		p_type = payload_type;
+		call_recorder = rec;
 	}
 
 	/** Inits the RtpStreamReceiver */
@@ -599,6 +601,11 @@ public class RtpStreamReceiver extends Thread {
 					 }
 					 len = p_type.codec.decode(buffer, lin, rtp_packet.getPayloadLength());
 					 
+					 // Call recording: Save incoming.
+					 // Data is in buffer lin, from 0 to len.
+					 if (call_recorder != null)
+					 	call_recorder.writeIncoming(lin, 0, len);
+					 
 		 			 if (speakermode == AudioManager.MODE_NORMAL)
 		 				 calc(lin,0,len);
 				 }
@@ -608,7 +615,7 @@ public class RtpStreamReceiver extends Thread {
 					 minheadroom = headroom;
 	 			 if (headroom < 250*mu) { 
 	 				 late++;
-					 if (good != 0 && lost/good < 0.01)
+					 if (good != 0 && lost/good < 0.01 && call_recorder == null)
 						 if (late/good > 0.01 && jitter + minjitteradjust < maxjitter) {
 							 jitter += minjitteradjust;
 							 late = 0;
@@ -686,6 +693,13 @@ public class RtpStreamReceiver extends Thread {
 		rtp_socket.close();
 		rtp_socket = null;
 		codec = "";
+		
+		// Call recording: stop incoming receive.
+		if (call_recorder != null)
+		{
+			call_recorder.stopIncoming();
+			call_recorder = null;
+		}
 
 		if (DEBUG)
 			println("rtp receiver terminated");

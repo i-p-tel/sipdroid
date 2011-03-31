@@ -128,6 +128,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_MMTEL = "mmtel";
 	public static final String PREF_MMTEL_QVALUE = "mmtel_qvalue";
 	
+	// Call recording preferences.
+	public static final String PREF_CALLRECORD = "callrecord";
+	
 	public static final String PREF_PAR = "par";
 	public static final String PREF_IMPROVE = "improve";
 	public static final String PREF_POSURL = "posurl";
@@ -180,6 +183,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final boolean	DEFAULT_MMTEL = false;
 	public static final String	DEFAULT_MMTEL_QVALUE = "1.00";	
 
+	// Call recording preferences.
+	public static final boolean DEFAULT_CALLRECORD = false;
+	
 	public static final boolean	DEFAULT_PAR = false;
 	public static final boolean	DEFAULT_IMPROVE = false;
 	public static final String	DEFAULT_POSURL = "";
