@@ -189,6 +189,8 @@
 <string name="settings_auto_ondemand2">Show toggle switch in status bar</string>
 <string name="settings_auto_headset">Auto-Answer headset</string>
 <string name="settings_auto_headset2">When wired headset is connected</string>
+<string name="settings_callrecord">Record calls</string>
+<string name="settings_callrecord2">Record all voice calls to SD card</string>
 
 <string name="settings_notifications">Notifications</string>
 <string name="settings_MWI">Voicemail</string>
@@ -302,5 +304,6 @@
 
 <string name="help_speakerphone">Press and hold volume buttons to force talk</string>
 <string name="menu_create">New PBX linked to my Google Voice</string>
+<string name="menu_register">Register VideoSMS feature</string>
 
 </resources>

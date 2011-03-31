@@ -108,6 +108,8 @@ public class RtpStreamSender extends Thread {
 	}};
 	//DTMF change 
 	
+	CallRecorder call_recorder = null;
+	
 	/**
 	 * Constructs a RtpStreamSender.
 	 * 
@@ -135,9 +137,10 @@ public class RtpStreamSender extends Thread {
 	public RtpStreamSender(boolean do_sync, Codecs.Map payload_type,
 			       long frame_rate, int frame_size,
 			       SipdroidSocket src_socket, String dest_addr,
-			       int dest_port) {
+			       int dest_port, CallRecorder rec) {
 		init(do_sync, payload_type, frame_rate, frame_size,
 				src_socket, dest_addr, dest_port);
+		call_recorder = rec;
 	}
 
 	/** Inits the RtpStreamSender */
@@ -420,6 +423,10 @@ public class RtpStreamSender extends Thread {
 				 continue;
 			 if (!p_type.codec.isValid())
 				 continue;
+			 
+			 // Call recording: Save the frame to the CallRecorder.
+			 if (call_recorder != null)
+			 	call_recorder.writeOutgoing(lin, pos, num);
 
 			 if (RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL) {
  				 calc(lin,pos,num);
@@ -454,6 +461,8 @@ public class RtpStreamSender extends Thread {
 			 } else {
 				 num = p_type.codec.encode(lin, ring%(frame_size*(frame_rate+1)), buffer, num);
 			 }
+			 
+ 
  			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
  			 rtp_packet.setTimestamp(time);
@@ -497,6 +506,13 @@ public class RtpStreamSender extends Thread {
 		p_type.codec.close();
 		rtp_socket.close();
 		rtp_socket = null;
+		
+		// Call recorder: stop recording outgoing.
+		if (call_recorder != null)
+		{
+			call_recorder.stopOutgoing();
+			call_recorder = null;
+		}
 
 		if (DEBUG)
 			println("rtp sender terminated");

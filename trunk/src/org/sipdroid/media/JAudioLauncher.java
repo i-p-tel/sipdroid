@@ -21,10 +21,13 @@ package org.sipdroid.media;
 
 import org.sipdroid.codecs.Codecs;
 import org.sipdroid.net.SipdroidSocket;
+import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.sip.provider.SipStack;
 import org.zoolu.tools.Log;
 import org.zoolu.tools.LogLevel;
+
+import android.preference.PreferenceManager;
 
 /** Audio launcher based on javax.sound  */
 public class JAudioLauncher implements MediaLauncher
@@ -78,13 +81,18 @@ public class JAudioLauncher implements MediaLauncher
       frame_rate=sample_rate/frame_size;
       useDTMF = (dtmf_pt != 0);
       try
-      {  socket=new SipdroidSocket(local_port);
+      {
+    	 CallRecorder call_recorder = null;
+    	 if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_CALLRECORD,
+					org.sipdroid.sipua.ui.Settings.DEFAULT_CALLRECORD))
+    		 call_recorder = new CallRecorder(null,payload_type.codec.samp_rate()); // Autogenerate filename from date. 
+    	 socket=new SipdroidSocket(local_port);
          dir=direction;
          // sender
          if (dir>=0)
          {  printLog("new audio sender to "+remote_addr+":"+remote_port,LogLevel.MEDIUM);
             //audio_input=new AudioInput();
-            sender=new RtpStreamSender(true,payload_type,frame_rate,frame_size,socket,remote_addr,remote_port);
+            sender=new RtpStreamSender(true,payload_type,frame_rate,frame_size,socket,remote_addr,remote_port,call_recorder);
             sender.setSyncAdj(2);
             sender.setDTMFpayloadType(dtmf_pt);
          }
@@ -92,7 +100,7 @@ public class JAudioLauncher implements MediaLauncher
          // receiver
          if (dir<=0)
          {  printLog("new audio receiver on "+local_port,LogLevel.MEDIUM);
-            receiver=new RtpStreamReceiver(socket,payload_type);
+            receiver=new RtpStreamReceiver(socket,payload_type,call_recorder);
          }
       }
       catch (Exception e) {  printException(e,LogLevel.HIGH);  }
