@@ -64,6 +64,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	final int MSG_ANSWER_SPEAKER = 2;
 	final int MSG_BACK = 3;
 	final int MSG_TICK = 4;
+	final int MSG_POPUP = 5;
 	
 	final int SCREEN_OFF_TIMEOUT = 12000;
 	
@@ -167,11 +168,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 					mHandler.sendEmptyMessageDelayed(MSG_ANSWER_SPEAKER, 10000);
 			break;
 		case UserAgent.UA_STATE_INCALL:
-			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-				mDialerDrawer.close();
-				mDialerDrawer.setVisibility(View.GONE);
-			} else
-				mDialerDrawer.setVisibility(View.VISIBLE);
+			mDialerDrawer.close();
+			mDialerDrawer.setVisibility(View.VISIBLE);
 			if (Receiver.docked <= 0)
 				screenOff(true);
 			break;
@@ -187,6 +185,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		if (Receiver.ccCall != null) mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
         if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
 		mHandler.sendEmptyMessage(MSG_TICK);
+		mHandler.sendEmptyMessage(MSG_POPUP);
 	    if (t == null && Receiver.call_state != UserAgent.UA_STATE_IDLE) {
 			mDigits.setText("");
 			running = true;
@@ -265,6 +264,9 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
     				mStats.setVisibility(View.VISIBLE);
     			} else
     				mStats.setVisibility(View.GONE);
+    			break;
+    		case MSG_POPUP:
+    	        if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
     			break;
     		}
     	}
@@ -404,12 +406,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 			Receiver.ccCall.setState(Call.State.ACTIVE);
 			Receiver.ccCall.base = SystemClock.elapsedRealtime();
 			mCallCard.displayMainCallStatus(ccPhone,Receiver.ccCall);
-			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-				mDialerDrawer.close();
-				mDialerDrawer.setVisibility(View.GONE);
-			} else {
-				mDialerDrawer.setVisibility(View.VISIBLE);
-			}
+			mDialerDrawer.setVisibility(View.VISIBLE);
 	        if (mSlidingCardManager != null)
 	        	mSlidingCardManager.showPopup();
 		}

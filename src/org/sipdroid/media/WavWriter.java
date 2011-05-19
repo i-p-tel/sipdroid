@@ -37,7 +37,7 @@ public class WavWriter
 	int rightSamplesWritten = 0;
 	// The positions of the first sample data byte.
 	long sampleDataOffset;
-	byte[] buf = new byte[5000];
+	byte[] buf = new byte[10000];
 	
 	public WavWriter(String filename,int sample_rate)
 	{

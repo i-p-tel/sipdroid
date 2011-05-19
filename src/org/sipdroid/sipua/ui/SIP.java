@@ -36,7 +36,7 @@ public class SIP extends Activity {
 			number = uri.substring(uri.indexOf(":")+1);
 			if (!number.equals("")) {
 		        Intent intent = new Intent(Intent.ACTION_CALL,
-		                Uri.fromParts("tel", Uri.decode(number)+
+		                Uri.fromParts(Uri.decode(number).contains("@")?"sipdroid":"tel", Uri.decode(number)+
 		                		(PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) ? "+" : ""), null));
 		        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		        Caller.noexclude = SystemClock.elapsedRealtime();
