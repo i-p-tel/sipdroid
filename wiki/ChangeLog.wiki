@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 2.2.2
+    * Fix issue 215
+
   * 2.2.1
     * Added Call Recording to SD card (issue 390)
 
