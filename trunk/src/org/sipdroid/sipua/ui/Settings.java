@@ -329,16 +329,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	// Get the content of the directory
-    	profileFiles = getProfileList();
-
-    	// Create menu items - show only if there are already some profiles
-        if (profileFiles != null && profileFiles.length > 0) {
-	        menu.add(0, MENU_IMPORT, 0, getString(R.string.settings_profile_menu_import)).setIcon(android.R.drawable.ic_menu_upload);
-	        menu.add(0, MENU_EXPORT, 0, getString(R.string.settings_profile_menu_export)).setIcon(android.R.drawable.ic_menu_save);
-        	menu.add(0, MENU_DELETE, 0, getString(R.string.settings_profile_menu_delete)).setIcon(android.R.drawable.ic_menu_delete);
-        }
-
+	    menu.add(0, MENU_IMPORT, 0, getString(R.string.settings_profile_menu_import)).setIcon(android.R.drawable.ic_menu_upload);
+	    menu.add(0, MENU_EXPORT, 0, getString(R.string.settings_profile_menu_export)).setIcon(android.R.drawable.ic_menu_save);
+	    menu.add(0, MENU_DELETE, 0, getString(R.string.settings_profile_menu_delete)).setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
 
