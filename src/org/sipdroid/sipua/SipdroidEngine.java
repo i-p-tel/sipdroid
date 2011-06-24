@@ -58,7 +58,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public UserAgent ua;
 
 	/** Register Agent */
-	private RegisterAgent[] ras;
+	public RegisterAgent[] ras;
 
 	private KeepAliveSip[] kas;
 	
@@ -108,7 +108,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 							Build.MODEL.equals("PC36100") ||
 							Build.MODEL.equals("HTC Desire") ||
 							Build.MODEL.equals("HTC Incredible S") ||
-							Build.MODEL.equals("HTC Wildfire"));
+							Build.MODEL.equals("HTC Wildfire") ||
+							Build.MODEL.equals("GT-I9100"));
 					edit.commit();
 				}
 				wl = new PowerManager.WakeLock[LINES];
@@ -372,7 +373,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 		return false;
 	}
 	
-	boolean isRegistered(int i)
+	public boolean isRegistered(int i)
 	{
 		if (ras[i] == null)
 		{
@@ -461,7 +462,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 			lasthalt = SystemClock.uptimeMillis();
 			sip_providers[i].haltConnections();
 		}
-		updateDNS();
+		if (!Thread.currentThread().getName().equals("main"))
+			updateDNS();
 		reg_ra.stopMWI();
     	WifiManager wm = (WifiManager) Receiver.mContext.getSystemService(Context.WIFI_SERVICE);
     	wm.startScan();
