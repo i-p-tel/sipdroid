@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 Luca Veltri - University of Parma - Italy
+ * Copyright (C) 2009 The Sipdroid Open Source Project
  * 
  * This file is part of MjSip (http://www.mjsip.org)
  * 
@@ -31,6 +32,9 @@ import org.zoolu.sip.message.Message;
 import org.zoolu.tools.DateFormat;
 import java.util.Vector;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.zoolu.tools.Parser;
 
 /**
@@ -136,15 +140,13 @@ public class SipParser extends Parser {
 	 * <i>hname</i>
 	 */
 	public int indexOfHeader(String hname) {
-		if (str.startsWith(hname, index))
-			return index;
-		String[] target = { '\n' + hname, '\r' + hname };
-		SipParser par = new SipParser(str, index);
-		// par.goTo(target);
-		par.goToIgnoreCase(target);
-		if (par.hasMore())
-			par.skipChar();
-		return par.getPos();
+	    Pattern p = Pattern.compile("^" + hname + ": ",
+	        Pattern.CASE_INSENSITIVE
+	        | Pattern.MULTILINE);
+	    Matcher m = p.matcher(str);
+	    if (m.find(index))
+	      return m.start();
+	    return str.length();
 	}
 
 	/** Goes to the begin of next header */

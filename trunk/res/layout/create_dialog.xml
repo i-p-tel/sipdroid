@@ -31,29 +31,6 @@
 
     <TextView
     	android:layout_height="wrap_content"
-    	android:text="A new account @pbxes.org will be created. It will be linked to your existing Google Voice account, and therefore get the same credentials as your Google Voice account."
-    	android:layout_width="wrap_content"
-    	android:textColor="#000000">
-    </TextView>
-    
-    <TextView
-    	android:layout_height="wrap_content"
-    	android:text="You may modify them later by logging in @pbxes.org via a web browser."
-    	android:layout_width="wrap_content"
-    	android:paddingTop="10dip"
-    	android:textColor="#000000">
-    </TextView>
-
-    <TextView
-    	android:layout_height="wrap_content"
-    	android:text="By submitting this form you agree to PBXes' Terms of Service as can be found @pbxes.org website."
-    	android:layout_width="wrap_content"
-    	android:paddingTop="10dip"
-    	android:textColor="#000000">
-    </TextView>
-
-    <TextView
-    	android:layout_height="wrap_content"
     	android:text="PBXes Name"
     	android:textStyle="bold"
     	android:textColor="#000000"
@@ -68,7 +45,29 @@
 
     <TextView
     	android:layout_height="wrap_content"
-    	android:text="Google Voice Name"
+    	android:id="@+id/intro"
+    	android:layout_width="wrap_content"
+    	android:textColor="#000000">
+    </TextView>
+    
+    <TextView
+    	android:layout_height="wrap_content"
+    	android:text="You may modify it later by logging in to PBXes via a web browser."
+    	android:layout_width="wrap_content"
+    	android:paddingTop="10dip"
+    	android:textColor="#000000">
+    </TextView>
+
+    <TextView
+    	android:layout_height="wrap_content"
+    	android:text="By submitting this form you agree to PBXes' Terms of Service as can be found at http://www.pbxes.org."
+    	android:layout_width="wrap_content"
+    	android:paddingTop="10dip"
+    	android:textColor="#000000">
+    </TextView>
+
+    <TextView android:id="@+id/email"
+    	android:layout_height="wrap_content"
     	android:textStyle="bold"
     	android:paddingTop="10dip"
     	android:textColor="#000000"
@@ -80,7 +79,7 @@
     	android:layout_width="wrap_content">
     </TextView>
 
-    <TextView
+    <TextView android:id="@+id/password"
     	android:layout_height="wrap_content"
     	android:text="Password"
     	android:textStyle="bold"
@@ -95,7 +94,7 @@
     	android:layout_width="fill_parent">
     </EditText>
     
-    <TextView
+    <TextView android:id="@+id/password_confirm"
     	android:layout_height="wrap_content"
     	android:text="Password Confirm"
     	android:textStyle="bold"

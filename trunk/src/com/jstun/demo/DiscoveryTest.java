@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -68,7 +67,7 @@ public class DiscoveryTest {
 		while (true) {
 			try {
 				// Test 1 including response
-				socketTest1 = new DatagramSocket(new InetSocketAddress(iaddress, 0));
+				socketTest1 = new DatagramSocket(/*new InetSocketAddress(iaddress, 0)*/);
 				socketTest1.setReuseAddress(true);
 				socketTest1.connect(InetAddress.getByName(stunServer), port);
 				socketTest1.setSoTimeout(timeout);
@@ -115,7 +114,7 @@ public class DiscoveryTest {
 					return true;
 				}
 			} catch (SocketTimeoutException ste) {
-				if (timeSinceFirstTransmission < 7900) {
+				if (timeSinceFirstTransmission < 3000) { // was 7900
 					Log.d(TAG, "Test 1: Socket timeout while receiving the response.");
 					timeSinceFirstTransmission += timeout;
 					int timeoutAddValue = (timeSinceFirstTransmission * 2);
@@ -138,7 +137,7 @@ public class DiscoveryTest {
 		while (true) {
 			try {
 				// Test 2 including response
-				DatagramSocket sendSocket = new DatagramSocket(new InetSocketAddress(iaddress, 0));
+				DatagramSocket sendSocket = new DatagramSocket(/*new InetSocketAddress(iaddress, 0)*/);
 				sendSocket.connect(InetAddress.getByName(stunServer), port);
 				sendSocket.setSoTimeout(timeout);
 				
@@ -276,7 +275,7 @@ public class DiscoveryTest {
 		while (true) {
 			try {
 				// Test 3 including response
-				DatagramSocket sendSocket = new DatagramSocket(new InetSocketAddress(iaddress, 0));
+				DatagramSocket sendSocket = new DatagramSocket(/*new InetSocketAddress(iaddress, 0)*/);
 				sendSocket.connect(InetAddress.getByName(stunServer), port);
 				sendSocket.setSoTimeout(timeout);
 				

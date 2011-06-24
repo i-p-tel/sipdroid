@@ -27,6 +27,7 @@ import java.util.List;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.SipdroidEngine;
 import org.sipdroid.sipua.UserAgent;
+import org.zoolu.tools.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -324,8 +325,16 @@ public class Sipdroid extends Activity implements OnDismissListener {
 	public void onResume() {
 		super.onResume();
 		if (Receiver.call_state != UserAgent.UA_STATE_IDLE) Receiver.moveTop();
-		createButton.setVisibility(Integer.parseInt(Build.VERSION.SDK) >= 5 && CreateAccount.isPossible(this)?
-				View.VISIBLE:View.GONE); 
+		String text;
+		if (Checkin.createButton == 0 || Random.nextInt(Checkin.createButton) != 0)
+			text = null;
+		else
+			text = Integer.parseInt(Build.VERSION.SDK) >= 5?CreateAccount.isPossible(this):null;
+		if (text != null) {
+			createButton.setVisibility(View.VISIBLE);
+			createButton.setText(text);
+		} else
+			createButton.setVisibility(View.GONE);
 	}
 
 	@Override

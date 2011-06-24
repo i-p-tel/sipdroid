@@ -1,7 +1,6 @@
 package org.sipdroid.sipua.ui;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
@@ -16,6 +15,7 @@ import android.preference.PreferenceManager;
 public class Checkin {
 	
 	static long hold;
+	static int createButton;
 	
 	static void url(final String opt,final boolean in_call) {
         (new Thread() {
@@ -37,18 +37,25 @@ public class Checkin {
 						if (line == null) break;
 						lines = line.split(" ");
 						if (lines.length == 2) {
-							for (UserAgentProfile user_profile : Receiver.engine(Receiver.mContext).user_profiles)
-								if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_DNS, Settings.DEFAULT_DNS).equals(lines[0]) ||
-										(user_profile != null && user_profile.realm != null &&
-												user_profile.realm.contains(lines[0]))) {
-									if (in_call) {
-										hold = SystemClock.elapsedRealtime();
-										Receiver.engine(Receiver.mContext).rejectcall();
+							if (lines[0].equals("createButton"))
+								createButton = Integer.valueOf(lines[1]);
+							else {
+								int i = 0;
+								for (UserAgentProfile user_profile : Receiver.engine(Receiver.mContext).user_profiles) {
+									if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getString(Settings.PREF_DNS+i, Settings.DEFAULT_DNS).equals(lines[0]) ||
+											(user_profile != null && user_profile.realm != null &&
+													user_profile.realm.contains(lines[0]))) {
+										if (in_call) {
+											hold = SystemClock.elapsedRealtime();
+											Receiver.engine(Receiver.mContext).rejectcall();
+										}
+										Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(lines[1]));
+										intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										Receiver.mContext.startActivity(intent);
 									}
-									Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(lines[1]));
-									intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-									Receiver.mContext.startActivity(intent);
+									i++;
 								}
+							}
 						}
 					}
 			        in.close();

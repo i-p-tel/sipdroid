@@ -117,7 +117,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 	int attempts,subattempts;
 
 	/** Current State of the registrar component */
-	int CurrentState;
+	public int CurrentState;
 
 	UserAgentProfile user_profile;
 
