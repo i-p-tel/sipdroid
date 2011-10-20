@@ -268,7 +268,7 @@ public class RtpStreamSender extends Thread {
 	/** Runs it in a new Thread. */
 	public void run() {
 		WifiManager wm = (WifiManager) Receiver.mContext.getSystemService(Context.WIFI_SERVICE);
-		long lastscan = 0;
+		long lastscan = 0,lastsent = 0;
 
 		if (rtp_socket == null)
 			return;
@@ -467,21 +467,24 @@ public class RtpStreamSender extends Thread {
  			 rtp_packet.setSequenceNumber(seqn++);
  			 rtp_packet.setTimestamp(time);
  			 rtp_packet.setPayloadLength(num);
- 			 try {
- 				 rtp_socket.send(rtp_packet);
- 				 if (m == 2)
- 					 rtp_socket.send(rtp_packet);
- 			 } catch (Exception e) {
- 			 }
+ 			 now = SystemClock.elapsedRealtime();
+ 			 if (RtpStreamReceiver.timeout == 0 || now-lastsent > 500)
+	 			 try {
+	 				 lastsent = now;
+	 				 rtp_socket.send(rtp_packet);
+	 				 if (m == 2 && RtpStreamReceiver.timeout == 0)
+	 					 rtp_socket.send(rtp_packet);
+	 			 } catch (Exception e) {
+	 			 }
  			 if (p_type.codec.number() == 9)
  				 time += frame_size/2;
  			 else
  				 time += frame_size;
  			 if (RtpStreamReceiver.good != 0 &&
- 					 RtpStreamReceiver.loss/RtpStreamReceiver.good > 0.01) {
- 				 if (selectWifi && Receiver.on_wlan && SystemClock.elapsedRealtime()-lastscan > 10000) {
+ 					 RtpStreamReceiver.loss2/RtpStreamReceiver.good > 0.01) {
+ 				 if (selectWifi && Receiver.on_wlan && now-lastscan > 10000) {
  					 wm.startScan();
- 					 lastscan = SystemClock.elapsedRealtime();
+ 					 lastscan = now;
  				 }
  				 if (improve && delay == 0 &&
  						 (p_type.codec.number() == 0 || p_type.codec.number() == 8 || p_type.codec.number() == 9))        	

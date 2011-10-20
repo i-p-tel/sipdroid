@@ -233,6 +233,20 @@ public class RtpStreamReceiver extends Thread {
 			smin = sm*r + smin*(1-r);
 	}
 	
+	void calc2(short[] lin,int off,int len) {
+		int i,j;
+		
+		for (i = 0; i < len; i++) {
+			j = lin[i+off];
+			if (j > 16350)
+				lin[i+off] = 16350<<1;
+			else if (j < -16350)
+				lin[i+off] = -16350<<1;
+			else
+				lin[i+off] = (short)(j<<1);
+		}
+	}
+	
 	static long down_time;
 	
 	public static void adjust(int keyCode,boolean down) {
@@ -246,6 +260,25 @@ public class RtpStreamReceiver extends Thread {
 			down_time = SystemClock.elapsedRealtime();
 		if (!down ^ RtpStreamReceiver.speakermode != AudioManager.MODE_NORMAL)
 			if (SystemClock.elapsedRealtime()-down_time < 500) {
+				if (!down)
+					down_time = 0;
+				if (ogain > 1)
+					if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+						if (gain != ogain) {
+							gain = ogain;
+							return;
+						}
+						if (mAudioManager.getStreamVolume(stream()) ==
+							mAudioManager.getStreamMaxVolume(stream())) return;
+						gain = ogain/2;
+					} else {
+						if (gain == ogain) {
+							gain = ogain/2;
+							return;
+						}
+						if (mAudioManager.getStreamVolume(stream()) == 0) return;
+						gain = ogain;
+					}
 		        mAudioManager.adjustStreamVolume(
 		                    stream(),
 		                    keyCode == KeyEvent.KEYCODE_VOLUME_UP
@@ -268,6 +301,7 @@ public class RtpStreamReceiver extends Thread {
 	}
 	
 	static boolean restored;
+	static float gain,ogain;
 	
 	void restoreVolume() {
 		switch (getMode()) {
@@ -277,9 +311,10 @@ public class RtpStreamReceiver extends Thread {
 						am.getStreamMaxVolume(AudioManager.STREAM_RING)*
 						org.sipdroid.sipua.ui.Settings.getEarGain()*3/4), 0);
 				track.setStereoVolume(AudioTrack.getMaxVolume()*
-						org.sipdroid.sipua.ui.Settings.getEarGain()
+						(ogain = org.sipdroid.sipua.ui.Settings.getEarGain()*2)
 						,AudioTrack.getMaxVolume()*
-						org.sipdroid.sipua.ui.Settings.getEarGain());
+						org.sipdroid.sipua.ui.Settings.getEarGain()*2);
+				if (gain == 0 || ogain <= 1) gain = ogain;
 				break;
 		case AudioManager.MODE_NORMAL:
 				track.setStereoVolume(AudioTrack.getMaxVolume(),AudioTrack.getMaxVolume());
@@ -386,7 +421,7 @@ public class RtpStreamReceiver extends Thread {
 		restoreMode();
 	}
 
-	public static float good, late, lost, loss;
+	public static float good, late, lost, loss, loss2;
 	double avgheadroom;
 	public static int timeout;
 	int seq;
@@ -608,6 +643,8 @@ public class RtpStreamReceiver extends Thread {
 					 
 		 			 if (speakermode == AudioManager.MODE_NORMAL)
 		 				 calc(lin,0,len);
+		 			 else if (gain > 1)
+		 				 calc2(lin,0,len);
 				 }
 				 
 				 avgheadroom = avgheadroom * 0.99 + (double)headroom * 0.01;
@@ -643,15 +680,19 @@ public class RtpStreamReceiver extends Thread {
 						 loss += gap;
 						 lost += gap;
 						 good += gap - 1;
+						 loss2++;
 					 } else {
-						 if (m < vm)
+						 if (m < vm) {
 							 loss++;
+							 loss2++;
+						 }
 					 }
 					 good++;
-					 if (good > 100) {
+					 if (good > 110) {
 						 good *= 0.99;
 						 lost *= 0.99;
 						 loss *= 0.99;
+						 loss2 *= 0.99;
 						 late *= 0.99;
 					 }
 				 }
