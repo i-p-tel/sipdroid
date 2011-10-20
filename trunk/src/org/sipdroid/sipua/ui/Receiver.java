@@ -769,37 +769,36 @@ import org.zoolu.sip.provider.SipProvider;
 		        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 		        	WifiInfo wi = wm.getConnectionInfo();
 		        	String activeSSID = null;
-		        	boolean activeFound = false;
 		        	if (wi != null) activeSSID = wi.getSSID();
 		        	List<ScanResult> mScanResults = wm.getScanResults();
 		        	List<WifiConfiguration> configurations = wm.getConfiguredNetworks();
 		        	if (configurations != null) {
-		                WifiConfiguration bestconfig = null,maxconfig = null;
+		                WifiConfiguration bestconfig = null,maxconfig = null,activeconfig = null;
 		                for(final WifiConfiguration config : configurations) {
 		                        if (maxconfig == null || config.priority > maxconfig.priority) {
 		                                maxconfig = config;
 		                        }
+		                        if (config.SSID != null && config.SSID.equals("\""+activeSSID+"\""))
+		                        	activeconfig = config;
 		                }
-		                ScanResult bestscan = null,maxscan = null;
+		                ScanResult bestscan = null,activescan = null;
 		                if (mScanResults != null)
 			                for(final ScanResult scan : mScanResults) {	
-		                    	if (activeSSID != null && activeSSID.equals(scan.SSID))
-		                    		activeFound = true;
 			                    for(final WifiConfiguration config : configurations) {
 			                    	if (config.SSID != null && config.SSID.equals("\""+scan.SSID+"\"")) {
 			                    		if (bestscan == null || scan.level > bestscan.level) {
 				                    		bestscan = scan;
 				                    		bestconfig = config;
 			                    		}
-			                    		if (config == maxconfig) {
-			                    			maxscan = scan;
-			                    		}
+				                    	if (config == activeconfig)
+				                    		activescan = scan;
 			                    	}
 			                    }
 			                }
-		                if (bestconfig != null && bestconfig.priority != maxconfig.priority &&
-		                		asu(bestscan) > asu(maxscan)*1.5 &&
-		                		(activeSSID == null || activeFound)) {
+		                if (bestconfig != null &&
+		                		(activeconfig == null || bestconfig.priority != activeconfig.priority) &&
+		                		asu(bestscan) > asu(activescan)*1.5 &&
+		                		(activeSSID == null || activescan != null) && asu(bestscan) > 22) {
 		               		if (!Sipdroid.release) Log.i("SipUA:","changing to "+bestconfig.SSID);
 		               		if (activeSSID == null || !activeSSID.equals(bestscan.SSID))
 		               			wm.disconnect();
@@ -809,6 +808,10 @@ import org.zoolu.sip.provider.SipProvider;
 		                	wm.saveConfiguration();
 		               		if (activeSSID == null || !activeSSID.equals(bestscan.SSID))
 		               			wm.reconnect();
+		                } else if (activescan != null && asu(activescan) < 15) {
+		                	wm.disconnect();
+		                	wm.disableNetwork(activeconfig.networkId);
+		                	wm.saveConfiguration();
 		                }
 		        	}
 	        	}
