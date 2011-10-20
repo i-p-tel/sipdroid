@@ -3,6 +3,10 @@
 
 === Beta-Versions ===
 
+  * 2.4
+    * Raise volume for highest gain setting, finer grained adjustment (fixes issue 455)
+    * Better voice quality on poor signal levels
+
   * 2.3
     * Fix issue 691, issue 883, issue 888, issue 924, issue 929
 
