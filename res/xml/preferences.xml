@@ -39,8 +39,7 @@
 				android:dialogTitle="@string/settings_protocol" />
 			<CheckBoxPreference
 				android:key="wlan"
-				android:title="@string/settings_wlan"
-				android:summary="@string/settings_check" />
+				android:title="@string/settings_wlan"/>
 			<CheckBoxPreference
 				android:key="3g"
 				android:title="@string/settings_3g"
@@ -93,8 +92,7 @@
 				android:dialogTitle="@string/settings_protocol" />
 			<CheckBoxPreference
 				android:key="wlan1"
-				android:title="@string/settings_wlan"
-				android:summary="@string/settings_check" />
+				android:title="@string/settings_wlan"/>
 			<CheckBoxPreference
 				android:key="3g1"
 				android:title="@string/settings_3g"
