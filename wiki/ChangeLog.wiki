@@ -3,6 +3,10 @@
 
 === Beta-Versions ===
 
+  * 2.5
+    * Android 4.0 (ICS) Compatibility
+    * Fix issue 851 and issue 964
+
   * 2.4
     * Raise volume for highest gain setting, finer grained adjustment (fixes issue 455)
     * Better voice quality on poor signal levels
