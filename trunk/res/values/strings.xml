@@ -304,6 +304,5 @@
 
 <string name="help_speakerphone">Press and hold volume buttons to force talk</string>
 <string name="menu_create">New PBX linked to my Google Voice</string>
-<string name="menu_register">Register VideoSMS feature</string>
 
 </resources>

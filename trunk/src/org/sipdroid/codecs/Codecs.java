@@ -173,6 +173,7 @@ public class Codecs {
 		Vector<Integer> v = new Vector<Integer>(codecs.size());
 
 		for (Codec c : codecs) {
+			c.update();
 			if (!c.isValid())
 				continue;
 			v.add(c.number());
@@ -260,6 +261,7 @@ public class Codecs {
 			int index = formats.size() + 1;
 			
 			for (Codec c : codecs) {
+				c.update();
 				if (!c.isValid())
 					continue;
 

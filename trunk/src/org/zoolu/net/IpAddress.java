@@ -144,6 +144,8 @@ public class IpAddress {
 					InetAddress inetAddress = enumIpAddr.nextElement();
 
 					if (!inetAddress.isLoopbackAddress()) { 
+						if (inetAddress.getHostAddress().toString().contains(":"))
+							continue;
 						if (!PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_STUN, Settings.DEFAULT_STUN)) {
 							localIpAddress = inetAddress.getHostAddress().toString();
 						} else {
@@ -170,7 +172,7 @@ public class IpAddress {
 					}					
 				}
 			}
-		} catch (SocketException ex) {
+		} catch (Exception ex) {
 			// do nothing
 		}
 	}

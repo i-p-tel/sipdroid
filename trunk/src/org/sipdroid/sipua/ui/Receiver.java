@@ -121,7 +121,8 @@ import org.zoolu.sip.provider.SipProvider;
 		private static String laststate,lastnumber;	
 		
 		public static synchronized SipdroidEngine engine(Context context) {
-			mContext = context;
+			if (mContext == null || !context.getClass().getName().contains("ReceiverRestrictedContext"))
+				mContext = context;
 			if (mSipdroidEngine == null) {
 				mSipdroidEngine = new SipdroidEngine();
 				mSipdroidEngine.StartEngine();

@@ -193,7 +193,7 @@ public class Caller extends BroadcastReceiver {
 	    					setResultData(null);
 	    				else if (!ask && PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_CALLTHRU, Settings.DEFAULT_CALLTHRU) &&
 	    						(callthru_prefix = PreferenceManager.getDefaultSharedPreferences(context).getString(Settings.PREF_CALLTHRU2, Settings.DEFAULT_CALLTHRU2)).length() > 0) {
-	    					callthru_number = (callthru_prefix+","+callthru_number+"#").replaceAll(",", ",p");
+	    					callthru_number = (callthru_prefix+","+callthru_number+"#");
 	    					setResultData(callthru_number);
 	    				} else if (ask || force) {
 	    					setResultData(null);

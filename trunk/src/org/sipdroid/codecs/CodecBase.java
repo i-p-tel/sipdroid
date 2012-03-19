@@ -43,6 +43,10 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 	private String value;
 
 	public void update() {
+		if (value == null) {
+			value = CODEC_DEFAULT_SETTING;
+			updateFlags(value);
+		}
 		if (Receiver.mContext != null) {
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext);
 			value = sp.getString(key(), CODEC_DEFAULT_SETTING);

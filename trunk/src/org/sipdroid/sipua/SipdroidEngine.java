@@ -106,6 +106,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 							Build.MODEL.equals("Archos5") ||
 							Build.MODEL.equals("ADR6300") ||
 							Build.MODEL.equals("PC36100") ||
+							Build.MODEL.equals("Dell Streak") ||
 							Build.MODEL.equals("HTC Desire") ||
 							Build.MODEL.equals("HTC Incredible S") ||
 							Build.MODEL.equals("HTC Wildfire") ||

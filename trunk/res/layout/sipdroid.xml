@@ -128,10 +128,5 @@
 	            android:layout_height="wrap_content" 
 		android:layout_gravity="center"
 	            android:text="@string/menu_create" />
-			<Button android:id="@+id/register_button" 
-	            android:layout_width="wrap_content" 
-	            android:layout_height="wrap_content" 
-		android:layout_gravity="center"
-	            android:text="@string/menu_register" />
 	</LinearLayout>
 </LinearLayout>
