@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ *
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ *
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+/////////////////////////////////////////////////////////////////////
+// these are the main messages of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+<string name="app_name">Sipdroid</string>
+<string name="pstn_name">Phone Call</string>
+<string name="sip_name">Sipdroid Call, when available</string>
+
+<string name="about">SipdroidはオープンソースのAndroid用SIPクライアントです。
+\n
+\n詳細情報は http://sipdroid.org を参照ください。
+\n
+\nバージョン ${VERSION}
+\nこのソフトウェアは 実験用として 提供しています。
+\n
+\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
+\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\n
+\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+\n
+\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details (http://www.gnu.org/licenses).</string>
+
+<string name="reg">登録中...</string>
+<string name="regpref">Preferred</string>
+<string name="regclick">クリックで選択</string>
+<string name="regfailed">登録に失敗しました</string>
+
+<string name="voicemail">メッセージを待っています</string>
+
+<string name="auto_enabled">自動応答/スピーカフォン</string>
+<string name="auto_disabled">自動応答 オフ</string>
+<string name="hint">相手先呼び出しID(Called Party Address</string>
+<string name="hint2">相手先電話番号</string>
+<string name="empty">相手先呼び出しIDは name@domain.com と指定してください</string>
+<string name="notfast">利用可能なネットワークがありません</string>
+
+<string name="settings_account">SIPアカウント</string>
+<string name="settings_line">Line</string>
+<string name="settings_username">認証用ユーザ名</string>
+<string name="settings_password">パスワード</string>
+<string name="settings_server">サーバ or プロキシ</string>
+<string name="settings_domain">ドメイン</string>
+<string name="settings_domain2">サーバ名と同じ場合は空欄</string>
+<string name="settings_username1">ユーザ名 or Caller ID</string>
+<string name="settings_callerid2">認証用ユーザ名と同じ場合は空欄</string>
+<string name="settings_port">ポート番号</string>
+        <string-array name="port_display_values">
+                <item>53</item>
+                <item>69</item>
+                <item>80</item>
+                <item>135</item>
+                <item>161</item>
+                <item>443</item>
+                <item>500</item>
+                <item>1433</item>
+                <item>1701</item>
+                <item>1812</item>
+                <item>3389</item>
+                <item>4500</item>
+                <item>5060 (標準値)</item>
+                <item>5061</item>
+                <item>5900</item>
+                <item>16999</item>
+                <item>26999</item>
+                <item>36999</item>
+                <item>custom</item>
+        </string-array>
+        <string-array name="port_values">
+                <item>53</item>
+                <item>69</item>
+                <item>80</item>
+                <item>135</item>
+                <item>161</item>
+                <item>443</item>
+                <item>500</item>
+                <item>1433</item>
+                <item>1701</item>
+                <item>1812</item>
+                <item>3389</item>
+                <item>4500</item>
+                <item>5060</item>
+                <item>5061</item>
+                <item>5900</item>
+                <item>16999</item>
+                <item>26999</item>
+                <item>36999</item>
+                <item>0</item>
+        </string-array>
+
+<string name="settings_protocol">プロトコル</string>
+    <string-array name="protocol_display_values">
+        <item>UDP (3Gでの待受時間が短め)</item>
+        <item>TCP (3Gでの待受時間が長め)</item>
+    </string-array>
+    <string-array name="protocol_values">
+        <item>udp</item>
+        <item>tcp</item>
+    </string-array>
+<string name="settings_vquality">ビデオ品質</string>
+    <string-array name="vquality_display_values">
+        <item>高い (352x288 @ 360kbit)</item>
+        <item>低い (176x144 @ 192kbit)</item>
+    </string-array>
+    <string-array name="vquality_values">
+        <item>high</item>
+        <item>low</item>
+    </string-array>
+<string name="settings_stun">STUNサーバを使用</string>
+<string name="settings_stun_server">STUNサーバ名</string>
+<string name="settings_stun_server_port">STUNサーバ ポート番号</string>
+
+<string name="settings_mmtel">MMTel flavorを使用</string>
+<string name="settings_mmtel_qvalue">Q値</string>
+ 
+<string name="settings_options">通話設定</string>
+<string name="settings_wlan">無線LANを使用</string>
+<string name="settings_3g">3Gを使用</string>
+<string name="settings_edge">EDGE(海外)を使用</string>
+<string name="settings_vpn">VPNを使用</string>
+<string name="settings_check">携帯電話会社がVoIPを許可している場合のみ有効にしてください。</string>
+<string name="settings_vpn2">PBXesでは無料のVPNサービスを提供しています。詳しくは PBXes >> HELP にて!</string>
+
+<string name="dialog_default">Sipdroidは標準の電話アプリに設定されていません. 標準の電話アプリとして設定しますか?
+\n
+\n\'いいえ\' を選択した場合, 他の電話アプリからSipdroid経由で電話するには電話番号の前に \'+\' をつけるか、Contactsから \'text to\' でSipdroidを選んでください.</string>
+<string name="dialog_message">Would you like to see a message from Pascal introducing Sipdroid 1.5?</string>
+<string name="dialog_port">安定性向上のためSIPポートを5060から5061に変更しますか？</string>
+<string name="yes">はい</string>
+<string name="no">いいえ</string>
+<string name="dontask">再度確認しません</string>
+
+<string name="settings_pref">電話発信時の利用選択</string>
+<string name="settings_pref2">自動的に\'+\'を付加して電話をかけれるようにしたり、Contactsから\'text to\'経由で使えるようにします.</string>
+    <string-array name="pref_display_values">
+        <item>Sipdroidのみ</item>
+        <item>Sipdroidが有効な場合</item>
+        <item>電話</item>
+        <item>常に確認</item>
+    </string-array>
+    <string-array name="pref_values">
+        <item>SIPONLY</item>
+        <item>SIP</item>
+        <item>PSTN</item>
+        <item>ASK</item>
+    </string-array>
+<string name="settings_compression">音声圧縮</string>
+    <string-array name="compression_display_values">
+        <item>WLAN使用時のみ</item>
+        <item>WLANと3G使用時</item>
+        <item>常に使用を試みる</item>
+        <item>使用しない</item>
+    </string-array>
+    <string-array name="compression_values">
+        <item>wlan</item>
+        <item>wlanor3g</item>
+        <item>always</item>
+        <item>never</item>
+    </string-array>
+<string name="settings_auto_on">他のアプリ利用時に自動応答</string>
+<string name="settings_auto_on2">画面オン状態では短いバイブで通知を出し自動応答</string>
+<string name="settings_auto_ondemand">要求に応じて自動応答</string>
+<string name="settings_auto_ondemand2">ステータスバーのスイッチで切り替え</string>
+<string name="settings_auto_headset">ヘッドセット接続時に自動応答</string>
+<string name="settings_auto_headset2">ヘッドセットが接続されている場合に自動応答</string>
+<string name="settings_callrecord">通話録音</string>
+<string name="settings_callrecord2">SDカードに全ての通話を録音</string>
+
+<string name="settings_notifications">通知設定</string>
+<string name="settings_MWI">ボイスメール</string>
+<string name="settings_MWI2">Subscribe to SIP message waiting</string>
+<string name="settings_reg">登録</string>
+<string name="settings_reg2">使用するSIPアカウントの選択を許可します</string>
+<string name="settings_notify">不在着信通知</string>
+<string name="settings_notify2">青いLEDで通知します</string>
+<string name="settings_nodata">データ無し通知</string>
+<string name="settings_nodata2">音声パケットに可聴音が含まれていない場合に通知します</string>
+
+<string name="settings_advanced_options">拡張設定</string>
+<string name="settings_av_options">音声/ビデオ</string>
+<string name="settings_policy_never">Changed system sleep policy to keep Wi-Fi on.</string>
+<string name="settings_policy_default">Reset Wi-Fi sleep policy to default.</string>
+<string name="settings_search">検索 &amp; 置換</string>
+<string name="settings_excludepat">除外条件</string>
+<string name="settings_sipringtone">SIP着信音</string>
+<string name="settings_sipringtone2">SIP着信時の着信音を設定</string>
+<string name="settings_sipringtone_dialog">着信音</string>
+<string name="settings_eargain">スピーカ出力の増幅率</string>
+<string name="settings_micgain">マイク入力の増幅率</string>
+<string name="settings_heargain">ヘッドセット出力の増幅率</string>
+<string name="settings_hmicgain">ヘッドセットマイク入力の増幅率</string>
+    <string-array name="eargain_display_values">
+        <item>低い (エコー無し)</item>
+        <item>普通</item>
+        <item>高い (may cause echo to remote party)</item>
+        <item>最大</item>
+    </string-array>
+    <string-array name="eargain_values">
+        <item>0.1</item>
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>1.0</item>
+    </string-array>
+
+<string name="settings_pbxes_options">PBXesの機能</string>
+<string name="settings_par">Simultaneous Outbound</string>
+<string name="settings_par2">Dials all of one person\'s phone numbers in parallel</string>
+<string name="settings_improve">Improve Audio</string>
+<string name="settings_improve2">要:有料アカウント</string>
+<string name="settings_hdvoice">PBXes supports HD Voice</string>
+<string name="settings_posurl">URL for Location/Callback</string>
+<string name="settings_pos">Update Location</string>
+<string name="settings_pos2">Can be announced to PBXes contacts (要:プレミアムアカウント)</string>
+<string name="settings_pos3">Updating location</string>
+<string name="settings_callback">Trigger Callback</string>
+<string name="settings_callback2">If no suitable data network available</string>
+<string name="settings_callthru">Trigger Callthru</string>
+<string name="settings_callthru2">Prefix for Callthru</string>
+
+<string name="settings_title">Sipdroid設定</string>
+
+<string name="settings_profile_title">Sipdroid設定 (<xliff:g id="profile">%s</xliff:g>)</string>
+<string name="settings_profile_menu_import">インポート</string>
+<string name="settings_profile_menu_export">エクスポート</string>
+<string name="settings_profile_menu_delete">削除</string>
+<string name="settings_profile_dialog_profiles_title">プロファイル</string>
+<string name="settings_profile_dialog_delete_title">プロファイルの削除</string>
+<string name="settings_profile_dialog_delete_text">プロファイル <xliff:g id="profile">%s</xliff:g> を削除しますか?</string>
+<string name="settings_profile_export_error">設定のエクスポートができません!</string>
+<string name="settings_profile_import_error">設定のインポートができません!</string>
+<string name="settings_profile_delete_error">プロファイルの削除ができません!</string>
+<string name="settings_profile_delete_confirmation">プロファイルを削除しました.</string>
+
+<string name="settings_wireless_options">ワイヤレス設定</string>
+<string name="settings_bluetooth">Android 2.2以上で使用可能</string>
+<string name="settings_keepon">常に画面ON</string>
+<string name="settings_keepon2">いくつかのデバイスでは設定の如何に関わらず、画面OFFになるとWi-Fiがおかしくなります</string>
+<string name="settings_selectwifi">Wi-Fi APを選択</string>
+<string name="settings_selectwifi2">電波強度で判断</string>
+<string name="settings_ownwifi">Wi-Fi出力を制御</string>
+<string name="settings_ownwifi2">バッテリ節約</string>
+
+<string name="menu_settings">設定</string>
+<string name="menu_exit">終了</string>
+<string name="menu_about">About</string>
+<string name="menu_dtmf">DTMF送信</string>
+<string name="menu_video">ビデオ送信</string>
+<string name="menu_call">ダイヤル</string>
+<string name="menu_mute">消音</string>
+<string name="menu_hold">保留</string>
+<string name="menu_transfer">転送電話</string>
+<string name="menu_speaker">スピーカ</string>
+<string name="menu_endCall">終話</string>
+<string name="menu_answer">応答</string>
+<string name="menu_bluetooth">Bluetooth (実験的)</string>
+
+<string name="transfer_title">転送電話 to</string>
+
+<string name="card_title_dialing">ダイヤル中</string>
+<string name="card_title_in_progress">通話中</string>
+<string name="card_title_incoming_call">着信中</string>
+<string name="card_title_call_ended">通話終了</string>
+<string name="card_title_ended_no_codec">エラー: コーデックが非互換です</string>
+<string name="card_title_on_hold">保留中</string>
+
+<string name="unknown">不明</string>
+
+<string name="slide_hint_down_to_end_call">下にスライドすると終話します.</string>
+<string name="slide_hint_up_to_answer">上にスライドすると電話に出ます.</string>
+
+<string name="ongoing">現在の通話</string>
+<string name="onHold">保留中</string>
+<string name="codecs">音声コーデック</string>
+<string name="codecs_summary">音声通話に使用するコーデックを選択します</string>
+<string name="codecs_move">このコーデックを移動</string>
+<string name="codecs_move_up">上に移動</string>
+<string name="codecs_move_down">下に移動</string>
+
+<string name="help_speakerphone">強制的に通話するにはボリュームボタンを押しつつづけてください</string>
+<string name="menu_create">New PBX linked to my Google Voice</string>
+
+</resources>

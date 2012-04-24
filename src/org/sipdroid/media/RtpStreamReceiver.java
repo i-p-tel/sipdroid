@@ -41,6 +41,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.ToneGenerator;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -485,6 +486,7 @@ public class RtpStreamReceiver extends Thread {
 	}
 
 	PowerManager.WakeLock pwl,pwl2;
+	WifiManager.WifiLock wwl;
 	static final int PROXIMITY_SCREEN_OFF_WAKE_LOCK = 32;
 	boolean lockLast,lockFirst;
 	
@@ -518,12 +520,16 @@ public class RtpStreamReceiver extends Thread {
 		if (lock) {
 			if (pwl2 == null) {
 				PowerManager pm = (PowerManager) Receiver.mContext.getSystemService(Context.POWER_SERVICE);
+				WifiManager wm = (WifiManager) Receiver.mContext.getSystemService(Context.WIFI_SERVICE);
 				pwl2 = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.Receiver");
 				pwl2.acquire();
+				wwl = wm.createWifiLock(3,"Sipdroid.Receiver");
+				wwl.acquire();
 			}
 		} else if (pwl2 != null) {
 			pwl2.release();
 			pwl2 = null;
+			wwl.release();
 		}
 	}
 
@@ -614,6 +620,9 @@ public class RtpStreamReceiver extends Thread {
 					 m++;
 					 continue;
 				 }
+				 gap = (gseq - seq) & 0xff;
+				 if (gap > 240)
+					 continue;
 				 server = track.getPlaybackHeadPosition();
 				 headroom = user-server;
 				 
