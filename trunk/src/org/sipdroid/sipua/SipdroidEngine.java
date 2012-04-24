@@ -67,7 +67,9 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 	public SipProvider[] sip_providers;
 	
-	public static PowerManager.WakeLock[] wl,pwl;
+	static PowerManager.WakeLock[] wl;
+	public static PowerManager.WakeLock[] pwl;
+	static WifiManager.WifiLock[] wwl;
 	
 	UserAgentProfile getUserAgentProfile(String suffix) {
 		UserAgentProfile user_profile = new UserAgentProfile(null);
@@ -97,6 +99,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 	public boolean StartEngine() {
 			PowerManager pm = (PowerManager) getUIContext().getSystemService(Context.POWER_SERVICE);
+			WifiManager wm = (WifiManager) getUIContext().getSystemService(Context.WIFI_SERVICE);
 			if (wl == null) {
 				if (!PreferenceManager.getDefaultSharedPreferences(getUIContext()).contains(org.sipdroid.sipua.ui.Settings.PREF_KEEPON)) {
 					Editor edit = PreferenceManager.getDefaultSharedPreferences(getUIContext()).edit();
@@ -115,6 +118,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 				}
 				wl = new PowerManager.WakeLock[LINES];
 				pwl = new PowerManager.WakeLock[LINES];
+				wwl = new WifiManager.WifiLock[LINES];
 			}
 			pref = ChangeAccount.getPref(Receiver.mContext);
 
@@ -133,6 +137,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			for (UserAgentProfile user_profile : user_profiles) {
 				if (wl[i] == null) {
 					wl[i] = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sipdroid.SipdroidEngine");
+					wwl[i] = wm.createWifiLock(3, "Sipdroid.SipdroidEngine");
 					if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_KEEPON, org.sipdroid.sipua.ui.Settings.DEFAULT_KEEPON))
 						pwl[i] = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Sipdroid.SipdroidEngine");
 				}
@@ -252,6 +257,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 				Receiver.alarm(0, LoopAlarm.class);
 				Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
 				wl[i].acquire();
+				wwl[i].acquire();
 			} else
 				Receiver.onText(Receiver.REGISTER_NOTIFICATION+i, null, 0, 0);
 	}
@@ -271,6 +277,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 				if (ra != null && !ra.isRegistered() && Receiver.isFast(i) && ra.register()) {
 					Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
 					wl[i].acquire();
+					wwl[i].acquire();
 				}
 			} catch (Exception ex) {
 				
@@ -297,6 +304,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 					if (ra != null && ra.register()) {
 						Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
 						wl[i].acquire();
+						wwl[i].acquire();
 					}
 				}
 			} catch (Exception ex) {
@@ -327,6 +335,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 					if (ra != null && ra.register()) {
 						Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
 						wl[i].acquire();
+						wwl[i].acquire();
 					}
 				}
 			} catch (Exception ex) {
@@ -349,6 +358,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 				}
 			if (wl[i].isHeld()) {
 				wl[i].release();
+				wwl[i].release();
 				if (pwl[i] != null && pwl[i].isHeld()) pwl[i].release();
 			}
 			if (kas[i] != null) {
@@ -401,6 +411,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i, null, 0,0);
 		if (wl[i].isHeld()) {
 			wl[i].release();
+			wwl[i].release();
 			if (pwl[i] != null && pwl[i].isHeld()) pwl[i].release();
 		}
 	}
@@ -450,13 +461,16 @@ public class SipdroidEngine implements RegisterAgentListener {
     	}
     	if (retry && SystemClock.uptimeMillis() > lastpwl + 45000 && pwl[i] != null && !pwl[i].isHeld() && Receiver.on_wlan) {
 			lastpwl = SystemClock.uptimeMillis();
-			if (wl[i].isHeld())
+			if (wl[i].isHeld()) {
 				wl[i].release();
+				wwl[i].release();
+			}
 			pwl[i].acquire();
 			register();
 			if (!wl[i].isHeld() && pwl[i].isHeld()) pwl[i].release();
 		} else if (wl[i].isHeld()) {
 			wl[i].release();
+			wwl[i].release();
 			if (pwl[i] != null && pwl[i].isHeld()) pwl[i].release();
 		}
 		if (SystemClock.uptimeMillis() > lasthalt + 45000) {

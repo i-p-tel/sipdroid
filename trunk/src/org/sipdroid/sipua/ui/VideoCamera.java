@@ -95,7 +95,7 @@ public class VideoCamera extends CallScreen implements
     private Handler mHandler = new MainHandler();
 	LocalSocket receiver,sender;
 	LocalServerSocket lss;
-	int obuffering;
+	int obuffering,opos;
 	int fps;
 	
     /** This Handler is used to post message back onto the main thread of the application */
@@ -130,12 +130,12 @@ public class VideoCamera extends CallScreen implements
                        	mRecordingTimeView.setText(text);
                         if (fps != 0) mFPS.setText(fps+(videoQualityHigh?"h":"l")+"fps");
                        	if (mVideoFrame != null) {
-                       		int buffering = mVideoFrame.getBufferPercentage();
+                       		int buffering = mVideoFrame.getBufferPercentage(),pos = mVideoFrame.getCurrentPosition();
                             if (buffering != 100 && buffering != 0) {
                             	mMediaController.show();
                             }
                             if (buffering != 0 && !mMediaRecorderRecording) mVideoPreview.setVisibility(View.INVISIBLE);
-                            if (obuffering != buffering && buffering == 100 && rtp_socket != null) {
+                            if (((obuffering != buffering && buffering == 100) || (opos == 0 && pos > 0)) && rtp_socket != null) {
         						RtpPacket keepalive = new RtpPacket(new byte[12],0);
         						keepalive.setPayloadType(125);
         						try {
@@ -144,6 +144,7 @@ public class VideoCamera extends CallScreen implements
 								}
                             }
                             obuffering = buffering;
+                            opos = pos;
                       	}
                         
                         // Work around a limitation of the T-Mobile G1: The T-Mobile
@@ -387,11 +388,6 @@ public class VideoCamera extends CallScreen implements
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mMediaRecorder.setOutputFile(sender.getFileDescriptor());
 
-        // Use the same frame rate for both, since internally
-        // if the frame rate is too large, it can cause camera to become
-        // unstable. We need to fix the MediaRecorder to disable the support
-        // of setting frame rate for now.
-        mMediaRecorder.setVideoFrameRate(20);
         if (videoQualityHigh) {
             mMediaRecorder.setVideoSize(352,288);
         } else {

@@ -158,7 +158,8 @@
         <item>Solo Sipdroid</item>
         <item>Sipdroid, cuando esté disponible</item>
         <item>Teléfono</item>
-    </string-array>
+        <item>Preguntar siempre</item>
+        </string-array>
     <string-array name="pref_values">
         <item>SIPONLY</item>
         <item>SIP</item>
@@ -179,7 +180,7 @@
         <item>never</item>
     </string-array>
 <string name="settings_auto_on">Auto-responder en uso</string>
-<string name="settings_auto_on2">Alerta vibratoria cuando cuando la pantalla está activa</string>
+<string name="settings_auto_on2">Alerta vibratoria cuando la pantalla está activa</string>
 <string name="settings_auto_ondemand">Auto-responder bajo demanda</string>
 <string name="settings_auto_ondemand2">Mostrar icono en la barra de estado</string>
 <string name="settings_auto_headset">Auto-responder con el manos libres</string>

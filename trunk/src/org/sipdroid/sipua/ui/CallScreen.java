@@ -59,6 +59,7 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 	public static final int TRANSFER_MENU_ITEM = FIRST_MENU_ID + 7;
 	public static final int ANSWER_MENU_ITEM = FIRST_MENU_ID + 8;
 	public static final int BLUETOOTH_MENU_ITEM = FIRST_MENU_ID + 9;
+	public static final int DTMF_MENU_ITEM = FIRST_MENU_ID + 10;
 
 	private static EditText transferText;
 

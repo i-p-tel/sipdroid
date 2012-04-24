@@ -49,6 +49,8 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -113,6 +115,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
     				2000:5000);
 	    first = true;
 	    pactive = false;
+	    pactivetime = SystemClock.elapsedRealtime();
 	    sensorManager.registerListener(this,proximitySensor,SensorManager.SENSOR_DELAY_NORMAL);
 	    started = true;
 	}
@@ -465,6 +468,34 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
         }
         return super.onKeyDown(keyCode, event);
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+
+		MenuItem m = menu.add(0, DTMF_MENU_ITEM, 0, R.string.menu_dtmf);
+		m.setIcon(R.drawable.ic_menu_dial_pad);
+		return result;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean result = super.onPrepareOptionsMenu(menu);
+
+		menu.findItem(DTMF_MENU_ITEM).setVisible(Receiver.call_state == UserAgent.UA_STATE_INCALL);
+		return result;
+	}
+		
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case DTMF_MENU_ITEM:
+			mDialerDrawer.animateOpen();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -497,6 +528,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 
 	static final float PROXIMITY_THRESHOLD = 5.0f;
 	public static boolean pactive;
+	public static long pactivetime;
 	
 	@Override
 	public void onSensorChanged(SensorEvent event) {
@@ -507,6 +539,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		float distance = event.values[0];
         boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
         pactive = active;
+        pactivetime = SystemClock.elapsedRealtime();
         setScreenBacklight((float) (active?0.1:-1));
 	}
 }
