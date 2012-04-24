@@ -3,6 +3,11 @@
 
 === Beta-Versions ===
 
+  * 2.6
+    * Improved Android 4.0 (ICS) Compatibility (issues 661, 881)
+    * Japanese (thanks to Osakana Taro)
+    * Fixed spurious hangups
+
   * 2.5
     * Android 4.0 (ICS) Compatibility
     * Fix issue 851 and issue 964
