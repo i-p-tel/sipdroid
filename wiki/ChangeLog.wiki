@@ -4,7 +4,7 @@
 === Beta-Versions ===
 
   * 2.6
-    * Improved Android 4.0 (ICS) Compatibility (issues 661, 881)
+    * Improved Android 4.0 (ICS) Compatibility (issue 661, issue 881)
     * Japanese (thanks to Osakana Taro)
     * Fixed spurious hangups
 
