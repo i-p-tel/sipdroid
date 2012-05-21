@@ -255,7 +255,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
     			if (RtpStreamReceiver.good != 0) {
     				if (RtpStreamReceiver.timeout != 0)
     					mStats.setText("no data");
-    				else if (RtpStreamSender.m == 2)
+    				else if (RtpStreamSender.m > 1)
 	    				mStats.setText(Math.round(RtpStreamReceiver.loss/RtpStreamReceiver.good*100)+"%loss, "+
 	    						Math.round(RtpStreamReceiver.lost/RtpStreamReceiver.good*100)+"%lost, "+
 	    						Math.round(RtpStreamReceiver.late/RtpStreamReceiver.good*100)+"%late (>"+
@@ -532,12 +532,17 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		boolean keepon = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_KEEPON, org.sipdroid.sipua.ui.Settings.DEFAULT_KEEPON);
 		if (first) {
 			first = false;
 			return;
 		}
 		float distance = event.values[0];
         boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
+		if (!(keepon && Receiver.on_wlan) ||
+				(InCallScreen.mSlidingCardManager != null && InCallScreen.mSlidingCardManager.isSlideInProgress()) ||
+				Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL || Receiver.call_state == UserAgent.UA_STATE_HOLD)
+			active = false;
         pactive = active;
         pactivetime = SystemClock.elapsedRealtime();
         setScreenBacklight((float) (active?0.1:-1));

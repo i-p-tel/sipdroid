@@ -423,7 +423,8 @@ public class RtpStreamReceiver extends Thread {
 	}
 
 	public static float good, late, lost, loss, loss2;
-	double avgheadroom;
+	double avgheadroom,devheadroom;
+	int avgcnt;
 	public static int timeout;
 	int seq;
 	
@@ -446,7 +447,7 @@ public class RtpStreamReceiver extends Thread {
 	
 	RtpPacket rtp_packet;
 	AudioTrack track;
-	int maxjitter,minjitter,minjitteradjust,minheadroom;
+	int maxjitter,minjitter,minjitteradjust;
 	int cnt,cnt2,user,luser,luser2,lserver;
 	public static int jitter,mu;
 	
@@ -468,7 +469,7 @@ public class RtpStreamReceiver extends Thread {
 			maxjitter /= 2*2;
 			minjitter = minjitteradjust = 500*mu;
 			jitter = 875*mu;
-			minheadroom = maxjitter*2;
+			devheadroom = Math.pow(jitter/5, 2);
 			timeout = 1;
 			luser = luser2 = -8000*mu;
 			cnt = cnt2 = user = lserver = 0;
@@ -495,7 +496,8 @@ public class RtpStreamReceiver extends Thread {
 			if (lock) {
 				boolean lockNew = (keepon && Receiver.on_wlan) ||
 					(InCallScreen.mSlidingCardManager != null && InCallScreen.mSlidingCardManager.isSlideInProgress()) ||
-					Receiver.call_state != UserAgent.UA_STATE_INCALL ||
+					Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL ||
+					Receiver.call_state == UserAgent.UA_STATE_HOLD ||
 					RtpStreamSender.delay != 0 ||
 					!InCallScreen.started;
 				if (lockFirst || lockLast != lockNew) {
@@ -533,6 +535,24 @@ public class RtpStreamReceiver extends Thread {
 		}
 	}
 
+	void newjitter(boolean inc) {
+		 if (good == 0 || lost/good > 0.01 || call_recorder != null)
+			 return;
+		 int newjitter = (int)Math.sqrt(devheadroom)*5 + (inc?minjitteradjust:0);
+		 if (newjitter < minjitter)
+			 newjitter = minjitter;
+		 if (newjitter > maxjitter)
+			 newjitter = maxjitter;
+		 if (!inc && (Math.abs(jitter-newjitter) < minjitteradjust || newjitter >= jitter))
+			 return;
+		 if (inc && newjitter <= jitter)
+			 return;
+		 jitter = newjitter;
+		 late = 0;
+		 avgcnt = 0;
+		 luser2 = user;
+	}
+	
 	boolean keepon;
 	
 	/** Runs it in a new Thread. */
@@ -642,6 +662,7 @@ public class RtpStreamReceiver extends Thread {
 						 saveVolume();
 						 setCodec();
 						 restoreVolume();
+						 codec = p_type.codec.getTitle();
 					 }
 					 len = p_type.codec.decode(buffer, lin, rtp_packet.getPayloadLength());
 					 
@@ -657,19 +678,14 @@ public class RtpStreamReceiver extends Thread {
 				 }
 				 
 				 avgheadroom = avgheadroom * 0.99 + (double)headroom * 0.01;
-				 if (headroom < minheadroom)
-					 minheadroom = headroom;
+				 if (avgcnt++ > 300)
+					 devheadroom = devheadroom * 0.999 + Math.pow(Math.abs(headroom - avgheadroom),2) * 0.001;
 	 			 if (headroom < 250*mu) { 
 	 				 late++;
-					 if (good != 0 && lost/good < 0.01 && call_recorder == null)
-						 if (late/good > 0.01 && jitter + minjitteradjust < maxjitter) {
-							 jitter += minjitteradjust;
-							 late = 0;
-							 luser2 = user;
-							 minheadroom = maxjitter*2;
-						 }
-					todo = jitter - headroom;
-					write(lin2,0,todo>BUFFER_SIZE?BUFFER_SIZE:todo);
+	 				 newjitter(true);
+	 				 System.out.println("RTP:underflow "+(int)Math.sqrt(devheadroom));
+					 todo = jitter - headroom;
+					 write(lin2,0,todo>BUFFER_SIZE?BUFFER_SIZE:todo);
 				 }
 
 				 if (cnt > 500*mu && cnt2 < 2) {
@@ -678,13 +694,14 @@ public class RtpStreamReceiver extends Thread {
 						 write(lin,todo,len-todo);
 				 } else
 					 write(lin,0,len);
-				 
+				 				 
 				 if (seq != 0) {
 					 getseq = gseq&0xff;
 					 expseq = ++seq&0xff;
 					 if (m == RtpStreamSender.m) vm = m;
 					 gap = (getseq - expseq) & 0xff;
 					 if (gap > 0) {
+						 System.out.println("RTP:lost");
 						 if (gap > 100) gap = 1;
 						 loss += gap;
 						 lost += gap;
@@ -707,7 +724,7 @@ public class RtpStreamReceiver extends Thread {
 				 }
 				 m = 1;
 				 seq = gseq;
-				 
+
 				 if (user >= luser + 8000*mu && (
 						 Receiver.call_state == UserAgent.UA_STATE_INCALL ||
 						 Receiver.call_state == UserAgent.UA_STATE_OUTGOING_CALL)) {
@@ -717,13 +734,8 @@ public class RtpStreamReceiver extends Thread {
 						 restoreVolume();
 					 }
 					 luser = user;
-					 if (user >= luser2 + 160000*mu && good != 0 && lost/good < 0.01 && avgheadroom > minheadroom) {
-						 int newjitter = (int)avgheadroom - minheadroom + minjitter;
-						 if (jitter-newjitter > minjitteradjust)
-							 jitter = newjitter;
-						 minheadroom = maxjitter*2;
-						 luser2 = user;
-					 }
+					 if (user >= luser2 + 160000*mu)
+						 newjitter(false);
 				 }
 				 lserver = server;
 			}

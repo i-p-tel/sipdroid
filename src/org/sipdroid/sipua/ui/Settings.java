@@ -269,7 +269,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     	if (Receiver.mContext == null) Receiver.mContext = this;
 		addPreferencesFromResource(R.xml.preferences);
 		setDefaultValues();
-		Codecs.check();
 	}
 	
 	void reload() {
@@ -325,6 +324,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		settings.registerOnSharedPreferenceChangeListener(this);
 
 		updateSummaries();		
+		Codecs.check();
 	}
 
     @Override
