@@ -21,6 +21,7 @@
 package org.sipdroid.sipua.ui;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -727,7 +728,7 @@ import org.zoolu.sip.provider.SipProvider;
 		    			engine(context).togglehold();
 	        } else
 	        if (intentAction.equals(ACTION_DOCK_EVENT)) {
-	        	docked = intent.getIntExtra(EXTRA_DOCK_STATE, -1);
+	        	docked = intent.getIntExtra(EXTRA_DOCK_STATE, -1) & 7;
 	        	if (call_state == UserAgent.UA_STATE_INCALL)
 	        		engine(mContext).speaker(speakermode());
 	        } else

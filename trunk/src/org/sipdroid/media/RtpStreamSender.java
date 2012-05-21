@@ -468,12 +468,13 @@ public class RtpStreamSender extends Thread {
  			 rtp_packet.setTimestamp(time);
  			 rtp_packet.setPayloadLength(num);
  			 now = SystemClock.elapsedRealtime();
- 			 if (RtpStreamReceiver.timeout == 0 || now-lastsent > 500)
+ 			 if (RtpStreamReceiver.timeout == 0 || Receiver.on_wlan || now-lastsent > 500)
 	 			 try {
 	 				 lastsent = now;
 	 				 rtp_socket.send(rtp_packet);
-	 				 if (m == 2 && RtpStreamReceiver.timeout == 0)
-	 					 rtp_socket.send(rtp_packet);
+	 				 if (m > 1 && (RtpStreamReceiver.timeout == 0 || Receiver.on_wlan))
+	 					 for (int i = 1; i < m; i++)
+	 						 rtp_socket.send(rtp_packet);
 	 			 } catch (Exception e) {
 	 			 }
  			 if (p_type.codec.number() == 9)
@@ -490,6 +491,7 @@ public class RtpStreamSender extends Thread {
  						 (p_type.codec.number() == 0 || p_type.codec.number() == 8 || p_type.codec.number() == 9))        	
  					 m = 2;
  				 else
+ 					 
  					 m = 1;
  			 } else
  				 m = 1;
