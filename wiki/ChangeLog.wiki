@@ -3,6 +3,11 @@
 
 === Beta-Versions ===
 
+  * 2.7
+    * Implementation of proper jitter buffer
+    * Better on HTC devices (issue 700)
+    * Bugfixes
+
   * 2.6
     * Improved Android 4.0 (ICS) Compatibility (issue 661, issue 881)
     * Japanese (thanks to Osakana Taro)
