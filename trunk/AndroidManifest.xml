@@ -135,7 +135,13 @@
 	        	<data android:path="org.sipdroid.sipua" />
 	      	</intent-filter>
 	    </receiver>
-    	<service android:name="org.sipdroid.sipua.ui.RegisterService" />
+        <receiver android:name="org.sipdroid.sipua.ui.PhoneStart">
+            <intent-filter>
+                <action android:name="org.sipdroid.START_SIPDROID" />
+                <action android:name="org.sipdroid.STOP_SIPDROID" />
+            </intent-filter>
+        </receiver>
+        <service android:name="org.sipdroid.sipua.ui.RegisterService" />
     </application>
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"></uses-permission>
