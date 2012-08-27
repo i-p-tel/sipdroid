@@ -91,13 +91,13 @@ This also works for Google Talk, MSN, Yahoo, AIM, and ICQ users. All these recip
 
 If you want to call any other SIP URI add it to a contact as one of the two unsupported messengers, Jabber or QQ, and use above method to dial the SIP URI from contacts.
 
-Note: PBXes only supports calling alphanumeric SIP URIs e.g. abc##@domain.tld. Calling URIs starting by a digit will result in a routing based on outbould dial rules.
+Note: PBXes only supports calling alphanumeric SIP URIs e.g. abc##@domain.tld. Calling URIs starting by a digit will result in a routing based on outbound dial rules.
 
 ==== From Sipdroid window ====
 
 You can enter SIP URIs into the "Called Party Address" field in Sipdroid. For calling Skype users enter the Skype name followed by *@skype* into "Called Party Address". Calling Skype users requires registering to PBXes. 
 
-Note: PBXes only supports calling alphanumeric SIP URIs e.g. abc##@domain.tld. Calling URIs starting by a digit will result in a routing based on outbould dial rules.
+Note: PBXes only supports calling alphanumeric SIP URIs e.g. abc##@domain.tld. Calling URIs starting by a digit will result in a routing based on outbound dial rules.
 
 === How are the buttons assigned? ===
 
