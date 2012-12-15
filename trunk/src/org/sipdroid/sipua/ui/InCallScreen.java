@@ -67,6 +67,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	final int MSG_BACK = 3;
 	final int MSG_TICK = 4;
 	final int MSG_POPUP = 5;
+	final int MSG_ACCEPT = 6;
 	
 	final int SCREEN_OFF_TIMEOUT = 12000;
 	
@@ -101,6 +102,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	public void onStop() {
 		super.onStop();
 		mHandler.removeMessages(MSG_BACK);
+		mHandler.removeMessages(MSG_ACCEPT);
+		mHandler.sendEmptyMessage(MSG_ACCEPT);
 		if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
 			finish();
 		sensorManager.unregisterListener(this);
@@ -270,6 +273,20 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
     			break;
     		case MSG_POPUP:
     	        if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
+    			break;
+    		case MSG_ACCEPT:
+    	        setScreenBacklight((float) -1);
+    	        getWindow().setFlags(0, 
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    	        if (mDialerDrawer != null) {
+					mDialerDrawer.close();
+					mDialerDrawer.setVisibility(View.VISIBLE);
+    	        }
+				ContentResolver cr = getContentResolver();
+    			if (hapticset) {
+    				Settings.System.putInt(cr, Settings.System.HAPTIC_FEEDBACK_ENABLED, haptic);
+    				hapticset = false;
+    			}
     			break;
     		}
     	}
@@ -441,8 +458,6 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
         case KeyEvent.KEYCODE_BACK:
         	if (mDialerDrawer.isOpened())
         		mDialerDrawer.animateClose();
-        	else if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL)
-        		reject();      
             return true;
 
         case KeyEvent.KEYCODE_CAMERA:
@@ -483,7 +498,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		boolean result = super.onPrepareOptionsMenu(menu);
 
 		menu.findItem(DTMF_MENU_ITEM).setVisible(Receiver.call_state == UserAgent.UA_STATE_INCALL);
-		return result;
+		return !(pactive || SystemClock.elapsedRealtime()-pactivetime < 1000);
 	}
 		
 	@Override
@@ -529,6 +544,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	static final float PROXIMITY_THRESHOLD = 5.0f;
 	public static boolean pactive;
 	public static long pactivetime;
+	int haptic;
+	boolean hapticset;
 	
 	@Override
 	public void onSensorChanged(SensorEvent event) {
@@ -539,12 +556,27 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		}
 		float distance = event.values[0];
         boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
-		if (!(keepon && Receiver.on_wlan) ||
-				(InCallScreen.mSlidingCardManager != null && InCallScreen.mSlidingCardManager.isSlideInProgress()) ||
-				Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL || Receiver.call_state == UserAgent.UA_STATE_HOLD)
+		if (!keepon ||
+				Receiver.call_state == UserAgent.UA_STATE_HOLD)
 			active = false;
         pactive = active;
         pactivetime = SystemClock.elapsedRealtime();
-        setScreenBacklight((float) (active?0.1:-1));
+        if (!active) {
+     		mHandler.sendEmptyMessageDelayed(MSG_ACCEPT, 1000);
+     		return;
+        }
+        mHandler.removeMessages(MSG_ACCEPT);
+        setScreenBacklight((float) 0.1);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        closeOptionsMenu();
+		mDialerDrawer.close();
+		mDialerDrawer.setVisibility(View.GONE);
+        ContentResolver cr = getContentResolver();
+		if (!hapticset) {
+			haptic = Settings.System.getInt(cr, Settings.System.HAPTIC_FEEDBACK_ENABLED, 1);
+			hapticset = true;
+		}
+		Settings.System.putInt(cr, Settings.System.HAPTIC_FEEDBACK_ENABLED, 0);
 	}
 }

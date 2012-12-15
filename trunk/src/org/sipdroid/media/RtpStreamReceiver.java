@@ -310,7 +310,7 @@ public class RtpStreamReceiver extends Thread {
 				int oldring = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0);
 				if (oldring > 0) setStreamVolume(AudioManager.STREAM_RING,(int)(
 						am.getStreamMaxVolume(AudioManager.STREAM_RING)*
-						org.sipdroid.sipua.ui.Settings.getEarGain()*3/4), 0);
+						org.sipdroid.sipua.ui.Settings.getEarGain()*3), 0);
 				track.setStereoVolume(AudioTrack.getMaxVolume()*
 						(ogain = org.sipdroid.sipua.ui.Settings.getEarGain()*2)
 						,AudioTrack.getMaxVolume()*
@@ -465,7 +465,7 @@ public class RtpStreamReceiver extends Thread {
 				maxjitter = 2*2*BUFFER_SIZE*3*mu;
 			oldtrack = track;
 			track = new AudioTrack(stream(), p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
-					maxjitter, AudioTrack.MODE_STREAM);
+					maxjitter*2, AudioTrack.MODE_STREAM);
 			maxjitter /= 2*2;
 			minjitter = minjitteradjust = 500*mu;
 			jitter = 875*mu;
@@ -494,12 +494,9 @@ public class RtpStreamReceiver extends Thread {
 	void lock(boolean lock) {
 		try {
 			if (lock) {
-				boolean lockNew = (keepon && Receiver.on_wlan) ||
-					(InCallScreen.mSlidingCardManager != null && InCallScreen.mSlidingCardManager.isSlideInProgress()) ||
-					Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL ||
+				boolean lockNew = keepon ||
 					Receiver.call_state == UserAgent.UA_STATE_HOLD ||
-					RtpStreamSender.delay != 0 ||
-					!InCallScreen.started;
+					RtpStreamSender.delay != 0;
 				if (lockFirst || lockLast != lockNew) {
 					lockLast = lockNew;
 					lock(false);
@@ -680,10 +677,9 @@ public class RtpStreamReceiver extends Thread {
 				 avgheadroom = avgheadroom * 0.99 + (double)headroom * 0.01;
 				 if (avgcnt++ > 300)
 					 devheadroom = devheadroom * 0.999 + Math.pow(Math.abs(headroom - avgheadroom),2) * 0.001;
-	 			 if (headroom < 250*mu) { 
+				 if (headroom < 250*mu) { 
 	 				 late++;
 	 				 newjitter(true);
-	 				 System.out.println("RTP:underflow "+(int)Math.sqrt(devheadroom));
 					 todo = jitter - headroom;
 					 write(lin2,0,todo>BUFFER_SIZE?BUFFER_SIZE:todo);
 				 }
@@ -701,7 +697,6 @@ public class RtpStreamReceiver extends Thread {
 					 if (m == RtpStreamSender.m) vm = m;
 					 gap = (getseq - expseq) & 0xff;
 					 if (gap > 0) {
-						 System.out.println("RTP:lost");
 						 if (gap > 100) gap = 1;
 						 loss += gap;
 						 lost += gap;

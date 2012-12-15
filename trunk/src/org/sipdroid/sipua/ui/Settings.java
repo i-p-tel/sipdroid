@@ -567,7 +567,10 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		for (int i = 0; i < SipdroidEngine.LINES; i++) {
 			String j = (i!=0?""+i:"");
 			if (!settings.getString(PREF_USERNAME+j, "").equals("") && 
-					!settings.getString(PREF_SERVER+j, "").equals("")) {
+					!settings.getString(PREF_SERVER+j, "").equals("") &&
+					(settings.getBoolean(PREF_WLAN+j, DEFAULT_WLAN) ||
+							settings.getBoolean(PREF_3G+j, DEFAULT_3G) ||
+							settings.getBoolean(PREF_EDGE+j, DEFAULT_EDGE))) {
 				valid = true;
 				wlan |= settings.getBoolean(PREF_WLAN+j, DEFAULT_WLAN);
 				g3 &= settings.getBoolean(PREF_3G+j, DEFAULT_3G) ||
