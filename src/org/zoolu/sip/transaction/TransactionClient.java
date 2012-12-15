@@ -110,7 +110,7 @@ public class TransactionClient extends Transaction {
 			int code = msg.getStatusLine().getCode();
 			if (code >= 100 && code < 200
 					&& (statusIs(STATE_TRYING) || statusIs(STATE_PROCEEDING))) {
-				retransmission_to.halt(); // modified
+//				retransmission_to.halt();
 				if (statusIs(STATE_TRYING))
 					changeStatus(STATE_PROCEEDING);
 				if (transaction_listener != null)

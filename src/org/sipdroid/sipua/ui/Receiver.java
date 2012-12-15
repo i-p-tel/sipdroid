@@ -21,7 +21,6 @@
 package org.sipdroid.sipua.ui;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -101,8 +100,9 @@ import org.zoolu.sip.provider.SipProvider;
 		public final static int AUTO_ANSWER_NOTIFICATION = 4;
 		public final static int REGISTER_NOTIFICATION = 5;
 		
-		final int MSG_SCAN = 1;
-		final int MSG_ENABLE = 2;
+		final static int MSG_SCAN = 1;
+		final static int MSG_ENABLE = 2;
+		final static int MSG_HOLD = 3;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
@@ -219,7 +219,7 @@ import org.zoolu.sip.provider.SipProvider;
 					RtpStreamReceiver.speakermode = speakermode();
 					bluetooth = -1;
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
-					engine(mContext).registerUdp();
+					engine(mContext).register();
 					broadcastCallStateChanged("OFFHOOK", caller);
 					ccCall.setState(Call.State.DIALING);
 					ccConn.setUserData(null);
@@ -259,7 +259,7 @@ import org.zoolu.sip.provider.SipProvider;
 				case UserAgent.UA_STATE_HOLD:
 					onText(CALL_NOTIFICATION, mContext.getString(R.string.card_title_on_hold), android.R.drawable.stat_sys_phone_call_on_hold,ccCall.base);
 					ccCall.setState(Call.State.HOLDING);
-			        if (InCallScreen.started) mContext.startActivity(createIntent(InCallScreen.class));
+			        if (InCallScreen.started && (pstn_state == null || !pstn_state.equals("RINGING"))) mContext.startActivity(createIntent(InCallScreen.class));
 					break;
 				}
 				pos(true);
@@ -667,7 +667,7 @@ import org.zoolu.sip.provider.SipProvider;
         			return AudioManager.MODE_IN_CALL;
 		}
 		
-	    Handler mHandler = new Handler() {
+	    static Handler mHandler = new Handler() {
 	    	public void handleMessage(Message msg) {
 	    		switch (msg.what) {
 	    		case MSG_SCAN:
@@ -676,6 +676,9 @@ import org.zoolu.sip.provider.SipProvider;
 	    			break;
 	    		case MSG_ENABLE:
 	    			enable_wifi(true);
+	    			break;
+	    		case MSG_HOLD:
+	    			engine(mContext).togglehold();
 	    			break;
 	    		}
 	    	}
@@ -686,6 +689,8 @@ import org.zoolu.sip.provider.SipProvider;
 	    		return 0;
 	    	return Math.round((scan.level + 113f) / 2f);
 	    }
+	    
+	    static long lastscan;
 	    
 	    @Override
 		public void onReceive(Context context, Intent intent) {
@@ -723,9 +728,13 @@ import org.zoolu.sip.provider.SipProvider;
 	    		pstn_time = SystemClock.elapsedRealtime();
 	    		if (pstn_state.equals("IDLE") && call_state != UserAgent.UA_STATE_IDLE)
 	    			broadcastCallStateChanged(null,null);
-	    		if ((pstn_state.equals("OFFHOOK") && call_state == UserAgent.UA_STATE_INCALL) ||
-		    			(pstn_state.equals("IDLE") && call_state == UserAgent.UA_STATE_HOLD))
-		    			engine(context).togglehold();
+	    		if (!pstn_state.equals("IDLE") && call_state == UserAgent.UA_STATE_INCALL)
+	    			mHandler.sendEmptyMessageDelayed(MSG_HOLD, 5000);
+	    		else if (pstn_state.equals("IDLE")) {
+	    			mHandler.removeMessages(MSG_HOLD);
+	    			if (call_state == UserAgent.UA_STATE_HOLD)
+	    				mHandler.sendEmptyMessage(MSG_HOLD);
+	    		}
 	        } else
 	        if (intentAction.equals(ACTION_DOCK_EVENT)) {
 	        	docked = intent.getIntExtra(EXTRA_DOCK_STATE, -1) & 7;
@@ -746,7 +755,7 @@ import org.zoolu.sip.provider.SipProvider;
 	        	alarm(0,OwnWifi.class);
 	        } else
 	        if (intentAction.equals(Intent.ACTION_USER_PRESENT)) {
-	        	mHandler.sendEmptyMessageDelayed(MSG_ENABLE, 3000);
+	        	mHandler.sendEmptyMessageDelayed(MSG_ENABLE,3000);
 	        } else
 	        if (intentAction.equals(Intent.ACTION_SCREEN_OFF)) {
 	        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
@@ -767,7 +776,8 @@ import org.zoolu.sip.provider.SipProvider;
 		    	mHandler.sendEmptyMessageDelayed(MSG_SCAN, 3000);
 	        } else
 	        if (intentAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
-	        	if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_SELECTWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_SELECTWIFI)) {
+	        	if (SystemClock.uptimeMillis() > lastscan + 45000 &&
+	        			PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_SELECTWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_SELECTWIFI)) {
 		        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 		        	WifiInfo wi = wm.getConnectionInfo();
 		        	String activeSSID = null;
@@ -810,6 +820,7 @@ import org.zoolu.sip.provider.SipProvider;
 		                	wm.saveConfiguration();
 		               		if (activeSSID == null || !activeSSID.equals(bestscan.SSID))
 		               			wm.reconnect();
+		        			lastscan = SystemClock.uptimeMillis();
 		                } else if (activescan != null && asu(activescan) < 15) {
 		                	wm.disconnect();
 		                	wm.disableNetwork(activeconfig.networkId);
