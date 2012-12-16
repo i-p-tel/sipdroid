@@ -453,7 +453,7 @@ public class SipdroidEngine implements RegisterAgentListener {
     		retry = false;
     		if (SystemClock.uptimeMillis() > lastpwl + 45000) {
 				if (pwl[i] != null && !pwl[i].isHeld()) {
-					if ((!Receiver.on_wlan && Build.MODEL.contains("HTC One")) || wwl[i] == null) {
+					if ((!Receiver.on_wlan && Build.MODEL.contains("HTC One")) || (Receiver.on_wlan && wwl[i] == null)) {
 						pwl[i].acquire();
 						retry = true;
 					}
