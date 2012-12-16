@@ -7,8 +7,7 @@
     * Recommended setting now is keeping screen on while talking to allow volume adjustments (wireless options menu)
     * Auto-hold after 5 seconds of call waiting
     * Bugfix for false registration timeouts
-    * Start/stop Sipdroid using broadcast intents (helps with Tasker
-automation)
+    * Start/stop Sipdroid using broadcast intents (helps with Tasker automation)
 
   * 2.7
     * Implementation of proper jitter buffer
