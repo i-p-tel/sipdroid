@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 2.9
+    * Quick fix for Jelly Bean
+
   * 2.8
     * Recommended setting now is keeping screen on while talking to allow volume adjustments (wireless options menu)
     * Auto-hold after 5 seconds of call waiting
