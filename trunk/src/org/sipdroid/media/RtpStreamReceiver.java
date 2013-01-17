@@ -679,7 +679,9 @@ public class RtpStreamReceiver extends Thread {
 					 devheadroom = devheadroom * 0.999 + Math.pow(Math.abs(headroom - avgheadroom),2) * 0.001;
 				 if (headroom < 250*mu) { 
 	 				 late++;
-	 				 newjitter(true);
+	 				 avgcnt += 10;
+	 				 if (avgcnt > 400)
+	 					 newjitter(true);
 					 todo = jitter - headroom;
 					 write(lin2,0,todo>BUFFER_SIZE?BUFFER_SIZE:todo);
 				 }

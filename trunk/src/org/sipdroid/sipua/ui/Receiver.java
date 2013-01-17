@@ -782,6 +782,7 @@ import org.zoolu.sip.provider.SipProvider;
 		        	WifiInfo wi = wm.getConnectionInfo();
 		        	String activeSSID = null;
 		        	if (wi != null) activeSSID = wi.getSSID();
+		        	if (activeSSID != null && activeSSID.length() == 0) activeSSID = null;
 		        	List<ScanResult> mScanResults = wm.getScanResults();
 		        	List<WifiConfiguration> configurations = wm.getConfiguredNetworks();
 		        	if (configurations != null) {
