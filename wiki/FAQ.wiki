@@ -103,7 +103,7 @@ Note: PBXes only supports calling alphanumeric SIP URIs e.g. abc##@domain.tld. C
 
 Android reserves the red key for turning screen off and the green call button for answering a phone call. That's why they don't always work for Sipdroid, e.g. when screen is turned on the red key will first switch screen off, and then end call on another press.  The green button will not work for Sipdroid if there is a phone call ringing at the same time. In this case the green button will answer the GSM call.
 
-That's why Sipdroid offers a sliding card. A call is off-hook if the card is at the top of the screen, and it is on-hook at the bottom. Just slide up to answer. Slide down to end call. If you want to reject an incoming call press the BACK button.
+That's why Sipdroid offers a sliding card. A call is off-hook if the card is at the top of the screen, and it is on-hook at the bottom. Just slide up to answer. Slide down to end call. If you want to reject an incoming call press the MENU button to select end call.
 
 === How can I modify phone numbers on the fly? Where is the prefix option? ===
 
