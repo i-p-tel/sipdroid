@@ -14,6 +14,7 @@ import org.sipdroid.sipua.ui.InstantAutoCompleteTextView;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
+import android.app.KeyguardManager.OnKeyguardExitResult;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -193,6 +194,11 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
     	}
 		if (enabled) {
 			mKeyguardLock.disableKeyguard();
+			if (Integer.parseInt(Build.VERSION.SDK) >= 16)
+				mKeyguardManager.exitKeyguardSecurely(new OnKeyguardExitResult() {
+				    public void onKeyguardExitResult(boolean success) {
+				    }
+				});
 			enabled = false;
 			enabletime = SystemClock.elapsedRealtime();
 		}
