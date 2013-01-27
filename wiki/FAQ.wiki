@@ -220,7 +220,7 @@ Please have a look at the [http://pbxes.org/community_e.php?display=wiki HELP se
 
 *It's all web based. No installation required.*
 
-First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. Leave the trunk name empty on your inbound route. The Android specific details can be found under "Fixed Mobile Convergence (FMC)".
+First you create extension(s) and trunk(s). Perform an echo test by dialing `*`43. Then you add at least one inbound and one outbound route. Leave the trunk name empty on your inbound route. The Android specific details can be found under "Mobile Extensions".
 
 The username to be entered in Sipdroid consists of account name, a dash ('-') and the extension number, e.g. "myuser-200". The password is that of the extension, not the password of your PBXes account.
 
