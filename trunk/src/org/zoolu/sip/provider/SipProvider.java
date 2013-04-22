@@ -569,9 +569,12 @@ public class SipProvider implements Configurable, TransportListener,
 		return outbound_proxy;
 	}
 
+	String server;
+	
 	/** Sets the outbound proxy. Use 'null' for not using any outbound proxy. */
-	public void setOutboundProxy(SocketAddress soaddr) {
+	public void setOutboundProxy(SocketAddress soaddr,String host) {
 		outbound_proxy = soaddr;
+		server = host;
 	}
 
 	/** Removes the outbound proxy. */
@@ -811,7 +814,7 @@ public class SipProvider implements Configurable, TransportListener,
 						+ ":" + dest_port, LogLevel.MEDIUM);
 				TcpTransport conn = null;
 				try {
-					conn = new TcpTransport(dest_ipaddr, dest_port, this);
+					conn = new TcpTransport(dest_ipaddr, dest_port, this, server);
 				} catch (Exception e) {
 					printLog("connection setup FAILED", LogLevel.HIGH);
 					return null;

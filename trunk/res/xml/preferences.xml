@@ -28,14 +28,14 @@
 			<ListPreference
 				android:key="port"
 				android:title="@string/settings_port"
-				android:entries="@array/port_display_values"
-				android:entryValues="@array/port_values"
+				android:entries="@array/port_display_values2"
+				android:entryValues="@array/port_values2"
 				android:dialogTitle="@string/settings_port" />
 			<ListPreference
 				android:key="protocol"
 				android:title="@string/settings_protocol"
-				android:entries="@array/protocol_display_values"
-				android:entryValues="@array/protocol_values"
+				android:entries="@array/protocol_display_values2"
+				android:entryValues="@array/protocol_values2"
 				android:dialogTitle="@string/settings_protocol" />
 			<CheckBoxPreference
 				android:key="wlan"
@@ -81,14 +81,14 @@
 			<ListPreference
 				android:key="port1"
 				android:title="@string/settings_port"
-				android:entries="@array/port_display_values"
-				android:entryValues="@array/port_values"
+				android:entries="@array/port_display_values2"
+				android:entryValues="@array/port_values2"
 				android:dialogTitle="@string/settings_port" />
 			<ListPreference
 				android:key="protocol1"
 				android:title="@string/settings_protocol"
-				android:entries="@array/protocol_display_values"
-				android:entryValues="@array/protocol_values"
+				android:entries="@array/protocol_display_values2"
+				android:entryValues="@array/protocol_values2"
 				android:dialogTitle="@string/settings_protocol" />
 			<CheckBoxPreference
 				android:key="wlan1"

@@ -389,6 +389,7 @@ import org.zoolu.sip.provider.SipProvider;
 		static AlarmManager am;
 		static PendingIntent gps_sender,net_sender;
 		static boolean net_enabled;
+		static long loctrydate;
 		
 		static final int GPS_UPDATES = 4000*1000;
 		static final int NET_UPDATES = 600*1000;
@@ -402,10 +403,12 @@ import org.zoolu.sip.provider.SipProvider;
 						PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS) &&
 						PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL).length() > 0) {
 					Location last = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-					if (last == null || System.currentTimeMillis() - last.getTime() > GPS_UPDATES) {
+					if (System.currentTimeMillis() - loctrydate > GPS_UPDATES && (last == null || System.currentTimeMillis() - last.getTime() > GPS_UPDATES)) {
+						loctrydate = System.currentTimeMillis();
 						pos_gps(true);
 						pos_net(false);
-					}
+					} else
+			    		Receiver.url("lat="+last.getLatitude()+"&lon="+last.getLongitude()+"&rad="+last.getAccuracy());
 					pos_net(true);
 				} else
 					pos_net(false);

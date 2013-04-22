@@ -29,6 +29,13 @@ import java.net.Socket; // import java.net.InetAddress;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+
+import org.apache.http.conn.ssl.SSLSocketFactory;
+
 /**
  * TcpSocket provides a uniform interface to TCP transport protocol, regardless
  * J2SE or J2ME is used.
@@ -50,9 +57,14 @@ public class TcpSocket {
 	static boolean lock;
 	
 	/** Creates a new UdpSocket */
-	public TcpSocket(IpAddress ipaddr, int port) throws java.io.IOException {
+	public TcpSocket(IpAddress ipaddr, int port, String host) throws java.io.IOException {
 //		socket = new Socket(ipaddr.getInetAddress(), port); modified
-		socket = new Socket();
+		SSLSocketFactory f = 
+	         (SSLSocketFactory) SSLSocketFactory.getSocketFactory();
+		if (host == null)
+			socket = new Socket();
+		else
+			socket = f.createSocket();
 		if (lock) throw new java.io.IOException();
 		lock = true;
 		try {
@@ -61,6 +73,14 @@ public class TcpSocket {
 		} catch (java.io.IOException e) {
 			lock = false;
 			throw e;
+		}
+		if (host != null) {
+			HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
+			SSLSession s = ((SSLSocket)socket).getSession();
+			if (!hv.verify(host, s)) {
+				lock = false;
+			    throw new java.io.IOException();
+			}
 		}
 		lock = false;
 	}

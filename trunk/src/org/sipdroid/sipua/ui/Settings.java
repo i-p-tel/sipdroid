@@ -509,7 +509,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			.setPositiveButton(android.R.string.ok, this)
 			.show();
 			return;
-		} else if (key.startsWith(PREF_SERVER)) {
+		} else if (key.startsWith(PREF_SERVER) || key.startsWith(PREF_PROTOCOL)) {
     		Editor edit = sharedPreferences.edit();
     		for (int i = 0; i < SipdroidEngine.LINES; i++) {
     			edit.putString(PREF_DNS+i, DEFAULT_DNS);
@@ -519,6 +519,15 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     				lp.setValue(sharedPreferences.getString(PREF_SERVER+j, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp");
     				lp = (ListPreference) getPreferenceScreen().findPreference(PREF_PORT+j);
     				lp.setValue(sharedPreferences.getString(PREF_SERVER+j, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "5061" : DEFAULT_PORT);
+    			}
+    			if (key.equals(PREF_PROTOCOL+j)) {
+    				if (sharedPreferences.getString(PREF_SERVER+j, DEFAULT_SERVER).equals(DEFAULT_SERVER)) {
+    					ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(PREF_PORT+j);
+    					lp.setValue(sharedPreferences.getString(PREF_PROTOCOL+j, DEFAULT_PROTOCOL).equals("tls") ? "5070" : "5061");
+    				} else {
+    		        	Receiver.engine(this).halt();
+    		    		Receiver.engine(this).StartEngine();
+    				}
     			}
     		}
     		edit.commit();

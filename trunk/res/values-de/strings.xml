@@ -92,10 +92,11 @@
 	</string-array>
 
 <string name="settings_protocol">Protokoll</string>
-    <string-array name="protocol_display_values">
+    <string-array name="protocol_display_values2">
         <item>UDP (kürzerer Standby mit 3G)</item>
         <item>TCP (längerer Standby mit 3G)</item>
-    </string-array>
+        <item>TLS (verschlüsselt)</item>
+        </string-array>
 <string name="settings_vquality">Video-Qualität</string>
     <string-array name="vquality_display_values">
         <item>Hoch (352x288 @ 360kbit)</item>
