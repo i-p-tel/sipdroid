@@ -48,12 +48,12 @@ class TcpTransport implements ConnectedTransport, TcpConnectionListener {
 
 	/** Transport listener */
 	TransportListener listener;
-
+	
 	/** Creates a new TcpTransport */
 	public TcpTransport(IpAddress remote_ipaddr, int remote_port,
-			TransportListener listener) throws IOException {
+			TransportListener listener, String host) throws IOException {
 		this.listener = listener;
-		TcpSocket socket = new TcpSocket(remote_ipaddr, remote_port);
+		TcpSocket socket = new TcpSocket(remote_ipaddr, remote_port, host);
 		tcp_conn = new TcpConnection(socket, this);
 		connection_id = new ConnectionIdentifier(this);
 		last_time = System.currentTimeMillis();

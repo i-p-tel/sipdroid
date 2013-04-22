@@ -507,9 +507,11 @@ public class VideoCamera extends CallScreen implements
     							break;
 							}
     						
-        					for (num = 14; num <= 14+number-2; num++)
-    							if (buffer[num] == 0 && buffer[num+1] == 0) break;
-    						if (num > 14+number-2) {
+        					for (num = 14; num <= 14+number-3; num++)
+    							if (buffer[num] == 0 && buffer[num+1] == 0 && (buffer[num+2]&0xfc) == 0x80) {
+    								break;
+    							}
+    						if (num > 14+number-3) {
     							num = 0;
     							rtp_packet.setMarker(false);
     						} else {	

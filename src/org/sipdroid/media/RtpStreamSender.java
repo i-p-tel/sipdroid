@@ -302,7 +302,7 @@ public class RtpStreamSender extends Thread {
 			if (frame_size == 960) frame_size = 320;
 		} else {
 			if (frame_size == 960) frame_size = 320;
-			if (frame_size == 1024) frame_size *= 2;
+			if (frame_size == 1024) frame_size = 160; // frame_size *= 2;
 		}
 		frame_rate = p_type.codec.samp_rate()/frame_size;
 		long frame_period = 1000 / frame_rate;
@@ -417,7 +417,7 @@ public class RtpStreamSender extends Thread {
 					 last_tx_time += next_tx_delay-sync_adj;
 				 }
 			 }
-			 pos = (ring+delay*frame_rate*frame_size)%(frame_size*(frame_rate+1));
+			 pos = (ring+delay*frame_rate*frame_size/2)%(frame_size*(frame_rate+1));
 			 num = record.read(lin,pos,frame_size);
 			 if (num <= 0)
 				 continue;
