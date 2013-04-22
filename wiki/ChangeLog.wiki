@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 3.0
+    * TLS Security
+
   * 2.9
     * Quick fix for Jelly Bean
 
