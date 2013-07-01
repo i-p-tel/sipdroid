@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 3.1
+    * Fix issue 1105
+
   * 3.0
     * TLS Security
 
