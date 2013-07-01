@@ -461,8 +461,8 @@ public class RtpStreamReceiver extends Thread {
 			maxjitter = AudioTrack.getMinBufferSize(p_type.codec.samp_rate(), 
 					AudioFormat.CHANNEL_CONFIGURATION_MONO, 
 					AudioFormat.ENCODING_PCM_16BIT);
-			if (maxjitter < 2*2*BUFFER_SIZE*3*mu)
-				maxjitter = 2*2*BUFFER_SIZE*3*mu;
+			if (maxjitter < 2*2*BUFFER_SIZE*6*mu)
+				maxjitter = 2*2*BUFFER_SIZE*6*mu;
 			oldtrack = track;
 			track = new AudioTrack(stream(), p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
 					maxjitter*2, AudioTrack.MODE_STREAM);
@@ -614,7 +614,7 @@ public class RtpStreamReceiver extends Thread {
 				if (timeout != 0) {
 					tg.stopTone();
 					track.pause();
-					for (int i = maxjitter*2; i > 0; i -= BUFFER_SIZE)
+					for (int i = maxjitter*4; i > 0; i -= BUFFER_SIZE)
 						write(lin2,0,i>BUFFER_SIZE?BUFFER_SIZE:i);
 					cnt += maxjitter*2;
 					track.play();
@@ -674,9 +674,11 @@ public class RtpStreamReceiver extends Thread {
 		 				 calc2(lin,0,len);
 				 }
 				 
-				 avgheadroom = avgheadroom * 0.99 + (double)headroom * 0.01;
+				 if (cnt == 0)
+					 avgheadroom = avgheadroom * 0.99 + (double)headroom * 0.01;
 				 if (avgcnt++ > 300)
 					 devheadroom = devheadroom * 0.999 + Math.pow(Math.abs(headroom - avgheadroom),2) * 0.001;
+
 				 if (headroom < 250*mu) { 
 	 				 late++;
 	 				 avgcnt += 10;

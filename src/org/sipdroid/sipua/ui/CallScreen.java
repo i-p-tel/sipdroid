@@ -194,7 +194,7 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
     	}
 		if (enabled) {
 			mKeyguardLock.disableKeyguard();
-			if (Integer.parseInt(Build.VERSION.SDK) >= 16)
+			if (Integer.parseInt(Build.VERSION.SDK) == 16 && Build.MODEL.contains("HTC One"))
 				mKeyguardManager.exitKeyguardSecurely(new OnKeyguardExitResult() {
 				    public void onKeyguardExitResult(boolean success) {
 				    }
