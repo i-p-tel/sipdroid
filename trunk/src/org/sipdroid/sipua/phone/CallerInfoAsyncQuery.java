@@ -29,7 +29,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.provider.Contacts;
+import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
@@ -283,7 +283,7 @@ public class CallerInfoAsyncQuery {
     	String number_search = number;
         if (number.contains("&"))
         	number_search = number.substring(0,number.indexOf("&"));
-        Uri contactRef = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, number_search);
+        Uri contactRef = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, number_search);
         
         CallerInfoAsyncQuery c = new CallerInfoAsyncQuery();
         c.allocate(context, contactRef);

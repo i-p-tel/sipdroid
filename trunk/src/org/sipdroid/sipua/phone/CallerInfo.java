@@ -25,9 +25,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.provider.Contacts;
-import android.provider.Contacts.People;
-import android.provider.Contacts.Phones;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Config;
 import android.util.Log;
 
@@ -120,60 +119,40 @@ public class CallerInfo {
         if (Config.LOGV) Log.v(TAG, "construct callerInfo from cursor");
         
         if (cursor != null) {
-            if (cursor.moveToFirst()) {
+            while (cursor.moveToNext()) {
 
                 int columnIndex;
 
-                // Look for the name
-                columnIndex = cursor.getColumnIndex(People.NAME);
-                if (columnIndex != -1) {
-                    info.name = cursor.getString(columnIndex);
-                }
-
                 // Look for the number
-                columnIndex = cursor.getColumnIndex(Phones.NUMBER);
+                columnIndex = cursor.getColumnIndex(ContactsContract.PhoneLookup.NUMBER);
                 if (columnIndex != -1) {
                     info.phoneNumber = cursor.getString(columnIndex);
                 }
                 
-                // Look for the label/type combo
-                columnIndex = cursor.getColumnIndex(Phones.LABEL);
+                // Look for the name
+                columnIndex = cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
                 if (columnIndex != -1) {
-                    int typeColumnIndex = cursor.getColumnIndex(Phones.TYPE);
+                    info.name = cursor.getString(columnIndex);
+                }
+
+                // Look for the label/type combo
+                columnIndex = cursor.getColumnIndex(ContactsContract.PhoneLookup.LABEL);
+                if (columnIndex != -1) {
+                    int typeColumnIndex = cursor.getColumnIndex(ContactsContract.PhoneLookup.TYPE);
                     if (typeColumnIndex != -1) {
                         info.numberType = cursor.getInt(typeColumnIndex);
                         info.numberLabel = cursor.getString(columnIndex);
-                        info.phoneLabel = Contacts.Phones.getDisplayLabel(context,
+                        info.phoneLabel = ContactsContract.CommonDataKinds.Phone.getTypeLabel(context.getResources(),
                                 info.numberType, info.numberLabel)
                                 .toString();
                     }
                 }
 
                 // Look for the person ID
-                columnIndex = cursor.getColumnIndex(Phones.PERSON_ID);
+                columnIndex = cursor.getColumnIndex(Phone.CONTACT_ID);
                 if (columnIndex != -1) {
-                    info.person_id = cursor.getLong(columnIndex);
-                } else {
-                    columnIndex = cursor.getColumnIndex(People._ID);
-                    if (columnIndex != -1) {
                         info.person_id = cursor.getLong(columnIndex);
-                    }
                 }
-                
-                // look for the custom ringtone, create from the string stored
-                // in the database.
-                columnIndex = cursor.getColumnIndex(People.CUSTOM_RINGTONE);
-                if ((columnIndex != -1) && (cursor.getString(columnIndex) != null)) {
-                    info.contactRingtoneUri = Uri.parse(cursor.getString(columnIndex));
-                } else {
-                    info.contactRingtoneUri = null;
-                }
-
-                // look for the send to voicemail flag, set it to true only
-                // under certain circumstances.
-                columnIndex = cursor.getColumnIndex(People.SEND_TO_VOICEMAIL);
-                info.shouldSendToVoicemail = (columnIndex != -1) && 
-                        ((cursor.getInt(columnIndex)) == 1);
             }
             cursor.close();
         }

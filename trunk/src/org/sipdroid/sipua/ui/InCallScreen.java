@@ -544,8 +544,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	static final float PROXIMITY_THRESHOLD = 5.0f;
 	public static boolean pactive;
 	public static long pactivetime;
-	int haptic;
-	boolean hapticset;
+	static int haptic;
+	static boolean hapticset;
 	
 	@Override
 	public void onSensorChanged(SensorEvent event) {

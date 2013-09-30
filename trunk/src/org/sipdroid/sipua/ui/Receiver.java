@@ -56,6 +56,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -125,6 +126,9 @@ import org.zoolu.sip.provider.SipProvider;
 			if (mContext == null || !context.getClass().getName().contains("ReceiverRestrictedContext"))
 				mContext = context;
 			if (mSipdroidEngine == null) {
+				if (android.os.Build.VERSION.SDK_INT > 9) {
+					ReceiverNew.setPolicy();
+				}
 				mSipdroidEngine = new SipdroidEngine();
 				mSipdroidEngine.StartEngine();
 				if (Integer.parseInt(Build.VERSION.SDK) >= 8)
@@ -407,7 +411,7 @@ import org.zoolu.sip.provider.SipProvider;
 						loctrydate = System.currentTimeMillis();
 						pos_gps(true);
 						pos_net(false);
-					} else
+					} else if (last != null)
 			    		Receiver.url("lat="+last.getLatitude()+"&lon="+last.getLongitude()+"&rad="+last.getAccuracy());
 					pos_net(true);
 				} else
