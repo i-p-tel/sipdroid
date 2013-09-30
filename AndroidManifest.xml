@@ -25,10 +25,10 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="3.1 beta"
-    android:versionCode="94"
+    android:versionName="3.2 beta"
+    android:versionCode="95"
     android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
+	<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="11"/>
 	<supports-screens
           android:normalScreens="true"
           android:smallScreens="true"

@@ -32,8 +32,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.provider.Contacts;
-import android.provider.Contacts.People;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -73,7 +72,6 @@ public class ContactsAsyncHelper extends Handler {
         sInstance = new ContactsAsyncHelper();
     }
     
-     
     private static final class WorkerArgs {
         public Context context;
         public ImageView view;
@@ -154,7 +152,7 @@ public class ContactsAsyncHelper extends Handler {
          */
         public Uri getPhotoUri() {
             if (mCurrentCallerInfo != null) {
-                return ContentUris.withAppendedId(People.CONTENT_URI, 
+                return ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, 
                         mCurrentCallerInfo.person_id);
             }
             return null; 
@@ -189,7 +187,7 @@ public class ContactsAsyncHelper extends Handler {
             
             switch (msg.arg1) {
                 case EVENT_LOAD_IMAGE:
-                    InputStream inputStream = Contacts.People.openContactPhotoInputStream(
+                    InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(
                             args.context.getContentResolver(), args.uri);
                     if (inputStream != null) {
                         args.result = Drawable.createFromStream(inputStream, args.uri.toString());

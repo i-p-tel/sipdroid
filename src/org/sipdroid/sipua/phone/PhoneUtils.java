@@ -22,9 +22,7 @@
 package org.sipdroid.sipua.phone;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.provider.Contacts;
 import android.text.TextUtils;
 import android.util.Log;
 import org.sipdroid.sipua.*;
@@ -183,13 +181,6 @@ static CallerInfoAsyncQuery.OnQueryCompleteListener sCallerInfoQueryListener =
             ((Connection) cookie).setUserData(ci);
         }
     };
-
-static void saveToContact(Context context, String number) {
-    Intent intent = new Intent(Contacts.Intents.Insert.ACTION,
-            Contacts.People.CONTENT_URI);
-    intent.putExtra(Contacts.Intents.Insert.PHONE, number);
-    context.startActivity(intent);
-}
 
 /**
  * Returns a single "name" for the specified given a CallerInfo object.

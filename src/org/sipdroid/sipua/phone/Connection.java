@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.os.SystemClock;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
-import android.provider.Contacts.People;
+import android.provider.ContactsContract;
 import android.provider.ContactsContract.Data;
 import android.text.TextUtils;
 
@@ -64,8 +64,6 @@ public class Connection
     "de.ub0r.android.callmeter.SAVE_SIPCALL";
     /** Extra holding uri of done call. */
     private static final String EXTRA_SIP_URI = "uri";
-    /** Extra holding name of provider. */
-    private static final String EXTRA_SIP_PROVIDER = "provider";
 
     Object userData;
 
@@ -197,7 +195,7 @@ public class Connection
         }
 
         if ((ci != null) && (ci.person_id > 0)) {
-            People.markAsContacted(resolver, ci.person_id);
+            ContactsContract.Contacts.markAsContacted(resolver, ci.person_id);
         }
 
         Uri result;
