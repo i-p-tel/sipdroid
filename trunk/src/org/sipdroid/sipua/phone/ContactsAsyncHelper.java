@@ -37,7 +37,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+
+import org.sipdroid.sipua.ui.Sipdroid;
 
 /**
  * Helper class for async access of images.
@@ -187,8 +190,18 @@ public class ContactsAsyncHelper extends Handler {
             
             switch (msg.arg1) {
                 case EVENT_LOAD_IMAGE:
-                    InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(
-                            args.context.getContentResolver(), args.uri);
+                    InputStream inputStream = null;
+                    
+                    try
+                    {
+                    	inputStream = args.context.getContentResolver().openInputStream(args.uri);
+                    }
+                    catch (FileNotFoundException e) 
+                    {
+                    	if (!Sipdroid.release) e.printStackTrace();
+					}
+                    
+
                     if (inputStream != null) {
                         args.result = Drawable.createFromStream(inputStream, args.uri.toString());
 
