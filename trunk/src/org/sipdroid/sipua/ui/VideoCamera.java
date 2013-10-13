@@ -36,6 +36,7 @@ import org.sipdroid.sipua.R;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -374,10 +375,7 @@ public class VideoCamera extends CallScreen implements
 					Log.d(TAG, ex.toString());
 				}
 			} else {
-				mCamera = Camera.open(); 
-				Camera.Parameters parameters = mCamera.getParameters(); 
-				parameters.set("camera-id", 2); 
-				mCamera.setParameters(parameters); 
+				mCamera = Camera.open(CameraInfo.CAMERA_FACING_FRONT); 
 			}
 			VideoCameraNew.unlock(mCamera);
 			mMediaRecorder.setCamera(mCamera);
