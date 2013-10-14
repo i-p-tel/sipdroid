@@ -85,7 +85,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(BV16)/bvcommon $(LOCAL_PATH)/$(BV16)/bv16 $(
 #LOCAL_CFLAGS = -O3 -DWMOPS=0 -DG192BITSTREAM=0
 include $(BUILD_SHARED_LIBRARY)
 
-
+include $(CLEAR_VARS)
 SILK     := silk
 LOCAL_MODULE    := silkcommon
 LOCAL_SRC_FILES :=  $(SILK)/src/SKP_Silk_A2NLSF.c \
