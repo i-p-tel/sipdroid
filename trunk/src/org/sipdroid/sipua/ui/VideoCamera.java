@@ -375,7 +375,14 @@ public class VideoCamera extends CallScreen implements
 					Log.d(TAG, ex.toString());
 				}
 			} else {
-				mCamera = Camera.open(CameraInfo.CAMERA_FACING_FRONT); 
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+					mCamera = Camera.open(CameraInfo.CAMERA_FACING_FRONT);
+				} else {
+					mCamera = Camera.open();
+					Camera.Parameters parameters = mCamera.getParameters();
+					parameters.set("camera-id", 2);
+					mCamera.setParameters(parameters);
+				}
 			}
 			VideoCameraNew.unlock(mCamera);
 			mMediaRecorder.setCamera(mCamera);
