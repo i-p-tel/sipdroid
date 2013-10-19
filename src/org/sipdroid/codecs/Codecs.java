@@ -272,7 +272,7 @@ public class Codecs {
 					if ( (codec==null) || (i < index) ) {
 						codec = c;
 						index = i;
-						continue;
+						break;
 					}
 				}
 				
@@ -285,7 +285,7 @@ public class Codecs {
 								//fmt number has no attr with name 
 								codec = c;
 								index = i;
-								continue;
+								break;
 							}
 						}
 				}
