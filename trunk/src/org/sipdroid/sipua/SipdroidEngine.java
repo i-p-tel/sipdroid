@@ -173,7 +173,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 							user_profile.contact_url, user_profile.username,
 							user_profile.realm, user_profile.passwd, this, user_profile,
 							user_profile.qvalue, icsi, user_profile.pub); // added by mandrajg
-					kas[i] = new KeepAliveSip(sip_providers[i],100000);
+					kas[i] = new KeepAliveSip(sip_providers[i]);
 				} catch (Exception E) {
 				}
 				i++;
@@ -360,7 +360,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 			}
 			if (kas[i] != null) {
 				Receiver.alarm(0, LoopAlarm.class);
-				kas[i].halt();
 			}
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i, null, 0, 0);
 			if (ra != null)
