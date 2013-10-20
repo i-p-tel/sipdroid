@@ -401,7 +401,7 @@ import org.zoolu.sip.provider.SipProvider;
 		public static void pos(boolean enable) {
 			
 			if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS) ||
-			PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL).isEmpty()) {
+			PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL).length() < 1) {
 				if (lm != null && am != null) {
 					pos_gps(false);
 					pos_net(false);
@@ -417,7 +417,7 @@ import org.zoolu.sip.provider.SipProvider;
 			if (enable) {
 				if (call_state == UserAgent.UA_STATE_IDLE && Sipdroid.on(mContext) &&
 						PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS) &&
-						!PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL).isEmpty()) {
+						PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL).length()>0) {
 					Location last = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 					if (System.currentTimeMillis() - loctrydate > GPS_UPDATES && (last == null || System.currentTimeMillis() - last.getTime() > GPS_UPDATES)) {
 						loctrydate = System.currentTimeMillis();
@@ -778,7 +778,7 @@ import org.zoolu.sip.provider.SipProvider;
 	        	mHandler.sendEmptyMessageDelayed(MSG_ENABLE,3000);
 	        } else
 	        if (intentAction.equals(Intent.ACTION_SCREEN_OFF)) {
-				if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_OWNWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_OWNWIFI)) {
+				if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_OWNWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_OWNWIFI)) {
 		        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 		        	WifiInfo wi = wm.getConnectionInfo();
 		        	if (wm.getWifiState() != WifiManager.WIFI_STATE_ENABLED || wi == null || wi.getSupplicantState() != SupplicantState.COMPLETED
@@ -795,7 +795,8 @@ import org.zoolu.sip.provider.SipProvider;
 	        			}
 	        } else
 		    if (intentAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
-		    	mHandler.sendEmptyMessageDelayed(MSG_SCAN, 3000);
+				if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_SELECTWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_SELECTWIFI))
+					mHandler.sendEmptyMessageDelayed(MSG_SCAN, 3000);
 	        } else
 	        if (intentAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
 	        	if (SystemClock.uptimeMillis() > lastscan + 45000 &&
