@@ -1,5 +1,7 @@
 package org.sipdroid.sipua.ui;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.StrictMode;
 
 /*
@@ -23,7 +25,7 @@ import android.os.StrictMode;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-public class ReceiverNew {
+@TargetApi(Build.VERSION_CODES.GINGERBREAD) public class ReceiverNew {
 	static void setPolicy() {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);

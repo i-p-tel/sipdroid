@@ -126,7 +126,7 @@ import org.zoolu.sip.provider.SipProvider;
 			if (mContext == null || !context.getClass().getName().contains("ReceiverRestrictedContext"))
 				mContext = context;
 			if (mSipdroidEngine == null) {
-				if (android.os.Build.VERSION.SDK_INT > 9) {
+				if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
 					ReceiverNew.setPolicy();
 				}
 				mSipdroidEngine = new SipdroidEngine();
