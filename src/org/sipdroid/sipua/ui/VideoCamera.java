@@ -376,7 +376,7 @@ public class VideoCamera extends CallScreen implements
 				}
 			} else {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-					mCamera = Camera.open(CameraInfo.CAMERA_FACING_FRONT);
+					mCamera = VideoCameraNew_SDK9.open();
 				} else {
 					mCamera = Camera.open();
 					Camera.Parameters parameters = mCamera.getParameters();
