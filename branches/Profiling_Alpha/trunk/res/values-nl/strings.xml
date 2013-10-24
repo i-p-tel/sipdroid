@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+ <string name="card_title_call_ended">Oproep beëindigd</string>
+  <string name="card_title_dialing">Kiezen</string>
+  <string name="card_title_in_progress">In gesprek</string>
+  <string name="card_title_incoming_call">Inkomend gesprek</string>
+  <string name="card_title_on_hold">In wachtstand</string>
+  <string name="menu_call">Bellen</string>
+  <string name="unknown">Onbekend</string>
+  <string name="slide_hint_up_to_answer">Openschuiven voor opnemen</string>
+</resources>

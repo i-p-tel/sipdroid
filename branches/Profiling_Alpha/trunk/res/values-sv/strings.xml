@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ *
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ *
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+/////////////////////////////////////////////////////////////////////
+// these are the main messages of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+<string name="app_name">Sipdroid</string>
+<string name="pstn_name">Telefonsamtal</string>
+<string name="sip_name">Sipdroidsamtal, om möjligt</string>
+
+<string name="about">Sipdroid är en open-source SIP klient för Android
+\n
+\nSe http://sipdroid.org för mer info
+\n
+\nVersion ${VERSION}
+\nMjukvaran har släppts för provning.
+\n
+\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
+\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\n
+\nDetta program är fri mjukvara; det är tillåtet att distribuera det och/eller modifiera det under villkoren i GNU General Public License som puliserats av Free Software Foundation; antingen version 3 av Licensen, eller (om så önskas) någon senare version.
+\n
+\nDetta program distribueras med hopp om att det ska vara användbart, men UTAN GARANTIER; utan någon garanti om ANVÄNDBARHET eller LÄMPLIGHET FÖR NÅGOT SPECIFIKT ANVÄNDNINGSOMRÅDE. Se GNU General Public License för ytterligare detaljer (http://www.gnu.org/licenses).</string>
+
+<string name="reg">Registrering...</string>
+<string name="regok">Registrerad</string>
+<string name="regfailed">Registrering misslyckades</string>
+
+<string name="voicemail">Nytt röstmedelande</string>
+
+<string name="auto_enabled">Autosvar/Högtalartelefon</string>
+<string name="auto_disabled">Autosvar av</string>
+<string name="hint">Samtal till adress</string>
+<string name="empty">Skriv SIP address som namn@domän</string>
+<string name="notfast">Inget lämpligt datanät tillgängligt</string>
+
+<string name="settings_account">SIP användarkonto</string>
+<string name="settings_username">Privat användar-ID</string>
+<string name="settings_password">Lösenord</string>
+<string name="settings_server">SIP-server</string>
+<string name="settings_domain">Domän</string>
+<string name="settings_domain2">Lämna tomt om samma som SIP-server</string>
+<string name="settings_username1">Publik SIP adress</string>
+<string name="settings_callerid2">Lämna tomt om samma som privat användar-id</string>
+<string name="settings_port">Port</string>
+	<string-array name="port_display_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060 (standard)</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>custom</item>
+	</string-array>
+	<string-array name="port_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>0</item>
+	</string-array>
+
+<string name="settings_protocol">Protokoll</string>
+    <string-array name="protocol_display_values">
+        <item>UDP (kortare standby på 3G)</item>
+        <item>TCP (längre standby på 3G)</item>
+    </string-array>
+    <string-array name="protocol_values">
+        <item>udp</item>
+        <item>tcp</item>
+    </string-array>
+<string name="settings_vquality">Video kvalitet</string>
+    <string-array name="vquality_display_values">
+        <item>Hög (352x288 @ 360kbit)</item>
+        <item>Låg (176x144 @ 192kbit)</item>
+    </string-array>
+    <string-array name="vquality_values">
+        <item>high</item>
+        <item>low</item>
+    </string-array>
+<string name="settings_stun">Använd STUN Server</string>
+<string name="settings_stun_server">STUN Server namn</string>
+<string name="settings_stun_server_port">STUN Server port</string>
+
+<string name="settings_mmtel">Använd MMTel tillägg</string>
+<string name="settings_mmtel_qvalue">Q värde</string>
+
+<string name="settings_options">Samtals alternativ</string>
+<string name="settings_wlan">Använd WLAN</string>
+<string name="settings_3g">Använd 3G</string>
+<string name="settings_edge">Använd EDGE</string>
+<string name="settings_vpn">Använd VPN</string>
+<string name="settings_check">Kontrollera med din mobil operatör om de tillåter VoIP</string>
+<string name="settings_vpn2">PBXes erbjuder gratis VPN tjänst, se HELP sektion tre</string>
+
+<string name="dialog_default">Sipdroid är inte definerad som föredragen telefon. Vill du göra den till föredragen telefon?
+\n
+\nOm du svarar \'No\' här, kan du fortfarande ringa med Sipdroid från systemet genom att lägga till \'+\' bakom numret i Dialer, eller genom att välja \'text to\' i Contacts.</string>
+<string name="dialog_message">Vill du se a ett medelande från Pascal som introducerar Sipdroid 1.5?</string>
+<string name="yes">Ja</string>
+<string name="no">Nej</string>
+<string name="dontask">Fråga mig inte igen</string>
+
+<string name="settings_pref">Föredragen Samtalstyp</string>
+<string name="settings_pref2">Överrid genom att addera \'+\' bakom nummret i Dialer, eller välja \'text to\' i Kontakter</string>
+    <string-array name="pref_display_values">
+        <item>Sipdroid alltid</item>
+        <item>Sipdroid, när tillgängligt</item>
+        <item>Telefon</item>
+		<item>Fråga alltid</item>
+    </string-array>
+    
+<string name="settings_compression">Röstkomprimering</string>
+    <string-array name="compression_display_values">
+        <item>Endast över WLAN</item>
+        <item>Endast över WLAN och 3G</item>
+        <item>Försök alltid</item>
+        <item>Aldrig</item>
+    </string-array>
+    <string-array name="compression_values">
+        <item>wlan</item>
+        <item>wlanor3g</item>
+        <item>always</item>
+        <item>never</item>
+    </string-array>
+<string name="settings_auto_on">Autosvar på</string>
+<string name="settings_auto_on2">Kort vibrationssignal när skärmen är på</string>
+<string name="settings_auto_ondemand">Autosvar på begäran</string>
+<string name="settings_auto_ondemand2">Visa väljare i status fältet</string>
+<string name="settings_auto_headset">Autosvar headset</string>
+<string name="settings_auto_headset2">När sladd-headset är anslutet</string>
+
+<string name="settings_notifications">Medelanden</string>
+<string name="settings_MWI">Röstbrevlåda</string>
+<string name="settings_MWI2">Bevaka röstbrevlåda</string>
+<string name="settings_notify">Missade samtal</string>
+<string name="settings_notify2">Visa med blå LED</string>
+<string name="settings_nodata">Ingen Data</string>
+<string name="settings_nodata2">Indikera tappade talpaket med toner</string>
+
+<string name="settings_advanced_options">Avancerade Alternativ</string>
+<string name="settings_av_options">Audio/Video Settings</string>
+<string name="settings_policy_never">Ändrat system sleep policy till att hålla Wi-Fi på.</string>
+<string name="settings_policy_default">Återställ Wi-Fi sleep policy till utgångsvärde.</string>
+<string name="settings_search">Sök &amp; Ersätt</string>
+<string name="settings_excludepat">Excludera mönster</string>
+<string name="settings_sipringtone">SIP Ringsignal</string>
+<string name="settings_sipringtone2">Sätt ringsignal för inkommande SIP samtal</string>
+<string name="settings_sipringtone_dialog">Ringtoner</string>
+<string name="settings_eargain">Earpiece Gain</string>
+<string name="settings_micgain">Mikrofon Gain</string>
+<string name="settings_heargain">Headset Gain</string>
+<string name="settings_hmicgain">Headset Mikrofon</string>
+    <string-array name="eargain_display_values">
+        <item>Låg (inget eko)</item>
+        <item>Medium</item>
+        <item>Hög (kan orsaka eko till andra parten)</item>
+        <item>Högsta</item>
+    </string-array>
+    <string-array name="eargain_values">
+        <item>0.1</item>
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>1.0</item>
+    </string-array>
+
+<string name="settings_pbxes_options">PBXes funktioner</string>
+<string name="settings_par">Samtidiga utgående</string>
+<string name="settings_par2">Ringer en person\'s samtliga telefonnummer samtidigt</string>
+<string name="settings_improve">Förbättra Audio</string>
+<string name="settings_improve2">kräver betalkonto</string>
+<string name="settings_hdvoice">PBXes supportar HD samtal</string>
+<string name="settings_posurl">URL för Location/Callback</string>
+<string name="settings_pos">Uppdatera Location</string>
+<string name="settings_pos2">Kan medelas till PBXes contacts (kräver premium konto)</string>
+<string name="settings_pos3">Uppdaterar Location</string>
+<string name="settings_callback">Trigga Callback</string>
+<string name="settings_callback2">Om inget lämpligt datanät finns tillgängligt</string>
+<string name="settings_callthru">Trigga Callthru</string>
+<string name="settings_callthru2">Prefix för Callthru</string>
+
+<string name="settings_title">Sipdroid konfigurationer</string>
+
+<string name="settings_profile_title">Sipdroid konfigurationer (<xliff:g id="profile">%s</xliff:g>)</string>
+<string name="settings_profile_menu_import">Importera</string>
+<string name="settings_profile_menu_delete">Ta bort</string>
+<string name="settings_profile_dialog_profiles_title">Profiler</string>
+<string name="settings_profile_dialog_delete_title">Ta bort profil</string>
+<string name="settings_profile_dialog_delete_text">Vill du verkligen ta bort <xliff:g id="profile">%s</xliff:g> profilen?</string>
+<string name="settings_profile_export_error">Kan ej exportera konfigurationen!</string>
+<string name="settings_profile_import_error">Kan ej importera konfigurationen!</string>
+<string name="settings_profile_delete_error">Kan ej ta bort denna profil!</string>
+<string name="settings_profile_delete_confirmation">Profilen har tagits bort.</string>
+
+<string name="settings_wireless_options">Trådlöst</string>
+<string name="settings_bluetooth">Kräver Android 2.2 eller senare</string>
+<string name="settings_keepon">Skärm på</string>
+<string name="settings_keepon2">Krävs av vissa device för problem-fri Wi-Fi</string>
+<string name="settings_selectwifi">Välj Wi-Fi AP</string>
+<string name="settings_selectwifi2">Efter signal nivå</string>
+<string name="settings_ownwifi">Styr Wi-Fi styrka</string>
+<string name="settings_ownwifi2">Sparar batteri</string>
+
+<string name="menu_settings">Inställningar</string>
+<string name="menu_exit">Avsluta</string>
+<string name="menu_about">Om sipdroid</string>
+<string name="menu_dtmf">Skicka DTMF</string>
+<string name="menu_video">Skicka Video</string>
+<string name="menu_call">Ring</string>
+<string name="menu_mute">Mute</string>
+<string name="menu_hold">Parkera</string>
+<string name="menu_transfer">Transferera</string>
+<string name="menu_speaker">Högtalare</string>
+<string name="menu_endCall">Avsluta samtal</string>
+<string name="menu_answer">Svara</string>
+
+<string name="transfer_title">Transferera till</string>
+
+<string name="card_title_dialing">Slår nummer</string>
+<string name="card_title_in_progress">Samtal pågår</string>
+<string name="card_title_incoming_call">Inkommande samtal</string>
+<string name="card_title_call_ended">Samtal avslutat</string>
+<string name="card_title_ended_no_codec">FEL: Codecar ej kompatibla</string>
+<string name="card_title_on_hold">Samtal parkerat</string>
+
+<string name="unknown">Okänd</string>
+
+<string name="slide_hint_down_to_end_call">Dra ned för att avsluta.</string>
+<string name="slide_hint_up_to_answer">Dra upp för att svara.</string>
+
+<string name="ongoing">Pågående samtal</string>
+<string name="onHold">Samtal parkerat</string>
+<string name="codecs">Audio codecar</string>
+<string name="codecs_summary">Välj audio-codecar för röstsamtal</string>
+<string name="codecs_move">Flytta denna codec</string>
+<string name="codecs_move_up">Flytta upp ett steg</string>
+<string name="codecs_move_down">Flytta ner ett steg</string>
+</resources>

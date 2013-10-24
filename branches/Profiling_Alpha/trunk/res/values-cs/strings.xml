@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ *
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ *
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+/////////////////////////////////////////////////////////////////////
+// these are the main messages of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+<string name="pstn_name">Telefon</string>
+<string name="sip_name">Sipdroid, když je k dispozici</string>
+
+<string name="about">Sipdroid je open-source SIP klient pro Android
+\n
+\nPro více informací navštivte http://sipdroid.org
+\n
+\nVerze ${VERSION}
+\nTento program byl uvolněn pro testování.
+\n
+\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
+\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\n
+\nTento program je free software, můžete jej redistribuovat a/nebo modifikovat za podmínek stanovených v GNU General Public License zveřejněnou nadací Free Software Foundation, buďto ve verzi 3 nebo (podle vaší volby) jakékoliv její pozdější verze.
+\n
+\nTento program je šířen v naději, že bude užitečný, ale BEZ JAKÉKOLIV ZÁRUKY, neposkytuje ani odvozené záruky PRODEJNOSTI anebo VHODNOSTI PRO DANÝ ÚČEL. Podrobnější informace naleznete v GNU General Public License (http://www.gnu.org/licenses).</string>
+
+<string name="reg">Registrace...</string>
+<string name="regok">Registrován</string>
+<string name="regfailed">Registrace selhala</string>
+
+<string name="voicemail">Čekající zprávy</string>
+
+<string name="auto_enabled">Auto-odpověď/hlasitý poslech</string>
+<string name="auto_disabled">Auto-odpověď vypnuta</string>
+<string name="hint">Adresa volaného</string>
+<string name="empty">Prosím vložte adresu volaného ve tvaru jmeno@domena.com</string>
+<string name="notfast">Žádné vhodné datové sítě nejsou k dispozici</string>
+
+<string name="settings_account">Nastavení SIP účtu</string>
+<string name="settings_username">Uživatelské jméno</string>
+<string name="settings_password">Heslo</string>
+<string name="settings_server">Server</string>
+<string name="settings_domain">Doména</string>
+<string name="settings_domain2">Nechat prázdné, pokud je stejné jako server</string>
+<string name="settings_username1">Jméno/ID volajícího</string>
+<string name="settings_callerid2">Ponechte prázdné, pokud je stejné s uživatelským jménem.</string>
+<string name="settings_port">Port</string>
+<string name="settings_protocol">Protokol</string>
+    <string-array name="protocol_display_values">
+        <item>UDP (méně v pohotovosti na 3G)</item>
+        <item>TCP (více v pohotovosti na 3G)</item>
+    </string-array>
+<string name="settings_stun">Použít STUN server</string>
+<string name="settings_stun_server">Jméno STUN serveru</string>
+<string name="settings_stun_server_port">Port STUN serveru</string>
+ 
+<string name="settings_options">Možnosti volání</string>
+<string name="settings_wlan">Použít WLAN</string>
+<string name="settings_3g">Použít 3G</string>
+<string name="settings_edge">Použít EDGE</string>
+<string name="settings_check">Ověřte si u vašeho operátora, jestli má povolené VoIP.</string>
+
+<string name="dialog_default">Sipdroid je nyní není nastavený jako výchozí telefon. Chcete ho nastavit jako výchozí telefon?
+\n
+\nPokud zde odpovíte \'Ne\', můžete stále volat přes Sipdroid přidáním znaku \'+\' za číslo volaného.</string>
+<string name="yes">Ano</string>
+<string name="no">Ne</string>
+<string name="dontask">Neptat se znovu</string>
+
+<string name="settings_pref">Preferovaný typ volání</string>
+<string name="settings_pref2">Možno předpsat pomocí znaku \'+\' za číslem volaného.</string>
+    <string-array name="pref_display_values">
+        <item>Pouze Sipdroid</item>
+        <item>Sipdroid, pokud je k dispozici</item>
+        <item>Telefon</item>
+		<item>Always ask</item>
+    </string-array>
+<string name="settings_compression">Komprese hlasu</string>
+    <string-array name="compression_display_values">
+        <item>Pouze přes WLAN</item>
+        <item>Pouze přes WLAN/3G</item>
+        <item>Vždy zkusit</item>
+        <item>Nikdy</item>
+    </string-array>
+<string name="settings_auto_on">Auto-odpověď je aktivní</string>
+<string name="settings_auto_on2">Krátké vibrační upozornění, když je obrazovka zapnuta</string>
+<string name="settings_auto_ondemand">Auto-odpověď na vyžádání</string>
+<string name="settings_auto_ondemand2">Zobrazit přepínač ve stavovém řádku</string>
+<string name="settings_auto_headset">Auto-odpověď sluchátka</string>
+<string name="settings_auto_headset2">Pokud je připojeno drátové sluchátko</string>
+
+<string name="settings_notifications">Oznámení</string>
+<string name="settings_MWI">Hlasová schránka</string>
+<string name="settings_MWI2">Zpráva při čekání na přihlášení k SIP</string>
+<string name="settings_notify">Zmeškaný hovor</string>
+<string name="settings_notify2">Upozornění modrou LED</string>
+<string name="settings_nodata">Žádná data</string>
+<string name="settings_nodata2">Upozornit na ztracené hlasové pakety zvukovým tónem</string>
+
+<string name="settings_advanced_options">Pokročilé možnosti</string>
+<string name="settings_policy_never">Změnit politiku uspání na Wifi stále zapnuto.</string>
+<string name="settings_policy_default">Resetovat politiku uspání na výchozí.</string>
+<string name="settings_search">Najít a nahradit</string>
+<string name="settings_excludepat">Vylučovací vzor</string>
+<string name="settings_sipringtone">SIP vyzvánění</string>
+<string name="settings_sipringtone2">Nastavit vyzváněcí tón pro SIP hovory</string>
+<string name="settings_sipringtone_dialog">Vyzvánění</string>
+<string name="settings_eargain">Zesílení sluchátka</string>
+<string name="settings_micgain">Zesílení mikrofonu</string>
+<string name="settings_heargain">Zesílení headsetu</string>
+<string name="settings_hmicgain">Zesílení mikrofonu headsetu</string>
+    <string-array name="eargain_display_values">
+        <item>Nizké (bez ozvěny)</item>
+        <item>Střední</item>
+        <item>Vysoké (může způsobit ozvěnu u volaného)</item>
+        <item>Nejvyšší</item>
+    </string-array>
+<string name="settings_ownwifi">Řídit výkon Wi-Fi</string>
+<string name="settings_ownwifi2">Šetří baterie</string>
+
+<string name="settings_pbxes_options">PBXes funkce</string>
+<string name="settings_par">Simultánní odchozí volání</string>
+<string name="settings_par2">Vytočí paralelně všechny čísla jedné osoby</string>
+<string name="settings_improve">Zlepšit zvuk</string>
+<string name="settings_improve2">vyžaduje placený účet</string>
+<string name="settings_posurl">URL pro polohu/zpětné volání</string>
+<string name="settings_pos">Aktualizovat polohu</string>
+<string name="settings_pos2">Může být oznámena PBXes kontaktu (vyžaduje Premium účet)</string>
+<string name="settings_pos3">Aktualizace polohy</string>
+<string name="settings_callback">Spoušť zpětné volání</string>
+<string name="settings_callback2">Pokud nejsou žádné vhodné datové sítě k dispozici</string>
+<string name="settings_callthru">Spoušť přesměrování</string>
+<string name="settings_callthru2">Prefix pro přesměrování</string>
+
+<string name="settings_title">Nastavení Sipdroidu</string>
+
+<string name="settings_profile_title">Nastavení Sipdroidu (<xliff:g id="profile">%s</xliff:g>)</string>
+<string name="settings_profile_menu_import">Importovat</string>
+<string name="settings_profile_menu_delete">Smazat</string>
+<string name="settings_profile_dialog_profiles_title">Profily</string>
+<string name="settings_profile_dialog_delete_title">Smazat profil</string>
+<string name="settings_profile_dialog_delete_text">Opravdu chcete snazat profil <xliff:g id="profile">%s</xliff:g>?</string>
+<string name="settings_profile_export_error">Chyba při exportu nastavení!</string>
+<string name="settings_profile_import_error">Chyba při importu nastavení!</string>
+<string name="settings_profile_delete_error">Tento profil nelze smazat!</string>
+<string name="settings_profile_delete_confirmation">Profil byl smazán.</string>
+
+<string name="menu_settings">Nastavení</string>
+<string name="menu_exit">Ukončit</string>
+<string name="menu_about">O programu</string>
+<string name="menu_dtmf">Poslat DTMF</string>
+<string name="menu_video">Poslat video</string>
+<string name="menu_call">Vytočit</string>
+<string name="menu_mute">Ztlumit</string>
+<string name="menu_hold">Přidržet</string>
+<string name="menu_transfer">Přenos</string>
+<string name="menu_speaker">Nahlas</string>
+<string name="menu_endCall">Ukončit</string>
+
+<string name="transfer_title">Přenost hovoru</string>
+
+<string name="card_title_dialing">Vytáčení</string>
+<string name="card_title_in_progress">Hovor</string>
+<string name="card_title_incoming_call">Příchozí volání</string>
+<string name="card_title_call_ended">Hovor ukončen</string>
+<string name="card_title_ended_no_codec">CHYBA: Nekompatibilní kodek</string>
+<string name="card_title_on_hold">Přidržení</string>
+
+<string name="unknown">Neznámý</string>
+
+<string name="slide_hint_down_to_end_call">Posunoutí dolu ukončí hovor.</string>
+<string name="slide_hint_up_to_answer">Posunutí nahoru přijme hovor.</string>
+
+<string name="ongoing">Probíhající hovor</string>
+<string name="onHold">Přidržení</string>
+<string name="codecs">Audio kodeky</string>
+<string name="codecs_summary">Vyberte audio kodek, který bude dostupný pro volání</string>
+<string name="codecs_move">Přesunout kodek</string>
+<string name="codecs_move_up">Přesunout nahoru</string>
+<string name="codecs_move_down">Přesunout dolu</string>
+</resources>

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ *
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ *
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+////////////////////////////////////////////////////////////////////////////////////
+// Simplified Chinese language file by Vantonio.
+// If there should be any problems please email me
+// at nio.von@gmail.com or report it at http://www.sipdroid.org
+/////////////////////////////////////////////////////////////////////
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+<string name="app_name">Sipdroid</string>
+<string name="pstn_name">电话</string>
+<string name="sip_name">Sipdroid，当可用时</string>
+
+<string name="about">Sipdroid是Android系统下的开源SIP客户端。
+\n
+\n请浏览 http://sipdroid.org 以获得更多信息。
+\n
+\n版本 ${VERSION}
+
+\n此为测试版本。
+
+\n
+\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
+\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\n
+\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+\n
+\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details (http://www.gnu.org/licenses).</string>
+
+<string name="reg">正在登录...</string>
+<string name="regok">登录成功</string>
+<string name="regfailed">登录失败</string>
+
+<string name="voicemail">语音留言：</string>
+
+<string name="auto_enabled">自动应答/扬声器</string>
+<string name="auto_disabled">自动应答关闭</string>
+
+<string name="hint">SIP地址</string>
+<string name="hint2">电话号码</string>
+<string name="empty">请输入一个类似于name@domain.com的SIP地址</string>
+<string name="notfast">无适用的网络</string>
+
+<string name="settings_account">SIP账户设置</string>
+<string name="settings_username">认证用户名</string>
+<string name="settings_password">密码</string>
+<string name="settings_server">服务器</string>
+<string name="settings_domain">域</string>
+<string name="settings_domain2">如与服务器相同请留空</string>
+<string name="settings_username1">用户名/Caller ID</string>
+<string name="settings_callerid2">如与认证用户名一致请留空</string>
+<string name="settings_port">端口</string>
+	<string-array name="port_display_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060 (标准)</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>自定义</item>
+	</string-array>
+	<string-array name="port_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>0</item>
+	</string-array>
+
+<string name="settings_protocol">协议</string>
+    <string-array name="protocol_display_values">
+        <item>UDP (3G网络下待机时间短)</item>
+        <item>TCP (3G网络下待机时间长)</item>
+    </string-array>
+    <string-array name="protocol_values">
+        <item>udp</item>
+        <item>tcp</item>
+    </string-array>
+<string name="settings_vquality">视频质量</string>
+    <string-array name="vquality_display_values">
+        <item>高 (352x288 @ 360kbit)</item>
+        <item>低 (176x144 @ 192kbit)</item>
+    </string-array>
+    <string-array name="vquality_values">
+        <item>high</item>
+        <item>low</item>
+    </string-array>
+<string name="settings_stun">使用STUN服务器</string>
+<string name="settings_stun_server">STUN服务器地址</string>
+<string name="settings_stun_server_port">STUN服务器端口</string>
+
+<string name="settings_mmtel">使用MMTel技术</string>
+<string name="settings_mmtel_qvalue">Q值</string>
+ 
+<string name="settings_options">通话选项</string>
+<string name="settings_wlan">使用Wi-Fi网络</string>
+<string name="settings_3g">使用3G网络</string>
+<string name="settings_edge">使用EDGE网络</string>
+<string name="settings_vpn">使用VPN</string>
+<string name="settings_check">请确认你的运营商是否允许VoIP电话</string>
+<string name="settings_vpn2">PBXes提供免费VPN服务，请进入www.pbxes.com并点击HELP获取相关信息。</string>
+
+<string name="dialog_default">Sipdroid现在不是默认的电话程序，是否要将其设置为默认？
+\n
+\n如果你选择了 \'否\'，你仍然可以在拨号时在电话号码后加上字符\'+\'，或长按联系人选择 \'发送短信\'以强制使用Sipdroid拨号。</string>
+<string name="dialog_message">是否查看Sipdroid 1.5的视频介绍？</string>
+
+<string name="yes">是</string>
+<string name="no">否</string>
+<string name="dontask">不再提示</string>
+
+<string name="settings_pref">Sipdroid优先级</string>
+<string name="settings_pref2">在拨号时在电话号码后加上字符\'+\'，或长按联系人选择 \'发送短信\'以强制使用Sipdroid拨号。</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <string-array name="pref_display_values">
+        <item>只使用Sipdroid</item>
+        <item>当可用时使用Sipdroid</item>
+        <item>总是使用电话</item>
+        <item>Always ask</item>
+    </string-array>
+	
+	<string-array name="pref_values">
+        <item>SIPONLY</item>
+        <item>SIP</item>
+        <item>PSTN</item>
+        <item>ASK</item>
+    </string-array>
+
+<string name="settings_compression">语音压缩</string>
+    <string-array name="compression_display_values">
+        <item>仅当使用WLAN时</item>
+        <item>仅当使用WLAN/3G时</item>
+        <item>总是尝试使用</item>
+        <item>从不使用</item>
+    </string-array>
+	<string-array name="compression_values">
+        <item>wlan</item>
+        <item>wlanor3g</item>
+        <item>always</item>
+        <item>never</item>
+    </string-array>
+<string name="settings_auto_on">开启自动应答</string>
+<string name="settings_auto_on2">振动提醒，仅用于非锁定状态下</string>
+<string name="settings_auto_ondemand">快速切换自动应答</string>
+<string name="settings_auto_ondemand2">在状态栏显示切换按钮</string>
+<string name="settings_auto_headset">耳机插入时自动应答</string>
+<string name="settings_auto_headset2">当耳机插入时开启自动应答</string>
+
+<string name="settings_notifications">通知设置</string>
+<string name="settings_MWI">语音留言</string>
+<string name="settings_MWI2">自动检查是否有未读的语音留言</string>
+<string name="settings_reg">登录</string>
+<string name="settings_reg2">允许选择SIP帐户</string>
+<string name="settings_notify">未接电话</string>
+<string name="settings_notify2">使用蓝色LED灯提醒</string>
+<string name="settings_nodata">无数据</string>
+<string name="settings_nodata2">使用单音调指示数据包丢失</string>
+
+<string name="settings_advanced_options">高级设置</string>
+<string name="settings_av_options">音频/视频设置</string>
+<string name="settings_policy_never">改变系统休眠策略以保持Wi-Fi的开启状态</string>
+<string name="settings_policy_default">重设Wi-Fi休眠设置为系统默认</string>
+<string name="settings_search">查找和替换</string>
+<string name="settings_excludepat">排除的正则表达式</string>
+<string name="settings_sipringtone">SIP铃声</string>
+<string name="settings_sipringtone2">设置SIP拨入电话的铃声</string>
+<string name="settings_sipringtone_dialog">铃声</string>
+<string name="settings_eargain">听筒音量</string>
+<string name="settings_micgain">麦克风音量</string>
+<string name="settings_heargain">耳机音量</string>
+<string name="settings_hmicgain">耳机麦克风音量</string>
+    <string-array name="eargain_display_values">
+        <item>低 (无回音)</item>
+
+        <item>中</item>
+        <item>高 (可能会出现回音)</item>
+
+        <item>极高</item>
+    </string-array>
+    <string-array name="eargain_values">
+        <item>0.1</item>
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>1.0</item>
+    </string-array>
+
+<string name="settings_pbxes_options">PBXes设置</string>
+<string name="settings_par">多个拨出电话</string>
+<string name="settings_par2">允许同时拨打多个电话</string>
+<string name="settings_improve">音质优化</string>
+<string name="settings_improve2">需要收费帐号</string>
+<string name="settings_hdvoice">PBXes支持高清语音</string>
+<string name="settings_posurl">地理位置及回拨URL地址</string>
+<string name="settings_pos">更新地理位置</string>
+<string name="settings_pos2">地址可被通报至PBXes的联系人(需要PBXes.com的Premium账户)</string>
+<string name="settings_pos3">正在更新地理位置</string>
+<string name="settings_callback">触发回拨</string>
+<string name="settings_callback2">如没有合适的网络时</string>
+<string name="settings_callthru">触发Callthru</string>
+<string name="settings_callthru2">Callthru前缀</string>
+
+<string name="settings_title">Sipdroid设置</string>
+
+<string name="settings_profile_title">Sipdroid设置 (<xliff:g id="profile">%s</xliff:g>)</string>
+<string name="settings_profile_menu_import">导入</string>
+<string name="settings_profile_menu_delete">删除</string>
+<string name="settings_profile_dialog_profiles_title">用户配置</string>
+<string name="settings_profile_dialog_delete_title">删除用户配置</string>
+<string name="settings_profile_dialog_delete_text">确认要删除用户<xliff:g id="profile">%s</xliff:g>的配置吗?</string>
+<string name="settings_profile_export_error">导出用户配置失败！</string>
+<string name="settings_profile_import_error">导入用户配置失败！</string>
+<string name="settings_profile_delete_error">删除用户配置失败！</string>
+<string name="settings_profile_delete_confirmation">成功删除用户配置。</string>
+
+<string name="settings_wireless_options">Wi-Fi设置</string>
+<string name="settings_bluetooth">需要Android 2.2或更高</string>
+<string name="settings_keepon">屏幕常亮</string>
+<string name="settings_keepon2">一些设备需要选择此项以保持Wi-Fi连接</string>
+<string name="settings_selectwifi">选择Wi-Fi热点</string>
+<string name="settings_selectwifi2">根据信号选择热点</string>
+<string name="settings_ownwifi">Wi-Fi电力控制</string>
+<string name="settings_ownwifi2">节约电力</string>
+
+<string name="menu_settings">设置</string>
+<string name="menu_exit">退出</string>
+<string name="menu_about">关于</string>
+<string name="menu_dtmf">发送DTMF</string>
+<string name="menu_video">发送视频</string>
+<string name="menu_call">呼叫</string>
+<string name="menu_mute">静音</string>
+<string name="menu_hold">保持</string>
+<string name="menu_transfer">转移</string>
+<string name="menu_speaker">扬声器</string>
+<string name="menu_endCall">挂断</string>
+<string name="menu_answer">应答</string>
+<string name="menu_bluetooth">蓝牙(实验功能)</string>
+
+<string name="transfer_title">将通话转移至</string>
+
+<string name="card_title_dialing">拨号中</string>
+<string name="card_title_in_progress">通话中</string>
+<string name="card_title_incoming_call">来电</string>
+<string name="card_title_call_ended">通话结束</string>
+<string name="card_title_ended_no_codec">错误：音频编解码器不兼容</string>
+<string name="card_title_on_hold">通话保持中</string>
+
+<string name="unknown">未知</string>
+
+<string name="slide_hint_down_to_end_call">向下滑动以结束通话</string>
+<string name="slide_hint_up_to_answer">向上滑动以接通来电</string>
+
+<string name="ongoing">当前通话</string>
+<string name="onHold">已保持</string>
+<string name="codecs">音频解编码器</string>
+<string name="codecs_summary">设置要使用的音频解编码器及其优先级</string>
+<string name="codecs_move">移动解编码器</string>
+<string name="codecs_move_up">上移</string>
+<string name="codecs_move_down">下移</string>
+<string name="help_speakerphone">按住音量键以强制通话</string>
+</resources>

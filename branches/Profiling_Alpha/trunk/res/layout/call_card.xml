@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!-- XML resource file for the *children* of a CallCard used in the Phone app.
+     The CallCard itself is a subclass of FrameLayout, and its (single)
+     child is the LinearLayout found here.  (In the CallCard constructor,
+     we inflate this file and add it as a child.)
+     TODO: consider just <include>ing this directly from incall_screen.xml? -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <!-- The CallCard displays info to the user about the currently active
+         phone call(s) on the device.  This vertical LinearLayout contains
+         the following subviews:
+
+         (1) The "main" or "full size" call card, which displays info
+             for the current foreground call, or the currently-ringing
+             incoming call (if there is one.)
+
+         (2) The "other call" info area for the current ongoing call,
+             visible only if an incoming call is ringing while you're
+             already using a phone line.
+
+         (3) The "other call" info area for the current call on hold,
+             visible only if there's a call on hold.
+    -->
+
+    <!-- (1) The main call card -->
+    <LinearLayout
+        android:id="@+id/mainCallCard"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="300dip"
+        >
+
+        <!-- "Upper title" at the very top of the CallCard. -->
+        <TextView android:id="@+id/upperTitle"
+                  android:paddingTop="6dip"
+                  android:paddingLeft="10dip"
+                  android:paddingRight="10dip"
+                  android:textAppearance="?android:attr/textAppearanceLarge"
+                  android:textSize="28sp"
+                  android:singleLine="true"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="10dip"
+                  />
+
+        <!-- Placeholder to add some space between the title and "person info" area if
+             there's enough room. -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_weight="1" />
+
+        <!-- "Person info": photo / name / number -->
+        <include layout="@layout/call_card_person_info" />
+
+        <!-- Placeholder to add some space below the name/number if there's enough room. -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_weight="10" />
+
+        <!-- "Lower title" and elapsed time counter, used only in the
+             "call in progress" state. -->
+        <LinearLayout android:id="@+id/lowerTitleViewGroup"
+                      android:orientation="horizontal"
+                      android:gravity="center_vertical"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_margin="6dip"
+                      >
+            <ImageView android:id="@+id/lowerTitleIcon"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginRight="8dip"
+                />
+            <TextView android:id="@+id/lowerTitle"
+                      android:textAppearance="?android:attr/textAppearanceMedium"
+                      android:textSize="18sp"
+                      android:singleLine="true"
+                      android:layout_width="wrap_content"
+                      android:layout_weight="1"
+                      android:layout_height="wrap_content"
+                      android:gravity="left"
+                      />
+            <Chronometer android:id="@+id/elapsedTime"
+                      android:textAppearance="?android:attr/textAppearanceMedium"
+                      android:textSize="18sp"
+                      android:singleLine="true"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      />
+        </LinearLayout>
+
+    </LinearLayout>    <!-- End of (1) The main call card -->
+
+
+    <!-- The "other call" info area. -->
+    <!-- There are two possible rows of information to display here:
+         (1) a one-liner with info about the "ongoing" (active) call,
+             displayed only if the main body of the CallCard is showing
+             an incoming call and a foreground call exists.
+         (2) a one-liner with info about the call on hold,
+             if there's a call on hold.
+         Note that BOTH can be visible in the rare case of an
+         incoming call while both lines are in use.  -->
+    <!-- The "other call" boxes are always bottom-aligned on the call card. -->
+
+    <!-- Fix the CallCard's updateState method to just fully
+         update EVERYTHING in the callcard based on the current phone
+         state: set the overall type of the CallCard, load up the main
+         caller info area, and load up and show or hide the "other call"
+         widgets as necessary.  -->
+
+    <!-- (2) Info area for the "ongoing" call -->
+    <LinearLayout android:id="@+id/otherCallOngoingInfoArea"
+                  android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical"
+                  android:layout_marginTop="4dip"
+                  >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dip"
+            android:layout_marginRight="8dip"
+            android:src="@drawable/ic_incall_ongoing"
+            />
+        <TextView android:id="@+id/otherCallOngoingName"
+              android:textAppearance="?android:attr/textAppearanceMedium"
+              android:textSize="18sp"
+              android:singleLine="true"
+              android:layout_width="wrap_content"
+              android:layout_weight="1"
+              android:layout_height="wrap_content"
+              android:gravity="left"
+              />
+        <TextView android:id="@+id/otherCallOngoingStatus"
+              android:text="@string/ongoing"
+              android:textAppearance="?android:attr/textAppearanceMedium"
+              android:textSize="18sp"
+              android:singleLine="true"
+              android:layout_marginRight="6dip"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              />
+    </LinearLayout>
+
+    <!-- (3) Info area for the "on hold" call -->
+    <LinearLayout android:id="@+id/otherCallOnHoldInfoArea"
+                  android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical"
+                  android:layout_marginTop="4dip"
+                  >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dip"
+            android:layout_marginRight="8dip"
+            android:src="@drawable/ic_incall_onhold"
+            />
+        <TextView android:id="@+id/otherCallOnHoldName"
+              android:textAppearance="?android:attr/textAppearanceMedium"
+              android:textSize="18sp"
+              android:singleLine="true"
+              android:layout_width="wrap_content"
+              android:layout_weight="1"
+              android:layout_height="wrap_content"
+              android:gravity="left"
+              />
+        <TextView android:id="@+id/otherCallOnHoldStatus"
+              android:text="@string/onHold"
+              android:textAppearance="?android:attr/textAppearanceMedium"
+              android:textSize="18sp"
+              android:singleLine="true"
+              android:layout_marginRight="6dip"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              />
+    </LinearLayout>
+
+    <!-- The hint about the Menu button, anchored to the bottom of the
+         CallCard.
+         This is used only in portrait mode.  (See updateMenuButtonHint());
+         in landscape mode we use the menuButtonHint from
+         incall_screen.xml, which is anchored to the bottom of the
+         screen.) -->
+    <TextView android:id="@+id/menuButtonHint"
+              android:textAppearance="?android:attr/textAppearanceMedium"
+              android:textSize="18sp"
+              android:textColor="?android:attr/textColorSecondary"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginTop="4dip"
+              android:visibility="gone"
+              android:gravity="center"
+              />
+
+</LinearLayout>

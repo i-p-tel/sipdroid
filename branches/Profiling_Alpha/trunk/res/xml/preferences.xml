@@ -1,0 +1,282 @@
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceScreen android:title="@string/settings_account"
+					android:key="account">
+			<EditTextPreference
+				android:key="username"
+				android:title="@string/settings_username"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="password"
+				android:title="@string/settings_password"
+				android:password="true"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="server"
+				android:title="@string/settings_server"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="domain"
+				android:title="@string/settings_domain"
+				android:summary="@string/settings_domain2"
+				android:singleLine="true" />
+			<EditTextPreference android:singleLine="true"
+				android:title="@string/settings_username1"
+				android:key="fromuser"
+				android:summary="@string/settings_callerid2">
+			</EditTextPreference>
+			<ListPreference
+				android:key="port"
+				android:title="@string/settings_port"
+				android:entries="@array/port_display_values2"
+				android:entryValues="@array/port_values2"
+				android:dialogTitle="@string/settings_port" />
+			<ListPreference
+				android:key="protocol"
+				android:title="@string/settings_protocol"
+				android:entries="@array/protocol_display_values2"
+				android:entryValues="@array/protocol_values2"
+				android:dialogTitle="@string/settings_protocol" />
+			<CheckBoxPreference
+				android:key="wlan"
+				android:title="@string/settings_wlan"/>
+			<CheckBoxPreference
+				android:key="3g"
+				android:title="@string/settings_3g"
+				android:summary="@string/settings_check" />
+			<CheckBoxPreference
+				android:key="edge"
+				android:title="@string/settings_edge"
+				android:summary="@string/settings_check" />
+			<CheckBoxPreference
+				android:key="vpn"
+				android:title="@string/settings_vpn"
+				android:summary="@string/settings_vpn2" />
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_account"
+				android:key="account1">
+			<EditTextPreference
+				android:key="username1"
+				android:title="@string/settings_username"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="password1"
+				android:title="@string/settings_password"
+				android:password="true"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="server1"
+				android:title="@string/settings_server"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="domain1"
+				android:title="@string/settings_domain"
+				android:summary="@string/settings_domain2"
+				android:singleLine="true" />
+			<EditTextPreference android:singleLine="true"
+				android:title="@string/settings_username1"
+				android:key="fromuser1"
+				android:summary="@string/settings_callerid2">
+			</EditTextPreference>
+			<ListPreference
+				android:key="port1"
+				android:title="@string/settings_port"
+				android:entries="@array/port_display_values2"
+				android:entryValues="@array/port_values2"
+				android:dialogTitle="@string/settings_port" />
+			<ListPreference
+				android:key="protocol1"
+				android:title="@string/settings_protocol"
+				android:entries="@array/protocol_display_values2"
+				android:entryValues="@array/protocol_values2"
+				android:dialogTitle="@string/settings_protocol" />
+			<CheckBoxPreference
+				android:key="wlan1"
+				android:title="@string/settings_wlan"/>
+			<CheckBoxPreference
+				android:key="3g1"
+				android:title="@string/settings_3g"
+				android:summary="@string/settings_check" />
+			<CheckBoxPreference
+				android:key="edge1"
+				android:title="@string/settings_edge"
+				android:summary="@string/settings_check" />
+			<CheckBoxPreference
+				android:key="vpn1"
+				android:title="@string/settings_vpn"
+				android:summary="@string/settings_vpn2" />
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_options">
+			<ListPreference
+				android:key="pref"
+				android:title="@string/settings_pref"
+				android:entries="@array/pref_display_values"
+				android:entryValues="@array/pref_values"
+				android:summary="@string/settings_pref2"
+				android:dialogTitle="@string/settings_pref" />
+			<CheckBoxPreference
+				android:key="auto_on"
+				android:title="@string/settings_auto_on"
+				android:summary="@string/settings_auto_on2" />
+			<CheckBoxPreference
+				android:key="auto_ondemand"
+				android:title="@string/settings_auto_ondemand"
+				android:summary="@string/settings_auto_ondemand2" />
+			<CheckBoxPreference
+				android:key="auto_headset"
+				android:title="@string/settings_auto_headset"
+				android:summary="@string/settings_auto_headset2" />
+			<CheckBoxPreference
+				android:key="callrecord"
+				android:title="@string/settings_callrecord"
+				android:summary="@string/settings_callrecord2" />
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_notifications">
+			<CheckBoxPreference
+				android:key="MWI_enabled"
+				android:title="@string/settings_MWI"
+				android:summary="@string/settings_MWI2" />
+			<CheckBoxPreference
+				android:key="registration"
+				android:title="@string/settings_reg"
+				android:summary="@string/settings_reg2" />
+			<CheckBoxPreference
+				android:key="notify"
+				android:title="@string/settings_notify"
+				android:summary="@string/settings_notify2" />
+			<CheckBoxPreference
+				android:key="nodata"
+				android:title="@string/settings_nodata"
+				android:summary="@string/settings_nodata2" />
+			<org.sipdroid.sipua.ui.SipRingtonePreference
+				android:key="sipringtone"
+				android:title="@string/settings_sipringtone"
+				android:summary="@string/settings_sipringtone2"
+				android:dialogTitle="@string/settings_sipringtone_dialog"
+				android:persistent="false"
+				android:ringtoneType="ringtone" /> 
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_av_options">
+			<ListPreference
+				android:key="eargain"
+				android:title="@string/settings_eargain"
+				android:entries="@array/eargain_display_values"
+				android:entryValues="@array/eargain_values"
+				android:defaultValue="0.25"
+				android:dialogTitle="@string/settings_eargain" />
+			<ListPreference
+				android:key="micgain"
+				android:title="@string/settings_micgain"
+				android:entries="@array/eargain_display_values"
+				android:entryValues="@array/eargain_values"
+				android:defaultValue="0.25"
+				android:dialogTitle="@string/settings_micgain" />
+			<ListPreference
+				android:key="heargain"
+				android:title="@string/settings_heargain"
+				android:entries="@array/eargain_display_values"
+				android:entryValues="@array/eargain_values"
+				android:defaultValue="0.25"
+				android:dialogTitle="@string/settings_heargain" />
+			<ListPreference
+				android:key="hmicgain"
+				android:title="@string/settings_hmicgain"
+				android:entries="@array/eargain_display_values"
+				android:entryValues="@array/eargain_values"
+				android:defaultValue="1.0"
+				android:dialogTitle="@string/settings_hmicgain" />
+			<ListPreference
+				android:key="vquality"
+				android:title="@string/settings_vquality"
+				android:entries="@array/vquality_display_values"
+				android:entryValues="@array/vquality_values"
+				android:defaultValue="low"
+				android:dialogTitle="@string/settings_vquality" />
+	</PreferenceScreen>
+	<PreferenceScreen
+		android:key="codecs"
+		android:title="@string/codecs" >
+        	<intent
+                	android:action="android.intent.action.MAIN"
+	                android:targetPackage="org.sipdroid.sipua"
+	                android:targetClass="org.sipdroid.codecs.Codecs$CodecSettings" />
+
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_advanced_options">
+			<EditTextPreference
+				android:key="search"
+				android:title="@string/settings_search"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="excludepat"
+				android:title="@string/settings_excludepat"
+				android:singleLine="true" />
+			<CheckBoxPreference
+				android:key="stun"
+				android:title="@string/settings_stun"/>
+			<EditTextPreference
+				android:key="stun_server"
+				android:title="@string/settings_stun_server"
+				android:singleLine="true" />
+			<EditTextPreference
+				android:key="stun_server_port"
+				android:title="@string/settings_stun_server_port"
+				android:singleLine="true" />
+			<CheckBoxPreference
+				android:key="mmtel"
+				android:title="@string/settings_mmtel"/>
+			<EditTextPreference
+				android:key="mmtel_qvalue"
+				android:title="@string/settings_mmtel_qvalue"
+				android:singleLine="true" />													
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_wireless_options">
+			<CheckBoxPreference
+				android:key="ownwifi"
+				android:title="@string/settings_ownwifi"
+				android:summary="@string/settings_ownwifi2" />
+			<CheckBoxPreference
+				android:key="selectwifi"
+				android:title="@string/settings_selectwifi"
+				android:summary="@string/settings_selectwifi2" />
+			<CheckBoxPreference
+				android:key="keepon"
+				android:title="@string/settings_keepon"
+				android:summary="@string/settings_keepon2" />
+			<CheckBoxPreference
+				android:key="bluetooth"
+				android:title="@string/menu_bluetooth"
+				android:summary="@string/settings_bluetooth" />
+	</PreferenceScreen>
+	<PreferenceScreen android:title="@string/settings_pbxes_options">
+			<CheckBoxPreference
+				android:key="par"
+				android:title="@string/settings_par"
+				android:summary="@string/settings_par2" />
+			<CheckBoxPreference
+				android:key="improve"
+				android:title="@string/settings_improve"/>
+			<EditTextPreference
+				android:key="posurl"
+				android:title="@string/settings_posurl"
+				android:hint="https://www1.pbxes.com/name"
+				android:singleLine="true" />
+			<CheckBoxPreference
+				android:key="pos"
+				android:title="@string/settings_pos"
+				android:summary="@string/settings_pos2" />
+			<CheckBoxPreference
+				android:key="callback"
+				android:title="@string/settings_callback"
+				android:summary="@string/settings_callback2" />
+			<CheckBoxPreference
+				android:key="callthru"
+				android:title="@string/settings_callthru"
+				android:summary="@string/settings_callback2" />
+			<EditTextPreference
+				android:key="callthru2"
+				android:title="@string/settings_callthru2"
+				android:hint="Accessno.,PIN#"
+				android:singleLine="true" />
+	</PreferenceScreen> 
+</PreferenceScreen>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ * 
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ * 
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+/////////////////////////////////////////////////////////////////////
+// these are the main definitions of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+ -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#736f6e">
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_weight="1"
+			android:gravity="left"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="15dip"
+				android:paddingRight="15dip"
+				android:paddingTop="15dip">
+		
+				<TextView
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:textColor="#ffffff"
+					android:typeface="serif"
+					android:textStyle="bold|italic"
+					android:shadowDx="1"
+					android:shadowDy="1"
+					android:shadowRadius="1"
+					android:shadowColor="#aaaaaa"
+					android:textSize="28dip"
+					android:text="@string/app_name"/>
+		
+				</LinearLayout>
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_weight="0"
+			android:gravity="right"
+			android:paddingTop="10dip"
+			android:paddingLeft="10dip"
+			android:paddingRight="10dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+			<Button
+				android:id="@+id/contacts_button"
+				android:background="@drawable/ic_menu_dial_pad"
+				android:layout_width="48dp"
+				android:layout_height="48dp"/>
+			<Button
+				android:id="@+id/settings_button"
+				android:background="@drawable/ic_menu_preferences"
+				android:layout_width="48dp"
+				android:layout_height="48dp"/>
+					</LinearLayout>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:paddingLeft="5dip"
+		android:paddingRight="5dip">
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:padding="5dip">
+	
+			<org.sipdroid.sipua.ui.InstantAutoCompleteTextView
+				android:id="@+id/txt_callee2"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text=""
+				android:singleLine="true"
+				android:hint="@string/hint2"
+				android:inputType="phone"
+				android:imeOptions="actionSend"/>
+			<org.sipdroid.sipua.ui.InstantAutoCompleteTextView
+				android:id="@+id/txt_callee"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text=""
+				android:singleLine="true"
+				android:hint="@string/hint"
+				android:inputType="textEmailAddress"
+				android:imeOptions="actionSend"/>
+		</LinearLayout>
+	</LinearLayout>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:gravity="bottom"
+		android:background="#736f6e">
+			<Button android:id="@+id/create_button" 
+	            android:layout_width="wrap_content" 
+	            android:layout_height="wrap_content" 
+		android:layout_gravity="center"
+	            android:text="@string/menu_create" />
+	</LinearLayout>
+</LinearLayout>
