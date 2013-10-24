@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ *
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ *
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+/////////////////////////////////////////////////////////////////////
+// these are the main messages of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+<string name="app_name">Sipdroid</string>
+<string name="pstn_name">სატელეფონო ზარი</string>
+<string name="sip_name">Sipdroid ზარი, შესაძლებლობის მიხედვით</string>
+
+<string name="about">Sipdroid არის android-ის SIP კლიენტი
+\n
+\nმეტი ინფორმაციისათვის იხილეთ http://sipdroid.org
+\n
+\nვერსია ${VERSION}
+\nპროგრამული უზრუნველყოფა იმყოფება აქტიური დამუშავების ქვეშ.
+\n
+\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
+\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\n
+\nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+\n
+\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details (http://www.gnu.org/licenses).</string>
+
+<string name="reg">რეგისტრაცია...</string>
+<string name="regpref">Preferred</string>
+<string name="regclick">ასარჩევად დაწკაპეთ</string>
+<string name="regfailed">რეგისტრაცია შეუძლებელია</string>
+
+<string name="voicemail">მომლოდინე შეტყობინება</string>
+
+<string name="auto_enabled">ავტომოპასუხე</string>
+<string name="auto_disabled">ავტომოპასუხე გამორთულია</string>
+<string name="hint">მრავალარხიანი ზარი</string>
+<string name="hint2">ტელეფონის ნომერი</string>
+<string name="empty">გთხოვთ შეიყვანოთ მრავალარხიანი ზარის მისამართი ფორმატით name@domain.com</string>
+<string name="notfast">შესაფერისი მონაცემების ქსელი ნაპოვნო არაა</string>
+
+<string name="settings_account">SIP ანგარიში</string>
+<string name="settings_line">ხაზი</string>
+<string name="settings_username">მომხმარებლის სახელი</string>
+<string name="settings_password">პაროლი</string>
+<string name="settings_server">სერვერი ან პროქსი</string>
+<string name="settings_domain">დომენი</string>
+<string name="settings_domain2">დატოვეთ ცარიელი თუ იგივეა რაც სერვერი</string>
+<string name="settings_username1">მომხმარებელი ან აბონენტის ID</string>
+<string name="settings_callerid2">დატოვეთ ცარიელი თუ იგივეა რაც მომხმარებლის სახელი</string>
+<string name="settings_port">პორტი</string>
+	<string-array name="port_display_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060 (ნაგულისხმევი)</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>custom</item>
+	</string-array>
+	<string-array name="port_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>0</item>
+	</string-array>
+
+<string name="settings_protocol">პროტოკოლი</string>
+    <string-array name="protocol_display_values">
+        <item>UDP (ნაკლები მოლოდინის დრო 3G-ზე)</item>
+        <item>TCP (მეტი მოლოდინის დრო 3G-ზე)</item>
+    </string-array>
+    <string-array name="protocol_values">
+        <item>udp</item>
+        <item>tcp</item>
+    </string-array>
+<string name="settings_vquality">ვიდეო ხარისხი</string>
+    <string-array name="vquality_display_values">
+        <item>მაღალი (352x288 @ 360კბ/წმ)</item>
+        <item>დაბალი (176x144 @ 192კბ/წმ)</item>
+    </string-array>
+    <string-array name="vquality_values">
+        <item>მაღალი</item>
+        <item>დაბალი</item>
+    </string-array>
+<string name="settings_stun">STUN სერვერის გამოყენება</string>
+<string name="settings_stun_server">STUN სერვერის სახელი</string>
+<string name="settings_stun_server_port">STUN სერვერის პორტი</string>
+
+<string name="settings_mmtel">MMTel -ის გამოყენება</string>
+<string name="settings_mmtel_qvalue">Q-ის მნიშვნელობა</string>
+ 
+<string name="settings_options">ზარის პარამეტრები</string>
+<string name="settings_wlan">WLAN-ის გამოყენება</string>
+<string name="settings_3g">3G-ის გამოყენება</string>
+<string name="settings_edge">EDGE-ის გამოყენება</string>
+<string name="settings_vpn">VPN-ის გამოყენება</string>
+<string name="settings_check">შეამოწმეთ არის თუ არა VoIP დაშვებული თქვენი მობილური ოპერატორის მიერ</string>
+<string name="settings_vpn2">PBX-ები როგორც წესი გთავაზობენ უფასო VPN სერვისებს. იხ. PBX-ები-> დახმარება</string>
+
+<string name="dialog_default">Sipdroid-ი ამჟამად არ გამოიყენება როგორც ნაგულისხმევი ტელეფონი. გნებავთ გავხადო?
+\n
+\nთუ თქვენ უპასუხებთ \'არა\', თქვენ მაინც შეგეძლებათ Sipdroid-ით სარგებლობა სისტემიდან ნომრისათვის წინ ნიშან \'+\' -ის დამატებით ან \'text to\' -ს არჩევით კონტაქტებში.</string>
+<string name="dialog_message">გნებავთ იხილოთ პასკალის შეტყობინება Sipdroid 1.5-ის შესახებ?</string>
+<string name="dialog_port">გნებავთ SIP პორტის 5060-დან 5061-ზე შეცვლა მეტი სანდოობისათვის?</string>
+<string name="yes">დიახ</string>
+<string name="no">არა</string>
+<string name="dontask">აღარ მკითხო</string>
+
+<string name="settings_pref">ზარის არჩეული ტიპი</string>
+<string name="settings_pref2">შეგიძლიათ გადაახტეთ სიმბოლო \'+\' -ის დამატებით ნომრის წინ ან \'text to\' -ს არჩევით კონტაქტებში.</string>
+    <string-array name="pref_display_values">
+        <item>მხოლოდ Sipdroid</item>
+        <item>Sipdroid, ხელმისაწვდომობის შემთხვევაში</item>
+        <item>ტელეფონი</item>
+        <item>ყოველთვის შეკითხვა</item>
+    </string-array>
+    <string-array name="pref_values">
+        <item>SIPONLY</item>
+        <item>SIP</item>
+        <item>PSTN</item>
+        <item>შეკითხვა</item>
+    </string-array>
+<string name="settings_compression">ხმის შეკუმშვა</string>
+    <string-array name="compression_display_values">
+        <item>მხოლოდ WLAN</item>
+        <item>მხოლოდ WLAN და 3G</item>
+        <item>ყოველთვის ცდა</item>
+        <item>არასოდეს</item>
+    </string-array>
+    <string-array name="compression_values">
+        <item>wlan</item>
+        <item>wlanor3g</item>
+        <item>always</item>
+        <item>never</item>
+    </string-array>
+<string name="settings_auto_on">გამოიყენება თვითპასუხი</string>
+<string name="settings_auto_on2">მცირე ვიბრაცია შეტყობინებისათვის როდესაც ეკრანი ჩართულია</string>
+<string name="settings_auto_ondemand">თვითპასუხი მდგომარეობის შესაბამისად</string>
+<string name="settings_auto_ondemand2">გადასართველის ჩვენება</string>
+<string name="settings_auto_headset">თვითპასუხი ყურსასმენებით</string>
+<string name="settings_auto_headset2">როდესაც მიერთებულია ზონრიანი ყურსასმენი</string>
+<string name="settings_callrecord">ზარების ჩაწერა</string>
+<string name="settings_callrecord2">ყველა ხმოვანი ზარის SD card-ზე ჩაწერა</string>
+
+<string name="settings_notifications">Notifications</string>
+<string name="settings_MWI">ხმოვანი ფოსტა</string>
+<string name="settings_MWI2">Subscribe to SIP message waiting</string>
+<string name="settings_reg">რეგისტრაცია</string>
+<string name="settings_reg2">რჩეული SIP ანგარიშის არჩევის შესაძლებლობა</string>
+<string name="settings_notify">გამოტოვებული ზარი</string>
+<string name="settings_notify2">შეტყობინება ლურჯი LED-ით</string>
+<string name="settings_nodata">მონაცემები არაა</string>
+<string name="settings_nodata2">Indicate missing voice packets by audible tones</string>
+
+<string name="settings_advanced_options">დამატებითი პატრამეტრები</string>
+<string name="settings_av_options">ხმა/გამოსახულება</string>
+<string name="settings_policy_never">სისტემური პოლიკიკის შეცვლა ძილის დროს Wi-Fi-ს ჩართულად დასატოვებლად.</string>
+<string name="settings_policy_default">Wi-Fi-ის ძილის პოლიტიკის ნაგულისხმევზე დაბრუნება.</string>
+<string name="settings_search">ძებნა &amp; შეცვლა</string>
+<string name="settings_excludepat">ნაწილის მოცილება</string>
+<string name="settings_sipringtone">SIP ზარის ტიპი</string>
+<string name="settings_sipringtone2">დააყენეთ ზარის ტიპი შემომავალი SIP ზარებისათვის</string>
+<string name="settings_sipringtone_dialog">ზარის ტიპი</string>
+<string name="settings_eargain">ყურსასმენის გაძლიერება</string>
+<string name="settings_micgain">მიკროფონის გაძლიერება</string>
+<string name="settings_heargain">სმენადობის გაძლიერება</string>
+<string name="settings_hmicgain">ყურსასმენის მიკროფონი</string>
+    <string-array name="eargain_display_values">
+        <item>დაბალი (ექოს გარეშე)</item>
+        <item>საშუალო</item>
+        <item>მაღალი (მოსაუბრესთან შეიძლება გაჩნდეს ექო)</item>
+        <item>უმაღლესი</item>
+    </string-array>
+    <string-array name="eargain_values">
+        <item>0.1</item>
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>1.0</item>
+    </string-array>
+
+<string name="settings_pbxes_options">PBX-ის თვისებები</string>
+<string name="settings_par">მრავალჯერადი გამავალი ზარები</string>
+<string name="settings_par2">პარალელური ზარი კონტაქტის ყველა ნომერთან</string>
+<string name="settings_improve">ხმის გაუმჯობესება</string>
+<string name="settings_improve2">საჭიროებს ფასიან ანგარიშს</string>
+<string name="settings_hdvoice">PBX მაღალი გარჩევადობის ხმის მხარდაჭერით</string>
+<string name="settings_posurl">მდებარეობის URL</string>
+<string name="settings_pos">მდებარეობის განახლება</string>
+<string name="settings_pos2">შეიძლება გამოცხადებილ იქნას PBX კონტაქტებში (საჭიროებს ფასიან ანგარიშს)</string>
+<string name="settings_pos3">მიმდინარეობს მდებარეობის განახლება</string>
+<string name="settings_callback">უკუკავშირის აღძვრა</string>
+<string name="settings_callback2">თუ შესაბამისი მონაცემთა ქსელი წვდომადი არაა</string>
+<string name="settings_callthru">გამჭოლის ზარის აღძვრა</string>
+<string name="settings_callthru2">გამჭოლი ზარის პრეფიქსი</string>
+
+<string name="settings_title">Sipdroid-ის გამართვა</string>
+
+<string name="settings_profile_title">Sipdroid-ის გამართვა (<xliff:g id="profile">%s</xliff:g>)</string>
+<string name="settings_profile_menu_import">შემოტანა</string>
+<string name="settings_profile_menu_export">გატანა</string>
+<string name="settings_profile_menu_delete">წაშლა</string>
+<string name="settings_profile_dialog_profiles_title">პროფილები</string>
+<string name="settings_profile_dialog_delete_title">პროფილის წაშლა</string>
+<string name="settings_profile_dialog_delete_text">ნამდვილად გნებავთ წაშალოთ პროფილი<xliff:g id="profile">%s</xliff:g>?</string>
+<string name="settings_profile_export_error">პარამეტრების გატანა შეუძლებელია!</string>
+<string name="settings_profile_import_error">პარამეტრების შემოტანა შეუძლებელია!</string>
+<string name="settings_profile_delete_error">მოცემული პროფილის წაშლა შეუძლებელია!</string>
+<string name="settings_profile_delete_confirmation">პროფილი წაიშალა.</string>
+
+<string name="settings_wireless_options">უსადენო</string>
+<string name="settings_bluetooth">მოითხოვს Android 2.2-ს ან ზემოთ</string>
+<string name="settings_keepon">ჩართული ეკრანი</string>
+<string name="settings_keepon2">გამოიყენება ზოგიერთი მოწყობილობის მიერ Wi-Fi-ს უპრობლემოდ სამუშაოდ</string>
+<string name="settings_selectwifi">აირჩიეთ Wi-Fi AP</string>
+<string name="settings_selectwifi2">სიგნალიზ სიძლიერის მიხედვით</string>
+<string name="settings_ownwifi">Wi-Fi-ს ძალის გამართვა</string>
+<string name="settings_ownwifi2">აკუმულატორის შენახვა</string>
+
+<string name="menu_settings">პარამეტრები</string>
+<string name="menu_exit">გასვლა</string>
+<string name="menu_about">შესახებ</string>
+<string name="menu_dtmf">DTMF-ის გაგზავნა</string>
+<string name="menu_video">ვიდეოს ჩართვა</string>
+<string name="menu_call">დარეკვა</string>
+<string name="menu_mute">გაჩუმება</string>
+<string name="menu_hold">მოცდა</string>
+<string name="menu_transfer">გადართვა</string>
+<string name="menu_speaker">Speaker</string>
+<string name="menu_endCall">ზარის დასრულება</string>
+<string name="menu_answer">პასუხი</string>
+<string name="menu_bluetooth">Bluetooth (საცდელი)</string>
+
+<string name="transfer_title">ზარის გადართვა</string>
+
+<string name="card_title_dialing">ზარის მიმდინარეობა</string>
+<string name="card_title_in_progress">მიმდინარე ზარი</string>
+<string name="card_title_incoming_call">შემომავალი ზარი</string>
+<string name="card_title_call_ended">ზარი დასრულდა</string>
+<string name="card_title_ended_no_codec">შეცდომა: კოდეკები შეუთავსებელია</string>
+<string name="card_title_on_hold">იცდის</string>
+
+<string name="unknown">უცნობი</string>
+
+<string name="slide_hint_down_to_end_call">საუბრის დასასრულებლად ჩამოქაჩეთ.</string>
+<string name="slide_hint_up_to_answer">საუბრის დასაწყებად აქაჩეთ.</string>
+
+<string name="ongoing">მიმდინარე ზარი</string>
+<string name="onHold">იცდის</string>
+<string name="codecs">აუდიო კოდეკები</string>
+<string name="codecs_summary">აირჩიეთ ზარებისათვის ხელმისაწვდომი აუდიო კოდეკები</string>
+<string name="codecs_move">კოდეკის გაწევა</string>
+<string name="codecs_move_up">ერთი ადგილით ზემოთ</string>
+<string name="codecs_move_down">ერთი ადგილით ქვემოთ</string>
+
+<string name="help_speakerphone">სასაუბროდ დააჭირეთ და გეჭიროთ ხმის ღილაკებზე</string>
+<string name="menu_create">ახალი PBX დაკავშირებულია ჩემს Google Voice-თან</string>
+
+</resources>

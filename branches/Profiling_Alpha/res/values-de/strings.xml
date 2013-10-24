@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ *
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ *
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+/////////////////////////////////////////////////////////////////////
+// these are the main messages of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+<string name="pstn_name">Telefon-Anruf</string>
+<string name="sip_name">Sipdroid-Anruf, wenn verfügbar</string>
+
+<string name="about">Sipdroid ist ein freier SIP-Client für Android
+\n
+\nSiehe http://sipdroid.org für weitere Infos
+\n
+\nVersion ${VERSION}
+\nDas Programm befindet sich noch in der Testphase.
+\n
+\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
+\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\n
+\nDieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder (nach Ihrer Option) jeder späteren Version.
+\n
+\nDie Veröffentlichung dieses Programms erfolgt in der Hoffnung, daß es Ihnen von Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE, sogar ohne die implizite Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License (siehe http://www.gnu.org/licenses).</string>
+
+<string name="reg">Angefordert</string>
+<string name="regok">Angemeldet</string>
+<string name="regfailed">Anmeldung fehlgeschlagen</string>
+
+<string name="voicemail">Neue Nachricht(en)</string>
+
+<string name="auto_enabled">Autom. Rufannahme/Freisprechen</string>
+<string name="auto_disabled">Automatische Rufannahme aus</string>
+<string name="hint">Zieladresse</string>
+<string name="hint2">Telefonnummer</string>
+<string name="empty">Bitte Zieladresse als name@domain.com eingeben</string>
+<string name="notfast">Keine geeignete Datenverbindung verfügbar</string>
+
+<string name="settings_account">Zugangsdaten</string>
+<string name="settings_username">Authentifizierungsname</string>
+<string name="settings_password">Passwort</string>
+<string name="settings_server">Server oder Proxy</string>
+<string name="settings_domain">Domäne</string>
+<string name="settings_domain2">Nur eintragen, wenn Domäne und Server verschieden sind</string>
+<string name="settings_username1">Benutzername</string>
+<string name="settings_callerid2">Nur eintragen, wenn Benutzername und Authentifizierungsname verschieden sind</string>
+<string name="settings_port">Port</string>
+	<string-array name="port_display_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060 (standard)</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>benutzerdefiniert</item>
+	</string-array>
+
+<string name="settings_protocol">Protokoll</string>
+    <string-array name="protocol_display_values2">
+        <item>UDP (kürzerer Standby mit 3G)</item>
+        <item>TCP (längerer Standby mit 3G)</item>
+        <item>TLS (verschlüsselt)</item>
+        </string-array>
+<string name="settings_vquality">Video-Qualität</string>
+    <string-array name="vquality_display_values">
+        <item>Hoch (352x288 @ 360kbit)</item>
+        <item>Niedrig (176x144 @ 192kbit)</item>
+    </string-array>
+
+<string name="settings_options">Anrufeinstellungen</string>
+<string name="settings_wlan">WLAN verwenden</string>
+<string name="settings_3g">3G verwenden</string>
+<string name="settings_edge">EDGE verwenden</string>
+<string name="settings_vpn">VPN verwenden</string>
+<string name="settings_check">Prüfen Sie, ob Ihr Mobilfunkanbieter VoIP-Nutzung erlaubt</string>
+<string name="settings_vpn2">PBXes bietet einen VPN-Dienst gratis an, siehe PBXes >> HILFE</string>
+
+<string name="dialog_default">Sipdroid ist nicht als Telefon voreingestellt. Möchten Sie es als Telefon voreinstellen?
+\n
+\nAuch wenn Sie mit \'Nein\' antworten, können Sie aus dem System über Sipdroid wählen, indem Sie \'+\' hinter eine Nummer im Telefon anhängen oder bei einem Kontakt auf \'Textnachricht an\' klicken.</string>
+<string name="dialog_port">Möchten Sie den SIP-Port von 5060 auf 5061 ändern, um die Zuverlässigkeit zu erhöhen?</string>
+<string name="yes">Ja</string>
+<string name="no">Nein</string>
+<string name="dontask">Nicht fragen</string>
+
+<string name="settings_pref">Bevorzugte Anrufart</string>
+<string name="settings_pref2">Ausnahmen durch \'+\' hinter Nummern anhängen oder auf \'Textnachricht an\' klicken</string>
+    <string-array name="pref_display_values">
+        <item>Sipdroid</item>
+        <item>Sipdroid, wenn verfügbar</item>
+        <item>Telefon</item>
+        <item>Immer fragen</item>
+    </string-array>
+<string name="settings_compression">Sprachkompression</string>
+    <string-array name="compression_display_values">
+        <item>Nur über WLAN</item>
+        <item>Nur über WLAN und 3G</item>
+        <item>Immer versuchen</item>
+        <item>Nie</item>
+    </string-array>
+<string name="settings_auto_on">Rufannahme im Betrieb</string>
+<string name="settings_auto_on2">Bei eingeschaltetem Bildschirm mit kurzem Vibrationsalarm</string>
+<string name="settings_auto_ondemand">Rufannahme nach Bedarf</string>
+<string name="settings_auto_ondemand2">Option in Statusleiste anzeigen</string>
+<string name="settings_auto_headset">Rufannahme mit Headset</string>
+<string name="settings_auto_headset2">Bei angeschlossenem Headset</string>
+
+<string name="settings_notifications">Benachrichtigungen</string>
+<string name="settings_MWI">Anrufbeantworter</string>
+<string name="settings_MWI2">Eingang neuer Nachrichten anzeigen</string>
+<string name="settings_reg">Registrierung</string>
+<string name="settings_reg2">Ermöglicht die Auswahl des bevorzugten SIP-Accounts</string>
+<string name="settings_notify">Verpasster Anruf</string>
+<string name="settings_notify2">Mit blauer LED anzeigen</string>
+<string name="settings_nodata">Unterbrechung</string>
+<string name="settings_nodata2">Fehlende Sprachpakete mit Hinweistönen anzeigen</string>
+
+<string name="settings_advanced_options">Erweiterte Einstellungen</string>
+<string name="settings_policy_never">Systemeinstellung geändert: WLAN bleibt bei Standy in Betrieb</string>
+<string name="settings_policy_default">Systemeinstellung wiederhergestellt: WLAN geht bei Standby außer Betrieb</string>
+<string name="settings_search">Suchen &amp; Ersetzen</string>
+<string name="settings_excludepat">Muster ausschließen</string>
+<string name="settings_sipringtone">SIP Klingelton</string>
+<string name="settings_sipringtone2">Klingelton für eingehende SIP-Anrufe</string>
+<string name="settings_sipringtone_dialog">Klingeltöne</string>
+<string name="settings_eargain">Hörerlautstärke</string>
+<string name="settings_micgain">Mikrofonlautstärke</string>
+<string name="settings_heargain">Headsetlautstärke</string>
+<string name="settings_hmicgain">Headsetmikrofon</string>
+    <string-array name="eargain_display_values">
+        <item>Leise (kein Echo)</item>
+        <item>Mittel</item>
+        <item>Laut (evtl. Echo beim Gesprächspartner)</item>
+        <item>Sehr laut</item>
+    </string-array>
+
+<string name="settings_pbxes_options">PBXes-Funktionen</string>
+<string name="settings_par">Gleichzeitige Anwahl</string>
+<string name="settings_par2">Wählt alle Nummern eines Gesprächspartners gleichzeitig an</string>
+<string name="settings_improve">Bessere Tonqualität</string>
+<string name="settings_improve2">erfordert bezahlten Account</string>
+<string name="settings_hdvoice">PBXes unterstützt HD Voice</string>
+<string name="settings_posurl">URL für Position/Callback</string>
+<string name="settings_pos">Position aktualisieren</string>
+<string name="settings_pos2">Kann PBXes-Kontakten angesagt werden (erfordert Premium-Account)</string>
+<string name="settings_pos3">Position aktualisiert</string>
+<string name="settings_callback">Callback auslösen</string>
+<string name="settings_callback2">Wenn keine geeignete Datenverbindung verfügbar</string>
+<string name="settings_callthru">Callthru auslösen</string>
+<string name="settings_callthru2">Prefix für Callthru</string>
+
+<string name="settings_wireless_options">Drahtlos</string>
+<string name="settings_bluetooth">Erfordert Android 2.2 oder höher</string>
+<string name="settings_keepon">Bildschirm an</string>
+<string name="settings_keepon2">An manchen Telefonen für unterbrechungsfreies Wi-Fi</string>
+<string name="settings_selectwifi">Wi-Fi-Basis wählen</string>
+<string name="settings_selectwifi2">Nach Signalstärke</string>
+<string name="settings_ownwifi">Wi-Fi an/abschalten</string>
+<string name="settings_ownwifi2">Spart Batterie</string>
+
+<string name="menu_settings">Einstellungen</string>
+<string name="menu_exit">Beenden</string>
+<string name="menu_about">Info</string>
+<string name="menu_dtmf">DTMF senden</string>
+<string name="menu_video">Video senden</string>
+<string name="menu_call">Wählen</string>
+<string name="menu_mute">Stumm</string>
+<string name="menu_hold">Halten</string>
+<string name="menu_transfer">Verbinden</string>
+<string name="menu_speaker">Lautsprecher</string>
+<string name="menu_endCall">Anruf beenden</string>
+<string name="menu_answer">Annehmen</string>
+
+<string name="transfer_title">Weiterverbinden mit</string>
+
+<string name="card_title_dialing">Rufaufbau</string>
+<string name="card_title_in_progress">Aktiver Anruf</string>
+<string name="card_title_incoming_call">Eingehender Anruf</string>
+<string name="card_title_call_ended">Anruf beendet</string>
+<string name="card_title_on_hold">Gehalten</string>
+
+<string name="unknown">Unbekannt</string>
+
+<string name="slide_hint_down_to_end_call">Nach unten schieben, um das Gepräch zu beenden.</string>
+<string name="slide_hint_up_to_answer">Nach oben schieben, um zu antworten.</string>
+
+<string name="ongoing">Aktuelle Anruf</string>
+<string name="onHold">Gehalten</string>
+
+<string name="help_speakerphone">Sie können die Lautstärkeregler als Sprechtaste verwenden</string>
+
+</resources>

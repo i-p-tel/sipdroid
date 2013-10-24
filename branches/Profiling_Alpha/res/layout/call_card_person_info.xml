@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2008 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!-- XML resource file for the "person info" area of the main
+     CallCard of the in-call UI, which includes the photo and
+     name/number TextViews.
+     This is the PORTRAIT mode version of this layout. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:gravity="center_horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              >
+
+    <!-- Photo, or else a generic placeholder image. -->
+    <!-- Contact photos are generally 96x96 (but may be smaller.)
+         The layout size of this ImageView is larger than that, though,
+         to account for the incall_photo_border background, which
+         adds a white border around the image (and a shadow around
+         the white border.) -->
+    <!-- TODO: Right now, for contact photos *smaller* than the standard
+         size, we still draw the picture frame at its normal size, so
+         you see the white border *and* lots of gray space around the
+         photo...  Need to confirm this is OK. -->
+    <ImageView android:id="@+id/photo"
+               android:layout_width="116px"
+               android:layout_height="116px"
+               android:scaleType="center"
+               android:background="@drawable/incall_photo_border"
+               />
+
+    <!-- Placeholder to add some space between the photo and name/number
+         if there's enough room. -->
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_weight="1" />
+
+    <!-- Name (or the phone number, if we don't have a name to display). -->
+    <TextView android:id="@+id/name"
+              android:gravity="center_horizontal"
+              android:textAppearance="?android:attr/textAppearanceLarge"
+              android:textSize="28sp"
+              android:singleLine="true"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              />
+
+    <!-- Label (like "Mobile" or "Work", if present) and phone number, side by side -->
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_marginTop="-4dip">
+        <TextView android:id="@+id/label"
+                  android:textAppearance="?android:attr/textAppearanceSmall"
+                  android:textSize="18sp"
+                  android:textColor="?android:attr/textColorSecondary"
+                  android:singleLine="true"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingRight="6dip"
+                  />
+        <TextView android:id="@+id/phoneNumber"
+                  android:textAppearance="?android:attr/textAppearanceSmall"
+                  android:textSize="18sp"
+                  android:textColor="?android:attr/textColorSecondary"
+                  android:singleLine="true"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  />
+    </LinearLayout>
+
+
+</LinearLayout>

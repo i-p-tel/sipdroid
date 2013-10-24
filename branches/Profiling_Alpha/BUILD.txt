@@ -1,0 +1,10 @@
+Building sipdroid from the command line
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To build the project from the command line, run:
+
+android update project -p . -t android-8
+
+Then you can use ant to make the binaries.
+
+ant debug

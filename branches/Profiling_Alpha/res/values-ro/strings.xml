@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ *
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ *
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+/////////////////////////////////////////////////////////////////////
+// these are the main messages of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+-->
+
+<resources>
+<string name="app_name">Sipdroid</string>
+<string name="pstn_name">Telefon</string>
+<string name="sip_name">Sipdroid, când e disponibil</string>
+
+<string name="about">Sipdroid este un client SIP open-source pentru Android
+\n
+\nVezi http://sipdroid.org pentru mai multe informaţii
+\n
+\nVersiune ${VERSION}
+\nAplicaţia a fost lansată pentru testare.
+\n
+\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
+\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\n
+\nAcest program este gratuit; se poate redistribui sau/şi modifica în termenii specificaţi de GNU General Public Licence, asa cum este publicată de Free Software Foundation; fie versiunea 3 a licenţei, fie (la optiunea ta) orice alta versiune ulterioară. 
+\n
+\nAcest program este distribuit în speranţa că va fi folositor, dar FĂRĂ NICI O GARANŢIE; A se vedea GNU General Public License pentru mai multe detalii (http://www.gnu.org/licenses).</string>
+
+<string name="reg">Înregistrare...</string>
+<string name="regok">Înregistrat</string>
+<string name="regfailed">Înregistrare eşuată</string>
+
+<string name="voicemail">Mesaj(e) în aşteptare</string>
+
+<string name="auto_enabled">Auto-Answer/Speakerphone</string>
+<string name="auto_disabled">Auto-Answer off</string>
+<string name="hint">Adresa apelată</string>
+<string name="empty">Introduceti adresa apelată astfel: nume@domeniu.com</string>
+<string name="notfast">Nu există conexiune de date adecvată</string>
+
+<string name="settings_account">Setari cont SIP</string>
+<string name="settings_username">Username</string>
+<string name="settings_password">Parola</string>
+<string name="settings_server">Server</string>
+<string name="settings_domain">Domain</string>
+<string name="settings_domain2">Lasă liber daca e la fel ca Server</string>
+<string name="settings_port">Port</string>
+<string name="settings_protocol">Protocol</string>
+    <string-array name="protocol_display_values">
+        <item>UDP (mai putin standby in 3G)</item>
+        <item>TCP (mai mult standby in 3G)</item>
+    </string-array>
+    <string-array name="protocol_values">
+        <item>udp</item>
+        <item>tcp</item>
+    </string-array>
+
+<string name="settings_options">Opţiuni Apelare</string>
+<string name="settings_wlan">Foloseste WLAN</string>
+<string name="settings_3g">Foloseste 3G</string>
+<string name="settings_edge">Foloseste EDGE</string>
+<string name="settings_check">Verifică dacă operatorul de telefonie mobilă permite VoIP</string>
+<string name="settings_pref">Tip apelare preferat</string>
+    <string-array name="pref_display_values">
+		<item>Sipdroid</item>
+        <item>Sipdroid, când e disponibil</item>
+        <item>Apelează</item>
+		<item>Always ask</item>
+    </string-array>
+<string name="settings_auto_on">Foloseşte Auto-Answer</string>
+<string name="settings_auto_on2">Vibrează scurt când ecranul este pornit</string>
+<string name="settings_auto_ondemand">Auto-Answer la cerere</string>
+<string name="settings_auto_ondemand2">Arată comutatorul în bara de stare</string>
+<string name="settings_MWI">Verfică Voicemail</string>
+<string name="settings_MWI2">Subscrie pentru aşteptare mesaje SIP</string>
+
+<string name="settings_advanced_options">Opţiuni avansate</string>
+<string name="settings_policy_never">Politica de repaus schimbată pentru a ţine Wifi pornit.</string>
+<string name="settings_policy_default">Resetare politica de repaus Wifi la initial.</string>
+<string name="settings_search">Caută &amp; Modifică</string>
+<string name="settings_excludepat">Şablon Excludere</string>
+<string name="settings_sipringtone">Ton de apel SIP</string>
+<string name="settings_sipringtone2">Selectează ton de apel pentru apeluri SIP primite</string>
+<string name="settings_sipringtone_dialog">Tonuri de apel</string>
+<string name="settings_eargain">Amplificare casca</string>
+    <string-array name="eargain_display_values">
+        <item>Scazut (fara ecou)</item>
+        <item>Mediu</item>
+        <item>Mare (poate produce ecou)</item>
+        <item>Cel mai mare</item>
+    </string-array>
+    <string-array name="eargain_values">
+        <item>0.1</item>
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>1.0</item>
+    </string-array>
+
+<string name="settings_pbxes_options">Trăsături PBXes</string>
+<string name="settings_par">Apeluri simultane</string>
+<string name="settings_par2">Sună toate numerele unei persoane în paralel</string>
+<string name="settings_improve">Îmbunătăţire Audio</string>
+<string name="settings_improve2">necesită cont platit</string>
+<string name="settings_posurl">URL pentru Locaţie/Callback</string>
+<string name="settings_pos">Actualizează Locaţie</string>
+<string name="settings_pos2">Contactele PBXes pot fi anuntate (necesită premium account)</string>
+<string name="settings_pos3">Actualizare locaţie</string>
+<string name="settings_callback">Declansează Callback</string>
+<string name="settings_callback2">Dacă nu există conexiune de date potrivită</string>
+<string name="settings_callthru">Declansează Callthru</string>
+<string name="settings_callthru2">Prefix pentru Callthru</string>
+
+<string name="menu_settings">Setări</string>
+<string name="menu_exit">Ieşire</string>
+<string name="menu_about">Despre</string>
+<string name="menu_dtmf">Trimite DTMF</string>
+<string name="menu_video">Trimite Video</string>
+<string name="menu_call">Apelează</string>
+<string name="menu_mute">Mut</string>
+<string name="menu_hold">Apel în asteptare</string>
+<string name="menu_transfer">Transfer</string>
+<string name="menu_speaker">Difuzor</string>
+<string name="menu_endCall">Terminare apel</string>
+
+<string name="transfer_title">Transferă la</string>
+
+<string name="card_title_dialing">Dialing</string>
+<string name="card_title_in_progress">Apel în desfăsurare</string>
+<string name="card_title_incoming_call">Primire apel</string>
+<string name="card_title_call_ended">Apel încheiat</string>
+<string name="card_title_on_hold">Reţinut</string>
+
+<string name="unknown">Necunoscut</string>
+
+<string name="slide_hint_down_to_end_call">Trage jos pentru terminare apel.</string>
+<string name="slide_hint_up_to_answer">Trage sus pentru preluare apel.</string>
+
+<string name="ongoing">Apel curent</string>
+<string name="onHold">În aşteptare</string>
+</resources>

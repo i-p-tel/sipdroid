@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="card_title_call_ended">通話結束</string>
+  <string name="card_title_dialing">正在撥打</string>
+  <string name="card_title_in_progress">通話中</string>
+  <string name="card_title_incoming_call">來電</string>
+  <string name="card_title_on_hold">保留中通話</string>
+  <string name="menu_call">撥打</string>
+  <string name="menu_endCall">結束通話</string>
+  <string name="menu_hold">保留</string>
+  <string name="menu_mute">靜音</string>
+  <string name="menu_speaker">喇叭</string>
+  <string name="unknown">無法辨識</string>
+  <string name="slide_hint_down_to_end_call">向下滑動即可結束通話。</string>
+  <string name="slide_hint_up_to_answer">向上滑動即可接聽。</string>
+ </resources>

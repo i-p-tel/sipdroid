@@ -1,0 +1,16 @@
+Additional Terms according to GPL, Section 7
+============================================
+
+When using the code of Sipdroid Open Source Project you must comply with the following terms:
+
+1) The main activity (Sipdroid.java) allows to acess a menu. From this menu you can choose the About Box displaying legal notices and author attributions.
+This functionality must be left fully intact. There must be no other activity put in front of the main activity on startup. You may not direct the user into another screen (e.g. Preferences), either on first or subsequent startups.
+The message of the About box must be left unchanged, too. However, you may add further infos (e.g. Features of your modified version) to the end of the text.
+
+2) Modified version may not keep the package name "org.sipdroid.sipua". It must be modified, too.
+
+Expressing these additional terms does not imply that you would otherwise - if they were missing - be allowed to remove the legal notices and author attributions. It is just written down to make totally clear and to avoid any further discussion when a violation occurs.
+
+
+	i-p-tel GmbH
+	July 23, 2009

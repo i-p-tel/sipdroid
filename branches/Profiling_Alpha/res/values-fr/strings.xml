@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	* Copyright (C) 2009 The Sipdroid Open Source Project
+	*
+	* This file is part of Sipdroid (http://www.sipdroid.org)
+	*
+	* Sipdroid is free software; you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published by
+	* the Free Software Foundation; either version 3 of the License, or
+	* (at your option) any later version.
+	*
+	* This source code is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	* GNU General Public License for more details.
+	*
+	* You should have received a copy of the GNU General Public License
+	* along with this source code; if not, write to the Free Software
+	* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+	/////////////////////////////////////////////////////////////////////
+	// these are the main messages of Sipdroid
+	// for modifying them additional terms according to section 7, GPL apply
+	// see ADDITIONAL_TERMS.txt
+	/////////////////////////////////////////////////////////////////////
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+<string name="app_name">Sipdroid</string>
+<string name="pstn_name">Téléphone</string>
+<string name="sip_name">Sipdroid, si disponible</string>
+
+<string name="about">Sipdroid est un client SIP open-source pour Android
+	\n
+	\nConsulter http://sipdroid.org pour plus d\'informations
+	\n
+	\nVersion ${VERSION}
+	\nLe logiciel a été sorti pour des tests.
+	\n
+	\nCopyright (C) 2009 Le projet Open Source Sipdroid (http://sipdroid.org)
+	\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+	\nCopyright (C) 2006 Le projet Open Source Android (http://android.com)
+	\nCopyright (C) 2005 Luca Veltri - University de Parme - Italie (http://mjsip.org)
+	\n
+	\nCe programme est un logiciel libre; vous pouvez le redistribuer et/ou le modifier selon les termes de la Licence Publique Générale GNU (GPL) comme publiée par la Free Software Foundation; ou en version 3 de la licence, ou (à votre guise)	n\'importe quelle autre version.
+	\n
+	\nCe programme est distribué dans l\'espoir qu\'il sera utile, mais SANS AUCUNE GARANTIE ; sans même la garantie implicite de COMMERCIALISATION ou D\'ADAPTATION A UN USAGE PARTICULIER. Consulter la GNU General Public License pour plus de détails (http://www.gnu.org/licenses).
+</string>
+
+<string name="reg">Enregistrement...</string>
+<string name="regok">Enregistré</string>
+<string name="regfailed">Echec de l\'enregistrement</string>
+
+<string name="voicemail">Message(s) en Attente</string>
+
+<string name="auto_enabled">Réponse Auto/Haut-parleur</string>
+<string name="auto_disabled">Réponse Auto coupée</string>
+<string name="hint">Adresse du correspondant</string>
+<string name="hint2">Numéro de téléphone</string>
+<string name="empty">Veuillez entrer une adresse pour le correspondant à appeller telle que nom@domaine.com</string>
+<string name="notfast">Aucun réseau de données convenable de disponible</string>
+
+<string name="settings_account">Compte SIP</string>
+<string name="settings_line">Ligne</string>
+<string name="settings_username">Nom d\'utilisateur pour l\'authentification</string>
+<string name="settings_password">Mot de passe</string>
+<string name="settings_server">Serveur ou Proxy</string>
+<string name="settings_domain">Domaine</string>
+<string name="settings_domain2">Laisser vide si identique au serveur</string>
+<string name="settings_username1">Nom d\'utilisateur ou ID de l\'appelant</string>
+<string name="settings_callerid2">Laisser vide si identique au nom d\'utilisateur pour l\'authentification</string>
+<string name="settings_port">Port</string>
+<string-array name="port_display_values">
+	<item>53</item>
+	<item>69</item>
+	<item>80</item>
+	<item>135</item>
+	<item>161</item>
+	<item>443</item>
+	<item>500</item>
+	<item>1433</item>
+	<item>1701</item>
+	<item>1812</item>
+	<item>3389</item>
+	<item>4500</item>
+	<item>5060 (standard)</item>
+	<item>5061</item>
+	<item>5900</item>
+	<item>16999</item>
+	<item>26999</item>
+	<item>36999</item>
+	<item>personnalisé</item>
+</string-array>
+<string-array name="port_values">
+	<item>53</item>
+	<item>69</item>
+	<item>80</item>
+	<item>135</item>
+	<item>161</item>
+	<item>443</item>
+	<item>500</item>
+	<item>1433</item>
+	<item>1701</item>
+	<item>1812</item>
+	<item>3389</item>
+	<item>4500</item>
+	<item>5060</item>
+	<item>5061</item>
+	<item>5900</item>
+	<item>16999</item>
+	<item>26999</item>
+	<item>36999</item>
+	<item>0</item>
+</string-array>
+
+<string name="settings_protocol">Protocole</string>
+<string-array name="protocol_display_values">
+	<item>UDP (autonomie plus courte en 3G)</item>
+	<item>TCP (autonomie plus longue en 3G)</item>
+</string-array>
+<string-array name="protocol_values">
+	<item>udp</item>
+	<item>tcp</item>
+</string-array>
+<string name="settings_vquality">Qualité Vidéo</string>
+   <string-array name="vquality_display_values">
+       <item>Haute (352x288 @ 360kbit)</item>
+       <item>Basse (176x144 @ 192kbit)</item>
+   </string-array>
+   <string-array name="vquality_values">
+       <item>high</item>
+       <item>low</item>
+   </string-array>
+<string name="settings_stun">Utiliser un serveur STUN</string>
+<string name="settings_stun_server">Nom du serveur STUN</string>
+<string name="settings_stun_server_port">Port du serveur STUN</string>
+
+<string name="settings_mmtel">Utiliser la saveur MMTel</string>
+<string name="settings_mmtel_qvalue">valeur de Q</string>
+
+<string name="settings_options">Options d\'appel</string>
+<string name="settings_wlan">Utiliser le WLAN</string>
+<string name="settings_3g">Utiliser la 3G</string>
+<string name="settings_edge">Utiliser l\'EDGE</string>
+<string name="settings_vpn">Utiliser le VPN</string>
+<string name="settings_check">Vérifier auprès de votre opérateur mobile si il autorise la VoIP</string>
+<string name="settings_vpn2">PBXes offres un service VPN gratuit, consulter PBXes >> AIDE</string>
+
+<string name="dialog_default">Sipdroid n\'est pas actuellement défini comme téléphone par défaut. Voudriez-vous le définir comme téléphone par défaut ?
+	\n
+	\nSi vous répondez \'Non\' ici, vous pouvez encore composer avec Sipdroid depuis le système en ajoutant \'+\' après un numéro dans le Numéroteur, ou en sélectionnant \'envoyer un SMS\' dans les Contacts.
+</string>
+<string name="dialog_message">Voudriez-vous voir un message de Pascal introduisant Sipdroid 1.5 ?</string>
+<string name="yes">Oui</string>
+<string name="no">Non</string>
+<string name="dontask">Ne pas me redemander</string>
+
+<string name="settings_pref">Type d\'appel préféré</string>
+<string name="settings_pref2">Passer outre en ajoutant \'+\' devant un numéro dans le Numéroteur, ou en sélectionnant \'message vers\' dans Contacts</string>
+<string-array name="pref_display_values">
+	<item>Sipdroid</item>
+	<item>Sipdroid, si disponible</item>
+	<item>Téléphone</item>
+	<item>Toujours demander</item>
+</string-array>
+<string-array name="pref_values">
+       <item>SIPONLY</item>
+       <item>SIP</item>
+       <item>PSTN</item>
+       <item>ASK</item>
+   </string-array>
+<string name="settings_compression">Compression de la Voix</string>
+<string-array name="compression_display_values">
+	<item>Seulement en WLAN</item>
+	<item>Seulement en WLAN/3G</item>
+	<item>Toujours active</item>
+	<item>Jamais</item>
+</string-array>
+<string-array name="compression_values">
+       <item>wlan</item>
+       <item>wlanor3g</item>
+       <item>always</item>
+       <item>never</item>
+   </string-array>
+<string name="settings_auto_on">Rép. Auto en service</string>
+<string name="settings_auto_on2">Courtes vibrations d\'alerte quand l\'écran est en marche</string>
+<string name="settings_auto_ondemand">Rép. Auto à la demande</string>
+<string name="settings_auto_ondemand2">Affiche le bouton dans la barre de statut</string>
+<string name="settings_auto_headset">Rép. Auto de l\'oreillette</string>
+<string name="settings_auto_headset2">Quand l\'oreillette est connectée</string>
+
+<string name="settings_notifications">Notifications</string>
+<string name="settings_MWI">Messages vocaux</string>
+<string name="settings_MWI2">S\'abonner à l\'attente de messages SIP</string>
+<string name="settings_reg">Enregistrement</string>
+<string name="settings_reg2">Permet la sélection du compte SIP préféré</string>
+<string name="settings_notify">Appel Manqué</string>
+<string name="settings_notify2">Notifier avec la LED bleue</string>
+<string name="settings_nodata">Aucune donnée</string>
+<string name="settings_nodata2">Indique des paquets "voix" par des tonalités audibles</string>
+
+<string name="settings_advanced_options">Options Avancées</string>
+<string name="settings_av_options">Audio/Vidéo</string>
+<string name="settings_policy_never">Politique de mise en veille du sysyème changée pour maintenir le Wi-Fi allumé.</string>
+<string name="settings_policy_default">Retour aux paramètres par défaut de la politique de mise en veille du Wi-Fi.</string>
+<string name="settings_search">Chercher &amp; Remplacer</string>
+<string name="settings_excludepat">Exclure des motifs</string>
+<string name="settings_sipringtone">Sonnerie SIP</string>
+<string name="settings_sipringtone2">Définir la sonnerie pour un appel SIP entrant</string>
+<string name="settings_sipringtone_dialog">Sonneries</string>
+<string name="settings_eargain">Gain de l\'écouteurs</string>
+<string name="settings_micgain">Gain du microphone</string>
+<string name="settings_heargain">Gain de l\'oreillette</string>
+<string name="settings_hmicgain">Mic. de l\'oreillette</string>
+<string-array name="eargain_display_values">
+	<item>Bas (aucun écho)</item>
+	<item>Moyen</item>
+	<item>Elevé (peut provoquer un écho avec le correspondant)</item>
+	<item>Trés élevé</item>
+</string-array>
+<string-array name="eargain_values">
+	<item>0.1</item>
+	<item>0.25</item>
+	<item>0.5</item>
+	<item>1.0</item>
+</string-array>
+
+<string name="settings_pbxes_options">Caractéristiques PBXes</string>
+<string name="settings_par">Appels simultanés</string>
+<string name="settings_par2">Compose les numéros de téléphone de chacun en paralèlle</string>
+<string name="settings_improve">Améliorations audio</string>
+<string name="settings_improve2">nécessite un compte payant</string>
+<string name="settings_hdvoice">PBXes supporte la voix en HD</string>
+<string name="settings_posurl">URL de l\'adresse/Callback</string>
+<string name="settings_pos">Mettre à jour l\'adresse</string>
+<string name="settings_pos2">Peut être indiqués aux contacts PBXes (Nécessite un compte premium)</string>
+<string name="settings_pos3">MAJ de l\'adresse</string>
+<string name="settings_callback">Déclencher un Callback</string>
+<string name="settings_callback2">Si aucun réseau de données convenable de disponible</string>
+<string name="settings_callthru">Déclencher un Callthru</string>
+<string name="settings_callthru2">Préfixe pour le Callthru</string>
+
+<string name="settings_title">Paramètres Sipdroid</string>
+
+<string name="settings_profile_title">Paramètres Sipdroid (<xliff:g id="profile">%s</xliff:g>)</string>
+<string name="settings_profile_menu_import">Importer</string>
+<string name="settings_profile_menu_export">Exporter</string>
+<string name="settings_profile_menu_delete">Effacer</string>
+<string name="settings_profile_dialog_profiles_title">Profiles</string>
+<string name="settings_profile_dialog_delete_title">Effacer le profile</string>
+<string name="settings_profile_dialog_delete_text">Voulez vous réellement effacer le profile <xliff:g id="profile">%s</xliff:g> ?</string>
+<string name="settings_profile_export_error">Ne peut exporter les paramètres !</string>
+<string name="settings_profile_import_error">Ne peut importer les paramètres!</string>
+<string name="settings_profile_delete_error">Ne peut effacer ce profile!</string>
+<string name="settings_profile_delete_confirmation">Le profile a été effacé.</string>
+
+<string name="settings_wireless_options">Sans-fils</string>
+<string name="settings_bluetooth">Nécessite Android 2.2 ou Supérieur</string>
+<string name="settings_keepon">Ecran allumé</string>
+<string name="settings_keepon2">Requis par certain terminaux pour avoir le Wi-Fi sans souci</string>
+<string name="settings_selectwifi">Selectionnerl\'AP Wi-Fi</string>
+<string name="settings_selectwifi2">Par niveau du signal</string>
+<string name="settings_ownwifi">Controler la puissance du Wi-Fi</string>
+<string name="settings_ownwifi2">Economise les batteries</string>
+
+<string name="menu_settings">Paramètres</string>
+<string name="menu_exit">Quitter</string>
+<string name="menu_about">A propos de</string>
+<string name="menu_dtmf">Envoi DTMF</string>
+<string name="menu_video">Envoi Video</string>
+<string name="menu_call">Numéroter</string>
+<string name="menu_mute">Muet</string>
+<string name="menu_hold">Mise en attente</string>
+<string name="menu_transfer">Transfert</string>
+<string name="menu_speaker">Haut-Parleur</string>
+<string name="menu_endCall">Fin d\'appel</string>
+<string name="menu_answer">Réponse</string>
+<string name="menu_bluetooth">Bluetooth (expérimental)</string>
+
+<string name="transfer_title">Transférer l\'appel vers</string>
+
+<string name="card_title_dialing">Numérotation</string>
+<string name="card_title_in_progress">Appel en cours</string>
+<string name="card_title_incoming_call">Appel entrant</string>
+<string name="card_title_call_ended">Appel terminé</string>
+<string name="card_title_ended_no_codec">ERREUR: Codecs incompatibles</string>
+<string name="card_title_on_hold">En attente</string>
+
+<string name="unknown">Inconnu</string>
+
+<string name="slide_hint_down_to_end_call">Faîtes glisser vers le bas pour terminer l\'appel.</string>
+<string name="slide_hint_up_to_answer">Faîtes glisser vers le haut pour répondre.</string>
+
+<string name="ongoing">Appel en cours</string>
+<string name="onHold">En attente</string>
+<string name="codecs">Codecs Audio</string>
+<string name="codecs_summary">Sélectionner les Codecs Audio pour être disponible pour les appels vocaux</string>
+<string name="codecs_move">Déplacer ce codec</string>
+<string name="codecs_move_up">Monter d\'une place</string>
+<string name="codecs_move_down">Descendre d\'une place</string>
+	
+<string name="help_speakerphone">Appuyer et maintenir les boutons de volume pour forcer la conversation</string>
+<string name="menu_create">Nouveau PBX lié à mon Google Voice</string>
+
+</resources>

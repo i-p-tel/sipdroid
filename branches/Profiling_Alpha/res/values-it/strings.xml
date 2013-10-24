@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2009 The Sipdroid Open Source Project
+ *
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ *
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+/////////////////////////////////////////////////////////////////////
+// these are the main messages of Sipdroid
+// for modifying them additional terms according to section 7, GPL apply
+// see ADDITIONAL_TERMS.txt
+/////////////////////////////////////////////////////////////////////
+-->
+
+<resources>
+
+<string name="app_name">Sipdroid</string>
+<string name="pstn_name">Telefono</string>
+<string name="sip_name">Sipdroid, quando disponibile</string>
+
+<string name="about">Sipdroid è un client SIP open-source per Android
+\n
+\nVisita http://sipdroid.org per maggiori informazioni
+\n
+\nVersione ${VERSION}
+\nIl software è stato rilasciato per prova.
+\n
+\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
+\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\n
+\nQuesto è un software gratuito; puoi ridistribuirlo e/o modificarlo sotto i termini della licenza GNU General Public License come pubblicato dalla Free Software Foundation; sia la versione 3 della Licenza, o (a tua scelta) una versione successiva.
+\n
+\nQuesto programma viene distribuito nella speranza che sia utile, ma SENZA ALCUNA GARANZIA; anche senza la garanzia implicita di COMMERCIABILITA\' o ADEGUATEZZA AD UN PARTICOLARE SCOPO. Vedi la licenza GNU General Public License per maggiori informazioni (http://www.gnu.org/licenses).</string>
+
+<string name="reg">Registrazione...</string>
+<string name="regok">Registrato</string>
+<string name="regfailed">Registrazione fallita</string>
+
+<string name="voicemail">Messaggi in segreteria</string>
+
+<string name="auto_enabled">Risposta automatica/Altoparlante</string>
+<string name="auto_disabled">Risposta automatica disabilitata</string>
+<string name="hint">Chiamate recenti</string>
+<string name="empty">Inserisci l\'indirizzo per la chiamata nel formato nome@dominio.com</string>
+<string name="notfast">Nessuna rete dati adeguata disponibile</string>
+
+<string name="settings_account">Impostazioni account SIP</string>
+<string name="settings_username">Nome utente</string>
+<string name="settings_password">Password</string>
+<string name="settings_server">Server</string>
+<string name="settings_domain">Dominio</string>
+<string name="settings_domain2">Lasciare vuoto se è uguale al server</string>
+<string name="settings_port">Porta</string>
+	<string-array name="port_display_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060 (standard)</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>personalizzata</item>
+	</string-array>
+	<string-array name="port_values">
+		<item>53</item>
+		<item>69</item>
+		<item>80</item>
+		<item>135</item>
+		<item>161</item>
+		<item>443</item>
+		<item>500</item>
+		<item>1433</item>
+		<item>1701</item>
+		<item>1812</item>
+		<item>3389</item>
+		<item>4500</item>
+		<item>5060</item>
+		<item>5061</item>
+		<item>5900</item>
+		<item>16999</item>
+		<item>26999</item>
+		<item>36999</item>
+		<item>0</item>
+	</string-array>
+
+<string name="settings_protocol">Protocollo</string>
+    <string-array name="protocol_display_values">
+        <item>UDP (meno attese in 3G)</item>
+        <item>TCP (lunghe attese in 3G)</item>
+    </string-array>
+    <string-array name="protocol_values">
+        <item>udp</item>
+        <item>tcp</item>
+    </string-array>
+
+<string name="settings_options">Impostazioni chiamate</string>
+<string name="settings_wlan">Utilizza WLAN</string>
+<string name="settings_3g">Utilizza 3G</string>
+<string name="settings_edge">Utilizza EDGE</string>
+<string name="settings_check">Controlla se il tuo operatore consente il VoIP</string>
+
+<string name="dialog_default">Sipdroid non è attualmente impostato come telefono predefinito. Vuoi renderlo predefinito?
+\n
+\nSe rispondi \'No\', puoi ancora chiamare dal sistema tramite Sipdroid aggiungendo \'+\' dopo un numero nella composizione, o selezionando \'testo a\' nei Contatti.</string>
+<string name="yes">Sì</string>
+<string name="no">No</string>
+<string name="dontask">Non richiederlo ancora</string>
+
+<string name="settings_pref">Tipo di chiamata preferita</string>
+<string name="settings_pref2">Scavalca aggiungendo \'+\' dopo un numero nella composizione, o selezionando \'testo a\' nei Contatti</string>
+    <string-array name="pref_display_values">
+        <item>Sipdroid</item>
+        <item>Sipdroid, quando disponibile</item>
+        <item>Telefono</item>
+		<item>Always ask</item>
+    </string-array>
+<string name="settings_compression">Compressione Voce</string>
+    <string-array name="compression_display_values">
+        <item>Solo in WLAN</item>
+        <item>Solo in WLAN/3G</item>
+        <item>Sempre attivo</item>
+        <item>Mai</item>
+    </string-array>
+<string name="settings_auto_on">Risposta automatica abilitata</string>
+<string name="settings_auto_on2">Breve avviso con vibrazione, quando lo schermo è acceso</string>
+<string name="settings_auto_ondemand">Risposta automatica a richiesta</string>
+<string name="settings_auto_ondemand2">Visualizza uno switch nella barra di stato</string>
+
+<string name="settings_notifications">Notifiche</string>
+<string name="settings_MWI">Casella vocale</string>
+<string name="settings_MWI2">Registrati ai messaggi SIP in attesa</string>
+<string name="settings_notify">Chiamate perse</string>
+<string name="settings_notify2">Notifica con un LED blu</string>
+
+<string name="settings_advanced_options">Impostazioni avanzate</string>
+<string name="settings_policy_never">Cambia le politiche di attesa per mantenere il Wifi attivo.</string>
+<string name="settings_policy_default">Reimposta politiche di attesa.</string>
+<string name="settings_search">Cerca &amp; Sostituisci</string>
+<string name="settings_excludepat">Valori esclusi</string>
+<string name="settings_sipringtone">Suoneria SIP</string>
+<string name="settings_sipringtone2">Imposta la suoneria per le chiamate in arrivo dal SIP</string>
+<string name="settings_sipringtone_dialog">Suonerie</string>
+<string name="settings_eargain">Regolazione altoparlante</string>
+    <string-array name="eargain_display_values">
+        <item>Basso (nessun echo)</item>
+        <item>Medio</item>
+        <item>Alto (può causare echo al client remoto)</item>
+        <item>Altissimo</item>
+    </string-array>
+    <string-array name="eargain_values">
+        <item>0.1</item>
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>1.0</item>
+    </string-array>
+
+<string name="settings_pbxes_options">Impostazioni PBXes</string>
+<string name="settings_par">Chiamate simultanee in uscita</string>
+<string name="settings_par2">Componi tutti i numeri di telefono di una persona contemporaneamente</string>
+<string name="settings_improve">Meglioramento audio</string>
+<string name="settings_improve2">richiede un\'account a pagamento</string>
+<string name="settings_posurl">URL per Posizione/CallBack</string>
+<string name="settings_pos">Aggiorna posizione</string>
+<string name="settings_pos2">Può essere annunciato ai contatti PBXes (richiede account premium)</string>
+<string name="settings_pos3">Aggiornamento posizione</string>
+<string name="settings_callback">Trigger CallBack</string>
+<string name="settings_callback2">Se non è disponibile una rete dati adeguata</string>
+<string name="settings_callthru">Trigger Callthru</string>
+<string name="settings_callthru2">Prefisso per Callthru</string>
+
+<string name="menu_settings">Impostazioni</string>
+<string name="menu_exit">Esci</string>
+<string name="menu_about">Info</string>
+<string name="menu_dtmf">Invia DTMF</string>
+<string name="menu_video">Invia Video</string>
+<string name="menu_call">Componi</string>
+<string name="menu_mute">Muto</string>
+<string name="menu_hold">Pausa</string>
+<string name="menu_transfer">Trasferisci</string>
+<string name="menu_speaker">Altoparlante</string>
+<string name="menu_endCall">Termina chiamata</string>
+
+<string name="transfer_title">Trasferimento di chiamata verso</string>
+
+<string name="card_title_dialing">Composizione</string>
+<string name="card_title_in_progress">Chiamata in corso</string>
+<string name="card_title_incoming_call">Chiamata in arrivo</string>
+<string name="card_title_call_ended">Chiamata conclusa</string>
+<string name="card_title_on_hold">In attesa</string>
+
+<string name="unknown">Sconosciuto</string>
+
+<string name="slide_hint_down_to_end_call">Scorrere in basso per terminare la chiamata.</string>
+<string name="slide_hint_up_to_answer">Scorri in alto per rispondere.</string>
+
+<string name="ongoing">Chiamata attuale</string>
+<string name="onHold">In attesa</string>
+</resources>
