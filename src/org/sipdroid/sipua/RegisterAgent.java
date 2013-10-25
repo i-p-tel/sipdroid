@@ -23,6 +23,7 @@ package org.sipdroid.sipua;
 
 import java.util.Vector;
 
+import org.sipdroid.sipua.ui.ReRegisterAlarm;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
@@ -477,7 +478,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 				if (listener != null)
 				{
 					listener.onUaRegistrationSuccess(this, target, contact, result);
-					Receiver.reRegister(expires);
+					ReRegisterAlarm.reRegister(expires);
 				}
 			}
 			else
@@ -509,7 +510,6 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 					{
 						listener.onUaRegistrationFailure(this, target, contact,
 								result);
-						Receiver.reRegister(1000);
 					}
 				}
 				else
@@ -625,7 +625,6 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 				{
 					listener.onUaRegistrationFailure(this, target, contact,
 							"Timeout");
-					Receiver.reRegister(1000);
 				}
 			}
 			else
@@ -638,7 +637,6 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 					{
 						listener.onUaRegistrationFailure(this, target, contact,
 								"Timeout");
-						Receiver.reRegister(1000);
 					}
 				} else {
 					CurrentState = UNREGISTERED;

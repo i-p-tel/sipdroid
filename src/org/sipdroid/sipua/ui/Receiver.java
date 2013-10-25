@@ -528,7 +528,7 @@ import org.zoolu.sip.provider.SipProvider;
 			lastnumber = number;
 		}
 		
-		public static void alarm(int renew_time,Class <?>cls) {
+		public static void alarm(long renew_time,Class <?>cls) {
        		if (!Sipdroid.release) Log.i("SipUA:","alarm "+renew_time);
 	        Intent intent = new Intent(mContext, cls);
 	        PendingIntent sender = PendingIntent.getBroadcast(mContext,
@@ -537,18 +537,6 @@ import org.zoolu.sip.provider.SipProvider;
 			am.cancel(sender);
 			if (renew_time > 0)
 				am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+renew_time*1000, sender);
-		}
-		
-		public static long expire_time;
-		
-		public static synchronized void reRegister(int renew_time) {
-			if (renew_time == 0)
-				expire_time = 0;
-			else {
-				if (expire_time != 0 && renew_time*1000 + SystemClock.elapsedRealtime() > expire_time) return;
-				expire_time = renew_time*1000 + SystemClock.elapsedRealtime();
-			}
-	       	alarm(renew_time-15, ReRegisterAlarm.class);
 		}
 
 		static Intent createIntent(Class<?>cls) {

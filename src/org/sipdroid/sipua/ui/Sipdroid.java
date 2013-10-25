@@ -406,7 +406,7 @@ public class Sipdroid extends Activity implements OnDismissListener {
 			Receiver.pos(true);
 			Receiver.engine(this).halt();
 			Receiver.mSipdroidEngine = null;
-			Receiver.reRegister(0);
+			ReRegisterAlarm.reRegister(0);
 			stopService(new Intent(this,RegisterService.class));
 			finish();
 			break;

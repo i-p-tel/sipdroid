@@ -23,13 +23,25 @@ package org.sipdroid.sipua.ui;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.SystemClock;
 
 public class ReRegisterAlarm extends BroadcastReceiver {
 
     @Override
 	public void onReceive(Context context, Intent intent) {
-    	if (!Sipdroid.release) Log.i("SipUA:","alarm");
     	Receiver.engine(context).expire();
     }
+    
+	public static long expire_time;
+	
+	public static synchronized void reRegister(int renew_time) {
+		if (renew_time == 0)
+			expire_time = 0;
+		else {
+			if (expire_time != 0 && renew_time*1000 + SystemClock.elapsedRealtime() > expire_time) return;
+			expire_time = renew_time*1000 + SystemClock.elapsedRealtime();
+		}
+       	Receiver.alarm(renew_time - 60, ReRegisterAlarm.class);
+	}
+	
 }
