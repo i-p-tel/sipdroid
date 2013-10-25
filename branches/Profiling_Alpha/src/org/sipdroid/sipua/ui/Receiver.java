@@ -765,9 +765,6 @@ import org.zoolu.sip.provider.SipProvider;
 					engine(context).register();
 				}
 			} else
-	        if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
-	        	engine(context).registerMore();
-			} else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&
 	        		!intent.getBooleanExtra(context.getString(R.string.app_name),false)) {
 	        	stopRingtone();
@@ -815,12 +812,6 @@ import org.zoolu.sip.provider.SipProvider;
 		        	else
 		        		alarm(15*60,OwnWifi.class);
 				}
-	        	if (SipdroidEngine.pwl != null)
-	        		for (PowerManager.WakeLock pwl : SipdroidEngine.pwl)
-	        			if (pwl != null && pwl.isHeld()) {
-			        		pwl.release();
-			        		pwl.acquire();
-	        			}
 	        } else
 		    if (intentAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
 				if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_SELECTWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_SELECTWIFI))
