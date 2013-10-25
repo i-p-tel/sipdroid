@@ -405,7 +405,7 @@ public class SipdroidEngine implements RegisterAgentListener {
     	}
 		if (isRegistered(i)) {
 			if (Receiver.on_wlan)
-				KeepaliveAlarm.alarm(60);
+				KeepaliveAlarm.alarm(user_profiles[i].getKeepaliveInterval());
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(i == pref?R.string.regpref:R.string.regclick),R.drawable.sym_presence_available,0);
 			reg_ra.subattempts = 0;
 			reg_ra.startMWI();
@@ -625,16 +625,12 @@ public class SipdroidEngine implements RegisterAgentListener {
 		return ret;
 	}
 	
-	public void keepAlive() {
+	public void keepAlive() throws IOException {
 		int i = 0;
 		for (KeepAliveSip ka : kas) {
-			if (ka != null && Receiver.on_wlan && isRegistered(i))
-				try {
+			if (ka != null && user_profiles[i].getKeepaliveInterval()>0 && isRegistered(i))
 					ka.sendToken();
-					KeepaliveAlarm.alarm(60);
-				} catch (IOException e) {
-					if (!Sipdroid.release) e.printStackTrace();
-				}
+			KeepaliveAlarm.alarm(user_profiles[i].getKeepaliveInterval());	
 			i++;
 		}
 	}

@@ -21,6 +21,7 @@
 
 package org.sipdroid.sipua;
 
+import org.sipdroid.sipua.ui.Receiver;
 import org.zoolu.sip.address.*;
 import org.zoolu.sip.provider.SipStack;
 import org.zoolu.sip.provider.SipProvider;
@@ -91,7 +92,7 @@ public class UserAgentProfile extends Configure {
 	 * milliseconds). Set keepalive_time=0 to disable the sending of keep-alive
 	 * datagrams.
 	 */
-	public long keepalive_time = 0;
+	public long keepalive_time = -1;
 
 	/**
 	 * Automatic call a remote user secified by the 'call_to' value. Use value
@@ -396,5 +397,20 @@ public class UserAgentProfile extends Configure {
 	protected String toLines() { // currently not implemented..
 		return contact_url;
 	}
+	
+	public long getKeepaliveInterval() {
+		if (keepalive_time < 0) // not set
+		{
+			if (SipStack.default_transport_protocols[0].equals("udp")) {
+				if (!Receiver.on_wlan)
+					return 5 * 60;
+				else
+					return 60;
+			} else
+				return 30 * 60;
+		}
 
+		return keepalive_time;
+
+	}
 }
