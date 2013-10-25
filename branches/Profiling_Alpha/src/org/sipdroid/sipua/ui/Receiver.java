@@ -548,7 +548,7 @@ import org.zoolu.sip.provider.SipProvider;
 				if (expire_time != 0 && renew_time*1000 + SystemClock.elapsedRealtime() > expire_time) return;
 				expire_time = renew_time*1000 + SystemClock.elapsedRealtime();
 			}
-	       	alarm(renew_time-15, OneShotAlarm.class);
+	       	alarm(renew_time-15, ReRegisterAlarm.class);
 		}
 
 		static Intent createIntent(Class<?>cls) {
