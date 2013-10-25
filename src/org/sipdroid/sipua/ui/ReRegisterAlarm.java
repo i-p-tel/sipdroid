@@ -25,11 +25,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class LoopAlarm extends BroadcastReceiver {
+public class ReRegisterAlarm extends BroadcastReceiver {
 
     @Override
 	public void onReceive(Context context, Intent intent) {
     	if (!Sipdroid.release) Log.i("SipUA:","alarm");
-    	Receiver.engine(context).keepAlive();
+    	Receiver.engine(context).expire();
     }
 }

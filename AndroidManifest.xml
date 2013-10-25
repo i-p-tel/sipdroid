@@ -112,9 +112,9 @@
 	        android:excludeFromRecents="true" android:taskAffinity=""
 	        android:launchMode="singleInstance">
         </activity>
-	    <receiver android:name="org.sipdroid.sipua.ui.OneShotAlarm"/>
-	    <receiver android:name="org.sipdroid.sipua.ui.OneShotAlarm2"/>
-	    <receiver android:name="org.sipdroid.sipua.ui.LoopAlarm"/>
+	    <receiver android:name="org.sipdroid.sipua.ui.ReRegisterAlarm"/>
+	    <receiver android:name="org.sipdroid.sipua.ui.RegisterServiceAlarm"/>
+	    <receiver android:name="org.sipdroid.sipua.ui.KeepaliveAlarm"/>
 	    <receiver android:name="org.sipdroid.sipua.ui.OwnWifi"/>
 	    <receiver android:name="org.sipdroid.sipua.ui.OneShotLocation"/>
 	    <receiver android:name="org.sipdroid.sipua.ui.LoopLocation"/>

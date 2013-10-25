@@ -26,7 +26,7 @@ import java.net.UnknownHostException;
 
 import org.sipdroid.net.KeepAliveSip;
 import org.sipdroid.sipua.ui.ChangeAccount;
-import org.sipdroid.sipua.ui.LoopAlarm;
+import org.sipdroid.sipua.ui.KeepaliveAlarm;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
@@ -255,7 +255,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 			RegisterAgent ra = ras[i];
 			if (ra != null && ra.unregister()) {
-				Receiver.alarm(0, LoopAlarm.class);
+				Receiver.alarm(0, KeepaliveAlarm.class);
 				Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
 				wl[i].acquire();
 			} else
@@ -359,7 +359,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 				if (wwl[i] != null && wwl[i].isHeld()) wwl[i].release();
 			}
 			if (kas[i] != null) {
-				Receiver.alarm(0, LoopAlarm.class);
+				Receiver.alarm(0, KeepaliveAlarm.class);
 			}
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i, null, 0, 0);
 			if (ra != null)
@@ -398,7 +398,7 @@ public class SipdroidEngine implements RegisterAgentListener {
     	}
 		if (isRegistered(i)) {
 			if (Receiver.on_wlan)
-				Receiver.alarm(60, LoopAlarm.class);
+				Receiver.alarm(60, KeepaliveAlarm.class);
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(i == pref?R.string.regpref:R.string.regclick),R.drawable.sym_presence_available,0);
 			reg_ra.subattempts = 0;
 			reg_ra.startMWI();
@@ -617,7 +617,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			if (ka != null && Receiver.on_wlan && isRegistered(i))
 				try {
 					ka.sendToken();
-					Receiver.alarm(60, LoopAlarm.class);
+					Receiver.alarm(60, KeepaliveAlarm.class);
 				} catch (IOException e) {
 					if (!Sipdroid.release) e.printStackTrace();
 				}
