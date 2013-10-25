@@ -20,16 +20,40 @@
 
 package org.sipdroid.sipua.ui;
 
+import org.sipdroid.sipua.SipdroidEngine;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
 public class KeepaliveAlarm extends BroadcastReceiver {
 
-    @Override
+	@Override
 	public void onReceive(Context context, Intent intent) {
-    	if (!Sipdroid.release) Log.i("SipUA:","alarm");
-    	Receiver.engine(context).keepAlive();
-    }
+
+		SipdroidEngine engine = Receiver.engine(context);
+		try {
+			engine.keepAlive();
+		} catch (Exception e) {
+
+			engine.expireConnection();
+			engine.register();
+		}
+	}
+
+	public static long expire_time;
+
+	public static synchronized void alarm(long renew_time) {
+		if (renew_time == 0)
+			expire_time = 0;
+		else {
+			if (expire_time != 0
+					&& renew_time * 1000 + SystemClock.elapsedRealtime() > expire_time)
+				return;
+			expire_time = renew_time * 1000 + SystemClock.elapsedRealtime();
+		}
+		Receiver.alarm(renew_time, KeepaliveAlarm.class);
+	}
 }

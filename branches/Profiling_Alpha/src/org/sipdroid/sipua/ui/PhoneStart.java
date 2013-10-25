@@ -42,7 +42,7 @@ public class PhoneStart extends BroadcastReceiver {
     		Receiver.pos(true);
     		Receiver.engine(context).halt();
     		Receiver.mSipdroidEngine = null;
-    		Receiver.reRegister(0);
+    		ReRegisterAlarm.reRegister(0);
     		context.stopService(new Intent(context,RegisterService.class));
     	}
 	}
