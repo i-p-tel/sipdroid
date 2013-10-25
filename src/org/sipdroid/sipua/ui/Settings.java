@@ -430,8 +430,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
    			setDefaultValues();
 
            	// Restart the engine
-       		Receiver.engine(context).halt();
-   			Receiver.engine(context).StartEngine();
+   			SipdroidEngine engine = Receiver.engine(context);
+   			engine.halt();
+   			engine.StartEngine();
    			
    			reload();
    			settings.registerOnSharedPreferenceChangeListener(context);
