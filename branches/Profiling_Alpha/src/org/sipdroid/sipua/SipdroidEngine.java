@@ -126,6 +126,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			
 			SipStack.init(null);
 			int i = 0;
+			IpAddress.setLocalIpAddress();
 			
 			for (UserAgentProfile user_profile : user_profiles) {
 				if (wl[i] == null) {
@@ -151,7 +152,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 					SipStack.ua_info = version;
 					SipStack.server_info = version;
 						
-					IpAddress.setLocalIpAddress();
+					
 					sip_providers[i] = new SipProvider(IpAddress.localIpAddress, 0);
 					user_profile.contact_url = getContactURL(user_profile.username,sip_providers[i]);
 					
@@ -403,8 +404,7 @@ public class SipdroidEngine implements RegisterAgentListener {
     		i++;
     	}
 		if (isRegistered(i)) {
-			if (Receiver.on_wlan)
-				KeepaliveAlarm.alarm(user_profiles[i].getKeepaliveInterval());
+			KeepaliveAlarm.alarm(user_profiles[i].getKeepaliveInterval());
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(i == pref?R.string.regpref:R.string.regclick),R.drawable.sym_presence_available,0);
 			reg_ra.subattempts = 0;
 			reg_ra.startMWI();
@@ -456,7 +456,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 	/** When a UA failed on (un)registering. */
 	public void onUaRegistrationFailure(RegisterAgent reg_ra, NameAddress target,
 			NameAddress contact, String result) {
-		boolean retry = false;
     	int i = 0;
     	for (RegisterAgent ra : ras) {
     		if (ra == reg_ra) break;
@@ -466,37 +465,9 @@ public class SipdroidEngine implements RegisterAgentListener {
     		reg_ra.CurrentState = RegisterAgent.UNREGISTERED;
     		Receiver.onText(Receiver.REGISTER_NOTIFICATION+i, null, 0, 0);
     	} else {
-    		retry = true;
     		Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.regfailed)+" ("+result+")",R.drawable.sym_presence_away,0);
     	}
-    	if (retry) {
-    		retry = false;
-    		if (SystemClock.uptimeMillis() > lastpwl + 45000) {
-				if (pwl[i] != null && !pwl[i].isHeld()) {
-					if ((!Receiver.on_wlan && Build.MODEL.contains("HTC One")) || (Receiver.on_wlan && wwl[i] == null)) {
-						pwl[i].acquire();
-						retry = true;
-					}
-				}
-				if (wwl[i] != null && !wwl[i].isHeld() && Receiver.on_wlan) {
-					wwl[i].acquire();
-					retry = true;
-				}
-    		}
-    	}
-		if (retry) {
-			lastpwl = SystemClock.uptimeMillis();
-			if (wl[i].isHeld()) {
-				wl[i].release();
-			}
-			register();
-			if (!wl[i].isHeld() && pwl[i] != null && pwl[i].isHeld()) pwl[i].release();
-			if (!wl[i].isHeld() && wwl[i] != null && wwl[i].isHeld()) wwl[i].release();
-		} else if (wl[i].isHeld()) {
-			wl[i].release();
-			if (pwl[i] != null && pwl[i].isHeld()) pwl[i].release();
-			if (wwl[i] != null && wwl[i].isHeld()) wwl[i].release();
-		}
+		
 		if (SystemClock.uptimeMillis() > lasthalt + 45000) {
 			lasthalt = SystemClock.uptimeMillis();
 			sip_providers[i].haltConnections();
@@ -506,6 +477,13 @@ public class SipdroidEngine implements RegisterAgentListener {
 		reg_ra.stopMWI();
     	WifiManager wm = (WifiManager) Receiver.mContext.getSystemService(Context.WIFI_SERVICE);
     	wm.startScan();
+	    
+		ReRegisterAlarm.reRegister(30+60);
+		
+	    if (wl[i].isHeld()) wl[i].release();
+		if (pwl[i] != null && pwl[i].isHeld()) pwl[i].release();
+		if (wwl[i] != null && wwl[i].isHeld()) wwl[i].release();
+
 	}
 	
 	public void updateDNS() {
