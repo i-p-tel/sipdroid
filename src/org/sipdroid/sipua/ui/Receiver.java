@@ -45,8 +45,8 @@ import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
@@ -72,6 +72,7 @@ import org.sipdroid.media.RtpStreamSender;
 import org.sipdroid.sipua.*;
 import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.Connection;
+import org.zoolu.net.IpAddress;
 import org.zoolu.sip.provider.SipProvider;
 
 	public class Receiver extends BroadcastReceiver {
@@ -631,26 +632,37 @@ import org.zoolu.sip.provider.SipProvider;
 		}
 		
 		public static boolean isFast(int i) {
-        	WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-        	WifiInfo wi = wm.getConnectionInfo();
-
+        	on_wlan = false;
         	if (PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_USERNAME+(i!=0?i:""),"").equals("") ||
         			PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER+(i!=0?i:""),"").equals(""))
         		return false;
-        	if (wi != null) {
-        		if (!Sipdroid.release) Log.i("SipUA:","isFastWifi() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())
-        				+" "+wi.getIpAddress());
-	        	if (wi.getIpAddress() != 0 && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
-	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
-	        		on_wlan = true;
-	        		if (!on_vpn())
-	        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN+(i!=0?i:""), org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
-	        		else
-	        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_VPN+(i!=0?i:""), org.sipdroid.sipua.ui.Settings.DEFAULT_VPN);  
-	        	}
-        	}
-        	on_wlan = false;
-			return isFastGSM(i);
+			
+	    	ConnectivityManager connectivityManager = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+	    	 if(connectivityManager != null) { 
+	    	        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+
+		    	        if (info != null && info.isConnected() && info.isAvailable()) {
+		    	        	if (info.getType() == ConnectivityManager.TYPE_WIFI ) {
+		    	        							on_wlan = true;
+		    	        			        		if (!on_vpn())
+		    	        			        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN+(i!=0?i:""), org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
+		    	        			        		else
+		    	        			        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_VPN+(i!=0?i:""), org.sipdroid.sipua.ui.Settings.DEFAULT_VPN);  
+		    	        		
+		    	        						}
+
+		    	        	else if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
+		    	    			return isFastGSM(i);
+		    	        	}
+		    	        			
+		    	        }	    	        	
+
+
+	    	        
+	    	    }
+		
+	    	 return false;
 		}
 			
 		static boolean isFastGSM(int i) {
@@ -697,6 +709,15 @@ import org.zoolu.sip.provider.SipProvider;
 	    	return Math.round((scan.level + 113f) / 2f);
 	    }
 	    
+	    static boolean isConnectedToNetwork()
+	    {
+			for (int i = 0; i < SipdroidEngine.LINES; i++) {
+				if (isFast(i))
+					return true;
+			}
+			return false;
+	    }
+	    
 	    static long lastscan;
 	    
 	    @Override
@@ -709,12 +730,31 @@ import org.zoolu.sip.provider.SipProvider;
 	        	on_vpn(false);
 	        	engine(context).register();
 	        } else
-		    if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
-		    		intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_AVAILABLE) ||
-		    		intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE) ||
-		    		intentAction.equals(Intent.ACTION_PACKAGE_REPLACED)) {
-		    	engine(context).register();
-			} else
+	        if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION)
+							|| intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_AVAILABLE)
+							|| intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE)
+							|| intentAction.equals(Intent.ACTION_PACKAGE_REPLACED)) {
+			
+						boolean isConnected = isConnectedToNetwork();
+			
+						if (!isConnected
+								|| intent.getBooleanExtra(
+										ConnectivityManager.EXTRA_IS_FAILOVER, false)
+								|| intent.getBooleanExtra(
+										ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+							engine(mContext).expireConnection();
+						}
+			
+						if (isConnected) {
+							String IP = IpAddress.getIPAddress();
+							if (IP.length() > 0
+									&& IP.compareToIgnoreCase(SipdroidEngine.lastIP) != 0) {
+								engine(mContext).register();
+							}
+						}
+			
+					}
+			else
 			if (intentAction.equals(ACTION_VPN_CONNECTIVITY) && intent.hasExtra("connection_state")) {
 				String state = intent.getSerializableExtra("connection_state").toString();
 				if (state != null && on_vpn() != state.equals("CONNECTED")) {

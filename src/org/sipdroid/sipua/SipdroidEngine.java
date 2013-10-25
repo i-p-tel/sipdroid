@@ -270,30 +270,18 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	public void registerMore() {
-		IpAddress.setLocalIpAddress();
-		int i = 0;
-		for (RegisterAgent ra : ras) {
-			try {
-				if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
-						user_profiles[i].realm.equals("")) {
-					i++;
-					continue;
-				}
-				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
-		
-				if (ra != null && !ra.isRegistered() && Receiver.isFast(i) && ra.register()) {
-					Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
-					wl[i].acquire();
-				}
-			} catch (Exception ex) {
-				
-			}
-			i++;
-		}
+		register(true);
 	}
 	
 	public void register() {
-		IpAddress.setLocalIpAddress();
+		register(false);
+	}
+	
+	private void register(boolean ifNotRegistered) {
+		
+		boolean bIpSet = false;
+    	lastIP = IpAddress.getIPAddress();
+
 		int i = 0;
 		for (RegisterAgent ra : ras) {
 			try {
@@ -305,11 +293,20 @@ public class SipdroidEngine implements RegisterAgentListener {
 				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
 		
 				if (!Receiver.isFast(i)) {
-					unregister(i);
+					setExpired(i);
 				} else {
-					if (ra != null && ra.register()) {
-						Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
-						wl[i].acquire();
+
+					if (ra != null && (!ifNotRegistered || (ifNotRegistered && !ra.isRegistered())))
+					{
+						if (!bIpSet) {
+							IpAddress.setLocalIpAddress();
+							bIpSet = true;
+						}
+						if (ra.register()) {
+							Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
+							wl[i].acquire();
+						}
+						
 					}
 				}
 			} catch (Exception ex) {
@@ -379,6 +376,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 		}
 	}
 
+    public static String lastIP;
+    
 	public boolean isRegistered()
 	{
 		for (RegisterAgent ra : ras)
@@ -424,6 +423,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 		ReRegisterAlarm.reRegister(0);
 		for (int i = 0; i < SipdroidEngine.LINES; i++)
 			setExpired(i);
+		lastIP = "";
 	}   
 	
 	String[] lastmsgs;
