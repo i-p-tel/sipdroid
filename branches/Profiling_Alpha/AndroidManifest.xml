@@ -41,6 +41,7 @@
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
 	<uses-feature android:name="android.hardware.wifi" android:required="false"/>
 	<uses-feature android:name="android.hardware.camera" android:required="false"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	<application android:icon="@drawable/icon64" android:label="@string/app_name">
         <activity android:name="org.sipdroid.sipua.ui.Sipdroid" android:label="@string/app_name" android:launchMode="singleInstance"
         	android:configChanges="orientation|keyboardHidden">
