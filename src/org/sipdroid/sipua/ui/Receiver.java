@@ -75,6 +75,8 @@ import org.sipdroid.sipua.phone.Connection;
 import org.zoolu.net.IpAddress;
 import org.zoolu.sip.provider.SipProvider;
 
+import com.commonsware.cwac.wakeful.WakefulIntentService;
+
 	public class Receiver extends BroadcastReceiver {
 
 		final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
@@ -728,7 +730,7 @@ import org.zoolu.sip.provider.SipProvider;
         	if (mContext == null) mContext = context;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
 	        	on_vpn(false);
-	        	engine(context).register();
+	    		WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
 	        } else
 	        if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION)
 							|| intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_AVAILABLE)
@@ -749,7 +751,7 @@ import org.zoolu.sip.provider.SipProvider;
 							String IP = IpAddress.getIPAddress();
 							if (IP.length() > 0
 									&& IP.compareToIgnoreCase(SipdroidEngine.lastIP) != 0) {
-								engine(mContext).register();
+					    		WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
 							}
 						}
 			
@@ -762,7 +764,7 @@ import org.zoolu.sip.provider.SipProvider;
 					for (SipProvider sip_provider : engine(context).sip_providers)
 						if (sip_provider != null)
 							sip_provider.haltConnections();
-					engine(context).register();
+		    		WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
 				}
 			} else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&

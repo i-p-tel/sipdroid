@@ -29,6 +29,7 @@ import org.sipdroid.sipua.ui.ChangeAccount;
 import org.sipdroid.sipua.ui.KeepaliveAlarm;
 import org.sipdroid.sipua.ui.ReRegisterAlarm;
 import org.sipdroid.sipua.ui.Receiver;
+import org.sipdroid.sipua.ui.RegisterWakefulIntentService;
 import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.zoolu.net.IpAddress;
@@ -36,6 +37,8 @@ import org.zoolu.net.SocketAddress;
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.provider.SipProvider;
 import org.zoolu.sip.provider.SipStack;
+
+import com.commonsware.cwac.wakeful.WakefulIntentService;
 
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
@@ -239,13 +242,10 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	public void expire() {
-		int i = 0;
-		for (RegisterAgent ra : ras) {
+		for (int i = 0; i < SipdroidEngine.LINES; i++) {
 			setExpired(i);
-			i++;
 		}
-
-		register();
+		WakefulIntentService.sendWakefulWork(getUIContext(), RegisterWakefulIntentService.class);
 	}
 
 	public void setExpired(int i) {
@@ -256,7 +256,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 		}
 	}
-	
+
 	public void unregister(int i) {
 			if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
 					user_profiles[i].realm.equals("")) return;
