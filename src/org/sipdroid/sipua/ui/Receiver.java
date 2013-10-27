@@ -746,11 +746,12 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 										ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
 							engine(mContext).expireConnection();
 						}
-			
+						
 						if (isConnected) {
 							String IP = IpAddress.getIPAddress();
 							if (IP.length() > 0
 									&& IP.compareToIgnoreCase(SipdroidEngine.lastIP) != 0) {
+								SipdroidEngine.lastIP = IP;
 					    		WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
 							}
 						}
