@@ -721,51 +721,49 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 	    }
 	    
 	    static long lastscan;
-	    
+	    	    
 	    @Override
 		public void onReceive(Context context, Intent intent) {
 	        String intentAction = intent.getAction();
+	        	        
 	        if (!Sipdroid.on(context)) return;
         	if (!Sipdroid.release) Log.i("SipUA:",intentAction);
         	if (mContext == null) mContext = context;
-	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
-	        	on_vpn(false);
-	    		WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
-	        } else
-	        if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION)
-							|| intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_AVAILABLE)
-							|| intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE)
-							|| intentAction.equals(Intent.ACTION_PACKAGE_REPLACED)) {
-			
-						boolean isConnected = isConnectedToNetwork();
-			
-						if (!isConnected
-								|| intent.getBooleanExtra(
-										ConnectivityManager.EXTRA_IS_FAILOVER, false)
-								|| intent.getBooleanExtra(
-										ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
-							engine(mContext).expireConnection();
-						}
-						
-						if (isConnected) {
-							String IP = IpAddress.getIPAddress();
-							if (IP.length() > 0
-									&& IP.compareToIgnoreCase(SipdroidEngine.lastIP) != 0) {
-								SipdroidEngine.lastIP = IP;
-					    		WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
-							}
-						}
-			
+			if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)) {
+				on_vpn(false);
+				WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
+			} else if (intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_AVAILABLE)
+					|| intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE)
+					|| intentAction.equals(Intent.ACTION_PACKAGE_REPLACED)) {
+				WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
+			}
+			if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) 
+					|| intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
+	
+				boolean isConnected = isConnectedToNetwork();
+  
+				if (!isConnected) {
+					engine(mContext).expireConnection();
+				}
+				
+				if (isConnected) {
+					String IP = IpAddress.getIPAddress();
+					if (IP.length() > 0 && IP.compareToIgnoreCase(SipdroidEngine.lastIP) != 0) {
+						SipdroidEngine.lastIP = IP;
+			    		WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
 					}
+				}	  
+	
+			}
 			else
 			if (intentAction.equals(ACTION_VPN_CONNECTIVITY) && intent.hasExtra("connection_state")) {
 				String state = intent.getSerializableExtra("connection_state").toString();
 				if (state != null && on_vpn() != state.equals("CONNECTED")) {
 					on_vpn(state.equals("CONNECTED"));
-					for (SipProvider sip_provider : engine(context).sip_providers)
+					for (SipProvider sip_provider : engine(mContext).sip_providers)
 						if (sip_provider != null)
 							sip_provider.haltConnections();
-		    		WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
+					WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
 				}
 			} else
 	        if (intentAction.equals(ACTION_PHONE_STATE_CHANGED) &&

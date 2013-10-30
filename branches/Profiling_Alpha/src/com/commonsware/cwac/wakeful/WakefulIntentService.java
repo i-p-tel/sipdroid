@@ -22,7 +22,7 @@ import android.os.PowerManager;
 abstract public class WakefulIntentService extends IntentService {
   abstract protected void doWakefulWork(Intent intent);
 
-  private static final String NAME=
+  private static String NAME=
       "com.commonsware.cwac.wakeful.WakefulIntentService";
   
   private static volatile PowerManager.WakeLock lockStatic=null;
@@ -51,6 +51,7 @@ abstract public class WakefulIntentService extends IntentService {
   
   public WakefulIntentService(String name) {
     super(name);
+    NAME = name;
     setIntentRedelivery(true);
   }
 

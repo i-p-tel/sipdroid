@@ -61,6 +61,7 @@ public class RegisterService extends Service {
 	private void registerReceiver() {
 		IntentFilter intentfilter = new IntentFilter();
 		intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		intentfilter.addAction(Receiver.ACTION_DATA_STATE_CHANGED);
 		intentfilter.addAction(Receiver.ACTION_PHONE_STATE_CHANGED);
 		intentfilter.addAction(Receiver.ACTION_DOCK_EVENT);
 		intentfilter.addAction(Intent.ACTION_HEADSET_PLUG);
