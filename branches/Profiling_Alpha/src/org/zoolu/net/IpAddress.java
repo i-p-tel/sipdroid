@@ -27,12 +27,9 @@ package org.zoolu.net;
 import java.net.BindException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
+import java.util.Locale;
 
-import org.apache.http.conn.util.InetAddressUtils;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
@@ -183,22 +180,14 @@ public class IpAddress {
 	
 	public static String getIPAddress() {
 		try {
-			List<NetworkInterface> interfaces = Collections
-					.list(NetworkInterface.getNetworkInterfaces());
-			for (NetworkInterface intf : interfaces) {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && !IpAddress_SDK9.isInterfaceUp(intf))
-						continue;
-				
-					List<InetAddress> addrs = Collections.list(intf
-							.getInetAddresses());
-					for (InetAddress addr : addrs) {
-						if (!addr.isLoopbackAddress() && !addr.getHostAddress().contains(":")) {
-							String sAddr = addr.getHostAddress().toUpperCase();
-							boolean isIPv4 = InetAddressUtils
-									.isIPv4Address(sAddr);
-							if (isIPv4)
-								return sAddr;
-						}
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = en.nextElement();
+
+				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+					InetAddress inetAddress = enumIpAddr.nextElement();
+
+					if (!inetAddress.isLoopbackAddress() && !inetAddress.getHostAddress().toString().contains(":")) 
+						return inetAddress.getHostAddress();
 					}
 				
 			}

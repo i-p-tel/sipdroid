@@ -634,37 +634,37 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 		}
 		
 		public static boolean isFast(int i) {
-        	on_wlan = false;
-        	if (PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_USERNAME+(i!=0?i:""),"").equals("") ||
-        			PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER+(i!=0?i:""),"").equals(""))
-        		return false;
-			
-	    	ConnectivityManager connectivityManager = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-	    	 if(connectivityManager != null) { 
-	    	        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-
-		    	        if (info != null && info.isConnected() && info.isAvailable()) {
-		    	        	if (info.getType() == ConnectivityManager.TYPE_WIFI ) {
-		    	        							on_wlan = true;
-		    	        			        		if (!on_vpn())
-		    	        			        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN+(i!=0?i:""), org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
-		    	        			        		else
-		    	        			        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_VPN+(i!=0?i:""), org.sipdroid.sipua.ui.Settings.DEFAULT_VPN);  
-		    	        		
-		    	        						}
-
-		    	        	else if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
-		    	    			return isFastGSM(i);
-		    	        	}
-		    	        			
-		    	        }	    	        	
-
-
-	    	        
-	    	    }
-		
-	    	 return false;
+			on_wlan = false;
+			if (PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_USERNAME + (i != 0 ? i : ""), "").equals("")
+					|| PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER + (i != 0 ? i : ""), "").equals(""))
+				return false;
+	
+			ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+	
+			if (connectivityManager != null) {
+				NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+	
+				if (info != null && info.isConnected() && info.isAvailable()) {
+					if (info.getType() == ConnectivityManager.TYPE_WIFI) {
+						on_wlan = true;
+						if (!on_vpn())
+							return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN + (i != 0 ? i : ""),
+									org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
+						else
+							return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_VPN + (i != 0 ? i : ""),
+									org.sipdroid.sipua.ui.Settings.DEFAULT_VPN);
+	
+					}
+	
+					else if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
+						return isFastGSM(i);
+					}
+	
+				}
+	
+			}
+	
+			return false;
 		}
 			
 		static boolean isFastGSM(int i) {
@@ -737,8 +737,7 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 					|| intentAction.equals(Intent.ACTION_PACKAGE_REPLACED)) {
 				WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
 			}
-			if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) 
-					|| intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
+			else if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) || intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
 	
 				boolean isConnected = isConnectedToNetwork();
   
