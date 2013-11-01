@@ -23,7 +23,7 @@ abstract public class WakefulIntentService extends IntentService {
   abstract protected void doWakefulWork(Intent intent);
 
   private static String NAME=
-      "com.commonsware.cwac.wakeful.WakefulIntentService";
+      "WakefulIntentService";
   
   private static volatile PowerManager.WakeLock lockStatic=null;
 
