@@ -23,7 +23,7 @@
     android:layout_width="fill_parent" android:layout_height="wrap_content"
     android:layout_weight="1">
     
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  <LinearLayout
     android:layout_width="fill_parent" android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="#ffffff"
@@ -109,11 +109,11 @@
     	android:layout_width="fill_parent">
     </EditText>
 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<LinearLayout
 	    android:layout_width="fill_parent" android:layout_height="wrap_content"
     	android:paddingTop="10dip"
 	    android:orientation="horizontal">
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		<LinearLayout
 		    android:layout_width="wrap_content" android:layout_height="wrap_content"
 		    android:orientation="horizontal" android:gravity="left"
 		    			android:layout_weight="1"
@@ -122,7 +122,7 @@
 		        android:layout_height="wrap_content" android:text="Create">
 		        </Button>
 		</LinearLayout>
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		<LinearLayout
 		    android:layout_width="wrap_content" android:layout_height="wrap_content"
 		    android:orientation="horizontal" android:gravity="right"
 		    			android:layout_weight="0"
