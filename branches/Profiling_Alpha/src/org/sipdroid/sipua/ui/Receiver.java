@@ -226,7 +226,8 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 					RtpStreamReceiver.speakermode = speakermode();
 					bluetooth = -1;
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
-					engine(mContext).register();
+					if (!engine(mContext).isRegistered())
+						engine(mContext).register();
 					broadcastCallStateChanged("OFFHOOK", caller);
 					ccCall.setState(Call.State.DIALING);
 					ccConn.setUserData(null);
@@ -737,22 +738,8 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 					|| intentAction.equals(Intent.ACTION_PACKAGE_REPLACED)) {
 				WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
 			}
-			else if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) || intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
-	
-				boolean isConnected = isConnectedToNetwork();
-  
-				if (!isConnected) {
-					engine(mContext).expireConnection();
-				}
-				
-				if (isConnected) {
-					String IP = IpAddress.getIPAddress();
-					if (IP.length() > 0 && IP.compareToIgnoreCase(SipdroidEngine.lastIP) != 0) {
-						SipdroidEngine.lastIP = IP;
-			    		WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
-					}
-				}	  
-	
+			else if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) || intentAction.equals(ACTION_DATA_STATE_CHANGED)) {	
+				reRegisterIfNetworkPresent();	  
 			}
 			else
 			if (intentAction.equals(ACTION_VPN_CONNECTIVITY) && intent.hasExtra("connection_state")) {
@@ -872,5 +859,21 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 		        	}
 	        	}
 	        }
+		}
+
+		public static synchronized void reRegisterIfNetworkPresent() {
+			boolean isConnected = isConnectedToNetwork();
+  
+			if (!isConnected) {
+				engine(mContext).expireConnection();
+			}
+			
+			if (isConnected) {
+				String IP = IpAddress.getIPAddress();
+				if (IP.length() > 0 && IP.compareToIgnoreCase(SipdroidEngine.lastIP) != 0) {
+					SipdroidEngine.lastIP = IP;
+					WakefulIntentService.sendWakefulWork(mContext, RegisterWakefulIntentService.class);
+				}
+			}
 		}   
 }
