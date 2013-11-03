@@ -194,7 +194,7 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
     	}
 		if (enabled) {
 			mKeyguardLock.disableKeyguard();
-			if (Integer.parseInt(Build.VERSION.SDK) == 16 && Build.MODEL.contains("HTC One"))
+			if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN && Build.MODEL.contains("HTC One"))
 				mKeyguardManager.exitKeyguardSecurely(new OnKeyguardExitResult() {
 				    public void onKeyguardExitResult(boolean success) {
 				    }
@@ -207,7 +207,7 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 	void reenableKeyguard() {
 		if (!enabled) {
 				try {
-					if (Integer.parseInt(Build.VERSION.SDK) < 5)
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ECLAIR)
 						Thread.sleep(1000);
 				} catch (InterruptedException e) {
 				}
@@ -224,7 +224,7 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Integer.parseInt(Build.VERSION.SDK) >= 5 && Integer.parseInt(Build.VERSION.SDK) <= 7)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR && Build.VERSION.SDK_INT <= Build.VERSION_CODES.ECLAIR_MR1)
 			disableKeyguard();
 		if (Receiver.call_state == UserAgent.UA_STATE_INCALL && socket == null && Receiver.engine(mContext).getLocalVideo() != 0 && Receiver.engine(mContext).getRemoteVideo() != 0 && PreferenceManager.getDefaultSharedPreferences(this).getString(org.sipdroid.sipua.ui.Settings.PREF_SERVER, org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER).equals(org.sipdroid.sipua.ui.Settings.DEFAULT_SERVER))
 	        (new Thread() {
@@ -291,21 +291,21 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 			socket = null;
 		}
 		super.onPause();
-		if (Integer.parseInt(Build.VERSION.SDK) >= 5 && Integer.parseInt(Build.VERSION.SDK) <= 7)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR && Build.VERSION.SDK_INT <= Build.VERSION_CODES.ECLAIR_MR1)
 			reenableKeyguard();
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		if (Integer.parseInt(Build.VERSION.SDK) < 5 || Integer.parseInt(Build.VERSION.SDK) > 7)
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ECLAIR || Build.VERSION.SDK_INT > Build.VERSION_CODES.ECLAIR_MR1)
 			disableKeyguard();
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		if (Integer.parseInt(Build.VERSION.SDK) < 5 || Integer.parseInt(Build.VERSION.SDK) > 7)
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ECLAIR || Build.VERSION.SDK_INT > Build.VERSION_CODES.ECLAIR_MR1)
 			reenableKeyguard();
 	}
 
