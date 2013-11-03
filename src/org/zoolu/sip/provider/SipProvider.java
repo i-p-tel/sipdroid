@@ -1209,7 +1209,7 @@ public class SipProvider implements Configurable, TransportListener,
 					(ConnectedTransport) transport);
 			removeConnection(conn_id);
 			if (Sipdroid.on(Receiver.mContext))
-				Receiver.engine(Receiver.mContext).register(); // modified
+				Receiver.reRegisterIfNetworkPresent(); // modified
 		}
 		if (error != null)
 			printException(error, LogLevel.HIGH);

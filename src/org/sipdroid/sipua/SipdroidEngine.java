@@ -281,7 +281,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 	private void register(boolean ifNotRegistered) {
 		
 		boolean bIpSet = false;
-    	lastIP = IpAddress.getIPAddress();
 
 		int i = 0;
 		for (RegisterAgent ra : ras) {
@@ -299,6 +298,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 					if (ra != null && (!ifNotRegistered || (ifNotRegistered && !ra.isRegistered())))
 					{
+				    	lastIP = IpAddress.getIPAddress();
+
 						if (!bIpSet) {
 							IpAddress.setLocalIpAddress();
 							bIpSet = true;
