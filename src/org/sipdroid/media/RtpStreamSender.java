@@ -496,7 +496,7 @@ public class RtpStreamSender extends Thread {
  			 } else
  				 m = 1;
 		}
-		if (Integer.parseInt(Build.VERSION.SDK) < 5)
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ECLAIR)
 			while (RtpStreamReceiver.getMode() == AudioManager.MODE_IN_CALL)
 				try {
 					sleep(1000);

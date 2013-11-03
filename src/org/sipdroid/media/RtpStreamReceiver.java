@@ -29,7 +29,6 @@ import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.UserAgent;
-import org.sipdroid.sipua.ui.InCallScreen;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.sipdroid.codecs.Codecs;
@@ -126,7 +125,7 @@ public class RtpStreamReceiver extends Thread {
 	}
 	
 	void cleanupBluetooth() {
-		if (was_enabled && Integer.parseInt(Build.VERSION.SDK) == 8) {
+		if (was_enabled && Build.VERSION.SDK_INT == Build.VERSION_CODES.FROYO) {
 			enableBluetooth(true);
 			try {
 				sleep(3000);
@@ -146,7 +145,7 @@ public class RtpStreamReceiver extends Thread {
 	}
 	
 	public static boolean isBluetoothSupported() {
-		if (Integer.parseInt(Build.VERSION.SDK) < 8)
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO)
 			return false;
 		return Bluetooth.isSupported();
 	}
@@ -356,7 +355,7 @@ public class RtpStreamReceiver extends Thread {
 	
 	public static int getMode() {
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
-		if (Integer.parseInt(Build.VERSION.SDK) >= 5)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR)
 			return am.isSpeakerphoneOn()?AudioManager.MODE_NORMAL:AudioManager.MODE_IN_CALL;
 		else
 			return am.getMode();
@@ -369,7 +368,7 @@ public class RtpStreamReceiver extends Thread {
 		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, true);
 		edit.commit();
 		AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
-		if (Integer.parseInt(Build.VERSION.SDK) >= 5) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
 			am.setSpeakerphoneOn(mode == AudioManager.MODE_NORMAL);
 			if (samsung) RtpStreamSender.changed = true;
 		} else
@@ -383,7 +382,7 @@ public class RtpStreamReceiver extends Thread {
 			edit.commit();
 			if (Receiver.pstn_state == null || Receiver.pstn_state.equals("IDLE")) {
 				AudioManager am = (AudioManager) Receiver.mContext.getSystemService(Context.AUDIO_SERVICE);
-				if (Integer.parseInt(Build.VERSION.SDK) >= 5)
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR)
 					am.setSpeakerphoneOn(false);
 				else
 					am.setMode(AudioManager.MODE_NORMAL);

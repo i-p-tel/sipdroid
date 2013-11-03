@@ -33,7 +33,6 @@ import java.net.SocketException;
 import java.net.SocketOptions;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.security.AccessController;
 
 /**
  * The default, concrete instance of datagram sockets. This class does not

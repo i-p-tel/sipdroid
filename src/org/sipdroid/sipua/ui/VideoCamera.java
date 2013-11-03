@@ -36,7 +36,6 @@ import org.sipdroid.sipua.R;
 
 import android.content.Context;
 import android.hardware.Camera;
-import android.hardware.Camera.CameraInfo;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -356,13 +355,13 @@ public class VideoCamera extends CallScreen implements
         else
         	mMediaRecorder.reset();
         if (mCamera != null) {
-        	if (Integer.parseInt(Build.VERSION.SDK) >= 8)
+        	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO)
         		VideoCameraNew2.reconnect(mCamera);
         	mCamera.release();
         	mCamera = null;
         }
 
-        if (useFront && Integer.parseInt(Build.VERSION.SDK) >= 5) {
+        if (useFront && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
 			if (isAvailableSprintFFC)
 			{
 				try
@@ -418,7 +417,7 @@ public class VideoCamera extends CallScreen implements
         if (mMediaRecorder != null) {
             mMediaRecorder.reset();
             if (mCamera != null) {
-	        	if (Integer.parseInt(Build.VERSION.SDK) >= 8)
+	        	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO)
 	        		VideoCameraNew2.reconnect(mCamera);
 	        	mCamera.release();
 	        	mCamera = null;

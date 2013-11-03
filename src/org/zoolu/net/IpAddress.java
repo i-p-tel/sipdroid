@@ -28,13 +28,10 @@ import java.net.BindException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
-import java.util.Locale;
-
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.content.Context;
 

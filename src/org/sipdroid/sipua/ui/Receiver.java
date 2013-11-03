@@ -56,7 +56,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
-import android.os.StrictMode;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -134,7 +133,7 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 				}
 				mSipdroidEngine = new SipdroidEngine();
 				mSipdroidEngine.StartEngine();
-				if (Integer.parseInt(Build.VERSION.SDK) >= 8)
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO)
 					Bluetooth.init();
 			} else
 				mSipdroidEngine.CheckEngine();
