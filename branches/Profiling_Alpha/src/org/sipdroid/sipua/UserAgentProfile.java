@@ -21,6 +21,8 @@
 
 package org.sipdroid.sipua;
 
+import java.util.Locale;
+
 import org.sipdroid.sipua.ui.Receiver;
 import org.zoolu.sip.address.*;
 import org.zoolu.sip.provider.SipStack;
@@ -270,15 +272,15 @@ public class UserAgentProfile extends Configure {
 		}
 
 		if (attribute.equals("do_register")) {
-			do_register = (par.getString().toLowerCase().startsWith("y"));
+			do_register = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("do_unregister")) {
-			do_unregister = (par.getString().toLowerCase().startsWith("y"));
+			do_unregister = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("do_unregister_all")) {
-			do_unregister_all = (par.getString().toLowerCase().startsWith("y"));
+			do_unregister_all = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("expires")) {
@@ -319,32 +321,32 @@ public class UserAgentProfile extends Configure {
 			return;
 		}
 		if (attribute.equals("no_offer")) {
-			no_offer = (par.getString().toLowerCase().startsWith("y"));
+			no_offer = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("no_prompt")) {
-			no_prompt = (par.getString().toLowerCase().startsWith("y"));
+			no_prompt = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 
 		if (attribute.equals("audio")) {
-			audio = (par.getString().toLowerCase().startsWith("y"));
+			audio = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("video")) {
-			video = (par.getString().toLowerCase().startsWith("y"));
+			video = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("recv_only")) {
-			recv_only = (par.getString().toLowerCase().startsWith("y"));
+			recv_only = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("send_only")) {
-			send_only = (par.getString().toLowerCase().startsWith("y"));
+			send_only = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("send_tone")) {
-			send_tone = (par.getString().toLowerCase().startsWith("y"));
+			send_tone = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("send_file")) {
@@ -387,7 +389,7 @@ public class UserAgentProfile extends Configure {
 			return;
 		}
 		if (attribute.equals("auto_accept")) {
-			accept_time = ((par.getString().toLowerCase().startsWith("y"))) ? 0
+			accept_time = ((par.getString().toLowerCase(Locale.US).startsWith("y"))) ? 0
 					: -1;
 			return;
 		}

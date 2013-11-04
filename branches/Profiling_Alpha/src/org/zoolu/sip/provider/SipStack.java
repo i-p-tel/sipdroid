@@ -23,6 +23,8 @@
 
 package org.zoolu.sip.provider;
 
+import java.util.Locale;
+
 import org.zoolu.tools.Configure;
 import org.zoolu.tools.Parser;
 import org.zoolu.tools.RotatingLog;
@@ -193,11 +195,11 @@ public class SipStack extends Configure {
 			return;
 		}
 		if (attribute.equals("use_rport")) {
-			use_rport = (par.getString().toLowerCase().startsWith("y"));
+			use_rport = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("force_rport")) {
-			force_rport = (par.getString().toLowerCase().startsWith("y"));
+			force_rport = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("max_forwards")) {
@@ -221,11 +223,11 @@ public class SipStack extends Configure {
 			return;
 		}
 		if (attribute.equals("single_timer")) {
-			single_timer = (par.getString().toLowerCase().startsWith("y"));
+			single_timer = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("early_dialog")) {
-			early_dialog = (par.getString().toLowerCase().startsWith("y"));
+			early_dialog = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 		if (attribute.equals("default_expires")) {
@@ -317,13 +319,13 @@ public class SipStack extends Configure {
 				String scale = par.getString();
 				if (scale == null)
 					scale = "null";
-				if (scale.toUpperCase().startsWith("MONTH"))
+				if (scale.toUpperCase(Locale.US).startsWith("MONTH"))
 					rotation_scale = RotatingLog.MONTH;
-				else if (scale.toUpperCase().startsWith("DAY"))
+				else if (scale.toUpperCase(Locale.US).startsWith("DAY"))
 					rotation_scale = RotatingLog.DAY;
-				else if (scale.toUpperCase().startsWith("HOUR"))
+				else if (scale.toUpperCase(Locale.US).startsWith("HOUR"))
 					rotation_scale = RotatingLog.HOUR;
-				else if (scale.toUpperCase().startsWith("MINUTE"))
+				else if (scale.toUpperCase(Locale.US).startsWith("MINUTE"))
 					rotation_scale = RotatingLog.MINUTE;
 				else {
 					rotation_time = 7;

@@ -23,6 +23,7 @@ package org.sipdroid.sipua.ui;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Locale;
 
 import org.sipdroid.codecs.Codecs;
 import org.sipdroid.media.RtpStreamReceiver;
@@ -31,12 +32,14 @@ import org.sipdroid.sipua.SipdroidEngine;
 import org.zoolu.sip.provider.SipStack;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
@@ -54,9 +57,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private Settings context = null;
 
 	// Path where to store all profiles - !!!should be replaced by some system variable!!!
-	private final static String profilePath = "/sdcard/Sipdroid/";
+	private final static String profilePath =  Environment.getExternalStorageDirectory().getPath() + "/Sipdroid/";
 	// Path where is stored the shared preference file - !!!should be replaced by some system variable!!!
-	private final String sharedPrefsPath = "/data/data/org.sipdroid.sipua/shared_prefs/";
+	private final String sharedPrefsPath = this.getFilesDir().getPath() + "/org.sipdroid.sipua/shared_prefs/";
 	// Shared preference file name - !!!should be replaced by some system variable!!!
 	private final String sharedPrefsFile = "org.sipdroid.sipua_preferences";
 	// List of profile files available on the SD card
@@ -594,7 +597,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	    	}
 	    	getPreferenceScreen().findPreference(PREF_PORT+j).setSummary(settings.getString(PREF_PORT+j, DEFAULT_PORT));
 	    	getPreferenceScreen().findPreference(PREF_PROTOCOL+j).setSummary(settings.getString(PREF_PROTOCOL+j,
-	    		settings.getString(PREF_SERVER+j, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp").toUpperCase());
+	    		settings.getString(PREF_SERVER+j, DEFAULT_SERVER).equals(DEFAULT_SERVER) ? "tcp" : "udp").toUpperCase(Locale.US));
 	    	getPreferenceScreen().findPreference(PREF_ACCOUNT+j).setSummary(username.equals("")||server.equals("")?getResources().getString(R.string.settings_line)+" "+(i+1):username+"@"+server);
        	}
        	

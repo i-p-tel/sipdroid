@@ -48,6 +48,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -355,8 +356,10 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
         mToneMap.put('*', ToneGenerator.TONE_DTMF_S);
 
         View button;
-        for (int viewId : mDisplayMap.keySet()) {
-            button = findViewById(viewId);
+        int key = 0;
+        for(int i = 0; i < mDisplayMap.size(); i++) {
+        	int viewId = mDisplayMap.keyAt(i);
+        	button = findViewById(viewId);
             button.setOnClickListener(this);
         }
     }
@@ -365,8 +368,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	EditText mDigits;
 	boolean running;
 	public static boolean started;
-    private static final HashMap<Integer, Character> mDisplayMap =
-        new HashMap<Integer, Character>();
+    private static final SparseArray<Character> mDisplayMap =
+        new SparseArray<Character>();
     private static final HashMap<Character, Integer> mToneMap =
         new HashMap<Character, Integer>();
     
@@ -374,7 +377,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
         int viewId = v.getId();
 
         // if the button is recognized
-        if (mDisplayMap.containsKey(viewId)) {
+        if (mDisplayMap.get(viewId) != null) {
                     appendDigit(mDisplayMap.get(viewId));
         }
     }

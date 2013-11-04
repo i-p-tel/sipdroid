@@ -26,7 +26,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceView;
 
-class VideoPreview extends SurfaceView {
+public class VideoPreview extends SurfaceView {
     private float mAspectRatio;
     private int mHorizontalTileSize = 1;
     private int mVerticalTileSize = 1;
@@ -35,7 +35,7 @@ class VideoPreview extends SurfaceView {
      * Setting the aspect ratio to this value means to not enforce an aspect ratio.
      */
     public static float DONT_CARE = 0.0f;
-
+    
     public VideoPreview(Context context) {
         super(context);
     }
