@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.sipdroid.sipua.ui.Receiver;
 
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
@@ -11,6 +12,7 @@ import android.bluetooth.BluetoothClass.Device;
 import android.bluetooth.BluetoothClass.Service;
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Build;
 
 /*
  * Copyright (C) 2010 The Sipdroid Open Source Project
@@ -46,6 +48,7 @@ public class Bluetooth {
 		}
 	}
 	
+	@TargetApi(Build.VERSION_CODES.FROYO)
 	public static void enable(boolean mode) {
 		if (mode)
 			am.startBluetoothSco();
@@ -68,6 +71,7 @@ public class Bluetooth {
 		return false;
 	}
 	
+	@TargetApi(Build.VERSION_CODES.FROYO)
 	public static boolean isSupported() {
 		init();
 		return am.isBluetoothScoAvailableOffCall();

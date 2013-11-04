@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- * Copyright (C) 2009 The Sipdroid Open Source Project
+* Copyright (C) 2009 The Sipdroid Open Source Project
  *
  * This file is part of Sipdroid (http://www.sipdroid.org)
  *
@@ -37,16 +37,16 @@
 \nVersiune ${VERSION}
 \nAplicaţia a fost lansată pentru testare.
 \n
-\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
-\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
-\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
-\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\nCopyright &#169; 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright &#169; 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright &#169; 2006 The Android Open Source Project (http://android.com)
+\nCopyright &#169; 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
 \n
 \nAcest program este gratuit; se poate redistribui sau/şi modifica în termenii specificaţi de GNU General Public Licence, asa cum este publicată de Free Software Foundation; fie versiunea 3 a licenţei, fie (la optiunea ta) orice alta versiune ulterioară. 
 \n
 \nAcest program este distribuit în speranţa că va fi folositor, dar FĂRĂ NICI O GARANŢIE; A se vedea GNU General Public License pentru mai multe detalii (http://www.gnu.org/licenses).</string>
 
-<string name="reg">Înregistrare...</string>
+<string name="reg">Înregistrare&#8230;</string>
 <string name="regok">Înregistrat</string>
 <string name="regfailed">Înregistrare eşuată</string>
 
@@ -69,10 +69,6 @@
     <string-array name="protocol_display_values">
         <item>UDP (mai putin standby in 3G)</item>
         <item>TCP (mai mult standby in 3G)</item>
-    </string-array>
-    <string-array name="protocol_values">
-        <item>udp</item>
-        <item>tcp</item>
     </string-array>
 
 <string name="settings_options">Opţiuni Apelare</string>

@@ -51,6 +51,7 @@ import android.os.PowerManager;
 
 import java.util.Enumeration;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * SipProvider implements the SIP transport layer, that is the layer responsable
@@ -284,7 +285,7 @@ public class SipProvider implements Configurable, TransportListener,
 			transport_protocols = SipStack.default_transport_protocols;
 		default_transport = transport_protocols[0];
 		for (int i = 0; i < transport_protocols.length; i++) {
-			transport_protocols[i] = transport_protocols[i].toLowerCase();
+			transport_protocols[i] = transport_protocols[i].toLowerCase(Locale.US);
 			if (transport_protocols[i].equals(PROTO_UDP))
 				transport_udp = true;
 			else if (transport_protocols[i].equals(PROTO_TCP))
@@ -451,7 +452,7 @@ public class SipProvider implements Configurable, TransportListener,
 			return;
 		}
 		if (attribute.equals("log_all_packets")) {
-			log_all_packets = (par.getString().toLowerCase().startsWith("y"));
+			log_all_packets = (par.getString().toLowerCase(Locale.US).startsWith("y"));
 			return;
 		}
 
@@ -885,9 +886,9 @@ public class SipProvider implements Configurable, TransportListener,
 		ViaHeader via = msg.getViaHeader();
 		String proto;
 		if (via != null)
-			proto = via.getProtocol().toLowerCase();
+			proto = via.getProtocol().toLowerCase(Locale.US);
 		else
-			proto = getDefaultTransport().toLowerCase(); // modified
+			proto = getDefaultTransport().toLowerCase(Locale.US); // modified
 		printLog("using transport " + proto, LogLevel.MEDIUM);
 
 		// select the destination address and port
@@ -994,7 +995,7 @@ public class SipProvider implements Configurable, TransportListener,
 			// discard non-SIP messages
 			String first_line = msg.getFirstLine();
 			if (first_line == null
-					|| first_line.toUpperCase().indexOf("SIP/2.0") < 0) {
+					|| first_line.toUpperCase(Locale.US).indexOf("SIP/2.0") < 0) {
 				if (log_all_packets)
 					printLog("NOT a SIP message: discarded\r\n", LogLevel.LOW);
 				return;

@@ -25,6 +25,7 @@
 
 package org.zoolu.sdp;
 
+import java.util.Locale;
 import java.util.Vector;
 
 /**
@@ -282,7 +283,7 @@ public class MediaDescriptor {
 			AttributeField a = (AttributeField) av.elementAt(i);
 			if (a.getAttributeName().equalsIgnoreCase("rtpmap")) {
 				String[] ar = a.getAttributeValue().split(" +", 2);
-				if (ar.length==2 && ar[1].toLowerCase().startsWith(codec.toLowerCase())) {
+				if (ar.length==2 && ar[1].toLowerCase(Locale.US).startsWith(codec.toLowerCase(Locale.US))) {
 					return ar[1];
 				}
 			}

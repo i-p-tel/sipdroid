@@ -21,6 +21,7 @@
 package org.sipdroid.codecs;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Vector;
 
 import org.sipdroid.sipua.R;
@@ -39,6 +40,7 @@ import android.preference.PreferenceActivity;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.util.SparseArray;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -58,12 +60,12 @@ public class Codecs {
 			add(new GSM());
 			add(new BV16());
 		}};
-	private static final HashMap<Integer, Codec> codecsNumbers;
+	private static final SparseArray<Codec> codecsNumbers;
 	private static final HashMap<String, Codec> codecsNames;
 
 	static {
 		final int size = codecs.size();
-		codecsNumbers = new HashMap<Integer, Codec>(size);
+		codecsNumbers = new SparseArray<Codec>(size);//HashMap<Integer, Codec>(size);
 		codecsNames = new HashMap<String, Codec>(size);
 
 		for (Codec c : codecs) {
@@ -251,7 +253,7 @@ public class Codecs {
 					int number = Integer.parseInt(s.substring(0, i));
 					int index = numbers.indexOf(number);
 					if (index >=0)
-						names.set(index, name.toLowerCase());
+						names.set(index, name.toLowerCase(Locale.US));
 				} catch (NumberFormatException e) {
 					// continue ... remote sent bogus rtp setting
 				}
@@ -266,7 +268,7 @@ public class Codecs {
 					continue;
 
 				//search current codec in offers by name
-				int i = names.indexOf(c.userName().toLowerCase());
+				int i = names.indexOf(c.userName().toLowerCase(Locale.US));
 				if (i >= 0) {
 					codecmap.set(i, c);
 					if ( (codec==null) || (i < index) ) {

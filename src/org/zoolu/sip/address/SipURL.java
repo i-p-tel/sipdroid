@@ -27,6 +27,8 @@ package org.zoolu.sip.address;
 
 import org.zoolu.sip.provider.SipParser;
 import org.zoolu.tools.Parser;
+
+import java.util.Locale;
 import java.util.Vector;
 
 /**
@@ -269,7 +271,7 @@ public class SipURL {
 
 	/** Adds transport parameter */
 	public void addTransport(String proto) {
-		addParameter(transport_param, proto.toLowerCase());
+		addParameter(transport_param, proto.toLowerCase(Locale.US));
 	}
 
 	/**

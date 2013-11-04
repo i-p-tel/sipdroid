@@ -21,6 +21,7 @@ package org.sipdroid.media;
 
 import java.io.File;
 
+import android.os.Environment;
 import android.text.format.Time;
 
 // Simple class to support call recording.
@@ -46,11 +47,11 @@ public class CallRecorder
 		}
 		
 		// Make sure directory exists.
-		File dir = new File("/sdcard/Sipdroid_Recordings/");
+		File dir = new File( Environment.getExternalStorageDirectory().getPath() + "/Sipdroid_Recordings/");
 		dir.mkdirs();
 		
 		// If this fails, all of the other calls just silently return immediately.
-		callWav = new WavWriter("/sdcard/Sipdroid_Recordings/" + filename + ".wav",sample_rate);
+		callWav = new WavWriter( Environment.getExternalStorageDirectory().getPath() + "/Sipdroid_Recordings/" + filename + ".wav",sample_rate);
 	}
 	
 	// Write data received from the internet.

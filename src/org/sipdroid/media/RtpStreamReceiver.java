@@ -118,7 +118,7 @@ public class RtpStreamReceiver extends Thread {
 	static boolean was_enabled;
 	
 	static void enableBluetooth(boolean mode) {
-		if (bluetoothmode != mode && (!mode || isBluetoothAvailable())) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO && bluetoothmode != mode && (!mode || isBluetoothAvailable())) {
 			if (mode) was_enabled = true;
 			Bluetooth.enable(bluetoothmode = mode);
 		}

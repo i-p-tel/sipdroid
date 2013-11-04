@@ -23,6 +23,8 @@
 
 package org.zoolu.sip.header;
 
+import java.util.Locale;
+
 import org.zoolu.sip.address.SipURL;
 import org.zoolu.sip.provider.SipParser;
 
@@ -71,7 +73,7 @@ public class ViaHeader extends ParametricHeader {
 	 */
 
 	public ViaHeader(String proto, String host, int port) {
-		super(SipHeaders.Via, "SIP/2.0/" + proto.toUpperCase() + " " + host
+		super(SipHeaders.Via, "SIP/2.0/" + proto.toUpperCase(Locale.US) + " " + host
 				+ ":" + port); // modified
 	}
 

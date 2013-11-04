@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- * Copyright (C) 2009 The Sipdroid Open Source Project
+* Copyright (C) 2009 The Sipdroid Open Source Project
  *
  * This file is part of Sipdroid (http://www.sipdroid.org)
  *
@@ -38,16 +38,16 @@
 \nVersion ${VERSION}
 \nThe software has been released for testing.
 \n
-\nCopyright (C) 2009 The Sipdroid Open Source Project (http://sipdroid.org)
-\nCopyright (C) 2008 Hughes Systique Corporation, USA (http://hsc.com)
-\nCopyright (C) 2006 The Android Open Source Project (http://android.com)
-\nCopyright (C) 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
+\nCopyright &#169; 2009 The Sipdroid Open Source Project (http://sipdroid.org)
+\nCopyright &#169; 2008 Hughes Systique Corporation, USA (http://hsc.com)
+\nCopyright &#169; 2006 The Android Open Source Project (http://android.com)
+\nCopyright &#169; 2005 Luca Veltri - University of Parma - Italy (http://mjsip.org)
 \n
 \nThis program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 \n
 \nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details (http://www.gnu.org/licenses).</string>
 
-<string name="reg">Registering...</string>
+<string name="reg">Registering&#8230;</string>
 <string name="regpref">Preferred</string>
 <string name="regclick">Click to select</string>
 <string name="regfailed">Registration failed</string>
@@ -122,7 +122,7 @@
         <item>TCP (longer standby on 3G)</item>
         <item>TLS (encrypted)</item>
         </string-array>
-    <string-array name="protocol_values2">
+    <string-array name="protocol_values2" translatable="false">
         <item>udp</item>
         <item>tcp</item>
         <item>tls</item>

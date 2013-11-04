@@ -33,6 +33,7 @@ import java.net.SocketException;
 import java.net.SocketOptions;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.Locale;
 
 /**
  * The default, concrete instance of datagram sockets. This class does not
@@ -112,7 +113,7 @@ public class PlainDatagramSocketImpl extends DatagramSocketImpl {
     @Override
     public void bind(int port, InetAddress addr) throws SocketException {
         String prop = null; //AccessController.doPrivileged(new PriviAction<String>("bindToDevice")); //$NON-NLS-1$
-        boolean useBindToDevice = prop != null && prop.toLowerCase().equals("true"); //$NON-NLS-1$
+        boolean useBindToDevice = prop != null && prop.toLowerCase(Locale.US).equals("true"); //$NON-NLS-1$
         bindToDevice = netImpl.bind2(fd, port, useBindToDevice, addr);
         if (0 != port) {
             localPort = port;
