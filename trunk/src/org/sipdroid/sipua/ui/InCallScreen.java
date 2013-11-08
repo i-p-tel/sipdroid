@@ -68,6 +68,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	final int MSG_TICK = 4;
 	final int MSG_POPUP = 5;
 	final int MSG_ACCEPT = 6;
+	final int MSG_ACCEPT_FORCE = 7;
 	
 	final int SCREEN_OFF_TIMEOUT = 12000;
 	
@@ -103,7 +104,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		super.onStop();
 		mHandler.removeMessages(MSG_BACK);
 		mHandler.removeMessages(MSG_ACCEPT);
-		mHandler.sendEmptyMessage(MSG_ACCEPT);
+		mHandler.sendEmptyMessageDelayed(MSG_ACCEPT_FORCE, 1000);
 		if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
 			finish();
 		sensorManager.unregisterListener(this);
@@ -113,6 +114,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	@Override
 	public void onStart() {
 		super.onStart();
+		mHandler.removeMessages(MSG_ACCEPT_FORCE);
 		if (Receiver.call_state == UserAgent.UA_STATE_IDLE)
      		mHandler.sendEmptyMessageDelayed(MSG_BACK, Receiver.call_end_reason == -1?
     				2000:5000);
@@ -275,6 +277,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
     	        if (mSlidingCardManager != null) mSlidingCardManager.showPopup();
     			break;
     		case MSG_ACCEPT:
+    		case MSG_ACCEPT_FORCE:
     	        setScreenBacklight((float) -1);
     	        getWindow().setFlags(0, 
                         WindowManager.LayoutParams.FLAG_FULLSCREEN);

@@ -389,6 +389,13 @@ public class SipdroidEngine implements RegisterAgentListener {
 		return ras[i].isRegistered();
 	}
 	
+	int getKeepaliveInterval(int i) {
+			if (sip_providers[i].getDefaultTransport().equals("udp")) {
+				return 60;
+			} else
+				return 5 * 60;
+	}
+	
 	public void onUaRegistrationSuccess(RegisterAgent reg_ra, NameAddress target,
 			NameAddress contact, String result) {
     	int i = 0;
@@ -398,7 +405,7 @@ public class SipdroidEngine implements RegisterAgentListener {
     	}
 		if (isRegistered(i)) {
 			if (Receiver.on_wlan)
-				Receiver.alarm(60, LoopAlarm.class);
+				Receiver.alarm(getKeepaliveInterval(i), LoopAlarm.class);
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(i == pref?R.string.regpref:R.string.regclick),R.drawable.sym_presence_available,0);
 			reg_ra.subattempts = 0;
 			reg_ra.startMWI();
@@ -559,7 +566,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 		if (!found || (ua = uas[p]) == null) {
 			if (PreferenceManager.getDefaultSharedPreferences(getUIContext()).getBoolean(Settings.PREF_CALLBACK, Settings.DEFAULT_CALLBACK) &&
 					PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_POSURL, Settings.DEFAULT_POSURL).length() > 0) {
-				Receiver.url("n="+Uri.decode(target_url));
+				Receiver.url("n="+Uri.encode(target_url));
 				return true;
 			}
 			return false;
@@ -617,7 +624,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 			if (ka != null && Receiver.on_wlan && isRegistered(i))
 				try {
 					ka.sendToken();
-					Receiver.alarm(60, LoopAlarm.class);
+					Receiver.alarm(getKeepaliveInterval(i), LoopAlarm.class);
 				} catch (IOException e) {
 					if (!Sipdroid.release) e.printStackTrace();
 				}

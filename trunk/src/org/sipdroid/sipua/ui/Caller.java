@@ -162,7 +162,7 @@ public class Caller extends BroadcastReceiver {
 	        			        if (phonesCursor != null) 
 	        			        {	        			        	
 	        			        	number = "";
-	        			            while (phonesCursor.moveToNext()) 
+	        			            if (phonesCursor.moveToNext()) 
 	        			            {
 		        			            		String id = phonesCursor.getString(phonesCursor
 		        			                        .getColumnIndex(PhoneLookup._ID));
