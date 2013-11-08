@@ -126,7 +126,7 @@ import org.zoolu.sip.provider.SipProvider;
 			if (mContext == null || !context.getClass().getName().contains("ReceiverRestrictedContext"))
 				mContext = context;
 			if (mSipdroidEngine == null) {
-				if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
+				if (android.os.Build.VERSION.SDK_INT > 9) {
 					ReceiverNew.setPolicy();
 				}
 				mSipdroidEngine = new SipdroidEngine();
@@ -475,11 +475,13 @@ import org.zoolu.sip.provider.SipProvider;
     		
     		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_WIFI_DISABLED,!enable);
     		edit.commit();
+    		/*
     		if (enable) {
                 Intent intent = new Intent(WifiManager.WIFI_STATE_CHANGED_ACTION);
                 intent.putExtra(WifiManager.EXTRA_NEW_STATE, wm.getWifiState());
                 mContext.sendBroadcast(intent);
     		}
+    		*/
     		wm.setWifiEnabled(enable);
 		}
 			    
@@ -507,12 +509,14 @@ import org.zoolu.sip.provider.SipProvider;
 				state = laststate;
 				number = lastnumber;
 			}
-			Intent intent = new Intent(ACTION_PHONE_STATE_CHANGED);
-			intent.putExtra("state",state);
-			if (number != null)
-				intent.putExtra("incoming_number", number);
-			intent.putExtra(mContext.getString(R.string.app_name), true);
-			mContext.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
+			if (android.os.Build.VERSION.SDK_INT >= 19) {
+				Intent intent = new Intent(ACTION_PHONE_STATE_CHANGED);
+				intent.putExtra("state",state);
+				if (number != null)
+					intent.putExtra("incoming_number", number);
+				intent.putExtra(mContext.getString(R.string.app_name), true);
+				mContext.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
+			}
 			if (state.equals("IDLE")) {
 				if (was_playing) {
 					if (pstn_state == null || pstn_state.equals("IDLE"))

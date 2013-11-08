@@ -347,6 +347,9 @@ public class RtpStreamSender extends Thread {
 					record = null;
 					break;
 				}
+				if (android.os.Build.VERSION.SDK_INT >= 16) {
+					RtpStreamSenderNew_SDK16.aec(record);
+				}
 				record.startRecording();
 				micgain = (int)(Settings.getMicGain()*10);
 			 }
