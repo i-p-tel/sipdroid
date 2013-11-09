@@ -3,8 +3,10 @@
 
 === Beta-Versions ===
 
-  * 3.3
+  * 3.4
     * Fix issue 1140
+
+  * 3.3
     * Fix issue disabling haptic feedback
     * Longer standby on Wifi and TCP/TLS
 
