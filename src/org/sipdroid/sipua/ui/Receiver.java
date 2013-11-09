@@ -509,7 +509,7 @@ import org.zoolu.sip.provider.SipProvider;
 				state = laststate;
 				number = lastnumber;
 			}
-			if (android.os.Build.VERSION.SDK_INT >= 19) {
+			if (android.os.Build.VERSION.SDK_INT < 19) {
 				Intent intent = new Intent(ACTION_PHONE_STATE_CHANGED);
 				intent.putExtra("state",state);
 				if (number != null)
