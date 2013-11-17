@@ -463,7 +463,7 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 			{
 				Vector<Header> contacts = resp.getContacts().getHeaders();
 				for (int i = 0; i < contacts.size(); i++) {
-					int exp_i = (new ContactHeader((Header) contacts
+					int exp_i = (new ContactHeader(contacts
 							.elementAt(i))).getExpires();
 					if (exp_i > 0 && (expires == 0 || exp_i < expires))
 						expires = exp_i;

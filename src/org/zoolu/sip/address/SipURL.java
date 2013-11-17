@@ -167,7 +167,7 @@ public class SipURL {
 
 	/** Whether two SipURLs are equals */
 	public boolean equals(SipURL sip_url) {
-		return (url == sip_url.url);
+		return (url.equals(sip_url.url));
 	}
 
 	/** Gets string representation of URL */

@@ -32,7 +32,7 @@ import org.sipdroid.sipua.SipdroidEngine;
 import org.zoolu.sip.provider.SipStack;
 
 import android.app.AlertDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
@@ -59,7 +59,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	// Path where to store all profiles - !!!should be replaced by some system variable!!!
 	private final static String profilePath =  Environment.getExternalStorageDirectory().getPath() + "/Sipdroid/";
 	// Path where is stored the shared preference file - !!!should be replaced by some system variable!!!
-	private final String sharedPrefsPath = this.getFilesDir().getPath() + "/org.sipdroid.sipua/shared_prefs/";
+	private final String sharedPrefsPath = "/data/data/org.sipdroid.sipua/shared_prefs/";
 	// Shared preference file name - !!!should be replaced by some system variable!!!
 	private final String sharedPrefsFile = "org.sipdroid.sipua_preferences";
 	// List of profile files available on the SD card

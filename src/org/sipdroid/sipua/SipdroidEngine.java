@@ -169,7 +169,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 					
 					// added by mandrajg
 					String icsi = null;
-					if (user_profile.mmtel == true){
+					if (user_profile.mmtel){
 						icsi = "\"urn%3Aurn-7%3A3gpp-service.ims.icsi.mmtel\"";
 					}
 		

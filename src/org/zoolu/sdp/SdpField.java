@@ -91,7 +91,7 @@ public class SdpField {
 			SdpField sf = (SdpField) obj;
 			if (type != sf.type)
 				return false;
-			if (value != sf.value)
+			if (!value.equals(sf.value))
 				return false;
 			return true;
 		} catch (Exception e) {

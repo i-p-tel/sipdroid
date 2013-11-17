@@ -20,7 +20,7 @@
 
 package org.sipdroid.sipua.ui;
 
-import org.sipdroid.sipua.ui.Sipdroid;
+
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
