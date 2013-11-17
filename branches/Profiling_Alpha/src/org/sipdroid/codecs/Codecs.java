@@ -239,7 +239,7 @@ public class Codecs {
 				} catch (NumberFormatException e) {
 					// continue ... remote sent bogus rtp setting
 				}
-			};
+			}
 		
 			//if we have attrs for format -> set name
 			Vector<AttributeField> attrs = offers.getMediaDescriptor("audio").getAttributes("rtpmap");			
@@ -334,7 +334,7 @@ public class Codecs {
 		@Override
 		public boolean onContextItemSelected(MenuItem item) {
 
-			int posn = (int)((AdapterContextMenuInfo)item.getMenuInfo()).position;
+			int posn = ((AdapterContextMenuInfo)item.getMenuInfo()).position;
 			Codec c = codecs.elementAt(posn);
 			if (item.getItemId() == MENU_UP) {
 				if (posn == 0)

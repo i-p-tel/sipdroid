@@ -106,11 +106,11 @@ public class Caller extends BroadcastReceiver {
 						Vector<Integer> vTypesCode = new Vector<Integer>();					
 				    	for(int i = 0; i < vExPats.size(); i++)
 			            {
-				    		if (vExPats.get(i).startsWith("h") || vExPats.get(i).startsWith("H"))
+				    		if ((vExPats.get(i).length() > 0 && vExPats.get(i).charAt(0) == 'h') || (vExPats.get(i).length() > 0 && vExPats.get(i).charAt(0) == 'H'))
 			        			vTypesCode.add(Integer.valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_HOME));
-				    		else if (vExPats.get(i).startsWith("m") || vExPats.get(i).startsWith("M"))
+				    		else if ((vExPats.get(i).length() > 0 && vExPats.get(i).charAt(0) == 'm') || (vExPats.get(i).length() > 0 && vExPats.get(i).charAt(0) == 'M'))
 			        			vTypesCode.add(Integer.valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE));
-				    		else if (vExPats.get(i).startsWith("w") || vExPats.get(i).startsWith("W"))
+				    		else if ((vExPats.get(i).length() > 0 && vExPats.get(i).charAt(0) == 'w') || (vExPats.get(i).length() > 0 && vExPats.get(i).charAt(0) == 'W'))
 			        			vTypesCode.add(Integer.valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_WORK));
 				    		else 
 				    			vPatNums.add(vExPats.get(i));     

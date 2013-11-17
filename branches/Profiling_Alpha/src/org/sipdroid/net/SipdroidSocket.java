@@ -50,12 +50,12 @@ public class SipdroidSocket extends DatagramSocket {
 		if (loaded) impl.close();
 	}
 	
-	public void setSoTimeout(int val) throws SocketException {
+	public synchronized void setSoTimeout(int val) throws SocketException {
 		if (loaded) impl.setOption(SocketOptions.SO_TIMEOUT, val);
 		else super.setSoTimeout(val);
 	}
 	
-	public void receive(DatagramPacket pack) throws IOException {
+	public synchronized void receive(DatagramPacket pack) throws IOException {
 		if (loaded) impl.receive(pack);
 		else super.receive(pack);
 	}

@@ -309,7 +309,7 @@ public class UserAgent extends CallListenerAdapter {
 		
 		// MMTel addition to define MMTel ICSI to be included in INVITE (added by mandrajg)
 		String icsi = null;	
-		if (user_profile.mmtel == true){
+		if (user_profile.mmtel){
 			icsi = "\"urn%3Aurn-7%3A3gpp-service.ims.icsi.mmtel\"";
 		}		
 		
@@ -741,7 +741,7 @@ public class UserAgent extends CallListenerAdapter {
 			return;
 		}
 		printLog("REDIRECTION (" + reason + ")", LogLevel.HIGH);
-		call.call(((String) contact_list.elementAt(0)));
+		call.call((contact_list.elementAt(0)));
 	}
 
 	/**

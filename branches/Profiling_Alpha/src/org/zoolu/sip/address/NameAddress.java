@@ -117,7 +117,7 @@ public class NameAddress {
 
 	/** Whether two NameAddresses are equals */
 	public boolean equals(NameAddress naddr) {
-		return (name == naddr.name && url == naddr.url);
+		return (name.equals(naddr.name) && url == naddr.url);
 	}
 
 	/** Gets string representation of NameAddress */
