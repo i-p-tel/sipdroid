@@ -225,8 +225,7 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 					RtpStreamReceiver.speakermode = speakermode();
 					bluetooth = -1;
 					onText(MISSED_CALL_NOTIFICATION, null, 0,0);
-					if (!engine(mContext).isRegistered())
-						engine(mContext).register();
+					engine(mContext).register();
 					broadcastCallStateChanged("OFFHOOK", caller);
 					ccCall.setState(Call.State.DIALING);
 					ccConn.setUserData(null);
