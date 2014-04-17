@@ -50,6 +50,34 @@ public class Caller extends BroadcastReceiver {
 		String last_number;
 		long last_time;
 		
+		static String getNumber(Context context,Uri contactRef,String column) {
+			String number = "";
+
+	        Cursor phonesCursor = context.getContentResolver().query(contactRef, null, null, null,
+	        		ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC");
+	        if (phonesCursor != null) 
+	        {	        			        	
+	            if (phonesCursor.moveToNext()) 
+	            {
+	            	String id = phonesCursor.getString(phonesCursor
+	                        .getColumnIndex(column));
+		            Cursor pCur = context.getContentResolver().query(Phone.CONTENT_URI,  
+		            		null, Phone.CONTACT_ID + "=?", new String[] { id }, null);
+		        	while (pCur.moveToNext()) {
+	    	            	String n = pCur.getString(pCur
+	    	                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+	    	            	if (TextUtils.isEmpty(n)) continue;
+	    	             	if (!number.equals("")) number = number + "&";
+	    	             	n = PhoneNumberUtils.stripSeparators(n);
+	    	             	number = number + searchReplaceNumber(context, n);
+	    	        }
+	    	        pCur.close();
+	            }
+	            phonesCursor.close();
+	        }
+	        return number;
+		}
+		
 		@Override
 		public void onReceive(final Context context, Intent intent) {
 	        String intentAction = intent.getAction();
@@ -144,47 +172,14 @@ public class Caller extends BroadcastReceiver {
 	        		    	}
 	        		    	
 	        		    	// Search & replace.
-	    				String search = sp.getString(Settings.PREF_SEARCH, Settings.DEFAULT_SEARCH);
-	    				String callthru_number = searchReplaceNumber(search, number);
+	    				String callthru_number = searchReplaceNumber(context,number);
 	    				String callthru_prefix;
 	    				
 						if (!ask && !force && PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Settings.PREF_PAR, Settings.DEFAULT_PAR)) 
 	    				{
-/*	    					String orig = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");	
-	     					if (orig.lastIndexOf("/phones") >= 0) 
-	    					{
-	     						orig = orig.substring(0,orig.lastIndexOf("/phones")+7);
-	        					Uri contactRef = Uri.parse(orig);
-	        					*/
-	        			    	Uri contactRef = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, number);
-	        			        Cursor phonesCursor = context.getContentResolver().query(contactRef, null, null, null,
-	        			        		ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC");
-	        			        if (phonesCursor != null) 
-	        			        {	        			        	
-	        			        	number = "";
-	        			            if (phonesCursor.moveToNext()) 
-	        			            {
-		        			            		String id = phonesCursor.getString(phonesCursor
-		        			                        .getColumnIndex(PhoneLookup._ID));
-		        			            		Cursor pCur = context.getContentResolver().query(Phone.CONTENT_URI,  
-		        			                            null, Phone.CONTACT_ID + "=?", new String[] { id }, null); 
-		        			            		
-		        			            		while (pCur.moveToNext()) {
-		        			                        	String n = pCur.getString(pCur
-		        			                                        .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-		        			                        	if (TextUtils.isEmpty(n)) continue;
-		    	         			                	if (!number.equals("")) number = number + "&";
-		    	         			                	n = PhoneNumberUtils.stripSeparators(n);
-		    	         			                	number = number + searchReplaceNumber(search, n);
-		        			                    }
-		        			                    pCur.close();
-	        			            }
-	        			            phonesCursor.close();
-	        			            if (number.equals(""))
-	        			            	number = callthru_number;
-	        			        } else
-	        			        	number = callthru_number;
-//	        				}        					
+	        			    number = getNumber(context,Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, number), PhoneLookup._ID);
+	        			    if (number.equals(""))
+	        			    	number = callthru_number;
 	    				} else
 	    					number = callthru_number;
 						
@@ -217,7 +212,9 @@ public class Caller extends BroadcastReceiver {
 	        }
 	    }
 		
-		private String searchReplaceNumber(String pattern, String number) {
+		static private String searchReplaceNumber(Context context,String number) {
+	    	SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+			String pattern = sp.getString(Settings.PREF_SEARCH, Settings.DEFAULT_SEARCH);
 		    // Comma should be safe as separator.
 		    String[] split = pattern.split(",");
 		    // We need exactly 2 parts: search and replace. Otherwise

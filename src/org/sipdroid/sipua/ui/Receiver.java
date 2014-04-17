@@ -809,7 +809,7 @@ import org.zoolu.sip.provider.SipProvider;
 		        	WifiInfo wi = wm.getConnectionInfo();
 		        	String activeSSID = null;
 		        	if (wi != null) activeSSID = wi.getSSID();
-		        	if (activeSSID != null && activeSSID.length() == 0) activeSSID = null;
+		        	if (activeSSID != null && (activeSSID.length() == 0 || activeSSID.equals("0x"))) activeSSID = null;
 		        	List<ScanResult> mScanResults = wm.getScanResults();
 		        	List<WifiConfiguration> configurations = wm.getConfiguredNetworks();
 		        	if (configurations != null) {
@@ -818,7 +818,8 @@ import org.zoolu.sip.provider.SipProvider;
 		                        if (maxconfig == null || config.priority > maxconfig.priority) {
 		                                maxconfig = config;
 		                        }
-		                        if (config.SSID != null && config.SSID.equals("\""+activeSSID+"\""))
+		                        if (config.SSID != null && (config.SSID.equals("\""+activeSSID+"\"") ||
+		                        		config.SSID.equals(activeSSID)))
 		                        	activeconfig = config;
 		                }
 		                ScanResult bestscan = null,activescan = null;

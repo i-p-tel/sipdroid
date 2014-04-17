@@ -392,6 +392,8 @@ public class VideoCamera extends CallScreen implements
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mMediaRecorder.setOutputFile(sender.getFileDescriptor());
+        if (Integer.parseInt(Build.VERSION.SDK) < 14 || Integer.parseInt(Build.VERSION.SDK) > 16)
+        	mMediaRecorder.setVideoFrameRate(20);
 
         if (videoQualityHigh) {
             mMediaRecorder.setVideoSize(352,288);
