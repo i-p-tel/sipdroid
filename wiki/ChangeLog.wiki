@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 3.5
+    * Fixes for KitKat
+
   * 3.4
     * Fix issue 1140
 
