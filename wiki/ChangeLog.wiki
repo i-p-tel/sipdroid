@@ -4,7 +4,7 @@
 === Beta-Versions ===
 
   * 3.5
-    * Fixes for KitKat
+    * Fixes for Kit Kat
 
   * 3.4
     * Fix issue 1140
