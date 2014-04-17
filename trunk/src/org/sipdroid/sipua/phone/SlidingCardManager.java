@@ -229,6 +229,7 @@ public class SlidingCardManager implements ViewTreeObserver.OnGlobalLayoutListen
         // aligned exactly with the bottom of the main frame.
         if (height == 0) {
         	height = mCallCard.getHeight();
+        	if (height == 0) return;
             // Reposition the "slide hints".
             RelativeLayout.LayoutParams lp =
                     (RelativeLayout.LayoutParams) mSlideUp.getLayoutParams();

@@ -36,6 +36,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -276,7 +277,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	}
 
 	private void setDefaultValues() {
-		settings = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
+		settings = getSharedPreferences(sharedPrefsFile, Integer.parseInt(Build.VERSION.SDK) >= 11?4:MODE_PRIVATE);
 
 		for (int i = 0; i < SipdroidEngine.LINES; i++) {
 			String j = (i!=0?""+i:"");
