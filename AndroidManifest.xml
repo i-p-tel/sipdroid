@@ -25,8 +25,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="3.5 beta"
-    android:versionCode="98"
+    android:versionName="3.6 beta"
+    android:versionCode="99"
     android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="11"/>
 	<supports-screens
