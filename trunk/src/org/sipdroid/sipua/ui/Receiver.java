@@ -104,6 +104,7 @@ import org.zoolu.sip.provider.SipProvider;
 		final static int MSG_SCAN = 1;
 		final static int MSG_ENABLE = 2;
 		final static int MSG_HOLD = 3;
+		final static int MSG_HANGUP = 4;
 		
 		final static long[] vibratePattern = {0,1000,1000};
 		
@@ -657,7 +658,8 @@ import org.zoolu.sip.provider.SipProvider;
         		if (!Sipdroid.release) Log.i("SipUA:","isFastWifi() "+WifiInfo.getDetailedStateOf(wi.getSupplicantState())
         				+" "+wi.getIpAddress());
 	        	if (wi.getIpAddress() != 0 && (WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.OBTAINING_IPADDR
-	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)) {
+	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTED)
+	        			|| WifiInfo.getDetailedStateOf(wi.getSupplicantState()) == DetailedState.CONNECTING) {
 	        		on_wlan = true;
 	        		if (!on_vpn())
 	        			return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_WLAN+(i!=0?i:""), org.sipdroid.sipua.ui.Settings.DEFAULT_WLAN);
@@ -702,6 +704,9 @@ import org.zoolu.sip.provider.SipProvider;
 	    			break;
 	    		case MSG_HOLD:
 	    			engine(mContext).togglehold();
+	    			break;
+	    		case MSG_HANGUP:
+	    			engine(mContext).rejectcall();
 	    			break;
 	    		}
 	    	}
@@ -753,10 +758,13 @@ import org.zoolu.sip.provider.SipProvider;
 	    			broadcastCallStateChanged(null,null);
 	    		if (!pstn_state.equals("IDLE") && call_state == UserAgent.UA_STATE_INCALL)
 	    			mHandler.sendEmptyMessageDelayed(MSG_HOLD, 5000);
+	    		else if (!pstn_state.equals("IDLE") && (call_state == UserAgent.UA_STATE_INCOMING_CALL || call_state == UserAgent.UA_STATE_OUTGOING_CALL))
+	    			mHandler.sendEmptyMessageDelayed(MSG_HANGUP, 5000);
 	    		else if (pstn_state.equals("IDLE")) {
 	    			mHandler.removeMessages(MSG_HOLD);
+	    			mHandler.removeMessages(MSG_HANGUP);
 	    			if (call_state == UserAgent.UA_STATE_HOLD)
-	    				mHandler.sendEmptyMessage(MSG_HOLD);
+	    				mHandler.sendEmptyMessageDelayed(MSG_HOLD, 1000);
 	    		}
 	        } else
 	        if (intentAction.equals(ACTION_DOCK_EVENT)) {
@@ -836,10 +844,11 @@ import org.zoolu.sip.provider.SipProvider;
 			                    	}
 			                    }
 			                }
+		                if (activescan != null) System.out.println("debug wifi asu(active)"+asu(activescan));
 		                if (bestconfig != null &&
 		                		(activeconfig == null || bestconfig.priority != activeconfig.priority) &&
 		                		asu(bestscan) > asu(activescan)*1.5 &&
-		                		(activeSSID == null || activescan != null) && asu(bestscan) > 22) {
+		                		/* (activeSSID == null || activescan != null) && */ asu(bestscan) > 22) {
 		               		if (!Sipdroid.release) Log.i("SipUA:","changing to "+bestconfig.SSID);
 		               		if (activeSSID == null || !activeSSID.equals(bestscan.SSID))
 		               			wm.disconnect();

@@ -535,7 +535,7 @@ public class RtpStreamReceiver extends Thread {
 	void newjitter(boolean inc) {
 		 if (good == 0 || lost/good > 0.01 || call_recorder != null)
 			 return;
-		 int newjitter = (int)Math.sqrt(devheadroom)*5 + (inc?minjitteradjust:0);
+		 int newjitter = (int)Math.sqrt(devheadroom)*7 + (inc?minjitteradjust:0);
 		 if (newjitter < minjitter)
 			 newjitter = minjitter;
 		 if (newjitter > maxjitter)
@@ -703,6 +703,7 @@ public class RtpStreamReceiver extends Thread {
 					 if (gap > 0) {
 						 if (gap > 100) gap = 1;
 						 loss += gap;
+						 System.out.println("debug packet lost");
 						 lost += gap;
 						 good += gap - 1;
 						 loss2++;
