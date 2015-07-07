@@ -3,6 +3,9 @@
 
 === Beta-Versions ===
 
+  * 3.6
+    * Fixes for Lollipop
+
   * 3.5
     * Fixes for Kit Kat
 
