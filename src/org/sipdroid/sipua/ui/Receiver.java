@@ -630,8 +630,17 @@ import org.zoolu.sip.provider.SipProvider;
 				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.menu_speaker), android.R.drawable.stat_sys_speakerphone,Receiver.ccCall.base);
 			else if (bluetooth > 0)
 				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.menu_bluetooth), R.drawable.stat_sys_phone_call_bluetooth,Receiver.ccCall.base);
-			else
+			else switch (call_state) {
+			case UserAgent.UA_STATE_INCALL:
 				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.card_title_in_progress), R.drawable.stat_sys_phone_call,Receiver.ccCall.base);
+				break;
+			case UserAgent.UA_STATE_OUTGOING_CALL:
+				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.card_title_dialing), R.drawable.stat_sys_phone_call,Receiver.ccCall.base);
+				break;
+			case UserAgent.UA_STATE_INCOMING_CALL:
+				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.card_title_incoming_call), R.drawable.stat_sys_phone_call,Receiver.ccCall.base);
+				break;
+			}
 		}
 
 		public static boolean on_wlan;
@@ -844,7 +853,6 @@ import org.zoolu.sip.provider.SipProvider;
 			                    	}
 			                    }
 			                }
-		                if (activescan != null) System.out.println("debug wifi asu(active)"+asu(activescan));
 		                if (bestconfig != null &&
 		                		(activeconfig == null || bestconfig.priority != activeconfig.priority) &&
 		                		asu(bestscan) > asu(activescan)*1.5 &&

@@ -240,6 +240,18 @@ public class Sipdroid extends Activity implements OnDismissListener {
 				startActivity(myIntent);
 			}
 		});
+		Button exitButton = (Button) findViewById(R.id.exit_button);
+		exitButton.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				on(mContext,false);
+				Receiver.pos(true);
+				Receiver.engine(mContext).halt();
+				Receiver.mSipdroidEngine = null;
+				Receiver.reRegister(0);
+				stopService(new Intent(mContext,RegisterService.class));
+				finish();
+			}
+		});
 
 		final OnDismissListener listener = this;
 		

@@ -318,7 +318,7 @@ public class RtpStreamSender extends Thread {
 
 		AudioRecord record = null;
 		
-		short[] lin = new short[frame_size*(frame_rate+1)];
+		short[] lin = new short[frame_size*(frame_rate+2)];
 		int num,ring = 0,pos;
 		random = new Random();
 		InputStream alerting = null;
@@ -420,7 +420,7 @@ public class RtpStreamSender extends Thread {
 					 last_tx_time += next_tx_delay-sync_adj;
 				 }
 			 }
-			 pos = (ring+delay*frame_rate*frame_size/2)%(frame_size*(frame_rate+1));
+			 pos = Integer.parseInt(Build.VERSION.SDK) == 21?0:((ring+delay*frame_rate*frame_size/2)%(frame_size*(frame_rate+1)));
 			 num = record.read(lin,pos,frame_size);
 			 if (num <= 0)
 				 continue;
@@ -462,10 +462,9 @@ public class RtpStreamSender extends Thread {
 					 num = p_type.codec.encode(lin, 0, buffer, num);
 				 }
 			 } else {
-				 num = p_type.codec.encode(lin, ring%(frame_size*(frame_rate+1)), buffer, num);
+				 num = p_type.codec.encode(lin, Integer.parseInt(Build.VERSION.SDK) == 21?0:(ring%(frame_size*(frame_rate+1))), buffer, num);
 			 }
 			 
- 
  			 ring += frame_size;
  			 rtp_packet.setSequenceNumber(seqn++);
  			 rtp_packet.setTimestamp(time);
