@@ -282,7 +282,7 @@ public class VideoCamera extends CallScreen implements
             	
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
-            	RtpStreamReceiver.adjust(keyCode,true);
+            	RtpStreamReceiver.adjust(keyCode,true,true);
             	return true;
         }
 
@@ -625,7 +625,7 @@ public class VideoCamera extends CallScreen implements
 		switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_DOWN:
         case KeyEvent.KEYCODE_VOLUME_UP:
-        	RtpStreamReceiver.adjust(keyCode,false);
+        	RtpStreamReceiver.adjust(keyCode,false,true);
         	return true;
         case KeyEvent.KEYCODE_ENDCALL:
         	if (Receiver.pstn_state == null ||

@@ -474,7 +474,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
         		Receiver.stopRingtone();
         		return true;
         	}
-        	RtpStreamReceiver.adjust(keyCode,true);
+        	RtpStreamReceiver.adjust(keyCode,true,!(pactive || SystemClock.elapsedRealtime()-pactivetime < 1000));
         	return true;
         }
         if (Receiver.call_state == UserAgent.UA_STATE_INCALL) {
@@ -520,7 +520,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_DOWN:
         case KeyEvent.KEYCODE_VOLUME_UP:
-        	RtpStreamReceiver.adjust(keyCode,false);
+        	RtpStreamReceiver.adjust(keyCode,false,!(pactive || SystemClock.elapsedRealtime()-pactivetime < 1000));
         	return true;
         case KeyEvent.KEYCODE_ENDCALL:
         	if (Receiver.pstn_state == null ||

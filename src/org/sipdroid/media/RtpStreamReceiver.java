@@ -65,7 +65,7 @@ public class RtpStreamReceiver extends Thread {
 	static String codec = "";
 
 	/** Size of the read buffer */
-	public static final int BUFFER_SIZE = 1024;
+	public static final int BUFFER_SIZE = 1024*4;
 
 	/** Maximum blocking time, spent waiting for reading new bytes [milliseconds] */
 	public static final int SO_TIMEOUT = 1000;
@@ -250,7 +250,7 @@ public class RtpStreamReceiver extends Thread {
 	
 	static long down_time;
 	
-	public static void adjust(int keyCode,boolean down) {
+	public static void adjust(int keyCode,boolean down,boolean show) {
         AudioManager mAudioManager = (AudioManager) Receiver.mContext.getSystemService(
                 Context.AUDIO_SERVICE);
         
@@ -285,7 +285,7 @@ public class RtpStreamReceiver extends Thread {
 		                    keyCode == KeyEvent.KEYCODE_VOLUME_UP
 		                            ? AudioManager.ADJUST_RAISE
 		                            : AudioManager.ADJUST_LOWER,
-		                    AudioManager.FLAG_SHOW_UI);
+		                    show?AudioManager.FLAG_SHOW_UI:0);
 			}
 		if (!down)
 			down_time = 0;
@@ -461,8 +461,8 @@ public class RtpStreamReceiver extends Thread {
 			maxjitter = AudioTrack.getMinBufferSize(p_type.codec.samp_rate(), 
 					AudioFormat.CHANNEL_CONFIGURATION_MONO, 
 					AudioFormat.ENCODING_PCM_16BIT);
-			if (maxjitter < 2*2*BUFFER_SIZE*6*mu)
-				maxjitter = 2*2*BUFFER_SIZE*6*mu;
+			if (maxjitter < 2*2*1024*6*mu)
+				maxjitter = 2*2*1024*6*mu;
 			oldtrack = track;
 			track = new AudioTrack(stream(), p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
 					maxjitter*2, AudioTrack.MODE_STREAM);
@@ -703,7 +703,6 @@ public class RtpStreamReceiver extends Thread {
 					 if (gap > 0) {
 						 if (gap > 100) gap = 1;
 						 loss += gap;
-						 System.out.println("debug packet lost");
 						 lost += gap;
 						 good += gap - 1;
 						 loss2++;

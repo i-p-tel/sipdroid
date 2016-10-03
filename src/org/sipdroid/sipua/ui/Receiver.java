@@ -856,7 +856,7 @@ import org.zoolu.sip.provider.SipProvider;
 		                if (bestconfig != null &&
 		                		(activeconfig == null || bestconfig.priority != activeconfig.priority) &&
 		                		asu(bestscan) > asu(activescan)*1.5 &&
-		                		/* (activeSSID == null || activescan != null) && */ asu(bestscan) > 22) {
+		                		/* (activeSSID == null || activescan != null) && */ asu(bestscan) >= 16) {
 		               		if (!Sipdroid.release) Log.i("SipUA:","changing to "+bestconfig.SSID);
 		               		if (activeSSID == null || !activeSSID.equals(bestscan.SSID))
 		               			wm.disconnect();
