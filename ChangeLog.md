@@ -1,5 +1,12 @@
 ### Beta-Versions ###
 
+  * 3.8
+    * Minor changes
+    * Battery optimisations for Sipdroid must be disabled on Android 7.0
+    
+  * 3.7
+    * Audio fix for Android 5.0
+    
   * 3.6
     * Fixes for Lollipop
 
