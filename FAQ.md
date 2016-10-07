@@ -73,30 +73,6 @@ NOTE: Don't add anything to emergency numbers. They are always dialed over Phone
 
 ![http://sipdroid.googlecode.com/svn/images/choose2.png](http://sipdroid.googlecode.com/svn/images/choose2.png)
 
-### How can I dial a Skype ID? (Or any other SIP URI?) ###
-
-#### From Contacts ####
-
-When clicking on the "Chat" tab of a contact you get a menu like this:
-
-![http://sipdroid.googlecode.com/svn/images/choose3.png](http://sipdroid.googlecode.com/svn/images/choose3.png)
-
-Choosing Sipdroid makes a voice call to a PC over instant messaging.
-
-Calling Skype users requires registering to PBXes. The callee needs to allow anonymous calls.
-
-This also works for Google Talk, MSN, Yahoo, AIM, and ICQ users. All these recipients have to do is either invite user service@gtalk2voip.com (gtalk2voip@yahoo.com for Yahoo! Messenger) to his friend list, or submit his user id from [gtalk2voip main page](http://gtalk2voip.com/), to become reachable from Sipdroid.
-
-If you want to call any other SIP URI add it to a contact as one of the two unsupported messengers, Jabber or QQ, and use above method to dial the SIP URI from contacts.
-
-Note: PBXes only supports calling alphanumeric SIP URIs e.g. abc##@domain.tld. Calling URIs starting by a digit will result in a routing based on outbound dial rules.
-
-#### From Sipdroid window ####
-
-You can enter SIP URIs into the "Called Party Address" field in Sipdroid. For calling Skype users enter the Skype name followed by **@skype** into "Called Party Address". Calling Skype users requires registering to PBXes.
-
-Note: PBXes only supports calling alphanumeric SIP URIs e.g. abc##@domain.tld. Calling URIs starting by a digit will result in a routing based on outbound dial rules.
-
 ### How are the buttons assigned? ###
 
 Android reserves the red key for turning screen off and the green call button for answering a phone call. That's why they don't always work for Sipdroid, e.g. when screen is turned on the red key will first switch screen off, and then end call on another press.  The green button will not work for Sipdroid if there is a phone call ringing at the same time. In this case the green button will answer the GSM call.
