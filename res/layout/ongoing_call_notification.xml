@@ -22,7 +22,7 @@
     android:gravity="center_vertical"
     android:layout_width="fill_parent"
     android:layout_height="65sp"
-    android:background="@android:drawable/status_bar_item_background"
+    android:background="@drawable/status_bar_item_app_background_normal"
     >
 
    <ImageView android:id="@+id/icon"

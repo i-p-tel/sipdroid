@@ -141,7 +141,7 @@ public class VideoCamera extends CallScreen implements
         						keepalive.setPayloadType(125);
         						try {
 									rtp_socket.send(keepalive);
-								} catch (IOException e) {
+								} catch (Exception e) {
 								}
                             }
                             obuffering = buffering;
@@ -533,7 +533,7 @@ public class VideoCamera extends CallScreen implements
     			 			if (seqn > 10) try {
     			 				rtp_socket.send(rtp_packet);
         			 			len += number-num;
-    			 			} catch (IOException e) {
+    			 			} catch (Exception e) {
     			 				if (!Sipdroid.release) e.printStackTrace();
     			 				break;
     			 			}

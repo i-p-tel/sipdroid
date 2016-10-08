@@ -254,11 +254,11 @@ public class CallScreen extends Activity implements DialogInterface.OnClickListe
 					for (;;) {
 						try {
 							rtp_socket.receive(videopacket);
-						} catch (IOException e) {
+						} catch (Exception e) {
 							rtp_socket.getDatagramSocket().disconnect();
 							try {
 								rtp_socket.send(keepalive);
-							} catch (IOException e1) {
+							} catch (Exception e1) {
 								return;
 							}
 						}

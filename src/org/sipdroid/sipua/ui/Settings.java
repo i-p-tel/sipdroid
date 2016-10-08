@@ -269,6 +269,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     	if (Receiver.mContext == null) Receiver.mContext = this;
 		addPreferencesFromResource(R.xml.preferences);
 		setDefaultValues();
+		if (Build.VERSION.SDK_INT >= 24) {
+			SettingsNew.ignoreBattery(this);
+		}
 	}
 	
 	void reload() {

@@ -390,6 +390,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	int getKeepaliveInterval(int i) {
+			if (Build.VERSION.SDK_INT >= 24)
+				return 0;
 			if (sip_providers[i].getDefaultTransport().equals("udp")) {
 				return 60;
 			} else
@@ -404,7 +406,7 @@ public class SipdroidEngine implements RegisterAgentListener {
     		i++;
     	}
 		if (isRegistered(i)) {
-			if (Receiver.on_wlan)
+			if (Receiver.on_wlan && getKeepaliveInterval(i) > 0)
 				Receiver.alarm(getKeepaliveInterval(i), LoopAlarm.class);
 			Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(i == pref?R.string.regpref:R.string.regclick),R.drawable.sym_presence_available,0);
 			reg_ra.subattempts = 0;
@@ -621,7 +623,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	public void keepAlive() {
 		int i = 0;
 		for (KeepAliveSip ka : kas) {
-			if (ka != null && Receiver.on_wlan && isRegistered(i))
+			if (ka != null && Receiver.on_wlan && isRegistered(i) && getKeepaliveInterval(i) > 0)
 				try {
 					ka.sendToken();
 					Receiver.alarm(getKeepaliveInterval(i), LoopAlarm.class);

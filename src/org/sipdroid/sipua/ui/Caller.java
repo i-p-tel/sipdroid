@@ -219,6 +219,8 @@ public class Caller extends BroadcastReceiver {
 		    String[] split = pattern.split(",");
 		    // We need exactly 2 parts: search and replace. Otherwise
 		    // we just return the current number.
+		    if (split.length == 1)
+		    	split = new String[] {split[0],""};
 		    if (split.length != 2)
 			return number;
 
@@ -243,7 +245,7 @@ public class Caller extends BroadcastReceiver {
     		    	// value, we guess that the user typed a bad replacement
     		    	// value and we use the original number.
     		    	if (modNumber.equals(split[1])) {
-    		    	    modNumber = number;
+    		    	    modNumber = number.replaceAll(split[0], split[1]);
     		    	}
 		    } catch (PatternSyntaxException e) {
 			// Wrong pattern syntax. Give back the original number.
