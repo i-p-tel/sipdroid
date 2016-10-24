@@ -198,26 +198,7 @@ The username to be entered in Sipdroid consists of account name, a dash ('-') an
 <br>
 <h2>Android Applications</h2>
 
-<h3>Ambient Light Sensor</h3>
-
-This tool is recommended to save battery. It uses the camera to adjust screen brightness.<br>
-<br>
-<h3>Google Talk</h3>
-
-See <a href='http://code.google.com/p/sipdroid/wiki/FAQ#How_can_I_dial_a_Skype_ID?_(Or_any_other_SIP_URI?)'>above</a>
-
 <h3>GV</h3>
 
 Sipdroid can be used to add true VoIP calling to the GV app. Both integrate amazingly well. Further info is available at <a href='http://iiordanov.blogspot.com/2009/07/sipdroid-gv-guava.html'>Iordans's blog</a>.<br>
 <br>
-<h3>Latitude, Weather Widgets, ...</h3>
-
-We noticed that choppy voice on WLANs can be resolved by turning off permanent location updates. Alternatives are uploading position to PBXes and announcing it to contacts when they call you, and "Snowstorm weather widget" that allows you to set location manually.<br>
-<br>
-<h3>Netcounter</h3>
-
-This is very nice to account your bandwidth usage on mobile networks. However, when you use WLANs only you should not install the present version. It wakes the device too often thus draining the battery.<br>
-<br>
-<h2>Hint for developer phones</h2>
-
-One limitation has been noticed on Android developer phones (ADP1). Due to limited memory home screen often takes several seconds to load. Luckily these phones allow root access. Issue the command "echo ro.HOME_APP_ADJ=1 >/data/local.prop" and reboot, to lock home screen in memory.
