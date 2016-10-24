@@ -176,11 +176,8 @@ Sipdroid presently supports basic call. All the typical PBX features are configu
 </li><li>Support of several modes for DTMF tones<br>
 </li><li>Support for NAT (network address translation)<br>
 </li><li>Simultaneous Outbound Calling<br>
-</li><li>Screening anonymous callers</li></ul>
-
-<img src='http://sipdroid.googlecode.com/svn/images/priv.png' />
-
-<ul><li>Time-based routing for incoming calls<br>
+</li><li>Screening anonymous callers<br>
+</li><li>Time-based routing for incoming calls<br>
 </li><li>Attended Call Transfer<br>
 </li><li>Conferences<br>
 </li><li>Video Reception (Video Transmission is supported by Sipdroid natively)<br>
