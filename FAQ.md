@@ -181,8 +181,7 @@ Sipdroid presently supports basic call. All the typical PBX features are configu
 </li><li>Attended Call Transfer<br>
 </li><li>Conferences<br>
 </li><li>Video Reception (Video Transmission is supported by Sipdroid natively)<br>
-</li><li>Trigger callback or callthru (if no suitable data network available)<br>
-</li><li>Calls to Skype users</li></ul>
+</li><li>Trigger callback or callthru (if no suitable data network available)</li></ul>
 
 You get even more <a href='http://pbxes.org/iptel_virtual-pbx.html'>features</a> on the paid accounts (e.g. Video Streaming, Announce Location, Call Recording, Improved Audio, Handoff of calls between networks).<br>
 <br>
