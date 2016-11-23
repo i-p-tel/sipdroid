@@ -3,9 +3,6 @@
 ### 3.0 ###
 Added TLS encryption for enhanced security. (2013)
 
-### 2.2 ###
-We added VideoSMS, a service to send HD video messages instantaneously regardless which video formats the receiver is able to play. From Sipdroid 2.3 onwards VideoSMS was moved into a separate [app](http://play.google.com/store/apps/details?id=ee.showm). (2011)
-
 ### 2.0 ###
 For Google™ Voice users, Sipdroid can now create a new, free PBXes account that is automatically linked to an existing Google™ Voice account. The new feature requires Android 2.0, or above, and Google's app connected to your Voice account. (2010)
 
