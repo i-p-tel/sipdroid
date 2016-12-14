@@ -1,5 +1,8 @@
 ### Beta-Versions ###
 
+  * 4.0
+    * Fixes for Nougat (7.1)
+    
   * 3.9
     * Fixes for Nougat
     
