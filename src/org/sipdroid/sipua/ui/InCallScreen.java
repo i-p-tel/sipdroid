@@ -41,6 +41,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -131,7 +132,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
     	if (!Sipdroid.release) Log.i("SipUA:","on pause");
     	switch (Receiver.call_state) {
     	case UserAgent.UA_STATE_INCOMING_CALL:
-    		if (!RtpStreamReceiver.isBluetoothAvailable()) Receiver.moveTop();
+//    		if (!RtpStreamReceiver.isBluetoothAvailable()) Receiver.moveTop();
     		break;
     	case UserAgent.UA_STATE_IDLE:
     		if (Receiver.ccCall != null)
@@ -149,7 +150,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	}
 	
 	void moveBack() {
-		if (Receiver.ccConn != null && !Receiver.ccConn.isIncoming()) {
+		if (Receiver.ccConn != null && !Receiver.ccConn.isIncoming() && Integer.parseInt(Build.VERSION.SDK) < 25) {
 			// after an outgoing call don't fall back to the contact
 			// or call log because it is too easy to dial accidentally from there
 	        startActivity(Receiver.createHomeIntent());

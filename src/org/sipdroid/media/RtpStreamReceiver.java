@@ -308,7 +308,8 @@ public class RtpStreamReceiver extends Thread {
 		switch (getMode()) {
 		case AudioManager.MODE_IN_CALL:
 				int oldring = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0);
-				if (oldring > 0) setStreamVolume(AudioManager.STREAM_RING,(int)(
+				if (oldring > 0 && Integer.parseInt(Build.VERSION.SDK) < 25)
+					setStreamVolume(AudioManager.STREAM_RING,(int)(
 						am.getStreamMaxVolume(AudioManager.STREAM_RING)*
 						org.sipdroid.sipua.ui.Settings.getEarGain()*3), 0);
 				track.setStereoVolume(AudioTrack.getMaxVolume()*
@@ -410,7 +411,8 @@ public class RtpStreamReceiver extends Thread {
 			am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,oldvibrate2);
 			Settings.System.putInt(cr, Settings.System.WIFI_SLEEP_POLICY, oldpolicy);
 			int oldring = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getInt("oldring",0);
-			if (oldring > 0) am.setStreamVolume(AudioManager.STREAM_RING, oldring, 0);
+			if (oldring > 0 && Integer.parseInt(Build.VERSION.SDK) < 25)
+					am.setStreamVolume(AudioManager.STREAM_RING, oldring, 0);
 			Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
 			edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_OLDVALID, false);
 			edit.commit();

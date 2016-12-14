@@ -121,6 +121,7 @@ public class SIPUri extends Activity {
 					alert.setPositiveButton(R.string.app_name,new DialogInterface.OnClickListener() {
 		                public void onClick(DialogInterface dialog, int whichButton) {
 		            			call(items[item]);
+		            			finish();
 		                }
 		            });
 					break;
