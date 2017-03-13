@@ -5,7 +5,7 @@
 
 ## Privacy Policy ##
 
-Sipdroid requests the following permissions:
+### Sipdroid requests the following permissions: ###
 
 android.permission.CAMERA
 
