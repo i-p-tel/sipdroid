@@ -1,5 +1,9 @@
 ### Beta-Versions ###
 
+  * 4.1
+    * Bugfix for screen unlock on incoming calls (for Android 6.0 and above)
+    * Improved accessibility
+    
   * 4.0
     * Fixes for Nougat (7.1)
     
