@@ -288,9 +288,13 @@ import org.zoolu.sip.provider.SipProvider;
 		        Notification notification = new Notification();
 		        notification.icon = mInCallResId;
 				if (type == MISSED_CALL_NOTIFICATION) {
+						notification = new Notification.Builder(mContext)
+								.setSmallIcon(mInCallResId)
+								.setContentIntent(PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0))
+								.setContentTitle(mContext.getString(R.string.app_name))
+								.setContentText(text)
+								.build();
 			        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
-			        	notification.setLatestEventInfo(mContext, text, mContext.getString(R.string.app_name),
-			        			PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0));
 			        	if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_NOTIFY, org.sipdroid.sipua.ui.Settings.DEFAULT_NOTIFY)) {
 				        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
 				        	notification.ledARGB = 0xff0000ff; /* blue */

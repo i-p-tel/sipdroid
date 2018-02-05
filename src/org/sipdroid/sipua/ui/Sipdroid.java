@@ -345,6 +345,7 @@ public class Sipdroid extends Activity implements OnDismissListener {
 	public void onResume() {
 		super.onResume();
 		if (Receiver.call_state != UserAgent.UA_STATE_IDLE) Receiver.moveTop();
+		/*
 		String text;
 		text = Integer.parseInt(Build.VERSION.SDK) >= 5?CreateAccount.isPossible(this):null;
 		if (text != null && !text.contains("Google Voice") &&
@@ -354,6 +355,7 @@ public class Sipdroid extends Activity implements OnDismissListener {
 			createButton.setVisibility(View.VISIBLE);
 			createButton.setText(text);
 		} else
+		*/
 			createButton.setVisibility(View.GONE);
 	}
 

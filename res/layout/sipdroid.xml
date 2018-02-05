@@ -80,19 +80,25 @@
 				android:id="@+id/contacts_button"
 				android:background="@drawable/ic_menu_dial_pad"
 				android:layout_width="48dp"
-				android:layout_height="48dp"/>
+				android:layout_height="48dp"
+				android:contentDescription="Contacts"
+			/>
 			<Button
 				android:id="@+id/settings_button"
 				android:background="@drawable/ic_menu_preferences"
 				android:layout_width="48dp"
-				android:layout_height="48dp"/>
+				android:layout_height="48dp"
+				android:contentDescription="@string/menu_settings"
+			/>
 			<Button
 				android:id="@+id/exit_button"
 				android:background="@drawable/sym_call_done"
 				android:layout_width="48dp"
-				android:layout_height="48dp"/>
-					</LinearLayout>
-			</LinearLayout>
+				android:layout_height="48dp"
+				android:contentDescription="@string/menu_exit"
+			/>
+		</LinearLayout>
+	</LinearLayout>
 
 	<LinearLayout
 		android:orientation="vertical"
@@ -127,7 +133,7 @@
 				android:imeOptions="actionSend"/>
 		</LinearLayout>
 	</LinearLayout>
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<LinearLayout 
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"

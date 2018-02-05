@@ -392,6 +392,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		super.onCreate(icicle);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		setContentView(R.layout.incall);
 		
 		initInCallScreen();
