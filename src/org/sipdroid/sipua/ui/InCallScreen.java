@@ -391,7 +391,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		if (Integer.parseInt(Build.VERSION.SDK) >= 26)
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		setContentView(R.layout.incall);
 		
@@ -503,7 +504,17 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		boolean result = super.onPrepareOptionsMenu(menu);
 
 		menu.findItem(DTMF_MENU_ITEM).setVisible(Receiver.call_state == UserAgent.UA_STATE_INCALL);
-		return !(pactive || SystemClock.elapsedRealtime()-pactivetime < 1000);
+		if (pactive || SystemClock.elapsedRealtime()-pactivetime < 1000) {
+			menu.findItem(HOLD_MENU_ITEM).setVisible(false);
+			menu.findItem(MUTE_MENU_ITEM).setVisible(false);
+			menu.findItem(VIDEO_MENU_ITEM).setVisible(false);
+			menu.findItem(TRANSFER_MENU_ITEM).setVisible(false);
+			menu.findItem(BLUETOOTH_MENU_ITEM).setVisible(false);
+			menu.findItem(SPEAKER_MENU_ITEM).setVisible(false);
+			menu.findItem(ANSWER_MENU_ITEM).setVisible(false);
+			menu.findItem(DTMF_MENU_ITEM).setVisible(false);
+		}
+		return result;
 	}
 		
 	@Override
