@@ -1,5 +1,8 @@
 ### Beta-Versions ###
 
+  * 4.2
+    * Bugfix for missing options button in calls (for Android 6 and 7)
+    
   * 4.1
     * Bugfix for screen unlock on incoming calls (for Android 6.0 and above)
     * Improved accessibility
