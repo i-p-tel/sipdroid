@@ -1,31 +1,28 @@
-| Copyright (C) 2009 The Sipdroid Open Source Project. The following article is part of Sipdroid. Sipdroid is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. |
-|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-
-
-
 ## Privacy Policy ##
 
-### Sipdroid requests the following permissions: ###
+Sipdroid never stores or transfers any personal data, such as call logs or phone numbers.
 
-android.permission.CAMERA
+### Sipdroid requests the following permissions on startup: ###
 
-Required for making video calls.
+#### Phone ####
+Allows access to call log. If you deny this permission, Sipdroid will not be able to proxy calls made through the OS dialer to Voice-over-IP any more. In this case you can only use the dialer of Sipdroid's main application screen to make VoIP calls, but there will be no call history for autocomplete available there either.
 
-android.permission.RECORD_AUDIO
+#### Contacts ####
+Used for displaying contact names in Sipdroid's dialer, for labelling ongoing calls on screen, and for adding names to missed call notifications. If you deny the permission, Sipdroid will just display phone numbers w/o their corresponding names.
 
-Required for making SIP calls.
+#### Record Audio ####
+Required for making voice calls. If you deny this permission, calls will be unidirectional. The other party won't hear you. In call options, there is an option you can tick to record calls to your SD card.
 
-android.permission.READ_PHONE_STATE
+### Optionally Enabled Permissions ###
 
-This is used to deal with situations where a SIP call is coming in while a mobile call is ongoing and vice versa.
+#### Location ####
+Sipdroid will not ask for this permission. If you want to use the PBXes feature to track your phone's location you have to manually enable it from Android Settings >> Apps >> Sipdroid >> Permissions.
 
-android.permission.GET_ACCOUNTS
+#### Camera ####
+Sipdroid will not ask for this permission. If you want to use the video calls feature you have to manually enable it from Android Settings >> Apps >> Sipdroid >> Permissions.
 
-For optionally creating a PBXes account the user's email address is prefilled into the dialog box.
-
-android.permission.READ_CONTACTS
-
-Used for displaying contact names in the dialer and for labelling ongoing calls on screen and saved call records by their corresponding contact names.
+#### Storage ####
+Sipdroid will ask you to allow access to storage if you want to import settings, or record calls to SD card. If you deny, these features obviously won't work.
 
 ### Does your app have access to my device phone number, IMEI or IP in any way?  ###
 
