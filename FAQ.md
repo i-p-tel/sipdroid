@@ -1,60 +1,6 @@
 | Copyright (C) 2009 The Sipdroid Open Source Project. The following article is part of Sipdroid. Sipdroid is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. |
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-
-
-## Prerequisites ##
-
-### How can I prepare for mobile VoIP? ###
-
-Sipdroid allows you to choose where you will use VoIP, on WLANs only, on 3G, or EDGE networks. If you are going to use VoIP services outside private wireless networks, it's your responsibility to check the contractual terms with the mobile operator:
-
-Often mobile phone operators forbid using VoIP in the contract's fine print. The European Union is already looking at whether blocks on VoIP service by Europe's mobile phone operators might breach competition laws.
-
-The following plans are suitable for unlimited hotspot/3G usage:
-
-  * USA: "T-Mobile has **no restrictions** on using SIP as a signaling protocol." ([source](http://groups.google.com/group/android-developers/browse_thread/thread/9e471b66e7f397b1/d5051b3d37c79beb?hl=en&ie=UTF-8&q=sipdroid#d5051b3d37c79beb))
-  * Germany: [debitel Talk and Surf S](https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php), all T-Mobile and Vodafone plans with VoIP Option, and all [O2 customers with Internet Packs](http://www.de.o2.com/ext/o2/wizard/index?page_id=15698;tree_id=303;category_id=;year=;page=1;state=online;style=portal)
-
-[Add](http://code.google.com/p/sipdroid/w/edit/FAQ) more!
-
-### What type of warranty comes with Sipdroid? ###
-
-This project publishes Sipdroid for free under the terms of [GNU General Public License v3](http://www.gnu.org/licenses/gpl.html). The first public version is beta for software testing. So please allow for some issues and incompatibilities at the beginning.
-
-### How much will Sipdroid drain the battery? (Constantly running Internet connection?) ###
-
-When using [pbxes.org](http://pbxes.org) the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time).  See [article](http://code.google.com/p/sipdroid/wiki/NewStandbyTechnique) for background.
-
-### How much bandwidth is required? ###
-
-Sipdroid uses G.711 A-law to transmit voice which needs about 80 kBit/s in each direction. This corresponds to a total of 1.2 MB per minute.
-
-A video call needs approximately twice as much.
-
-Over EDGE or when optionally enabled for all calls Sipdroid uses GSM codec to compress to about 30 kBit/s in each direction resulting in a total of 0.5 MB per minute.
-
-### What are the system requirements? ###
-
-To install Sipdroid you need version 1.5 "Cupcake" of Android.
-
-See http://android-developers.blogspot.com/2009/04/android-15-is-here.html for details on updating the OS on developer phones.
-
-The update for the other phones comes over the air, starting May 1st, 2009.
-
-### What build environment is needed for Sipdroid? ###
-
-If you are interested in developing and contributing to the project please install [Eclipse](http://developer.android.com/sdk/1.1_r1/installing.html) and [Subclipse](http://subclipse.tigris.org/install.html) for building the source code.
-
-After the sources are done downloading, you see the following in "Package Explorer"
-in Eclipse.
-
-> SipUA 326 [Trunk: trunk](http://sipdroid.googlecode.com/svn,)
-
-Right click on SipUA and select Properties in the drop down menu (last option). Click
-on Android (assumes the Android SDK is installed and configured in Eclipse). In the
-"Project Build Target" select "Android 1.6" (Target Name).
-
 ## User Interface ##
 
 ### How can I dial my contacts over Sipdroid / over Phone? ###
@@ -72,12 +18,6 @@ When entering a phone number in the dialer add a "+" sign to toggle call type. I
 NOTE: Don't add anything to emergency numbers. They are always dialed over Phone.
 
 ![http://sipdroid.googlecode.com/svn/images/choose2.png](http://sipdroid.googlecode.com/svn/images/choose2.png)
-
-### How are the buttons assigned? ###
-
-Android reserves the red key for turning screen off and the green call button for answering a phone call. That's why they don't always work for Sipdroid, e.g. when screen is turned on the red key will first switch screen off, and then end call on another press.  The green button will not work for Sipdroid if there is a phone call ringing at the same time. In this case the green button will answer the GSM call.
-
-That's why Sipdroid offers a sliding card. A call is off-hook if the card is at the top of the screen, and it is on-hook at the bottom. Just slide up to answer. Slide down to end call. If you want to reject an incoming call press the MENU button to select end call.
 
 ### How can I modify phone numbers on the fly? Where is the prefix option? ###
 
@@ -125,26 +65,50 @@ Suppose you are outside your wireless LAN, or got a mobile Internet connection, 
 
 Exclude pattern and search & replace get applied in the same way as for SIP calls.<br>
 <br>
-<h3>What types of video calls are supported?</h3>
+### How much will Sipdroid drain the battery? (Constantly running Internet connection?) ###
 
-There are three levels of operation for video calls.<br>
-<br>
-<h4>Sending</h4>
-By pressing the MENU button and choosing "Send Video" you can start<br>
-video transmission to a SIP phone with video.<br>
-<br>
-<h4>Receiving</h4>
-This is not supported natively. If you are registered to PBXes and the<br>
-other party starts sending video it will show up on the Android phone.<br>
-<br>
-<h4>Streaming</h4>
-When you start sending video as described above while you are in a<br>
-call to a regular phone, and you have a PBXes Premium Account, the<br>
-other party can open your webcall URL, click on your photo and see<br>
-your video.<br>
-<br>
-Streaming can also be used if you call somebody on his Android phone who is not registered to PBXes. Then he can still open your webcall URL from his mobile browser and see you.<br>
-<br>
+When using [pbxes.org](http://pbxes.org) the expected stand-by times are the same as without Sipdroid running in the background (we observed about three days of stand-by time).  See [article](http://code.google.com/p/sipdroid/wiki/NewStandbyTechnique) for background.
+
+### How much bandwidth is required? ###
+
+Sipdroid uses G.711 A-law to transmit voice which needs about 80 kBit/s in each direction. This corresponds to a total of 1.2 MB per minute.
+
+A video call needs approximately twice as much.
+
+Over EDGE or when optionally enabled for all calls Sipdroid uses GSM codec to compress to about 30 kBit/s in each direction resulting in a total of 0.5 MB per minute.
+
+## Legal ##
+
+### How can I prepare for mobile VoIP? ###
+
+Sipdroid allows you to choose where you will use VoIP, on WLANs only, on 3G, or EDGE networks. If you are going to use VoIP services outside private wireless networks, it's your responsibility to check the contractual terms with the mobile operator:
+
+Often mobile phone operators forbid using VoIP in the contract's fine print. The European Union is already looking at whether blocks on VoIP service by Europe's mobile phone operators might breach competition laws.
+
+The following plans are suitable for unlimited hotspot/3G usage:
+
+  * USA: "T-Mobile has **no restrictions** on using SIP as a signaling protocol." ([source](http://groups.google.com/group/android-developers/browse_thread/thread/9e471b66e7f397b1/d5051b3d37c79beb?hl=en&ie=UTF-8&q=sipdroid#d5051b3d37c79beb))
+  * Germany: [debitel Talk and Surf S](https://www.debitel.de/privat_shop/mobilfunk/tarife/uebersicht/tariftabelle/debitel-talk-and-surf-s-im-dt.-t-mobile-netz-22723.php), all T-Mobile and Vodafone plans with VoIP Option, and all [O2 customers with Internet Packs](http://www.de.o2.com/ext/o2/wizard/index?page_id=15698;tree_id=303;category_id=;year=;page=1;state=online;style=portal)
+
+[Add](http://code.google.com/p/sipdroid/w/edit/FAQ) more!
+
+### What type of warranty comes with Sipdroid? ###
+
+This project publishes Sipdroid for free under the terms of [GNU General Public License v3](http://www.gnu.org/licenses/gpl.html). The first public version is beta for software testing. So please allow for some issues and incompatibilities at the beginning.
+
+### What build environment is needed for Sipdroid? ###
+
+If you are interested in developing and contributing to the project please install [Eclipse](http://developer.android.com/sdk/1.1_r1/installing.html) and [Subclipse](http://subclipse.tigris.org/install.html) for building the source code.
+
+After the sources are done downloading, you see the following in "Package Explorer"
+in Eclipse.
+
+> SipUA 326 [Trunk: trunk](http://sipdroid.googlecode.com/svn,)
+
+Right click on SipUA and select Properties in the drop down menu (last option). Click
+on Android (assumes the Android SDK is installed and configured in Eclipse). In the
+"Project Build Target" select "Android 1.6" (Target Name).
+
 <h2>SIP Providers</h2>
 
 <h3>What SIP providers is Sipdroid compatible with?</h3>
