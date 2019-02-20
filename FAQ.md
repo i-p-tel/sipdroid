@@ -5,19 +5,7 @@
 
 ### How can I dial my contacts over Sipdroid / over Phone? ###
 
-In settings you can specify your preferred call type. This is used when clicking a "Call" tab of a contact. When clicking on the "Text" tab of a contact you get a menu like this:
-
-![http://sipdroid.googlecode.com/svn/images/choose.png](http://sipdroid.googlecode.com/svn/images/choose.png)
-
-"Messaging" lets you proceed with sending SMS/MMS. The other two let you override your call type manually.
-
-### How can I dial a number over Sipdroid / over Phone? ###
-
-When entering a phone number in the dialer add a "+" sign to toggle call type. If your preferred call type is Sipdroid adding a + behind the number calls over Phone.
-
-NOTE: Don't add anything to emergency numbers. They are always dialed over Phone.
-
-![http://sipdroid.googlecode.com/svn/images/choose2.png](http://sipdroid.googlecode.com/svn/images/choose2.png)
+In settings you can specify your preferred call type. This is used when clicking a "Call" tab of a contact. 
 
 ### How can I modify phone numbers on the fly? Where is the prefix option? ###
 
