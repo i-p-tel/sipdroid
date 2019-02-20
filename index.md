@@ -1,3 +1,5 @@
+[FAQ](https://github.com/i-p-tel/sipdroid/blob/wiki/FAQ.md)
+
 ## News ##
 
 ### 3.0 ###
