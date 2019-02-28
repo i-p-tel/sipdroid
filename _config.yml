@@ -6,3 +6,5 @@ theme: jekyll-theme-cayman
 
 gems:
   - jekyll-mentions
+include:
+  - faq.md
