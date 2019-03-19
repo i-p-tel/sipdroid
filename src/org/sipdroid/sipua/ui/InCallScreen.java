@@ -21,7 +21,6 @@ package org.sipdroid.sipua.ui;
  */
 
 import java.util.HashMap;
-
 import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.media.RtpStreamSender;
 import org.sipdroid.sipua.R;
@@ -30,9 +29,10 @@ import org.sipdroid.sipua.phone.Call;
 import org.sipdroid.sipua.phone.CallCard;
 import org.sipdroid.sipua.phone.Phone;
 import org.sipdroid.sipua.phone.SlidingCardManager;
-
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
@@ -41,6 +41,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -241,7 +242,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	}
 	
     Handler mHandler = new Handler() {
-    	public void handleMessage(Message msg) {
+    	@SuppressLint("NewApi")
+		public void handleMessage(Message msg) {
     		switch (msg.what) {
     		case MSG_ANSWER:
         		if (Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL)
@@ -287,7 +289,10 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 					mDialerDrawer.setVisibility(View.VISIBLE);
     	        }
 				ContentResolver cr = getContentResolver();
-    			if (hapticset) {
+    			if (hapticset && haptic != 0) {
+    				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+    					if (!Settings.System.canWrite(mContext))
+    						break;
     				Settings.System.putInt(cr, Settings.System.HAPTIC_FEEDBACK_ENABLED, haptic);
     				hapticset = false;
     			}
@@ -391,8 +396,8 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
-		if (Integer.parseInt(Build.VERSION.SDK) >= 26)
-			requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		if (Integer.parseInt(Build.VERSION.SDK) >= 26)
+//			requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		setContentView(R.layout.incall);
 		
@@ -563,6 +568,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	static int haptic;
 	static boolean hapticset;
 	
+	@SuppressLint("NewApi")
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		boolean keepon = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_KEEPON, org.sipdroid.sipua.ui.Settings.DEFAULT_KEEPON);
@@ -593,6 +599,15 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 			haptic = Settings.System.getInt(cr, Settings.System.HAPTIC_FEEDBACK_ENABLED, 1);
 			hapticset = true;
 		}
+		if (haptic == 0)
+			return;
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+			if (!Settings.System.canWrite(mContext)) {
+				 Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+				    intent.setData(Uri.parse("package:org.sipdroid.sipua"));
+				    startActivity(intent);
+				 return;
+			}
 		Settings.System.putInt(cr, Settings.System.HAPTIC_FEEDBACK_ENABLED, 0);
 	}
 }

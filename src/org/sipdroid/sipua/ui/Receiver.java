@@ -26,9 +26,13 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.KeyguardManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -275,6 +279,8 @@ import org.zoolu.sip.provider.SipProvider;
 		static String cache_text;
 		static int cache_res;
 		
+		@SuppressLint("NewApi")
+		@TargetApi(26)
 		public static void onText(int type,String text,int mInCallResId,long base) {
 			if (mSipdroidEngine != null && type == REGISTER_NOTIFICATION+mSipdroidEngine.pref) {
 				cache_text = text;
@@ -285,15 +291,30 @@ import org.zoolu.sip.provider.SipProvider;
 				text = null;
 	        NotificationManager mNotificationMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 	        if (text != null) {
-		        Notification notification = new Notification();
+		        Notification notification;
+			    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+			        mNotificationMgr.createNotificationChannel(new NotificationChannel("status", "Status", NotificationManager.IMPORTANCE_LOW));
+			        mNotificationMgr.createNotificationChannel(new NotificationChannel("missed", "Missed Call", NotificationManager.IMPORTANCE_LOW));
+			        mNotificationMgr.createNotificationChannel(new NotificationChannel("message", "Voice Message", NotificationManager.IMPORTANCE_HIGH));
+				    notification = new Notification.Builder(mContext,"status").build();
+			    } else
+			    	notification = new Notification.Builder(mContext).build();
 		        notification.icon = mInCallResId;
 				if (type == MISSED_CALL_NOTIFICATION) {
-						notification = new Notification.Builder(mContext)
-								.setSmallIcon(mInCallResId)
-								.setContentIntent(PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0))
-								.setContentTitle(mContext.getString(R.string.app_name))
-								.setContentText(text)
-								.build();
+					    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+							notification = new Notification.Builder(mContext,"missed")
+									.setSmallIcon(mInCallResId)
+									.setContentIntent(PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0))
+									.setContentTitle(mContext.getString(R.string.app_name))
+									.setContentText(text)
+									.build();
+					    else
+							notification = new Notification.Builder(mContext)
+									.setSmallIcon(mInCallResId)
+									.setContentIntent(PendingIntent.getActivity(mContext, 0, createCallLogIntent(), 0))
+									.setContentTitle(mContext.getString(R.string.app_name))
+									.setContentText(text)
+									.build();
 			        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			        	if (PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_NOTIFY, org.sipdroid.sipua.ui.Settings.DEFAULT_NOTIFY)) {
 				        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
@@ -304,7 +325,12 @@ import org.zoolu.sip.provider.SipProvider;
 	        	} else {
 	        		switch (type) {
 		        	case MWI_NOTIFICATION:
-			        	notification.flags |= Notification.FLAG_AUTO_CANCEL;
+					    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+						    notification = new Notification.Builder(mContext,"message").build();
+					    } else
+					    	notification = new Notification.Builder(mContext).build();
+				        notification.icon = mInCallResId;
+				        notification.flags |= Notification.FLAG_AUTO_CANCEL;
 						notification.contentIntent = PendingIntent.getActivity(mContext, 0, 
 								createMWIIntent(), 0);	
 			        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
@@ -403,6 +429,7 @@ import org.zoolu.sip.provider.SipProvider;
 		static final int GPS_UPDATES = 4000*1000;
 		static final int NET_UPDATES = 600*1000;
 		
+		@TargetApi(23)
 		public static void pos(boolean enable) {
 			
 			if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS) ||
@@ -420,6 +447,9 @@ import org.zoolu.sip.provider.SipProvider;
 			if (am == null) am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
 			pos_gps(false);
 			if (enable) {
+            	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+	        		if (mContext.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+	        		        != PackageManager.PERMISSION_GRANTED) return;
 				if (call_state == UserAgent.UA_STATE_IDLE && Sipdroid.on(mContext) &&
 						PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS) &&
 						PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL).length()>0) {

@@ -21,14 +21,15 @@
 
 package org.sipdroid.sipua.ui;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.SipdroidEngine;
 import org.sipdroid.sipua.UserAgent;
 import org.zoolu.tools.Random;
-
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -38,6 +39,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.database.CursorWrapper;
@@ -80,11 +82,42 @@ public class Sipdroid extends Activity implements OnDismissListener {
 	private static AlertDialog m_AlertDlg;
 	AutoCompleteTextView sip_uri_box,sip_uri_box2;
 	Button createButton;
+	AlertDialog permd;
 	
+	@TargetApi(23)
 	@Override
 	public void onStart() {
 		super.onStart();
 		Receiver.engine(this).registerMore();
+		
+    	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+			final String[] perms = {
+				Manifest.permission.READ_CALL_LOG,
+				Manifest.permission.PROCESS_OUTGOING_CALLS,
+				Manifest.permission.CALL_PHONE,
+				Manifest.permission.READ_CONTACTS,
+				Manifest.permission.WRITE_CONTACTS,
+				Manifest.permission.WRITE_CALL_LOG,
+				Manifest.permission.RECORD_AUDIO
+				};
+			for(String perm: perms)
+				if (checkSelfPermission(perm) != PackageManager.PERMISSION_GRANTED) {
+					if (permd == null || !permd.isShowing())
+					permd = new AlertDialog.Builder(this)
+					.setMessage(R.string.permhelp)
+					.setTitle("Permissions")
+					.setIcon(R.drawable.icon22)
+					.setCancelable(true)
+					.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+		                public void onClick(DialogInterface dialog, int whichButton) {
+		                	requestPermissions(perms,0);
+		                }
+		            })
+		            .show();
+			        return;
+				}
+    	}
+    	
 	    ContentResolver content = getContentResolver();
 	    Cursor cursor = content.query(Calls.CONTENT_URI,
 	            PROJECTION, Calls.NUMBER+" like ?", new String[] { "%@%" }, Calls.DEFAULT_SORT_ORDER);

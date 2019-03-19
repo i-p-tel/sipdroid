@@ -23,19 +23,20 @@ package org.sipdroid.sipua.ui;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
 import org.sipdroid.codecs.Codecs;
 import org.sipdroid.media.RtpStreamReceiver;
 import org.sipdroid.sipua.R;
 import org.sipdroid.sipua.SipdroidEngine;
 import org.zoolu.sip.provider.SipStack;
-
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -69,6 +70,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private static final int MENU_IMPORT = 0;
 	private static final int MENU_DELETE = 1;
 	private static final int MENU_EXPORT = 2;
+	private static final int MENU_ABOUT  = 3;
 
 	// All possible values of the PREF_PREF preference (see bellow) 
 	public static final String VAL_PREF_PSTN = "PSTN";
@@ -335,14 +337,23 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	    menu.add(0, MENU_IMPORT, 0, getString(R.string.settings_profile_menu_import)).setIcon(android.R.drawable.ic_menu_upload);
 	    menu.add(0, MENU_EXPORT, 0, getString(R.string.settings_profile_menu_export)).setIcon(android.R.drawable.ic_menu_save);
 	    menu.add(0, MENU_DELETE, 0, getString(R.string.settings_profile_menu_delete)).setIcon(android.R.drawable.ic_menu_delete);
-        return true;
+	    menu.add(0, MENU_ABOUT, 0, getString(R.string.menu_about)).setIcon(android.R.drawable.ic_menu_info_details);
+	    return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @TargetApi(23)
+	public boolean onOptionsItemSelected(MenuItem item) {
     	context = this;
 
     	switch (item.getItemId()) {
             case MENU_IMPORT:
+            	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+	        		if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+	        		        != PackageManager.PERMISSION_GRANTED) {
+	        				String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+	        		        requestPermissions(perms,0);
+	        		}
+            	
             	// Get the content of the directory
             	profileFiles = getProfileList();
             	if (profileFiles != null && profileFiles.length > 0) {
@@ -382,6 +393,15 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     			})
                 .show();
                 return true;
+                
+    		case MENU_ABOUT:
+    			new AlertDialog.Builder(this)
+    			.setMessage(getString(R.string.about).replace("\\n","\n").replace("${VERSION}", Sipdroid.getVersion(this)))
+    			.setTitle(getString(R.string.menu_about))
+    			.setIcon(R.drawable.icon22)
+    			.setCancelable(true)
+    			.show();
+    			break;
         }
 
         return false;
@@ -491,9 +511,18 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	EditText transferText;
 	String mKey;
 
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    @TargetApi(23)
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     	if (!Thread.currentThread().getName().equals("main"))
     		return;
+    	if (key.equals(PREF_CALLRECORD) && sharedPreferences.getBoolean(key, DEFAULT_CALLRECORD))
+        	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+        		if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        		        != PackageManager.PERMISSION_GRANTED) {
+        				String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        		        requestPermissions(perms,0);
+        		}
+        	
 		if (key.startsWith(PREF_PORT) && sharedPreferences.getString(key, DEFAULT_PORT).equals("0")) {
 	   		Editor edit = sharedPreferences.edit();
     		edit.putString(key, DEFAULT_PORT);

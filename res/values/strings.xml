@@ -47,6 +47,10 @@
 \n
 \nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details (http://www.gnu.org/licenses).</string>
 
+<string name="permhelp">Sipdroid never stores or transfers any personal data, such as call logs or phone numbers. Please allow access to:
+\n\nTelephone: If you deny, Sipdroid will not be able to proxy calls made through the OS dialer to Voice-over-IP.
+\n\nContacts: For displaying their names in Sipdroid\'s call screen.
+\n\nMicrophone: If you deny, calls will be unidirectional. The other party won\'t hear you.</string>
 <string name="reg">Registering...</string>
 <string name="regpref">Preferred</string>
 <string name="regclick">Click to select</string>

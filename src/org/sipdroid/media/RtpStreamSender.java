@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Random;
-
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
@@ -36,8 +35,10 @@ import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.sipdroid.codecs.Codecs;
 import org.sipdroid.codecs.G711;
-
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
@@ -266,6 +267,7 @@ public class RtpStreamSender extends Thread {
 	int mu;
 	
 	/** Runs it in a new Thread. */
+	@TargetApi(23)
 	public void run() {
 		WifiManager wm = (WifiManager) Receiver.mContext.getSystemService(Context.WIFI_SERVICE);
 		long lastscan = 0,lastsent = 0;
@@ -285,6 +287,12 @@ public class RtpStreamSender extends Thread {
 		m = 1;
 		int dtframesize = 4;
 		
+    	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+    		if (Receiver.mContext.checkSelfPermission(Manifest.permission.RECORD_AUDIO)
+    		        != PackageManager.PERMISSION_GRANTED) {
+    		        return;
+    		}
+    	
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
 		mu = p_type.codec.samp_rate()/8000;
 		int min = AudioRecord.getMinBufferSize(p_type.codec.samp_rate(), 

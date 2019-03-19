@@ -20,8 +20,10 @@ package org.sipdroid.sipua.ui;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -35,6 +37,13 @@ public class SIP extends Activity {
 		if (uri.indexOf(":") >= 0) {
 			number = uri.substring(uri.indexOf(":")+1);
 			if (!number.equals("")) {
+            	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+	        		if (checkSelfPermission(Manifest.permission.CALL_PHONE)
+	        		        != PackageManager.PERMISSION_GRANTED) {
+	        				String[] perms = {Manifest.permission.CALL_PHONE};
+	        		        requestPermissions(perms,0);
+	        		        return;
+	        		}
 		        Intent intent = new Intent(Intent.ACTION_CALL,
 		                Uri.fromParts(Uri.decode(number).contains("@")?"sipdroid":"tel", Uri.decode(number)+
 		                		(PreferenceManager.getDefaultSharedPreferences(this).getString(Settings.PREF_PREF, Settings.DEFAULT_PREF).equals(Settings.VAL_PREF_PSTN) ? "+" : ""), null));

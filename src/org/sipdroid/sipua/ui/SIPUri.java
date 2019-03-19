@@ -134,7 +134,7 @@ public class SIPUri extends Activity {
 	    @Override
 	    public void onPause() {
 	        super.onPause();
-	        finish();
+//	        finish();
 	    }
 	 
 }

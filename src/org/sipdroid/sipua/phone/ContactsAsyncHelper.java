@@ -196,12 +196,11 @@ public class ContactsAsyncHelper extends Handler {
                     {
                     	inputStream = args.context.getContentResolver().openInputStream(args.uri);
                     }
-                    catch (FileNotFoundException e) 
+                    catch (Exception e) 
                     {
                     	if (!Sipdroid.release) e.printStackTrace();
 					}
                     
-
                     if (inputStream != null) {
                         args.result = Drawable.createFromStream(inputStream, args.uri.toString());
 

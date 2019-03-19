@@ -25,10 +25,10 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="4.2 beta"
-    android:versionCode="107"
+    android:versionName="4.4 beta"
+    android:versionCode="115"
     android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="11"/>
+	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="26"/>
 	<supports-screens
           android:normalScreens="true"
           android:smallScreens="true"
@@ -41,7 +41,7 @@
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
 	<uses-feature android:name="android.hardware.wifi" android:required="false"/>
 	<uses-feature android:name="android.hardware.camera" android:required="false"/>
-	<application android:icon="@drawable/icon64" android:label="@string/app_name">
+	<application android:icon="@drawable/icon64" android:label="@string/app_name" android:theme="@android:style/Theme.Holo">
         <activity android:name="org.sipdroid.sipua.ui.Sipdroid" android:label="@string/app_name" android:launchMode="singleInstance"
         	android:configChanges="orientation|keyboardHidden">
             <intent-filter>

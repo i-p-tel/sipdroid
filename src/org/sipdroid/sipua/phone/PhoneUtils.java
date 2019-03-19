@@ -21,10 +21,13 @@
 
 package org.sipdroid.sipua.phone;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+
 import org.sipdroid.sipua.*;
 
 public class PhoneUtils {
@@ -123,7 +126,7 @@ static CallerInfoToken startGetCallerInfo(Context context, Connection c,
         // handling case where number is null (caller id hidden) as well.
         if (!TextUtils.isEmpty(number)) {
             cit.currentInfo.phoneNumber = number;
-             cit.asyncQuery = CallerInfoAsyncQuery.startQuery(QUERY_TOKEN, context,
+            cit.asyncQuery = CallerInfoAsyncQuery.startQuery(QUERY_TOKEN, context,
                     number, c.getAddress2(), sCallerInfoQueryListener, c);
             cit.asyncQuery.addQueryListener(QUERY_TOKEN, listener, cookie);
             cit.isFinal = false;

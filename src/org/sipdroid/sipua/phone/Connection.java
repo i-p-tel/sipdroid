@@ -1,12 +1,15 @@
 package org.sipdroid.sipua.phone;
 
 import org.sipdroid.sipua.ui.Receiver;
-
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.SystemClock;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
@@ -164,10 +167,17 @@ public class Connection
         this.userData = userdata;
     }
     
-    public static Uri addCall(CallerInfo ci, Context context, String number,
+    @TargetApi(23)
+	public static Uri addCall(CallerInfo ci, Context context, String number,
             boolean isPrivateNumber, int callType, long start, int duration) {
         final ContentResolver resolver = context.getContentResolver();
 
+    	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+    		if (context.checkSelfPermission(Manifest.permission.WRITE_CALL_LOG)
+    		        != PackageManager.PERMISSION_GRANTED) {
+     		        return null;
+    		}
+    	
         if (TextUtils.isEmpty(number)) {
             if (isPrivateNumber) {
                 number = CallerInfo.PRIVATE_NUMBER;
@@ -195,7 +205,12 @@ public class Connection
         }
 
         if ((ci != null) && (ci.person_id > 0)) {
-            ContactsContract.Contacts.markAsContacted(resolver, ci.person_id);
+        	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        		if (context.checkSelfPermission(Manifest.permission.WRITE_CONTACTS)
+        		        == PackageManager.PERMISSION_GRANTED)
+        			ContactsContract.Contacts.markAsContacted(resolver, ci.person_id);
+        	} else
+        		ContactsContract.Contacts.markAsContacted(resolver, ci.person_id);
         }
 
         Uri result;
