@@ -146,10 +146,3 @@ Please have a look at the <a href='http://pbxes.org/community_e.php?display=wiki
 First you create extension(s) and trunk(s). Perform an echo test by dialing <code>*</code>43. Then you add at least one inbound and one outbound route. Leave the trunk name empty on your inbound route. The Android specific details can be found under "Mobile Extensions".<br>
 <br>
 The username to be entered in Sipdroid consists of account name, a dash ('-') and the extension number, e.g. "myuser-200". The password is that of the extension, not the password of your PBXes account.<br>
-<br>
-<h2>Android Applications</h2>
-
-<h3>GV</h3>
-
-Sipdroid can be used to add true VoIP calling to the GV app. Both integrate amazingly well. Further info is available at <a href='http://iiordanov.blogspot.com/2009/07/sipdroid-gv-guava.html'>Iordans's blog</a>.<br>
-<br>
