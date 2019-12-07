@@ -1,5 +1,14 @@
 ### Beta-Versions ###
 
+  * 5.0
+    * Call continues when switching from Wifi to mobile data and back
+    * Added support for 64-bit only CPUs
+    * Fixed force closes
+    
+  * 4.4
+    * Supports notification channels
+    * Targets SDK 23
+
   * 4.2
     * Bugfix for missing options button in calls (for Android 6 and 7)
     
