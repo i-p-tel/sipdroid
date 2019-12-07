@@ -111,7 +111,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_AUTO_ONDEMAND = "auto_on_demand";
 	public static final String PREF_AUTO_HEADSET = "auto_headset";
 	public static final String PREF_MWI_ENABLED = "MWI_enabled";
-	public static final String PREF_REGISTRATION = "registration";
 	public static final String PREF_NOTIFY = "notify";
 	public static final String PREF_NODATA = "nodata";
 	public static final String PREF_SIPRINGTONE = "sipringtone";
@@ -311,10 +310,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 
 		if (! settings.contains(PREF_MWI_ENABLED)) {
 			CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(PREF_MWI_ENABLED);
-			cb.setChecked(true);
-		}
-		if (! settings.contains(PREF_REGISTRATION)) {
-			CheckBoxPreference cb = (CheckBoxPreference) getPreferenceScreen().findPreference(PREF_REGISTRATION);
 			cb.setChecked(true);
 		}
 		if (Sipdroid.market) {
@@ -585,7 +580,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
         			key.startsWith(PREF_FROMUSER) ||
         			key.equals(PREF_AUTO_ONDEMAND) ||
         			key.equals(PREF_MWI_ENABLED) ||
-        			key.equals(PREF_REGISTRATION) ||
         			key.equals(PREF_KEEPON)) {
         	Receiver.engine(this).halt();
     		Receiver.engine(this).StartEngine();

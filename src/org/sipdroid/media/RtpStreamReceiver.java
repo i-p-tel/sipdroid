@@ -22,6 +22,7 @@
 package org.sipdroid.media;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.SocketException;
 
 import org.sipdroid.net.RtpPacket;
@@ -95,10 +96,13 @@ public class RtpStreamReceiver extends Thread {
 		call_recorder = rec;
 	}
 
+	int local_port;
+	
 	/** Inits the RtpStreamReceiver */
 	private void init(SipdroidSocket socket) {
 		if (socket != null)
 			rtp_socket = new RtpSocket(socket);
+		local_port = rtp_socket.getDatagramSocket().getLocalPort();
 	}
 
 	/** Whether is running */
@@ -628,6 +632,10 @@ public class RtpStreamReceiver extends Thread {
 					tg.startTone(ToneGenerator.TONE_SUP_RINGTONE);
 				}
 				rtp_socket.getDatagramSocket().disconnect();
+				if (RtpStreamSender.new_socket != null) {
+					rtp_socket = new RtpSocket(RtpStreamSender.new_socket);
+					RtpStreamSender.new_socket = null;
+				}
 				if (++timeout > 60) {
 					Receiver.engine(Receiver.mContext).rejectcall();
 					break;

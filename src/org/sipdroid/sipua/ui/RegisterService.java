@@ -22,11 +22,13 @@ package org.sipdroid.sipua.ui;
 
 import org.sipdroid.media.RtpStreamReceiver;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.IBinder;
 
 public class RegisterService extends Service {
@@ -45,6 +47,7 @@ public class RegisterService extends Service {
     @Override
     public void onCreate() {
     	super.onCreate();
+    	Receiver.sContext = this;
     	if (Receiver.mContext == null) Receiver.mContext = this;
         if (m_receiver == null) {
 			 IntentFilter intentfilter = new IntentFilter();

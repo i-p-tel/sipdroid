@@ -138,7 +138,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 				
 				try {
 					SipStack.debug_level = 0;
-		//			SipStack.log_path = "/data/data/org.sipdroid.sipua";
 					SipStack.max_retransmission_timeout = 4000;
 					SipStack.default_transport_protocols = new String[1];
 					SipStack.default_transport_protocols[0] = PreferenceManager.getDefaultSharedPreferences(getUIContext()).getString(Settings.PREF_PROTOCOL+(i!=0?i:""),
@@ -178,7 +177,8 @@ public class SipdroidEngine implements RegisterAgentListener {
 				}
 				i++;
 			}
-			register();
+			if (Receiver.sContext != null)
+				register();
 			listen();
 
 			return true;
@@ -264,7 +264,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	
 	public void registerMore() {
 		IpAddress.setLocalIpAddress();
-		int i = 0;
+		int i = 0,c = 0;
 		for (RegisterAgent ra : ras) {
 			try {
 				if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
@@ -273,21 +273,28 @@ public class SipdroidEngine implements RegisterAgentListener {
 					continue;
 				}
 				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
-		
-				if (ra != null && !ra.isRegistered() && Receiver.isFast(i) && ra.register()) {
-					Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
-					wl[i].acquire();
-				}
+
+				if (ra != null)
+					if (ra.isRegistered()) c++;
+					else if (Receiver.isFast(i)) {
+						c++;
+						if (ra.register()) {
+							Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
+							wl[i].acquire();
+						}
+					}
 			} catch (Exception ex) {
 				
 			}
 			i++;
 		}
+		if (c == 0)
+			Receiver.onText(Receiver.REGISTER_NOTIFICATION_0,getUIContext().getString(R.string.regfailed),R.drawable.sym_presence_away,0);
 	}
 	
 	public void register() {
 		IpAddress.setLocalIpAddress();
-		int i = 0;
+		int i = 0,c = 0;
 		for (RegisterAgent ra : ras) {
 			try {
 				if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
@@ -296,52 +303,26 @@ public class SipdroidEngine implements RegisterAgentListener {
 					continue;
 				}
 				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
-		
+
 				if (!Receiver.isFast(i)) {
 					unregister(i);
-				} else {
-					if (ra != null && ra.register()) {
-						Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
-						wl[i].acquire();
+				} else
+					if (ra != null) {
+						c++;
+						if (ra.register()) {
+							Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
+							wl[i].acquire();
+						}
 					}
-				}
 			} catch (Exception ex) {
 				
 			}
 			i++;
 		}
+		if (c == 0)
+			Receiver.onText(Receiver.REGISTER_NOTIFICATION_0,getUIContext().getString(R.string.regfailed),R.drawable.sym_presence_away,0);
 	}
 	
-	public void registerUdp() {
-		IpAddress.setLocalIpAddress();
-		int i = 0;
-		for (RegisterAgent ra : ras) {
-			try {
-				if (user_profiles[i] == null || user_profiles[i].username.equals("") ||
-						user_profiles[i].realm.equals("") ||
-						sip_providers[i] == null ||
-						sip_providers[i].getDefaultTransport() == null ||
-						sip_providers[i].getDefaultTransport().equals("tcp")) {
-					i++;
-					continue;
-				}
-				user_profiles[i].contact_url = getContactURL(user_profiles[i].from_url,sip_providers[i]);
-		
-				if (!Receiver.isFast(i)) {
-					unregister(i);
-				} else {
-					if (ra != null && ra.register()) {
-						Receiver.onText(Receiver.REGISTER_NOTIFICATION+i,getUIContext().getString(R.string.reg),R.drawable.sym_presence_idle,0);
-						wl[i].acquire();
-					}
-				}
-			} catch (Exception ex) {
-				
-			}
-			i++;
-		}
-	}
-
 	public void halt() { // modified
 		long time = SystemClock.elapsedRealtime();
 		

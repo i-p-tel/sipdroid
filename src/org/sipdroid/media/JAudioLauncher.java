@@ -87,6 +87,7 @@ public class JAudioLauncher implements MediaLauncher
 					org.sipdroid.sipua.ui.Settings.DEFAULT_CALLRECORD))
     		 call_recorder = new CallRecorder(null,payload_type.codec.samp_rate()); // Autogenerate filename from date. 
     	 socket=new SipdroidSocket(local_port);
+    	 RtpStreamSender.new_socket = null;
          dir=direction;
          // sender
          if (dir>=0)

@@ -25,10 +25,10 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="4.4 beta"
-    android:versionCode="115"
+    android:versionName="5.0 beta"
+    android:versionCode="120"
     android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="26"/>
+	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="28"/>
 	<supports-screens
           android:normalScreens="true"
           android:smallScreens="true"
@@ -173,6 +173,7 @@
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 	<uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"></uses-permission>
 	<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"></uses-permission>
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE"></uses-permission>
 <!-- 
 	<permission android:name="org.sipdroid.sipua.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<uses-permission android:name="org.sipdroid.sipua.permission.C2D_MESSAGE" />

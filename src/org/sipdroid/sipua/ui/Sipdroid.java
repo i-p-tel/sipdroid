@@ -88,7 +88,9 @@ public class Sipdroid extends Activity implements OnDismissListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		Receiver.engine(this).registerMore();
+		Receiver.engine(this);
+		if (Receiver.sContext != null)
+			Receiver.engine(this).registerMore();
 		
     	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
 			final String[] perms = {
@@ -371,7 +373,11 @@ public class Sipdroid extends Activity implements OnDismissListener {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		edit.putBoolean(Settings.PREF_ON, on);
 		edit.commit();
-        if (on) Receiver.engine(context).isRegistered();
+        if (on) {
+        	Receiver.engine(context);
+        	if (Receiver.sContext != null)
+        		Receiver.engine(context).isRegistered();
+        }
 	}
 
 	@Override

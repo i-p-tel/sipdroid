@@ -2,10 +2,10 @@ LOCAL_PATH := $(call my-dir)
 SPEEX	:= speex-1.2rc1
 SILK     := silk
 
-include $(CLEAR_VARS)
-LOCAL_MODULE    := OSNetworkSystem
-LOCAL_SRC_FILES := OSNetworkSystem.cpp
-include $(BUILD_SHARED_LIBRARY)
+#include $(CLEAR_VARS)
+#LOCAL_MODULE    := OSNetworkSystem
+#LOCAL_SRC_FILES := OSNetworkSystem.cpp
+#include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := speex_jni

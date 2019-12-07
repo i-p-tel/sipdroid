@@ -24,8 +24,11 @@ package org.sipdroid.media;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Random;
+
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
@@ -35,6 +38,7 @@ import org.sipdroid.sipua.ui.Settings;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.sipdroid.codecs.Codecs;
 import org.sipdroid.codecs.G711;
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -55,6 +59,7 @@ import android.preference.PreferenceManager;
 public class RtpStreamSender extends Thread {
 	/** Whether working in debug mode. */
 	public static boolean DEBUG = true;
+	public static SipdroidSocket new_socket;
 
 	/** The RtpSocket */
 	RtpSocket rtp_socket = null;
@@ -144,6 +149,9 @@ public class RtpStreamSender extends Thread {
 		call_recorder = rec;
 	}
 
+	String dest_addr;
+	int dest_port,local_port;
+	
 	/** Inits the RtpStreamSender */
 	private void init(boolean do_sync, Codecs.Map payload_type,
 			  long frame_rate, int frame_size,
@@ -169,7 +177,8 @@ public class RtpStreamSender extends Thread {
 		this.do_sync = do_sync;
 		try {
 			rtp_socket = new RtpSocket(src_socket, InetAddress
-					.getByName(dest_addr), dest_port);
+					.getByName(this.dest_addr = dest_addr), this.dest_port = dest_port);
+			this.local_port = src_socket.getLocalPort();
 		} catch (Exception e) {
 			if (!Sipdroid.release) e.printStackTrace();
 		}
@@ -486,6 +495,15 @@ public class RtpStreamSender extends Thread {
 	 					 for (int i = 1; i < m; i++)
 	 						 rtp_socket.send(rtp_packet);
 	 			 } catch (Exception e) {
+	 				if (new_socket == null) {
+		 				rtp_socket.getDatagramSocket().close();
+		 				try {
+							if (running)
+								rtp_socket = new RtpSocket(new_socket = new SipdroidSocket(local_port), InetAddress
+									.getByName(dest_addr), dest_port);
+						} catch (Exception e1) {
+						}
+	 				}
 	 			 }
  			 if (p_type.codec.number() == 9)
  				 time += frame_size/2;

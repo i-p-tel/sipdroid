@@ -35,6 +35,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -104,6 +105,7 @@ import org.zoolu.sip.provider.SipProvider;
 		public final static int MISSED_CALL_NOTIFICATION = 3;
 		public final static int AUTO_ANSWER_NOTIFICATION = 4;
 		public final static int REGISTER_NOTIFICATION = 5;
+		public final static int REGISTER_NOTIFICATION_0 = 7;
 		
 		final static int MSG_SCAN = 1;
 		final static int MSG_ENABLE = 2;
@@ -116,6 +118,7 @@ import org.zoolu.sip.provider.SipProvider;
 		public static SipdroidEngine mSipdroidEngine;
 		
 		public static Context mContext;
+		public static Service sContext;
 		public static SipdroidListener listener_video;
 		public static Call ccCall;
 		public static Connection ccConn;
@@ -127,6 +130,7 @@ import org.zoolu.sip.provider.SipProvider;
 		public static String MWI_account;
 		private static String laststate,lastnumber;	
 		
+		@TargetApi(26)
 		public static synchronized SipdroidEngine engine(Context context) {
 			if (mContext == null || !context.getClass().getName().contains("ReceiverRestrictedContext"))
 				mContext = context;
@@ -140,7 +144,12 @@ import org.zoolu.sip.provider.SipProvider;
 					Bluetooth.init();
 			} else
 				mSipdroidEngine.CheckEngine();
-        	context.startService(new Intent(context,RegisterService.class));
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+		        context.startForegroundService(new Intent(context, RegisterService.class));
+		    } else {
+		    	context.startService(new Intent(context,RegisterService.class));
+		    }
+        	
 			return mSipdroidEngine;
 		}
 		
@@ -276,6 +285,29 @@ import org.zoolu.sip.provider.SipProvider;
 			}
 		}
 		
+		static int notifications[] = new int[REGISTER_NOTIFICATION+2];
+
+		public static int alloc(int i)
+		{
+			int x;
+			
+			if (notifications[i] != 0)
+				return notifications[i];
+			if (notifications[5] == REGISTER_NOTIFICATION || notifications[6] == REGISTER_NOTIFICATION)
+				x = REGISTER_NOTIFICATION+1;
+			else
+				x = REGISTER_NOTIFICATION;
+			return notifications[i] = x;
+		}
+		
+		public static int free(int i)
+		{
+			int ret = notifications[i];
+			
+			notifications[i] = 0;
+			return ret;
+		}
+		
 		static String cache_text;
 		static int cache_res;
 		
@@ -286,9 +318,6 @@ import org.zoolu.sip.provider.SipProvider;
 				cache_text = text;
 				cache_res = mInCallResId;
 			}
-			if (type >= REGISTER_NOTIFICATION && mInCallResId == R.drawable.sym_presence_available &&
-					!PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_REGISTRATION, org.sipdroid.sipua.ui.Settings.DEFAULT_REGISTRATION))
-				text = null;
 	        NotificationManager mNotificationMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 	        if (text != null) {
 		        Notification notification;
@@ -296,7 +325,7 @@ import org.zoolu.sip.provider.SipProvider;
 			        mNotificationMgr.createNotificationChannel(new NotificationChannel("status", "Status", NotificationManager.IMPORTANCE_LOW));
 			        mNotificationMgr.createNotificationChannel(new NotificationChannel("missed", "Missed Call", NotificationManager.IMPORTANCE_LOW));
 			        mNotificationMgr.createNotificationChannel(new NotificationChannel("message", "Voice Message", NotificationManager.IMPORTANCE_HIGH));
-				    notification = new Notification.Builder(mContext,"status").build();
+			        notification = new Notification.Builder(mContext,"status").build();
 			    } else
 			    	notification = new Notification.Builder(mContext).build();
 		        notification.icon = mInCallResId;
@@ -370,16 +399,30 @@ import org.zoolu.sip.provider.SipProvider;
 						else
 							contentView.setTextViewText(R.id.text2, text);
 						if (mSipdroidEngine != null)
-							contentView.setTextViewText(R.id.text1,
-								mSipdroidEngine.user_profiles[type-REGISTER_NOTIFICATION].username+"@"+
-								mSipdroidEngine.user_profiles[type-REGISTER_NOTIFICATION].realm_orig);
+							if (type == REGISTER_NOTIFICATION_0)
+								contentView.setTextViewText(R.id.text1,
+										mSipdroidEngine.user_profiles[0].username+"@"+
+										mSipdroidEngine.user_profiles[0].realm_orig);
+							else
+								contentView.setTextViewText(R.id.text1,
+									mSipdroidEngine.user_profiles[type-REGISTER_NOTIFICATION].username+"@"+
+									mSipdroidEngine.user_profiles[type-REGISTER_NOTIFICATION].realm_orig);
 	        		} else
 						contentView.setTextViewText(R.id.text1, text);
 					notification.contentView = contentView;
 		        }
-		        mNotificationMgr.notify(type,notification);
+				if (type == REGISTER_NOTIFICATION_0)
+					type = REGISTER_NOTIFICATION;
+				else if (type >= REGISTER_NOTIFICATION)
+					type = alloc(type);
+		    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && Receiver.sContext != null && type == REGISTER_NOTIFICATION)
+		    		Receiver.sContext.startForeground(type,notification);
+		    	else
+		    		mNotificationMgr.notify(type,notification);
 	        } else {
-	        	mNotificationMgr.cancel(type);
+	        	if (type >= REGISTER_NOTIFICATION)
+	        		type = free(type);
+		   		mNotificationMgr.cancel(type);
 	        }
 	        if (type != AUTO_ANSWER_NOTIFICATION)
 	        	updateAutoAnswer();

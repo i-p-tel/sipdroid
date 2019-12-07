@@ -137,10 +137,6 @@
 				android:title="@string/settings_MWI"
 				android:summary="@string/settings_MWI2" />
 			<CheckBoxPreference
-				android:key="registration"
-				android:title="@string/settings_reg"
-				android:summary="@string/settings_reg2" />
-			<CheckBoxPreference
 				android:key="notify"
 				android:title="@string/settings_notify"
 				android:summary="@string/settings_notify2" />
