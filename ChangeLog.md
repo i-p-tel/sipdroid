@@ -1,5 +1,8 @@
 ### Beta-Versions ###
 
+  * 5.2
+    * Video stream now browser based for 1-to-1 and 3-way conferences
+    
   * 5.0
     * Call continues when switching from Wifi to mobile data and back
     * Added support for 64-bit only CPUs
