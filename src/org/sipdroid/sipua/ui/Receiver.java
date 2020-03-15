@@ -422,6 +422,8 @@ import org.zoolu.sip.provider.SipProvider;
 	        } else {
 	        	if (type >= REGISTER_NOTIFICATION)
 	        		type = free(type);
+	        	if (type == 0)
+	        		type = REGISTER_NOTIFICATION;
 		   		mNotificationMgr.cancel(type);
 	        }
 	        if (type != AUTO_ANSWER_NOTIFICATION)

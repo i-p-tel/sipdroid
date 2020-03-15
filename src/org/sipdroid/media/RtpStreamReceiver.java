@@ -155,6 +155,8 @@ public class RtpStreamReceiver extends Thread {
 		return Bluetooth.isSupported();
 	}
 	
+	static public boolean notoast;
+	
 	public int speaker(int mode) {
 		int old = speakermode;
 		
@@ -168,6 +170,10 @@ public class RtpStreamReceiver extends Thread {
 		setMode(speakermode = mode);
 		setCodec();
 		restoreVolume();
+		if (notoast) {
+			notoast = false;
+			return old;
+		}
 		if (mode == AudioManager.MODE_NORMAL && Thread.currentThread().getName().equals("main"))
 			Toast.makeText(Receiver.mContext, R.string.help_speakerphone, Toast.LENGTH_LONG).show();
 		return old;

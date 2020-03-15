@@ -67,12 +67,12 @@ public class RegisterService extends Service {
 	         intentfilter = new IntentFilter();
         }
         Receiver.engine(this).isRegistered();
-        RtpStreamReceiver.restoreSettings();
     }
     
     @Override
     public void onStart(Intent intent, int id) {
          super.onStart(intent,id);
+         RtpStreamReceiver.restoreSettings();
          Receiver.alarm(10*60, OneShotAlarm2.class);
     }
 

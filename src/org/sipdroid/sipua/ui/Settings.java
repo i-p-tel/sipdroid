@@ -141,7 +141,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_CALLTHRU2 = "callthru2";
 	public static final String PREF_CODECS = "codecs_new";
 	public static final String PREF_DNS = "dns";
-	public static final String PREF_VQUALITY = "vquality";
 	public static final String PREF_MESSAGE = "vmessage";
 	public static final String PREF_BLUETOOTH = "bluetooth";
 	public static final String PREF_KEEPON = "keepon";
@@ -196,7 +195,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String	DEFAULT_CALLTHRU2 = "";
 	public static final String	DEFAULT_CODECS = null;
 	public static final String	DEFAULT_DNS = "";
-	public static final String  DEFAULT_VQUALITY = "low";
 	public static final boolean DEFAULT_MESSAGE = false;
 	public static final boolean DEFAULT_BLUETOOTH = false;
 	public static final boolean DEFAULT_KEEPON = false;
@@ -637,7 +635,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     	fill(PREF_MICGAIN,  "" + DEFAULT_MICGAIN,  R.array.eargain_values, R.array.eargain_display_values);
     	fill(PREF_HEARGAIN, "" + DEFAULT_HEARGAIN, R.array.eargain_values, R.array.eargain_display_values);
     	fill(PREF_HMICGAIN, "" + DEFAULT_HMICGAIN, R.array.eargain_values, R.array.eargain_display_values);
-    	fill(PREF_VQUALITY,      DEFAULT_VQUALITY, R.array.vquality_values,R.array.vquality_display_values);
     	if (settings.getBoolean(PREF_STUN, DEFAULT_STUN)) {
     		getPreferenceScreen().findPreference(PREF_STUN_SERVER).setEnabled(true);
     		getPreferenceScreen().findPreference(PREF_STUN_SERVER_PORT).setEnabled(true);

@@ -181,13 +181,6 @@
 				android:entryValues="@array/eargain_values"
 				android:defaultValue="1.0"
 				android:dialogTitle="@string/settings_hmicgain" />
-			<ListPreference
-				android:key="vquality"
-				android:title="@string/settings_vquality"
-				android:entries="@array/vquality_display_values"
-				android:entryValues="@array/vquality_values"
-				android:defaultValue="low"
-				android:dialogTitle="@string/settings_vquality" />
 	</PreferenceScreen>
 	<PreferenceScreen
 		android:key="codecs"

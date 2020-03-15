@@ -20,7 +20,7 @@ package org.sipdroid.sipua.ui;
  * along with this source code; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
+/*
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -99,7 +99,6 @@ public class VideoCamera extends CallScreen implements
 	int obuffering,opos;
 	int fps;
 	
-    /** This Handler is used to post message back onto the main thread of the application */
     private class MainHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -158,7 +157,6 @@ public class VideoCamera extends CallScreen implements
          }
     };
 
-    /** Called with the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -261,9 +259,6 @@ public class VideoCamera extends CallScreen implements
 		finish();
     }
 
-	/*
-     * catch the back and call buttons to return to the in call activity.
-     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -670,3 +665,4 @@ public class VideoCamera extends CallScreen implements
 	}
 	
 }
+*/
