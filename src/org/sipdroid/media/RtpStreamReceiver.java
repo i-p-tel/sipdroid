@@ -605,7 +605,7 @@ public class RtpStreamReceiver extends Thread {
 		empty();
 		lockFirst = true;
 		while (running) {
-			lock(true);
+			lock(Receiver.call_state != UserAgent.UA_STATE_INCOMING_CALL);
 			if (Receiver.call_state == UserAgent.UA_STATE_HOLD) {
 				lock(false);
 				tg.stopTone();

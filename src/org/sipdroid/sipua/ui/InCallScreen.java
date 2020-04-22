@@ -125,6 +125,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 	    pactivetime = SystemClock.elapsedRealtime();
 	    sensorManager.registerListener(this,proximitySensor,SensorManager.SENSOR_DELAY_NORMAL);
 	    started = true;
+	    Receiver.progress();
 	}
 
 	@Override
@@ -579,7 +580,7 @@ public class InCallScreen extends CallScreen implements View.OnClickListener, Se
 		float distance = event.values[0];
         boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
 		if (!keepon ||
-				Receiver.call_state == UserAgent.UA_STATE_HOLD)
+				Receiver.call_state == UserAgent.UA_STATE_HOLD || Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL)
 			active = false;
         pactive = active;
         pactivetime = SystemClock.elapsedRealtime();

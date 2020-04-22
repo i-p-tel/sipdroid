@@ -323,6 +323,7 @@ import org.zoolu.sip.provider.SipProvider;
 		        Notification notification;
 			    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 			        mNotificationMgr.createNotificationChannel(new NotificationChannel("status", "Status", NotificationManager.IMPORTANCE_LOW));
+			        mNotificationMgr.createNotificationChannel(new NotificationChannel("call", "Call", NotificationManager.IMPORTANCE_HIGH));
 			        mNotificationMgr.createNotificationChannel(new NotificationChannel("missed", "Missed Call", NotificationManager.IMPORTANCE_LOW));
 			        mNotificationMgr.createNotificationChannel(new NotificationChannel("message", "Voice Message", NotificationManager.IMPORTANCE_HIGH));
 			        notification = new Notification.Builder(mContext,"status").build();
@@ -371,6 +372,12 @@ import org.zoolu.sip.provider.SipProvider;
 						notification.contentIntent = PendingIntent.getActivity(mContext, 0,
 				                createIntent(AutoAnswer.class), 0);
 						break;
+		        	case CALL_NOTIFICATION:
+					    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O && !InCallScreen.started)
+					    	notification = new Notification.Builder(mContext,"call")
+		        				.setFullScreenIntent(PendingIntent.getActivity(mContext, 0,
+		        						createIntent(Sipdroid.class), 0), true)
+		        				.setSmallIcon(mInCallResId).build();
 		        	default:
 		        		if (type >= REGISTER_NOTIFICATION && mSipdroidEngine != null && type != REGISTER_NOTIFICATION+mSipdroidEngine.pref &&
 		        				mInCallResId == R.drawable.sym_presence_available)
