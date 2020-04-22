@@ -1,5 +1,8 @@
 ### Beta-Versions ###
 
+  * 5.3
+    * Visibility of incoming calls for Android 10
+    
   * 5.2
     * Video stream now browser based for 1-to-1 and 3-way conferences
     
