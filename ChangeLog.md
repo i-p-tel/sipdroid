@@ -3,7 +3,7 @@
   * 5.5
     * Allow TLS connections to numeric IP addresses
     
-  * 5.3
+  * 5.4
     * Visibility of incoming calls for Android 10
     
   * 5.2
