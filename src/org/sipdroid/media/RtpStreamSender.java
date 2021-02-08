@@ -278,8 +278,7 @@ public class RtpStreamSender extends Thread {
 	/** Runs it in a new Thread. */
 	@TargetApi(23)
 	public void run() {
-		WifiManager wm = (WifiManager) Receiver.mContext.getSystemService(Context.WIFI_SERVICE);
-		long lastscan = 0,lastsent = 0;
+		long lastsent = 0;
 
 		if (rtp_socket == null)
 			return;
@@ -287,7 +286,6 @@ public class RtpStreamSender extends Thread {
 		long time = 0;
 		double p = 0;
 		boolean improve = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(Settings.PREF_IMPROVE, Settings.DEFAULT_IMPROVE);
-		boolean selectWifi = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_SELECTWIFI, org.sipdroid.sipua.ui.Settings.DEFAULT_SELECTWIFI);
 		int micgain = 0;
 		long last_tx_time = 0;
 		long next_tx_delay;
@@ -511,10 +509,6 @@ public class RtpStreamSender extends Thread {
  				 time += frame_size;
  			 if (RtpStreamReceiver.good != 0 &&
  					 RtpStreamReceiver.loss2/RtpStreamReceiver.good > 0.01) {
- 				 if (selectWifi && Receiver.on_wlan && now-lastscan > 10000) {
- 					 wm.startScan();
- 					 lastscan = now;
- 				 }
  				 if (improve && delay == 0 &&
  						 (p_type.codec.number() == 0 || p_type.codec.number() == 8 || p_type.codec.number() == 9))        	
  					 m = 2;

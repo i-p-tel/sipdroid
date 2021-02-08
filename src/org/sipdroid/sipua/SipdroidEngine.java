@@ -315,7 +315,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 						}
 					}
 			} catch (Exception ex) {
-				
+
 			}
 			i++;
 		}
@@ -482,8 +482,6 @@ public class SipdroidEngine implements RegisterAgentListener {
 		if (!Thread.currentThread().getName().equals("main"))
 			updateDNS();
 		reg_ra.stopMWI();
-    	WifiManager wm = (WifiManager) Receiver.mContext.getSystemService(Context.WIFI_SERVICE);
-    	wm.startScan();
 	}
 	
 	public void updateDNS() {

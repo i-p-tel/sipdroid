@@ -55,10 +55,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	// Context definition
 	private Settings context = null;
 
-	// Path where to store all profiles - !!!should be replaced by some system variable!!!
-	private final static String profilePath = "/sdcard/Sipdroid/";
 	// Path where is stored the shared preference file - !!!should be replaced by some system variable!!!
-	private final String sharedPrefsPath = "/data/data/org.sipdroid.sipua/shared_prefs/";
+	private static String sharedPrefsPath = "/data/data/org.sipdroid.sipua/shared_prefs/";
 	// Shared preference file name - !!!should be replaced by some system variable!!!
 	private final String sharedPrefsFile = "org.sipdroid.sipua_preferences";
 	// List of profile files available on the SD card
@@ -120,7 +118,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_MICGAIN = "micgain";
 	public static final String PREF_HEARGAIN = "heargain";
 	public static final String PREF_HMICGAIN = "hmicgain";
-	public static final String PREF_OWNWIFI = "ownwifi";
 	public static final String PREF_STUN = "stun";
 	public static final String PREF_STUN_SERVER = "stun_server";
 	public static final String PREF_STUN_SERVER_PORT = "stun_server_port";
@@ -144,7 +141,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_MESSAGE = "vmessage";
 	public static final String PREF_BLUETOOTH = "bluetooth";
 	public static final String PREF_KEEPON = "keepon";
-	public static final String PREF_SELECTWIFI = "selectwifi";
 	public static final String PREF_ACCOUNT = "account";
 	
 	// Default values of the preferences
@@ -174,7 +170,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final float	DEFAULT_MICGAIN = (float) 0.25;
 	public static final float	DEFAULT_HEARGAIN = (float) 0.25;
 	public static final float	DEFAULT_HMICGAIN = (float) 1.0;
-	public static final boolean	DEFAULT_OWNWIFI = false;
 	public static final boolean	DEFAULT_STUN = false;
 	public static final String	DEFAULT_STUN_SERVER = "stun.ekiga.net";
 	public static final String	DEFAULT_STUN_SERVER_PORT = "3478";
@@ -198,7 +193,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final boolean DEFAULT_MESSAGE = false;
 	public static final boolean DEFAULT_BLUETOOTH = false;
 	public static final boolean DEFAULT_KEEPON = false;
-	public static final boolean DEFAULT_SELECTWIFI = false;
 	public static final int     DEFAULT_ACCOUNT = 0;
 
 	// An other preference keys (not in the Preferences XML file)
@@ -339,14 +333,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     	context = this;
 
     	switch (item.getItemId()) {
-            case MENU_IMPORT:
-            	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
-	        		if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-	        		        != PackageManager.PERMISSION_GRANTED) {
-	        				String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-	        		        requestPermissions(perms,0);
-	        		}
-            	
+            case MENU_IMPORT:            	
             	// Get the content of the directory
             	profileFiles = getProfileList();
             	if (profileFiles != null && profileFiles.length > 0) {
@@ -401,7 +388,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     }
 
     public static String[] getProfileList() {
-    	File dir = new File(profilePath);
+    	File dir = new File(sharedPrefsPath);
     	return dir.list();
     }
 
@@ -422,12 +409,10 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     private void exportSettings() {
 		if (! settings.getString(PREF_USERNAME, "").equals("") && ! settings.getString(PREF_SERVER, "").equals(""))
 	        try {
-	        	// Create the directory for the profiles
-	        	new File(profilePath).mkdirs();
-	
-	        	// Copy shared preference file on the SD card
-	        	copyFile(new File(sharedPrefsPath + sharedPrefsFile + ".xml"), new File(profilePath + getProfileNameString()));
+	        	// Copy shared preference file
+	        	copyFile(new File(sharedPrefsPath + sharedPrefsFile + ".xml"), new File(sharedPrefsPath + getProfileNameString()));
 	        } catch (Exception e) {
+	        	e.printStackTrace();
 	            Toast.makeText(this, getString(R.string.settings_profile_export_error), Toast.LENGTH_SHORT).show();
 	        }
     }
@@ -437,7 +422,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			boolean message = settings.getBoolean(PREF_MESSAGE, DEFAULT_MESSAGE);
 
 			try {
-				copyFile(new File(profilePath + profileFiles[whichItem]), new File(sharedPrefsPath + sharedPrefsFile + ".xml"));
+				copyFile(new File(sharedPrefsPath + profileFiles[whichItem]), new File(sharedPrefsPath + sharedPrefsFile + ".xml"));
             } catch (Exception e) {
                 Toast.makeText(context, getString(R.string.settings_profile_import_error), Toast.LENGTH_SHORT).show();
                 return;
@@ -463,7 +448,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 
 	private OnClickListener deleteOkButtonClick = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
-        	File profile = new File(profilePath + profileFiles[profileToDelete]);
+        	File profile = new File(sharedPrefsPath + profileFiles[profileToDelete]);
         	boolean rv = false;
         	// Check if the file exists and try to delete it
         	if (profile.exists()) {

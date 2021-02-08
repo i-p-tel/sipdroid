@@ -25,10 +25,10 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="5.3 beta"
-    android:versionCode="123"
+    android:versionName="5.5 beta"
+    android:versionCode="125"
     android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="28"/>
+	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="29"/>
 	<supports-screens
           android:normalScreens="true"
           android:smallScreens="true"
@@ -40,8 +40,8 @@
 	<uses-feature android:name="android.hardware.telephony" android:required="false"/>
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
 	<uses-feature android:name="android.hardware.wifi" android:required="false"/>
-	<uses-feature android:name="android.hardware.camera" android:required="false"/>
-	<application android:icon="@drawable/icon64" android:label="@string/app_name" android:theme="@android:style/Theme.Holo">
+	<application android:icon="@drawable/icon64" android:label="@string/app_name" android:theme="@android:style/Theme.Holo"
+	    android:requestLegacyExternalStorage="true">
         <activity android:name="org.sipdroid.sipua.ui.Sipdroid" android:label="@string/app_name" android:launchMode="singleInstance"
         	android:configChanges="orientation|keyboardHidden">
             <intent-filter>
@@ -105,15 +105,6 @@
 	   android:name="org.sipdroid.codecs.Codecs$CodecSettings"
 	   android:label="@string/app_name" >
         </activity>
-        <!--
-        <activity android:name="org.sipdroid.sipua.ui.VideoCamera" android:label="@string/menu_video"
-	        android:excludeFromRecents="true" android:taskAffinity=""
-			android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-	        android:screenOrientation="landscape"
-	        android:clearTaskOnLaunch="true"
-	        android:configChanges="orientation|keyboardHidden">
-        </activity>
-        -->
         <activity android:name="org.sipdroid.sipua.ui.InCallScreen" android:label="@string/app_name" 
 	        android:excludeFromRecents="true" android:taskAffinity=""
 	        android:launchMode="singleInstance" android:showWhenLocked="true">
@@ -162,10 +153,9 @@
 	<uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
 	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"></uses-permission>
-	<uses-permission android:name="android.permission.CAMERA"></uses-permission>
 	<uses-permission android:name="android.permission.VIBRATE" ></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" ></uses-permission>
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" ></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" ></uses-permission>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" ></uses-permission>
 	<uses-permission android:name="android.permission.BLUETOOTH" ></uses-permission>
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" ></uses-permission>

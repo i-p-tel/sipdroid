@@ -21,8 +21,12 @@ package org.sipdroid.codecs;
 
 import org.sipdroid.sipua.ui.Receiver;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -93,9 +97,11 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 	}
 
 	TelephonyManager tm;
-	int nt;
 	
+	@TargetApi(24)
 	public boolean isValid() {
+		int nt = 0;
+		
 		if (!isEnabled())
 			return false;
 		if (Receiver.on_wlan)
@@ -103,7 +109,17 @@ class CodecBase implements Preference.OnPreferenceChangeListener {
 		if (wlanOnly())
 			return false;
 		if (tm == null) tm = (TelephonyManager) Receiver.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-		nt = tm.getNetworkType();
+    	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+    		if (Receiver.mContext.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+    		        != PackageManager.PERMISSION_GRANTED) {
+    		        nt = TelephonyManager.NETWORK_TYPE_UMTS;
+    		}
+    	if (nt == 0) {
+			if (android.os.Build.VERSION.SDK_INT >= 24)
+				nt = tm.getDataNetworkType();
+			else
+				nt = tm.getNetworkType();
+    	}
 		if (wlanOr3GOnly() && nt < TelephonyManager.NETWORK_TYPE_UMTS)
 			return false;
 		if (nt < TelephonyManager.NETWORK_TYPE_EDGE)

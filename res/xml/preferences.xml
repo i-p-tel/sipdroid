@@ -221,14 +221,6 @@
 	</PreferenceScreen>
 	<PreferenceScreen android:title="@string/settings_wireless_options">
 			<CheckBoxPreference
-				android:key="ownwifi"
-				android:title="@string/settings_ownwifi"
-				android:summary="@string/settings_ownwifi2" />
-			<CheckBoxPreference
-				android:key="selectwifi"
-				android:title="@string/settings_selectwifi"
-				android:summary="@string/settings_selectwifi2" />
-			<CheckBoxPreference
 				android:key="keepon"
 				android:title="@string/settings_keepon"
 				android:summary="@string/settings_keepon2" />

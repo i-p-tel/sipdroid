@@ -437,7 +437,8 @@ public class RtpStreamReceiver extends Thread {
 	public static float good, late, lost, loss, loss2;
 	double avgheadroom,devheadroom;
 	int avgcnt;
-	public static int timeout;
+	public static long timeout;
+	long timeoutstart;
 	int seq;
 	
 	void empty() {
@@ -483,6 +484,7 @@ public class RtpStreamReceiver extends Thread {
 			jitter = 875*mu;
 			devheadroom = Math.pow(jitter/5, 2);
 			timeout = 1;
+			timeoutstart = System.currentTimeMillis();
 			luser = luser2 = -8000*mu;
 			cnt = cnt2 = user = lserver = 0;
 			if (oldtrack != null) {
@@ -619,6 +621,7 @@ public class RtpStreamReceiver extends Thread {
 				track.play();
 				System.gc();
 				timeout = 1;
+				timeoutstart = System.currentTimeMillis();
 				luser = luser2 = -8000*mu;
 			}
 			try {
@@ -633,6 +636,7 @@ public class RtpStreamReceiver extends Thread {
 					empty();
 				}
 				timeout = 0;
+				timeoutstart = System.currentTimeMillis();
 			} catch (IOException e) {
 				if (timeout == 0 && nodata) {
 					tg.startTone(ToneGenerator.TONE_SUP_RINGTONE);
@@ -642,7 +646,8 @@ public class RtpStreamReceiver extends Thread {
 					rtp_socket = new RtpSocket(RtpStreamSender.new_socket);
 					RtpStreamSender.new_socket = null;
 				}
-				if (++timeout > 60) {
+				timeout = (System.currentTimeMillis()-timeoutstart)/1000 + 1;
+				if (timeout > 60) {
 					Receiver.engine(Receiver.mContext).rejectcall();
 					break;
 				}

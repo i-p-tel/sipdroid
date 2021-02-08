@@ -74,7 +74,7 @@ public class TcpSocket {
 			lock = false;
 			throw e;
 		}
-		if (host != null) {
+		if (host != null && !host.equals(ipaddr.toString())) {
 			HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
 			SSLSession s = ((SSLSocket)socket).getSession();
 			if (!hv.verify(host, s)) {
