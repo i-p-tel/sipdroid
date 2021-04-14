@@ -1,5 +1,8 @@
 ### Beta-Versions ###
 
+  * 5.6
+    * Quicker call setups
+
   * 5.5
     * Allow TLS connections to numeric IP addresses
     
