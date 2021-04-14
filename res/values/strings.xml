@@ -242,7 +242,7 @@
 <string name="settings_improve">Improve Audio</string>
 <string name="settings_improve2">requires paid account</string>
 <string name="settings_hdvoice">PBXes supports HD Voice</string>
-<string name="settings_posurl">URL for Location/Callback</string>
+<string name="settings_posurl">URL for Callback</string>
 <string name="settings_pos">Update Location</string>
 <string name="settings_pos2">Can be announced to PBXes contacts (requires premium account)</string>
 <string name="settings_pos3">Updating location</string>

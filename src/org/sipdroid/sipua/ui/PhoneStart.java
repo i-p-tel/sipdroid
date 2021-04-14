@@ -39,7 +39,6 @@ public class PhoneStart extends BroadcastReceiver {
         	//NOTE: this kills service, but not activity if it is currently visible.
         	//      Can activity be killed as well somehow?
     		Sipdroid.on(context, false);
-    		Receiver.pos(true);
     		Receiver.engine(context).halt();
     		Receiver.mSipdroidEngine = null;
     		Receiver.reRegister(0);

@@ -243,10 +243,6 @@
 				android:hint="https://www1.pbxes.com/name"
 				android:singleLine="true" />
 			<CheckBoxPreference
-				android:key="pos"
-				android:title="@string/settings_pos"
-				android:summary="@string/settings_pos2" />
-			<CheckBoxPreference
 				android:key="callback"
 				android:title="@string/settings_callback"
 				android:summary="@string/settings_callback2" />

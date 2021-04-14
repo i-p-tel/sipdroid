@@ -279,7 +279,6 @@ public class Sipdroid extends Activity implements OnDismissListener {
 		exitButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				on(mContext,false);
-				Receiver.pos(true);
 				Receiver.engine(mContext).halt();
 				Receiver.mSipdroidEngine = null;
 				Receiver.reRegister(0);
@@ -456,7 +455,6 @@ public class Sipdroid extends Activity implements OnDismissListener {
 			
 		case EXIT_MENU_ITEM: 
 			on(this,false);
-			Receiver.pos(true);
 			Receiver.engine(this).halt();
 			Receiver.mSipdroidEngine = null;
 			Receiver.reRegister(0);

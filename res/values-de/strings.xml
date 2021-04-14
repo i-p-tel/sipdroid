@@ -176,7 +176,7 @@
 <string name="settings_improve">Bessere Tonqualität</string>
 <string name="settings_improve2">erfordert bezahlten Account</string>
 <string name="settings_hdvoice">PBXes unterstützt HD Voice</string>
-<string name="settings_posurl">URL für Position/Callback</string>
+<string name="settings_posurl">URL für Callback</string>
 <string name="settings_pos">Position aktualisieren</string>
 <string name="settings_pos2">Kann PBXes-Kontakten angesagt werden (erfordert Premium-Account)</string>
 <string name="settings_pos3">Position aktualisiert</string>

@@ -277,7 +277,6 @@ import org.zoolu.sip.provider.SipProvider;
 			        if (InCallScreen.started && (pstn_state == null || !pstn_state.equals("RINGING"))) mContext.startActivity(createIntent(InCallScreen.class));
 					break;
 				}
-				pos(true);
 				RtpStreamReceiver.ringback(false);
 			}
 		}
@@ -400,10 +399,7 @@ import org.zoolu.sip.provider.SipProvider;
 					if (base != 0) {
 						contentView.setChronometer(R.id.text1, base, text+" (%s)", true);
 					} else if (type >= REGISTER_NOTIFICATION) {
-						if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS))
-							contentView.setTextViewText(R.id.text2, text+"/"+mContext.getString(R.string.settings_pos3));
-						else
-							contentView.setTextViewText(R.id.text2, text);
+						contentView.setTextViewText(R.id.text2, text);
 						if (mSipdroidEngine != null)
 							if (type == REGISTER_NOTIFICATION_0)
 								contentView.setTextViewText(R.id.text1,
@@ -468,87 +464,8 @@ import org.zoolu.sip.provider.SipProvider;
 		}
 		
 		public static void registered() {
-			pos(true);
 		}
 		
-		static LocationManager lm;
-		static AlarmManager am;
-		static PendingIntent gps_sender,net_sender;
-		static boolean net_enabled;
-		static long loctrydate;
-		
-		static final int GPS_UPDATES = 4000*1000;
-		static final int NET_UPDATES = 600*1000;
-		
-		@TargetApi(23)
-		public static void pos(boolean enable) {
-			
-			if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS) ||
-			PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL).length() < 1) {
-				if (lm != null && am != null) {
-					pos_gps(false);
-					pos_net(false);
-					lm = null;
-					am = null;
-				}
-				return;
-			}
-			
-	        if (lm == null) lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-			if (am == null) am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-			pos_gps(false);
-			if (enable) {
-            	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
-	        		if (mContext.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-	        		        != PackageManager.PERMISSION_GRANTED) return;
-				if (call_state == UserAgent.UA_STATE_IDLE && Sipdroid.on(mContext) &&
-						PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(org.sipdroid.sipua.ui.Settings.PREF_POS, org.sipdroid.sipua.ui.Settings.DEFAULT_POS) &&
-						PreferenceManager.getDefaultSharedPreferences(mContext).getString(org.sipdroid.sipua.ui.Settings.PREF_POSURL, org.sipdroid.sipua.ui.Settings.DEFAULT_POSURL).length()>0) {
-					Location last = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-					if (System.currentTimeMillis() - loctrydate > GPS_UPDATES && (last == null || System.currentTimeMillis() - last.getTime() > GPS_UPDATES)) {
-						loctrydate = System.currentTimeMillis();
-						pos_gps(true);
-						pos_net(false);
-					} else if (last != null)
-			    		Receiver.url("lat="+last.getLatitude()+"&lon="+last.getLongitude()+"&rad="+last.getAccuracy());
-					pos_net(true);
-				} else
-					pos_net(false);
-			}
-		}
-
-		static void pos_gps(boolean enable) {
-			if (gps_sender == null) {
-		        Intent intent = new Intent(mContext, OneShotLocation.class);
-		        gps_sender = PendingIntent.getBroadcast(mContext,
-		                0, intent, 0);
-			}
-	        if (enable) {
-				lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, GPS_UPDATES, 3000, gps_sender);
-				am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+10*1000, gps_sender);	        	
-	        } else {
-				am.cancel(gps_sender);
-				lm.removeUpdates(gps_sender);
-	        }
-		}
-		
-		static void pos_net(boolean enable) {
-			if (net_sender == null) {
-		        Intent loopintent = new Intent(mContext, LoopLocation.class);
-		        net_sender = PendingIntent.getBroadcast(mContext,
-		                0, loopintent, 0);
-			}
-			if (net_enabled != enable) {
-				if (enable) {
-					lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, NET_UPDATES, 3000, net_sender);
-				} else {
-					lm.removeUpdates(net_sender);
-				}
-				net_enabled = enable;
-			}
-		}
-		
-			    
 		public static void url(final String opt) {
 	        (new Thread() {
 				public void run() {
@@ -596,6 +513,7 @@ import org.zoolu.sip.provider.SipProvider;
 			lastnumber = number;
 		}
 		
+		@TargetApi(23)
 		public static void alarm(int renew_time,Class <?>cls) {
        		if (!Sipdroid.release) Log.i("SipUA:","alarm "+renew_time);
 	        Intent intent = new Intent(mContext, cls);
@@ -603,8 +521,14 @@ import org.zoolu.sip.provider.SipProvider;
 	                0, intent, 0);
 			AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
 			am.cancel(sender);
-			if (renew_time > 0)
-				am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+renew_time*1000, sender);
+			if (renew_time > 0) {
+				if (android.os.Build.VERSION.SDK_INT >= 23)
+					am.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+renew_time*1000, sender);
+				else if (android.os.Build.VERSION.SDK_INT >= 19)
+	        		am.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+renew_time*1000, sender);
+	        	else
+	        		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+renew_time*1000, sender);
+			}
 		}
 		
 		public static long expire_time;

@@ -25,8 +25,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.sipdroid.sipua"
-    android:versionName="5.5 beta"
-    android:versionCode="125"
+    android:versionName="5.6 beta"
+    android:versionCode="126"
     android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="29"/>
 	<supports-screens
@@ -35,15 +35,12 @@
           android:largeScreens="true"
           android:anyDensity="false" />
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
-	<uses-feature android:name="android.hardware.location" android:required="false"/>
-	<uses-feature android:name="android.hardware.location.gps" android:required="false"/>
 	<uses-feature android:name="android.hardware.telephony" android:required="false"/>
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
 	<uses-feature android:name="android.hardware.wifi" android:required="false"/>
-	<application android:icon="@drawable/icon64" android:label="@string/app_name" android:theme="@android:style/Theme.Holo"
-	    android:requestLegacyExternalStorage="true">
+	<application android:icon="@drawable/icon64" android:label="@string/app_name" android:theme="@android:style/Theme.Holo">
         <activity android:name="org.sipdroid.sipua.ui.Sipdroid" android:label="@string/app_name" android:launchMode="singleInstance"
-        	android:configChanges="orientation|keyboardHidden">
+        	android:configChanges="orientation|keyboardHidden" android:showWhenLocked="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -113,8 +110,6 @@
 	    <receiver android:name=".ui.OneShotAlarm2" android:label="@string/app_name"/>
 	    <receiver android:name=".ui.LoopAlarm" android:label="@string/app_name"/>
 	    <receiver android:name=".ui.OwnWifi" android:label="@string/app_name"/>
-	    <receiver android:name=".ui.OneShotLocation" android:label="@string/app_name"/>
-	    <receiver android:name=".ui.LoopLocation" android:label="@string/app_name"/>
 	    <receiver android:name=".ui.Caller" android:label="@string/app_name">
 	        <intent-filter android:priority="-1">
 	        	<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
@@ -154,9 +149,6 @@
 	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"></uses-permission>
 	<uses-permission android:name="android.permission.VIBRATE" ></uses-permission>
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" ></uses-permission>
-	<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" ></uses-permission>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" ></uses-permission>
 	<uses-permission android:name="android.permission.BLUETOOTH" ></uses-permission>
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" ></uses-permission>
 	<uses-permission android:name="android.permission.BROADCAST_STICKY" ></uses-permission>

@@ -474,8 +474,12 @@ public class RtpStreamReceiver extends Thread {
 			maxjitter = AudioTrack.getMinBufferSize(p_type.codec.samp_rate(), 
 					AudioFormat.CHANNEL_CONFIGURATION_MONO, 
 					AudioFormat.ENCODING_PCM_16BIT);
+			/*
 			if (maxjitter < 2*2*1024*6*mu)
 				maxjitter = 2*2*1024*6*mu;
+				*/
+			if (maxjitter < 2*1024*mu)
+				maxjitter = 2*1024*mu;
 			oldtrack = track;
 			track = new AudioTrack(stream(), p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
 					maxjitter*2, AudioTrack.MODE_STREAM);
@@ -628,11 +632,13 @@ public class RtpStreamReceiver extends Thread {
 				rtp_socket.receive(rtp_packet);
 				if (timeout != 0) {
 					tg.stopTone();
+					/*
 					track.pause();
 					for (int i = maxjitter*4; i > 0; i -= BUFFER_SIZE)
 						write(lin2,0,i>BUFFER_SIZE?BUFFER_SIZE:i);
 					cnt += maxjitter*2;
 					track.play();
+					*/
 					empty();
 				}
 				timeout = 0;

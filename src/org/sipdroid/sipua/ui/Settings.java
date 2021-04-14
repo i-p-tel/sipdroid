@@ -56,7 +56,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private Settings context = null;
 
 	// Path where is stored the shared preference file - !!!should be replaced by some system variable!!!
-	private static String sharedPrefsPath = "/data/data/org.sipdroid.sipua/shared_prefs/";
+	public static String sharedPrefsPath = "/data/data/org.sipdroid.sipua/shared_prefs/";
 	// Shared preference file name - !!!should be replaced by some system variable!!!
 	private final String sharedPrefsFile = "org.sipdroid.sipua_preferences";
 	// List of profile files available on the SD card
@@ -132,7 +132,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final String PREF_PAR = "par";
 	public static final String PREF_IMPROVE = "improve";
 	public static final String PREF_POSURL = "posurl";
-	public static final String PREF_POS = "pos";
 	public static final String PREF_CALLBACK = "callback";
 	public static final String PREF_CALLTHRU = "callthru";
 	public static final String PREF_CALLTHRU2 = "callthru2";
@@ -184,7 +183,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static final boolean	DEFAULT_PAR = false;
 	public static final boolean	DEFAULT_IMPROVE = false;
 	public static final String	DEFAULT_POSURL = "";
-	public static final boolean	DEFAULT_POS = false;
 	public static final boolean	DEFAULT_CALLBACK = false;
 	public static final boolean	DEFAULT_CALLTHRU = false;
 	public static final String	DEFAULT_CALLTHRU2 = "";
@@ -493,13 +491,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     	if (!Thread.currentThread().getName().equals("main"))
     		return;
-    	if (key.equals(PREF_CALLRECORD) && sharedPreferences.getBoolean(key, DEFAULT_CALLRECORD))
-        	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
-        		if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        		        != PackageManager.PERMISSION_GRANTED) {
-        				String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        		        requestPermissions(perms,0);
-        		}
         	
 		if (key.startsWith(PREF_PORT) && sharedPreferences.getString(key, DEFAULT_PORT).equals("0")) {
 	   		Editor edit = sharedPreferences.edit();
@@ -558,7 +549,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
         			key.equals(PREF_MMTEL_QVALUE) ||	// (added by mandrajg)
         			key.startsWith(PREF_PROTOCOL) ||
         			key.startsWith(PREF_VPN) ||
-        			key.equals(PREF_POS) ||
         			key.equals(PREF_POSURL) ||
         			key.startsWith(PREF_FROMUSER) ||
         			key.equals(PREF_AUTO_ONDEMAND) ||
@@ -641,10 +631,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     		getPreferenceScreen().findPreference(PREF_CALLTHRU2).setEnabled(false);
     	}
        	if (! settings.getString(PREF_POSURL, DEFAULT_POSURL).equals(DEFAULT_POSURL)) {
-    		getPreferenceScreen().findPreference(PREF_POS).setEnabled(! DEFAULT_POS);
     		getPreferenceScreen().findPreference(PREF_CALLBACK).setEnabled(! DEFAULT_CALLBACK);
        	} else {
-    		getPreferenceScreen().findPreference(PREF_POS).setEnabled(DEFAULT_POS);
     		getPreferenceScreen().findPreference(PREF_CALLBACK).setEnabled(DEFAULT_CALLBACK);
        	}
        	getPreferenceScreen().findPreference(PREF_BLUETOOTH).setEnabled(RtpStreamReceiver.isBluetoothSupported());
