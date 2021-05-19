@@ -1,5 +1,10 @@
 ### Beta-Versions ###
 
+  * 5.7
+    * Fix speakerphone
+    * Fix wrong mic on Android 11
+    * Fix callback on PBXes
+
   * 5.6
     * Quicker call setups
 
