@@ -355,7 +355,7 @@ public class RtpStreamSender extends Thread {
 					}
 				}
 				changed = false;
-				record = new AudioRecord(MediaRecorder.AudioSource.MIC, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
+				record = new AudioRecord(MediaRecorder.AudioSource.VOICE_COMMUNICATION, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
 							min);
 				if (record.getState() != AudioRecord.STATE_INITIALIZED) {
 					Receiver.engine(Receiver.mContext).rejectcall();

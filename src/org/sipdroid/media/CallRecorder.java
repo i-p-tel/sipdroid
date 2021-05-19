@@ -21,6 +21,7 @@ package org.sipdroid.media;
 
 import java.io.File;
 
+import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Settings;
 
 import android.text.format.Time;
@@ -46,7 +47,9 @@ public class CallRecorder
 		}
 		
 		// If this fails, all of the other calls just silently return immediately.
-		callWav = new WavWriter(Settings.sharedPrefsPath + filename + ".wav",sample_rate);
+		if (Receiver.mContext == null)
+			return;
+		callWav = new WavWriter(Receiver.mContext.getExternalFilesDir(null) + "/" + filename + ".wav",sample_rate);
 	}
 	
 	// Write data received from the internet.

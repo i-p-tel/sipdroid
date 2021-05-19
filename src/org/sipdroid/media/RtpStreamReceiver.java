@@ -495,6 +495,7 @@ public class RtpStreamReceiver extends Thread {
 				oldtrack.stop();
 				oldtrack.release();
 			}
+			track.play();
 		}
 	}
 	
@@ -514,7 +515,9 @@ public class RtpStreamReceiver extends Thread {
 			if (lock) {
 				boolean lockNew = keepon ||
 					Receiver.call_state == UserAgent.UA_STATE_HOLD ||
-					RtpStreamSender.delay != 0;
+					Receiver.call_state == UserAgent.UA_STATE_INCOMING_CALL ||
+					RtpStreamReceiver.speakermode == AudioManager.MODE_NORMAL ||
+					Receiver.headset > 0 || Receiver.docked > 0;
 				if (lockFirst || lockLast != lockNew) {
 					lockLast = lockNew;
 					lock(false);
@@ -606,7 +609,6 @@ public class RtpStreamReceiver extends Thread {
 		short lin2[] = new short[BUFFER_SIZE];
 		int server, headroom, todo, len = 0, m = 1, expseq, getseq, vm = 1, gap, gseq;
 		ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_VOICE_CALL,(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
-		track.play();
 		System.gc();
 		empty();
 		lockFirst = true;
