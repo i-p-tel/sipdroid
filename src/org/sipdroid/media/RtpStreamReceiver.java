@@ -188,7 +188,8 @@ public class RtpStreamReceiver extends Thread {
 	
 	public static synchronized void ringback(boolean ringback) {
 		if (ringback && ringbackPlayer == null) {
-	        AudioManager am = (AudioManager) Receiver.mContext.getSystemService(
+			ringbackPlayer = new ToneGenerator(stream(),(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
+			AudioManager am = (AudioManager) Receiver.mContext.getSystemService(
                     Context.AUDIO_SERVICE);
 			oldvol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
 			setMode(speakermode);
@@ -199,7 +200,6 @@ public class RtpStreamReceiver extends Thread {
 					am.getStreamMaxVolume(stream())*
 					(speakermode == AudioManager.MODE_NORMAL?4:3)/4
 					),0);
-			ringbackPlayer = new ToneGenerator(stream(),(int)(ToneGenerator.MAX_VOLUME*2*org.sipdroid.sipua.ui.Settings.getEarGain()));
 			ringbackPlayer.startTone(ToneGenerator.TONE_SUP_RINGTONE);
 		} else if (!ringback && ringbackPlayer != null) {
 			ringbackPlayer.stopTone();

@@ -531,7 +531,7 @@ public class RtpStreamSender extends Thread {
 		m = 0;
 		
 		p_type.codec.close();
-		rtp_socket.close();
+		rtp_socket.getDatagramSocket().close();
 		rtp_socket = null;
 		
 		// Call recorder: stop recording outgoing.
