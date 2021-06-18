@@ -1,5 +1,8 @@
 ### Beta-Versions ###
 
+  * 5.9
+    * Fixed issue that all calls became silent suddenly
+
   * 5.8
     * When there is an incoming call, the phone will directly show the sipdroid call screen with the slider to accept it if the phone is locked.
 
