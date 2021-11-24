@@ -1,5 +1,9 @@
 ### Beta-Versions ###
 
+  * 6.0
+    * Fix issue rejecting calls in background with no reason
+    * Signal rejected calls as busy
+ 
   * 5.9
     * Fixed issue that all calls became silent suddenly
 
