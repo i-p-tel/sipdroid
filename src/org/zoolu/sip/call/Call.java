@@ -231,7 +231,7 @@ public class Call implements InviteDialogListener {
 	public void hangup() {
 		if (dialog != null) { // try dialog.refuse(), cancel(), and bye()
 			// methods..
-			dialog.refuse();
+			dialog.busy();
 			dialog.cancel();
 			dialog.bye();
 		}

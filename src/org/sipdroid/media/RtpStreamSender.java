@@ -358,9 +358,8 @@ public class RtpStreamSender extends Thread {
 				record = new AudioRecord(MediaRecorder.AudioSource.VOICE_COMMUNICATION, p_type.codec.samp_rate(), AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, 
 							min);
 				if (record.getState() != AudioRecord.STATE_INITIALIZED) {
-					Receiver.engine(Receiver.mContext).rejectcall();
 					record = null;
-					break;
+					continue;
 				}
 				if (android.os.Build.VERSION.SDK_INT >= 16) {
 					RtpStreamSenderNew_SDK16.aec(record);
