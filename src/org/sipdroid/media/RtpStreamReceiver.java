@@ -486,6 +486,8 @@ public class RtpStreamReceiver extends Thread {
 			maxjitter /= 2*2;
 			minjitter = minjitteradjust = 500*mu;
 			jitter = 875*mu;
+			if (jitter > maxjitter)
+				jitter = maxjitter;
 			devheadroom = Math.pow(jitter/5, 2);
 			timeout = 1;
 			timeoutstart = System.currentTimeMillis();
@@ -671,7 +673,7 @@ public class RtpStreamReceiver extends Thread {
 					 continue;
 				 server = track.getPlaybackHeadPosition();
 				 headroom = user-server;
-				 
+
 				 if (headroom > 2*jitter)
 					 cnt += len;
 				 else
