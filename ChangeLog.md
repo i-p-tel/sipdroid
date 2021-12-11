@@ -1,5 +1,8 @@
 ### Beta-Versions ###
 
+  * 6.1
+    * Fix issue of too long delay in some calls
+
   * 6.0
     * Fix issue rejecting calls in background with no reason
     * Signal rejected calls as busy
