@@ -95,12 +95,12 @@ JNIEXPORT jint JNICALL Java_org_sipdroid_codecs_Speex_decode
     (JNIEnv *env, jobject obj, jbyteArray encoded, jshortArray lin, jint size) {
 
         jbyte buffer[dec_frame_size];
-        jshort output_buffer[dec_frame_size];
+        jshort output_buffer[dec_frame_size*10];
         jsize encoded_length = size;
 
 	if (!codec_open)
 		return 0;
-
+	if (encoded_length > dec_frame_size) encoded_length = dec_frame_size;
 	env->GetByteArrayRegion(encoded, rtp_header, encoded_length, buffer);
 	speex_bits_read_from(&dbits, (char *)buffer, encoded_length);
 	speex_decode_int(dec_state, &dbits, output_buffer);

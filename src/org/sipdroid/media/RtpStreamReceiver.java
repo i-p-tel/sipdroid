@@ -24,7 +24,8 @@ package org.sipdroid.media;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.sipdroid.net.RtpPacket;
 import org.sipdroid.net.RtpSocket;
 import org.sipdroid.net.SipdroidSocket;
@@ -34,10 +35,11 @@ import org.sipdroid.sipua.ui.InCallScreen;
 import org.sipdroid.sipua.ui.Receiver;
 import org.sipdroid.sipua.ui.Sipdroid;
 import org.sipdroid.codecs.Codecs;
-
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
+import android.media.AudioDeviceInfo;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -375,6 +377,7 @@ public class RtpStreamReceiver extends Thread {
 	
 	static boolean samsung;
 	
+	@TargetApi(23)
 	public static void setMode(int mode) {
 		Editor edit = PreferenceManager.getDefaultSharedPreferences(Receiver.mContext).edit();
 		edit.putBoolean(org.sipdroid.sipua.ui.Settings.PREF_SETMODE, true);
@@ -383,6 +386,24 @@ public class RtpStreamReceiver extends Thread {
 		if (Integer.parseInt(Build.VERSION.SDK) >= 5) {
 			am.setSpeakerphoneOn(mode == AudioManager.MODE_NORMAL);
 			if (samsung) RtpStreamSender.changed = true;
+			if (Integer.parseInt(Build.VERSION.SDK) >= 31) {
+				ArrayList<Integer> targetTypes = new ArrayList<Integer>();
+				if (mode != AudioManager.MODE_NORMAL) {
+				    targetTypes.add(AudioDeviceInfo.TYPE_BUILTIN_EARPIECE);
+				} else {
+				    targetTypes.add(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
+				}
+				List<AudioDeviceInfo> devices = am.getAvailableCommunicationDevices();
+				outer:
+				for (Integer targetType : targetTypes) {
+				    for (AudioDeviceInfo device : devices) {
+				        if (device.getType() == targetType) {
+				            boolean result = am.setCommunicationDevice(device);
+				            if (result) break outer;
+				        }
+				    }
+				}
+			}
 		} else
 			am.setMode(mode);
 	}

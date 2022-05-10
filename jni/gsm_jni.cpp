@@ -93,12 +93,12 @@ JNIEXPORT jint JNICALL Java_org_sipdroid_codecs_GSM_encode
 	for (i = 0; i < size; i+=BLOCK_LEN) {
 #ifdef DEBUG_GSM
 		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, 
-            "encoding frame size: %d\toffset: %d i: %d\n", size, offset, i); 		
+            "encoding frame size: %d\toffset: %d i: %d\n", BLOCK_LEN, offset, i);
 #endif
 			
 		env->GetShortArrayRegion(lin, offset + i,frsz, pre_amp);
 
-		ret=gsm0610_encode(gsm0610_enc_state, (uint8_t *) gsm0610_data, pre_amp, size);
+		ret=gsm0610_encode(gsm0610_enc_state, (uint8_t *) gsm0610_data, pre_amp, BLOCK_LEN);
 
 #ifdef DEBUG_GSM
 			__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, 
@@ -120,8 +120,8 @@ extern "C"
 JNIEXPORT jint JNICALL Java_org_sipdroid_codecs_GSM_decode
     (JNIEnv *env, jobject obj, jbyteArray encoded, jshortArray lin, jint size) {
 
-	jshort post_amp[BLOCK_LEN];
-	jbyte gsm0610_data[BLOCK_LEN];
+	jshort post_amp[BLOCK_LEN*20];
+	jbyte gsm0610_data[BLOCK_LEN*20];
 
 	int len;
 
@@ -132,7 +132,7 @@ JNIEXPORT jint JNICALL Java_org_sipdroid_codecs_GSM_decode
 	__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, 
         "##### BEGIN DECODE ********  decoding frame size: %d\n", size); 	
 #endif
-
+	if (size > BLOCK_LEN) size = BLOCK_LEN;
 	env->GetByteArrayRegion(encoded, RTP_HDR_SIZE, size, gsm0610_data);
 	len = gsm0610_decode(gsm0610_dec_state, post_amp,(uint8_t *) gsm0610_data, size);
 

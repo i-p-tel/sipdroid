@@ -631,6 +631,7 @@ import org.zoolu.sip.provider.SipProvider;
 				Receiver.onText(Receiver.CALL_NOTIFICATION, mContext.getString(R.string.card_title_incoming_call), R.drawable.stat_sys_phone_call,Receiver.ccCall.base);
 				break;
 			}
+			RtpStreamSender.changed = true;
 		}
 
 		public static boolean on_wlan;

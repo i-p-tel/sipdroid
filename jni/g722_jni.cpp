@@ -120,7 +120,7 @@ JNIEXPORT jint JNICALL Java_org_sipdroid_codecs_G722_decode
  //   jshort output_buffer[( MAX_FRAME_LENGTH << 1 ) * MAX_INPUT_FRAMES ];
 	
 	jbyte adpcmdata[BLOCK_LEN];
-	jshort outdata[BLOCK_LEN];
+	jshort outdata[BLOCK_LEN*10];
 	
 	int len,ret;
 
@@ -131,7 +131,7 @@ JNIEXPORT jint JNICALL Java_org_sipdroid_codecs_G722_decode
 	__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, 
         "##### BEGIN DECODE ********  decoding frame size: %d\n", size); 	
 #endif
-
+	if (size > BLOCK_LEN) size = BLOCK_LEN;
 	env->GetByteArrayRegion(encoded, RTP_HDR_SIZE, size, adpcmdata);
 	len = g722_decode(&dec_state, outdata, (uint8_t *) adpcmdata, size);
 
