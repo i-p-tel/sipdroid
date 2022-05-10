@@ -1,5 +1,9 @@
 ### Beta-Versions ###
 
+  * 6.2
+    * Security fix in codecs (https://github.com/Kishanthan)
+    * Android 12 compatibility
+    
   * 6.1
     * Fix issue of too long delay in some calls
 
