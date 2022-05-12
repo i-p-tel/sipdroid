@@ -1,7 +1,7 @@
 ### Beta-Versions ###
 
   * 6.2
-    * Security fix in codecs (https://github.com/Kishanthan)
+    * Buffer overflow related security fixes (https://github.com/Kishanthan)
     * Android 12 compatibility
     
   * 6.1
