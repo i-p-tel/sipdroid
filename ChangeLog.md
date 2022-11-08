@@ -1,5 +1,9 @@
 ### Beta-Versions ###
 
+  * 6.3
+    * Android 13 & Windows 12 compatibility
+    * Notifications in dark mode
+ 
   * 6.2
     * Buffer overflow related security fixes (https://github.com/Kishanthan)
     * Android 12 compatibility
