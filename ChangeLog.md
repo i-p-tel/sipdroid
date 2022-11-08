@@ -1,7 +1,7 @@
 ### Beta-Versions ###
 
   * 6.3
-    * Android 13 & Windows 12 compatibility
+    * Android 13 & Windows 11 compatibility
     * Notifications in dark mode
  
   * 6.2
