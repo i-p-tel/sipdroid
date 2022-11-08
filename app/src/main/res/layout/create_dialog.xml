@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2010 The Sipdroid Open Source Project
+ * 
+ * This file is part of Sipdroid (http://www.sipdroid.org)
+ * 
+ * Sipdroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:layout_weight="1">
+    
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:padding="10dip">
+
+    <TextView
+    	android:layout_height="wrap_content"
+    	android:text="PBXes Name"
+    	android:textStyle="bold"
+    	android:textColor="#000000"
+    	android:paddingTop="10dip"
+    	android:layout_width="wrap_content">
+    </TextView>
+    <EditText android:id="@+id/EditText01"
+		android:singleLine="true"
+    	android:layout_height="wrap_content"
+    	android:layout_width="fill_parent">
+    </EditText>
+
+    <TextView
+    	android:layout_height="wrap_content"
+    	android:id="@+id/intro"
+    	android:layout_width="wrap_content"
+    	android:textColor="#000000">
+    </TextView>
+    
+    <TextView
+    	android:layout_height="wrap_content"
+    	android:text="You may modify it later by logging in to PBXes via a web browser."
+    	android:layout_width="wrap_content"
+    	android:paddingTop="10dip"
+    	android:textColor="#000000">
+    </TextView>
+
+    <TextView
+    	android:layout_height="wrap_content"
+    	android:text="By submitting this form you agree to PBXes' Terms of Service as can be found at http://www.pbxes.org."
+    	android:layout_width="wrap_content"
+    	android:paddingTop="10dip"
+    	android:textColor="#000000">
+    </TextView>
+
+    <TextView android:id="@+id/email"
+    	android:layout_height="wrap_content"
+    	android:textStyle="bold"
+    	android:paddingTop="10dip"
+    	android:textColor="#000000"
+    	android:layout_width="wrap_content">
+    </TextView>
+    <TextView android:id="@+id/Text01"
+    	android:layout_height="wrap_content"
+    	android:textColor="#000000"
+    	android:layout_width="wrap_content">
+    </TextView>
+
+    <TextView android:id="@+id/password"
+    	android:layout_height="wrap_content"
+    	android:text="Password"
+    	android:textStyle="bold"
+    	android:paddingTop="10dip"
+    	android:textColor="#000000"
+    	android:layout_width="wrap_content">
+    </TextView>
+    <EditText android:id="@+id/EditText02"
+		android:password="true"
+		android:singleLine="true"
+    	android:layout_height="wrap_content"
+    	android:layout_width="fill_parent">
+    </EditText>
+    
+    <TextView android:id="@+id/password_confirm"
+    	android:layout_height="wrap_content"
+    	android:text="Password Confirm"
+    	android:textStyle="bold"
+    	android:paddingTop="10dip"
+    	android:textColor="#000000"
+    	android:layout_width="wrap_content">
+    </TextView>
+    <EditText android:id="@+id/EditText03"
+		android:password="true"
+		android:singleLine="true"
+    	android:layout_height="wrap_content"
+    	android:layout_width="fill_parent">
+    </EditText>
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    	android:paddingTop="10dip"
+	    android:orientation="horizontal">
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:layout_width="wrap_content" android:layout_height="wrap_content"
+		    android:orientation="horizontal" android:gravity="left"
+		    			android:layout_weight="1"
+		    >
+		    <Button android:id="@+id/Button01" android:layout_width="wrap_content"
+		        android:layout_height="wrap_content" android:text="Create">
+		        </Button>
+		</LinearLayout>
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:layout_width="wrap_content" android:layout_height="wrap_content"
+		    android:orientation="horizontal" android:gravity="right"
+		    			android:layout_weight="0"
+		    >
+		    <Button android:id="@+id/Button02" android:layout_width="wrap_content"
+		        android:layout_height="wrap_content" android:text="Cancel">
+		        </Button>
+		</LinearLayout>
+	</LinearLayout>
+
+  </LinearLayout>
+</ScrollView>

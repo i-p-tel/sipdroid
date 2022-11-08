@@ -1,0 +1,8 @@
+build/
+.idea/
+.gradle/
+local.properties
+import-summary.txt
+gradle/
+gradlew
+gradlew.bat
