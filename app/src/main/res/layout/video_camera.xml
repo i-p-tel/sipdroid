@@ -1,0 +1,73 @@
+<!-- Copyright (C) 2007 The Android Open Source Project
+ 
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+ 
+          http://www.apache.org/licenses/LICENSE-2.0
+ 
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+--> 
+ 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"> 
+ 
+    <org.sipdroid.sipua.ui.VideoPreview 
+            android:id="@+id/camera_preview"
+            android:layout_width="176px"
+            android:layout_height="144px"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+    /> 
+ 
+    <VideoView
+            android:id="@+id/video_frame"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+    /> 
+  
+    <!-- Note: In this TextView the paddingRight="2"
+         attribute is required because otherwise the
+         text's drop shadow will be clipped. --> 
+    <TextView 
+            android:id="@+id/recording_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="60dip"
+            android:layout_marginRight="6dip"
+            android:paddingRight="2dip"
+            android:shadowColor="#c0000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:gravity="right"
+            android:textColor="@color/recording_time_elapsed_text"
+            android:textSize="20dip"
+            android:textStyle="bold"
+            android:visibility="gone"/> 
+     <TextView 
+            android:id="@+id/fps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dip"
+            android:layout_marginRight="6dip"
+            android:paddingRight="2dip"
+            android:shadowColor="#c0000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:gravity="right"
+            android:textColor="@color/recording_time_elapsed_text"
+            android:textSize="20dip"/> 
+ 
+</RelativeLayout> 
