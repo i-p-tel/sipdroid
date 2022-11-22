@@ -88,9 +88,7 @@ public class Sipdroid extends Activity implements OnDismissListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		Receiver.engine(this);
-		if (Receiver.sContext != null)
-			Receiver.engine(this).registerMore();
+		Receiver.engine(this).registerMore();
 		
     	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
 			final String[] perms = {
@@ -101,10 +99,12 @@ public class Sipdroid extends Activity implements OnDismissListener {
 				Manifest.permission.WRITE_CONTACTS,
 				Manifest.permission.WRITE_CALL_LOG,
 				Manifest.permission.RECORD_AUDIO,
-				Manifest.permission.BLUETOOTH_CONNECT
+				null
 				};
+			if (Integer.parseInt(Build.VERSION.SDK) >= 31)
+				perms[perms.length-1] = Manifest.permission.BLUETOOTH_CONNECT;
 			for(String perm: perms)
-				if (checkSelfPermission(perm) != PackageManager.PERMISSION_GRANTED) {
+				if (perm != null && checkSelfPermission(perm) != PackageManager.PERMISSION_GRANTED) {
 					if (permd == null || !permd.isShowing())
 					permd = new AlertDialog.Builder(this)
 					.setMessage(R.string.permhelp)
@@ -374,9 +374,7 @@ public class Sipdroid extends Activity implements OnDismissListener {
 		edit.putBoolean(Settings.PREF_ON, on);
 		edit.commit();
         if (on) {
-        	Receiver.engine(context);
-        	if (Receiver.sContext != null)
-        		Receiver.engine(context).isRegistered();
+        	Receiver.engine(context).isRegistered();
         }
 	}
 

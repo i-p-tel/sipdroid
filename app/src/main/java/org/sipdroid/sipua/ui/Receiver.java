@@ -423,16 +423,23 @@ import org.zoolu.sip.provider.SipProvider;
 					type = REGISTER_NOTIFICATION;
 				else if (type >= REGISTER_NOTIFICATION)
 					type = alloc(type);
-		    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && Receiver.sContext != null && type == REGISTER_NOTIFICATION)
-		    		Receiver.sContext.startForeground(type,notification);
-		    	else
-		    		mNotificationMgr.notify(type,notification);
+		    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && Receiver.sContext != null && type == REGISTER_NOTIFICATION) {
+					System.out.println("startForeground "+type);
+					Receiver.sContext.startForeground(type, notification);
+				} else {
+					System.out.println("notify " + type);
+					mNotificationMgr.notify(type, notification);
+				}
 	        } else {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && Receiver.sContext != null && type != REGISTER_NOTIFICATION_0 && type >= REGISTER_NOTIFICATION && alloc(type) == REGISTER_NOTIFICATION) {
+					onText(alloc(type), Receiver.sContext.getString(R.string.regfailed), R.drawable.sym_presence_away, 0);
+					return;
+				}
 	        	if (type >= REGISTER_NOTIFICATION)
 	        		type = free(type);
 	        	if (type == 0)
 	        		type = REGISTER_NOTIFICATION;
-		   		mNotificationMgr.cancel(type);
+				mNotificationMgr.cancel(type);
 	        }
 	        if (type != AUTO_ANSWER_NOTIFICATION)
 	        	updateAutoAnswer();
@@ -735,7 +742,7 @@ import org.zoolu.sip.provider.SipProvider;
         	if (mContext == null) mContext = context;
 	        if (intentAction.equals(Intent.ACTION_BOOT_COMPLETED)){
 	        	on_vpn(false);
-	        	engine(context).register();
+				engine(context).register();
 	        } else
 		    if (intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
 		    		intentAction.equals(ACTION_EXTERNAL_APPLICATIONS_AVAILABLE) ||

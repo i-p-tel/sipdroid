@@ -309,7 +309,6 @@ public class RegisterAgent implements TransactionClientListener, SubscriberDialo
 		currentSubscribeMessage = req;
 		return req;
 	}
-		
 
 	public void startMWI()
 	{

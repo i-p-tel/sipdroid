@@ -177,8 +177,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 				}
 				i++;
 			}
-			if (Receiver.sContext != null)
-				register();
+			register();
 			listen();
 
 			return true;
@@ -263,6 +262,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	public void registerMore() {
+		if (Receiver.sContext == null) return;
 		IpAddress.setLocalIpAddress();
 		int i = 0,c = 0;
 		for (RegisterAgent ra : ras) {
@@ -293,6 +293,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 	}
 	
 	public void register() {
+		if (Receiver.sContext == null) return;
 		IpAddress.setLocalIpAddress();
 		int i = 0,c = 0;
 		for (RegisterAgent ra : ras) {
@@ -357,6 +358,7 @@ public class SipdroidEngine implements RegisterAgentListener {
 
 	public boolean isRegistered()
 	{
+		if (Receiver.sContext == null) return false;
 		for (RegisterAgent ra : ras)
 			if (ra != null && ra.isRegistered())
 				return true;
