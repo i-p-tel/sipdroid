@@ -1,5 +1,9 @@
 ### Beta-Versions ###
 
+  * 6.5
+    * Android 14 compatibility
+    * Rejects incoming SIP calls during ongoing PSTN call
+  
   * 6.3
     * Android 13 & Windows 11 compatibility
     * Notifications in dark mode
