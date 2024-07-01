@@ -55,7 +55,7 @@ public class Codecs {
 			add(new alaw());
 			add(new ulaw());
 			add(new Speex());
-			add(new GSM());
+//			add(new GSM());			due to a bug in clang this can't be compiled since 12/2023
 			add(new BV16());
 		}};
 	private static final HashMap<Integer, Codec> codecsNumbers;

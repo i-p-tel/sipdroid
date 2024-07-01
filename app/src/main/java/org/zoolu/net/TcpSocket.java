@@ -59,7 +59,7 @@ public class TcpSocket {
 	/** Creates a new UdpSocket */
 	public TcpSocket(IpAddress ipaddr, int port, String host) throws java.io.IOException {
 //		socket = new Socket(ipaddr.getInetAddress(), port); modified
-		SSLSocketFactory f = 
+		SSLSocketFactory f =
 	         (SSLSocketFactory) SSLSocketFactory.getSocketFactory();
 		if (host == null)
 			socket = new Socket();

@@ -549,7 +549,8 @@ public class UserAgent extends CallListenerAdapter {
 			if (ua == this) break;
 			i++;
 		}
-		if (Receiver.call_state != UA_STATE_IDLE || !Receiver.isFast(i)) {
+		if (Receiver.call_state != UA_STATE_IDLE || (Receiver.pstn_state != null &&
+				!Receiver.pstn_state.equals("IDLE")) || !Receiver.isFast(i)) {
 			call.busy();
 			listen();
 			return;

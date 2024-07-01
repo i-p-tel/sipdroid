@@ -424,10 +424,8 @@ import org.zoolu.sip.provider.SipProvider;
 				else if (type >= REGISTER_NOTIFICATION)
 					type = alloc(type);
 		    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && Receiver.sContext != null && type == REGISTER_NOTIFICATION) {
-					System.out.println("startForeground "+type);
 					Receiver.sContext.startForeground(type, notification);
 				} else {
-					System.out.println("notify " + type);
 					mNotificationMgr.notify(type, notification);
 				}
 	        } else {

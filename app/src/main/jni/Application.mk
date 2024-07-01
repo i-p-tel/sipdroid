@@ -7,9 +7,9 @@ APP_MODULES	 += silkcommon
 #APP_MODULES	 += silk16_jni
 #APP_MODULES	 += silk24_jni
 APP_MODULES	 += g722_jni
-APP_MODULES	 += gsm_jni
+#APP_MODULES	 += gsm_jni
 
 APP_OPTIM        := release 
 APP_CFLAGS       += -O3
-APP_ABI			 := armeabi-v7a arm64-v8a
+APP_ABI			 := arm64-v8a armeabi-v7a
 APP_PLATFORM     := android-11

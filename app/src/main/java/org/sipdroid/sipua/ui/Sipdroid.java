@@ -99,6 +99,8 @@ public class Sipdroid extends Activity implements OnDismissListener {
 				Manifest.permission.WRITE_CONTACTS,
 				Manifest.permission.WRITE_CALL_LOG,
 				Manifest.permission.RECORD_AUDIO,
+				Manifest.permission.READ_PHONE_STATE,
+				Manifest.permission.POST_NOTIFICATIONS,
 				null
 				};
 			if (Integer.parseInt(Build.VERSION.SDK) >= 31)
