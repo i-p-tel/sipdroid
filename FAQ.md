@@ -61,8 +61,6 @@ When using [pbxes.org](http://pbxes.org) the expected stand-by times are the sam
 
 Sipdroid uses G.711 A-law to transmit voice which needs about 80 kBit/s in each direction. This corresponds to a total of 1.2 MB per minute.
 
-A video call needs approximately twice as much.
-
 Over EDGE or when optionally enabled for all calls Sipdroid uses GSM codec to compress to about 30 kBit/s in each direction resulting in a total of 0.5 MB per minute.
 
 ## Legal ##
@@ -132,10 +130,9 @@ Sipdroid presently supports basic call. All the typical PBX features are configu
 </li><li>Time-based routing for incoming calls<br>
 </li><li>Attended Call Transfer<br>
 </li><li>Conferences<br>
-</li><li>Video Reception (Video Transmission is supported by Sipdroid natively)<br>
 </li><li>Trigger callback or callthru (if no suitable data network available)</li></ul>
 
-You get even more <a href='http://pbxes.org/iptel_virtual-pbx.html'>features</a> on the paid accounts (e.g. Video Streaming, Announce Location, Call Recording, Improved Audio, Handoff of calls between networks).<br>
+You get even more <a href='http://pbxes.org/iptel_virtual-pbx.html'>features</a> on the paid accounts (e.g. Call Recording, Improved Audio, Handoff of calls between networks).<br>
 <br>
 <h3>How can I set up PBXes?</h3>
 
