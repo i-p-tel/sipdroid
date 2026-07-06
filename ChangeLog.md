@@ -1,5 +1,10 @@
 ### Beta-Versions ###
 
+  * 7.1
+    * Fix 1s audio lag on some devices
+    * Full screen UI for incoming calls now reliable again
+    * Keep screen on during Bluetooth calls to prevent silencing
+
   * 7.0
     * Improved Bluetooth support
     * New option Unregister on Trains
